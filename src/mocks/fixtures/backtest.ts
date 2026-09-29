@@ -139,3 +139,50 @@ export const READINESS_CHECKS = [
     detail: "reg_e_adjudication 0.72 免修改率，2 次关键错误，保持 R4",
   },
 ];
+
+// Sampling FRAMES (FR-3.3): the same three tiers are drawn from each of the
+// three work-intake frames, reported separately — positives-only sampling can
+// never produce a miss (false-negative) rate.
+export interface SamplingFrame {
+  code: "HANDLED" | "NO_TICKET" | "BACKLOG";
+  label: BiText;
+  tierA: number;
+  tierB: number;
+  tierC: number;
+}
+
+export const SAMPLING_FRAMES: SamplingFrame[] = [
+  {
+    code: "HANDLED",
+    label: { zh: "① 已有人处置的进件", en: "① threads handled by someone" },
+    tierA: 140,
+    tierB: 60,
+    tierC: 20,
+  },
+  {
+    code: "NO_TICKET",
+    label: { zh: "② 检测器判阴性、未建工单", en: "② detector-negative, no ticket created" },
+    tierA: 40,
+    tierB: 25,
+    tierC: 20,
+  },
+  {
+    code: "BACKLOG",
+    label: { zh: "③ 积压未处理", en: "③ sitting in backlog" },
+    tierA: 20,
+    tierB: 15,
+    tierC: 10,
+  },
+];
+
+// FR-3.3 AC5: random re-labeling of detector-NEGATIVE items. Without this
+// column the readiness recall criterion is "not signable" by construction.
+export const NEGATIVE_RELABEL = {
+  sampleSize: 1200,
+  missedRegulatedFound: 0,
+  falseNegativesFound: 3, // non-regulated misses, fed back as training cases
+  note: {
+    zh: "只看阳性样本量不出漏检率；阴性复标缺失时召回判据显示“不可签”。",
+    en: "Positive-only volume cannot bound misses; without this column recall is not signable.",
+  },
+};

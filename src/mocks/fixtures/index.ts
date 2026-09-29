@@ -38,4 +38,7 @@ export {
   INTENT_METRICS,
   CONFORMAL_CARD,
   READINESS_CHECKS,
+  SAMPLING_FRAMES,
+  NEGATIVE_RELABEL,
 } from "./backtest.ts";
+export type { SampleTier, IntentMetric, SamplingFrame } from "./backtest.ts";

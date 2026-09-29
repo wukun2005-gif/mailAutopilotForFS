@@ -43,6 +43,8 @@ export class CaseRunner {
     await this.gateway.postRead("/mock/admin/reset", {});
     simClock.reset();
     faultController.reset();
+    // NOTE: graduationOverrides intentionally survive scenario resets —
+    // Builder graduation/caps are policy config, not scenario state.
   }
 
   private baseTurn(turn: unknown, extra: Record<string, unknown> = {}) {

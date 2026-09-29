@@ -5,6 +5,7 @@
 import type { RLevel } from "./state.ts";
 import type { IntentHit } from "./caseState.ts";
 import { GRADUATION_TABLE } from "@/mocks/fixtures/index.ts";
+import { graduationOverrides } from "./graduationOverrides.ts";
 
 export interface IntentSpec {
   intentCode: string;
@@ -133,9 +134,13 @@ export function intentSpec(code: string): IntentSpec {
   return spec;
 }
 
-/** Graduated L level from the fixture graduation table; null = shadow/never. */
+/**
+ * Effective graduated L level. Baseline comes from the fixture table only for
+ * rows already marked graduated; Builder dual sign-off / manual caps are
+ * layered on via graduationOverrides (promotion can lift a shadow intent).
+ */
 export function graduatedLevel(intentCode: string): import("./state.ts").LLevel | null {
   const row = GRADUATION_TABLE.find((g) => g.intentCode === intentCode);
-  if (!row || row.status !== "graduated") return null;
-  return row.graduatedL;
+  const baseline = row && row.status === "graduated" ? row.graduatedL : null;
+  return graduationOverrides.effective(intentCode, baseline);
 }

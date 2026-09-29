@@ -1,0 +1,219 @@
+// ReadinessReport — FR-9.4: per-intent graduation verdict against the
+// rule-of-three bars, plus compliance + business dual sign-off. Signing a
+// shadow intent promotes it through graduationOverrides; the next inbound
+// email of that intent runs at the new level immediately.
+import { useState } from "react";
+import { CheckCircle2, XCircle, PenLine, ShieldCheck, Briefcase } from "lucide-react";
+import type { GraduationEntry } from "@/mocks/fixtures/index.ts";
+import { INTENT_METRICS, READINESS_CHECKS } from "@/mocks/fixtures/index.ts";
+import { cn } from "@/lib/utils";
+
+interface Verdict {
+  signable: boolean;
+  headline: string;
+  details: Array<{ text: string; pass: boolean | null }>;
+}
+
+function evaluate(g: GraduationEntry, negativeColumnPresent: boolean): Verdict {
+  const metric = INTENT_METRICS.find((m) => m.intentCode === g.intentCode);
+  if (g.status === "never") {
+    return {
+      signable: false,
+      headline:
+        g.risk === "R4"
+          ? "Permanent human: R4 adjudication is L0 decide / L1 human-signed draft"
+          : "Hard never in the email channel: no R3 tool is registered",
+      details: [{ text: "Graduation is structurally unreachable for this intent.", pass: null }],
+    };
+  }
+  if (g.status === "rare_hold") {
+    return {
+      signable: false,
+      headline: "Rare intent: 90-day volume can never reach the sample bar",
+      details: [
+        { text: `Only ${g.triggers90d} triggers in 90 days; held at human handling.`, pass: null },
+        { text: "Conformal abstain fallback (P2) routes these to an agent.", pass: null },
+      ],
+    };
+  }
+  const details: Verdict["details"] = [];
+  let signable = true;
+  if (g.regulated) {
+    const volumeOk = g.triggers90d >= 600;
+    const missesOk = g.criticalMisses === 0;
+    details.push({ text: `regulated bar: ≥600 triggers — ${g.triggers90d}`, pass: volumeOk });
+    details.push({ text: `0 critical misses — ${g.criticalMisses}`, pass: missesOk });
+    details.push({
+      text: "detector-negative re-label column present",
+      pass: negativeColumnPresent,
+    });
+    if (metric?.recallRegulated != null) {
+      const recallOk = metric.recallRegulated >= 0.995;
+      details.push({
+        text: `regulated recall ≥99.5% — ${(metric.recallRegulated * 100).toFixed(1)}%`,
+        pass: recallOk,
+      });
+      if (!recallOk) signable = false;
+    }
+    if (!volumeOk || !missesOk || !negativeColumnPresent) signable = false;
+  } else {
+    const volumeOk = g.triggers90d >= 300;
+    const noEditOk = (g.noEditApproval ?? 0) >= 0.97;
+    details.push({ text: `non-regulated bar: ≥300 triggers — ${g.triggers90d}`, pass: volumeOk });
+    details.push({
+      text: `no-edit approval ≥97% — ${((g.noEditApproval ?? 0) * 100).toFixed(1)}%`,
+      pass: noEditOk,
+    });
+    if (!volumeOk || !noEditOk) signable = false;
+  }
+  return {
+    signable,
+    headline:
+      g.status === "shadow"
+        ? signable
+          ? "Shadow evidence meets the bar — dual sign-off promotes this intent"
+          : "In shadow: evidence does not yet meet the graduation bar"
+        : signable
+          ? "Graduated and in production at the signed level"
+          : "Evidence does not meet the graduation bar",
+    details,
+  };
+}
+
+export function ReadinessReport({
+  entry,
+  negativeColumnPresent,
+  onPromote,
+}: {
+  entry: GraduationEntry;
+  negativeColumnPresent: boolean;
+  onPromote: () => void;
+}) {
+  const verdict = evaluate(entry, negativeColumnPresent);
+  const alreadySigned = entry.status === "graduated" && entry.dualSigned;
+  const [signedCompliance, setSignedCompliance] = useState(false);
+  const [signedBusiness, setSignedBusiness] = useState(false);
+  const both = signedCompliance && signedBusiness;
+
+  return (
+    <div className="rounded-lg border border-line bg-white p-3" data-id="s4.readiness">
+      <h3 className="flex items-center gap-1.5 text-[12px] font-semibold text-navy">
+        {verdict.signable ? (
+          <CheckCircle2 size={14} className="text-emerald-600" />
+        ) : (
+          <XCircle size={14} className="text-red-600" />
+        )}
+        Autonomy Readiness Report · {entry.intentCode}
+      </h3>
+      <p className="mt-0.5 text-[10.5px] text-gray-700">{verdict.headline}</p>
+      <ul className="mt-1 space-y-0.5">
+        {verdict.details.map((d) => (
+          <li key={d.text} className="flex items-center gap-1 font-mono text-[10px] text-gray-600">
+            {d.pass == null ? (
+              <span className="w-3.5 text-faint">·</span>
+            ) : d.pass ? (
+              <CheckCircle2 size={11} className="shrink-0 text-emerald-600" />
+            ) : (
+              <XCircle size={11} className="shrink-0 text-red-600" />
+            )}
+            {d.text}
+          </li>
+        ))}
+      </ul>
+
+      <details className="mt-2">
+        <summary className="cursor-pointer text-[10px] text-teal">global readiness checks</summary>
+        <ul className="mt-1 space-y-0.5">
+          {READINESS_CHECKS.map((c) => (
+            <li key={c.code} className="flex items-start gap-1 text-[10px]">
+              <CheckCircle2 size={11} className={cn("mt-0.5 shrink-0", c.pass ? "text-emerald-600" : "text-red-600")} />
+              <span>
+                <span className="font-medium">{c.label.en}</span>
+                <span className="text-faint"> — {c.detail}</span>
+              </span>
+            </li>
+          ))}
+        </ul>
+      </details>
+
+      {entry.status !== "never" && entry.status !== "rare_hold" && (
+        <div className="mt-2 rounded border border-line bg-paper p-2">
+          <div className="text-[10px] font-semibold uppercase tracking-wide text-faint">
+            dual sign-off (recorded)
+          </div>
+          {alreadySigned ? (
+            <div className="mt-1 space-y-0.5 text-[10px]">
+              {entry.signedBy?.map((s) => (
+                <div key={s.role.en} className="flex items-center gap-1">
+                  <CheckCircle2 size={11} className="text-emerald-600" />
+                  {s.role.en} signed {s.at}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="mt-1 flex flex-wrap gap-2">
+              <SignButton
+                icon={<ShieldCheck size={11} />}
+                label="Compliance signs"
+                signed={signedCompliance}
+                disabled={!verdict.signable}
+                onClick={() => setSignedCompliance(true)}
+                id="s4.sign.compliance"
+              />
+              <SignButton
+                icon={<Briefcase size={11} />}
+                label="Business owner signs"
+                signed={signedBusiness}
+                disabled={!verdict.signable}
+                onClick={() => setSignedBusiness(true)}
+                id="s4.sign.business"
+              />
+              {both && (
+                <button
+                  data-id="s4.sign.apply"
+                  onClick={onPromote}
+                  className="inline-flex items-center gap-1 rounded bg-navy px-2.5 py-1 text-[10.5px] font-semibold text-white"
+                >
+                  <PenLine size={11} /> apply graduation to runtime
+                </button>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function SignButton({
+  icon,
+  label,
+  signed,
+  disabled,
+  onClick,
+  id,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  signed: boolean;
+  disabled: boolean;
+  onClick: () => void;
+  id: string;
+}) {
+  return (
+    <button
+      data-id={id}
+      onClick={onClick}
+      disabled={disabled || signed}
+      className={cn(
+        "inline-flex items-center gap-1 rounded px-2.5 py-1 text-[10.5px] ring-1",
+        signed
+          ? "bg-emerald-50 text-emerald-800 ring-emerald-300"
+          : "bg-white text-navy ring-line disabled:opacity-40",
+      )}
+    >
+      {signed ? <CheckCircle2 size={11} /> : icon}
+      {signed ? "signed" : label}
+    </button>
+  );
+}
