@@ -1,0 +1,40 @@
+{
+  "app": {
+    "title": "邮件自动驾驶 · 金融业",
+    "subtitle": "可用性原型 — Larkspur Bank（虚构机构与数据）",
+    "bank": "Larkspur Bank"
+  },
+  "nav": {
+    "customer": "客户邮件",
+    "agent": "坐席交接",
+    "supervisor": "主管台",
+    "builder": "策略 Builder",
+    "settings": "Provider 设置"
+  },
+  "navHint": {
+    "customer": "屏①",
+    "agent": "屏②",
+    "supervisor": "屏③",
+    "builder": "屏④"
+  },
+  "mode": {
+    "mock": "模拟数据",
+    "live": "真实 LLM",
+    "simClock": "模拟时钟"
+  },
+  "language": "English",
+  "demo": {
+    "start": "一键演示",
+    "stop": "退出演示"
+  },
+  "comingSoon": {
+    "customer": "屏① 客户邮件视图 — 里程碑 M3 交付",
+    "agent": "屏② 坐席交接卷宗 — 里程碑 M4 交付",
+    "supervisor": "屏③ 主管台 — 里程碑 M5 交付",
+    "builder": "屏④ 策略 Builder — 里程碑 M6 交付",
+    "settings": "Provider 设置屏 — 里程碑 M3 交付"
+  },
+  "footer": {
+    "fictional": "全部银行、客户、账户、金额均为虚构；不构成法律、税务或投资建议。"
+  }
+}

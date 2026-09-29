@@ -1,0 +1,126 @@
+// Intent graduation table (fixture). Thresholds are the single source of
+// truth shared with gates.ts (M2) and the Builder matrix (M6):
+//   regulated intents  ≥ 600 triggers AND 0 critical misses
+//   non-regulated      ≥ 300 triggers AND no-edit-approval ≥ 97%
+// R3/R4 intents are "never" — no tool exists for them in the email channel.
+import type { BiText } from "./types.ts";
+import type { RLevel } from "@runtime/state.ts";
+
+export type GraduationStatus =
+  | "graduated"
+  | "shadow"
+  | "rare_hold"
+  | "never";
+
+export interface GraduationEntry {
+  intentCode: string;
+  label: BiText;
+  risk: RLevel;
+  regulated: boolean;
+  triggers90d: number;
+  criticalMisses: number;
+  noEditApproval: number | null; // 0..1, null for never/rare
+  graduatedL: "L3" | "L2" | null;
+  status: GraduationStatus;
+  dualSigned: boolean;
+  signedBy?: Array<{ role: BiText; at: string }>;
+}
+
+export const GRADUATION_TABLE: GraduationEntry[] = [
+  {
+    intentCode: "general_inquiry",
+    label: { zh: "公共信息咨询（费率/网点/流程）", en: "General inquiry (rates / branches / process)" },
+    risk: "R0",
+    regulated: false,
+    triggers90d: 1842,
+    criticalMisses: 0,
+    noEditApproval: 0.984,
+    graduatedL: "L3",
+    status: "graduated",
+    dualSigned: true,
+    signedBy: [
+      { role: { zh: "合规", en: "Compliance" }, at: "2026-08-12" },
+      { role: { zh: "业务负责人", en: "Business owner" }, at: "2026-08-12" },
+    ],
+  },
+  {
+    intentCode: "card_delivery_status",
+    label: { zh: "新卡配送状态查询", en: "Replacement card delivery status" },
+    risk: "R1",
+    regulated: false,
+    triggers90d: 612,
+    criticalMisses: 0,
+    noEditApproval: 0.978,
+    graduatedL: "L3",
+    status: "graduated",
+    dualSigned: true,
+    signedBy: [
+      { role: { zh: "合规", en: "Compliance" }, at: "2026-08-20" },
+      { role: { zh: "业务负责人", en: "Business owner" }, at: "2026-08-21" },
+    ],
+  },
+  {
+    intentCode: "od_fee_refund",
+    label: { zh: "阈值内透支费退还", en: "Within-threshold overdraft fee refund" },
+    risk: "R2",
+    regulated: false,
+    triggers90d: 488,
+    criticalMisses: 0,
+    noEditApproval: 0.972,
+    graduatedL: "L3",
+    status: "graduated",
+    dualSigned: true,
+    signedBy: [
+      { role: { zh: "合规", en: "Compliance" }, at: "2026-09-02" },
+      { role: { zh: "业务负责人", en: "Business owner" }, at: "2026-09-03" },
+    ],
+  },
+  {
+    intentCode: "reg_e_intake",
+    label: { zh: "Reg E 争议受理 / 起钟 / 回执", en: "Reg E intake / clocks / acknowledgment" },
+    risk: "R2",
+    regulated: true,
+    triggers90d: 640,
+    criticalMisses: 0,
+    noEditApproval: 0.961,
+    graduatedL: "L2", // clock-driven intake; provisional credit stays L2
+    status: "shadow",
+    dualSigned: false,
+  },
+  {
+    intentCode: "reg_e_adjudication",
+    label: { zh: "Reg E 争议裁决", en: "Reg E dispute adjudication" },
+    risk: "R4",
+    regulated: true,
+    triggers90d: 214,
+    criticalMisses: 0,
+    noEditApproval: null,
+    graduatedL: null,
+    status: "never",
+    dualSigned: false,
+  },
+  {
+    intentCode: "contact_detail_change",
+    label: { zh: "改地址 / 改联系方式 / 寄卡新地址", en: "Address / contact change, card to new address" },
+    risk: "R3",
+    regulated: false,
+    triggers90d: 176,
+    criticalMisses: 0,
+    noEditApproval: null,
+    graduatedL: null,
+    status: "never",
+    dualSigned: false,
+  },
+  {
+    intentCode: "wire_recall_request",
+    label: { zh: "电汇召回（稀有）", en: "Wire recall (rare)" },
+    risk: "R3",
+    regulated: false,
+    triggers90d: 11,
+    criticalMisses: 0,
+    noEditApproval: null,
+    graduatedL: null,
+    status: "rare_hold", // 90-day volume can never reach the bar
+    dualSigned: false,
+  },
+];

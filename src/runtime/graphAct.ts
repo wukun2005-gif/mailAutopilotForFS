@@ -1,0 +1,285 @@
+// Nodes 6–7 of the case machine (Dev Plan §6.1): orchestrate & act, then the
+// human checkpoint (LangGraph interrupt + Command resume). Nodes 8–9 and the
+// clock scheduler live in graphRespond.ts / graphClose.ts. Write tools only
+// run through the gateway (idempotent); R3 tools are not registered.
+import { Command, interrupt } from "@langchain/langgraph";
+import type { CaseStateType } from "./caseState.ts";
+import type { ApprovalItem, Draft } from "./caseState.ts";
+import type { ActionLedgerEntry } from "./state.ts";
+import type { NodeDeps, NodeFn } from "./graphNodes.ts";
+import { emailById, unwrap as unwrapEnvelope } from "./graphNodes.ts";
+import { appendEvent } from "./eventStore.ts";
+import { simClock } from "./simClock.ts";
+import { CUSTOMER_JANE, DISPUTE_EMAIL2 } from "@/mocks/fixtures/index.ts";
+import {
+  cardDeliveryLetter,
+  fraudLockedLetter,
+  lockedStepUpLetter,
+  materialsAckLetter,
+  onFileWarningSms,
+  refundConfirmationLetter,
+  regEReceiptLetter,
+  resultLetterError,
+  resultLetterNoError,
+  secondWaiverExplanationDraft,
+  transactionDetailLetter,
+  caseCardMessage,
+} from "./letters.ts";
+import { draftText, sendSecure } from "./graphRespond.ts";
+import {
+  ADJ_APPROVAL,
+  FRAUD_APPROVAL,
+  PC_APPROVAL,
+  SIGN_APPROVAL,
+  actOnClock,
+} from "./graphClose.ts";
+
+export interface ResumePayload {
+  approvalId: string;
+  decision: "approve" | "reject" | "edit";
+  reasonCode?: string;
+  /** adjudication approval only. */
+  outcome?: "error" | "no_error";
+  editedText?: string;
+}
+
+const OD2_APPROVAL = "AP-OD2-EXPLAIN";
+
+async function emit(
+  state: CaseStateType,
+  node: string,
+  type: "tool_result" | "resume" | "clock" | "system" | "idempotent_replay",
+  data?: Record<string, unknown>,
+) {
+  await appendEvent({ caseId: state.caseId, node, type, data });
+}
+
+function due(a: ApprovalItem): boolean {
+  if (a.status !== "pending") return false;
+  if (!a.clockDueAt) return true;
+  return simClock.now() >= a.clockDueAt - 48 * 3600 * 1000;
+}
+
+type WriteResult = { entry: ActionLedgerEntry; replayed: boolean };
+
+// ── 6. orchestrate & act ─────────────────────────────────────────────────────
+
+export function makeAct(deps: NodeDeps): NodeFn {
+  return async (state) => {
+    const updates: Partial<CaseStateType> = { approvals: [], drafts: [] };
+    const actionEntries: ActionLedgerEntry[] = [];
+    const track = (r: WriteResult) => actionEntries.push(r.entry);
+    const addApproval = (a: ApprovalItem) => {
+      if (!state.approvals.some((x) => x.id === a.id) && !(updates.approvals ?? []).some((x) => x.id === a.id))
+        updates.approvals = [...(updates.approvals ?? []), a];
+    };
+    const addDraft = (d: Draft) => {
+      if (!state.drafts.some((x) => x.id === d.id) && !(updates.drafts ?? []).some((x) => x.id === d.id))
+        updates.drafts = [...(updates.drafts ?? []), d];
+    };
+    const caseCard = async (emailId: string) => {
+      if (state.actions.some((a) => a.key.includes(`casecard:${emailId}`))) return;
+      const letter = lockedStepUpLetter(state.customerId);
+      track(
+        await sendSecure(
+          deps, state, `casecard:${emailId}`, "case_card",
+          `${caseCardMessage().body}\n\n${draftText(letter)}`,
+        ),
+      );
+    };
+
+    // Fraud quarantine (email 3): signals converged in ingest.
+    const f = state.prescan.fraudFlags;
+    const isFraud =
+      f.includes("LOCAL_PART_LOOKALIKE") ||
+      f.includes("PROMPT_INJECTION") ||
+      f.includes("R3_COMBO") ||
+      f.some((x) => x.startsWith("ATO_SCORE_") && Number(x.split("_")[2]) >= 70);
+    if (isFraud && state.turn.kind === "email") {
+      updates.fraud = { quarantined: true, signals: f, confirmed: false };
+      updates.status = "quarantined";
+      addApproval({
+        id: FRAUD_APPROVAL, kind: "fraud_confirm", intentCode: "contact_detail_change",
+        risk: "R3", lLevel: "L0", title: "Confirm BEC/ATO quarantine", status: "pending",
+      });
+      await emit(state, "act", "system", { quarantined: true, signals: f });
+      return { ...updates, actions: actionEntries };
+    }
+
+    // Clock-driven turns (email 2 statutory timeline).
+    if (state.turn.kind === "clock") {
+      const clockApprovals = await actOnClock(deps, state);
+      return { approvals: clockApprovals, actions: actionEntries };
+    }
+
+    if (!["email", "step_up"].includes(state.turn.kind)) return {};
+    const emailId = state.currentEmailId;
+    if (!emailId) return {};
+    const level = state.identity?.level ?? "I0";
+    const decisions = state.decisions.filter((d) => d.sourceEmailId === emailId);
+    const email = emailById(emailId);
+
+    // Attachments → OCR gate (Day-6 materials).
+    if (state.turn.kind === "email" && email?.attachments?.length) {
+      const materials = [...state.materials];
+      for (const att of email.attachments) {
+        const r = unwrapEnvelope<{ gateDecision: string; confidence: number; flags: string[] }>(
+          await deps.gateway.postRead("/mock/ocr", { attachmentId: att.id }),
+        );
+        const existing = materials.findIndex((m) => m.code === att.id);
+        const row = {
+          code: att.id,
+          status: r.gateDecision === "auto_slot" ? ("received" as const) : ("ocr_low_confidence" as const),
+          ocrConfidence: r.confidence,
+          receivedDayN: simClock.dayN(),
+        };
+        if (existing >= 0) materials[existing] = row;
+        else materials.push(row);
+        if (r.gateDecision === "auto_slot") addDraft(materialsAckLetter(state.customerId));
+        await emit(state, "act", "tool_result", { ocr: att.id, gateDecision: r.gateDecision, flags: r.flags });
+      }
+      updates.materials = materials;
+    }
+
+    for (const d of decisions) {
+      const cell = d.cell;
+      if (d.intentCode === "contact_detail_change") continue; // never cell: no plan, no tool
+
+      if (d.intentCode === "card_delivery_status" && cell.kind === "L" && cell.level === "L3") {
+        addDraft(cardDeliveryLetter(state.customerId));
+      }
+
+      if (d.intentCode === "transaction_detail") {
+        if (cell.kind === "deny") {
+          await caseCard(emailId);
+          updates.status = "awaiting_customer";
+        } else if (cell.kind === "L" && level === "I3") {
+          addDraft(transactionDetailLetter(state.customerId));
+          updates.status = "pending_verify";
+        }
+      }
+
+      if (d.intentCode === "reg_e_intake") {
+        // Deterministic intake: file + clocks run at ANY identity (R2×I0 too).
+        if (!state.actions.some((a) => a.actionType === "create_dispute" && a.status === "done")) {
+          track(await deps.gateway.callWrite({
+            caseId: state.caseId, actionType: "create_dispute",
+            keySeed: DISPUTE_EMAIL2.disputeId, body: { txId: DISPUTE_EMAIL2.txId },
+          }));
+          updates.clocksFiled = true;
+          await emit(state, "act", "clock", { filed: true, case: DISPUTE_EMAIL2.disputeId });
+        }
+        if (level === "I0" || level === "I1") await caseCard(emailId);
+        else addDraft(regEReceiptLetter(state.customerId));
+      }
+
+      if (d.intentCode === "od_fee_refund") {
+        if (cell.kind === "deny") {
+          await caseCard(emailId);
+          updates.status = "awaiting_customer";
+        } else if (cell.kind === "L" && cell.level === "L3") {
+          const already = state.actions.some(
+            (a) => a.actionType === "refund_od_fee" && a.status === "done",
+          );
+          if (!already) {
+            const r = await deps.gateway.callWrite({
+              caseId: state.caseId, actionType: "refund_od_fee",
+              keySeed: "refund:ODF-3318", body: { feeId: "ODF-3318", amountCents: 3500 },
+            });
+            track(r);
+            await emit(state, "act", r.replayed ? "idempotent_replay" : "tool_result", {
+              refund: r.data, replayed: r.replayed,
+            });
+          }
+          addDraft(refundConfirmationLetter(state.customerId));
+          updates.status = "pending_verify";
+        } else if (cell.kind === "L" && cell.level === "L2") {
+          const explanation = secondWaiverExplanationDraft(state.customerId);
+          addDraft(explanation);
+          addApproval({
+            id: OD2_APPROVAL, kind: "money_action", intentCode: "od_fee_refund",
+            risk: "R2", lLevel: "L2", title: "Approve second-waiver explanation",
+            draft: explanation, status: "pending",
+          });
+        }
+      }
+    }
+    return { ...updates, actions: actionEntries };
+  };
+}
+
+// ── 7. human checkpoint (interrupt / Command resume) ─────────────────────────
+
+export function makeHumanCheckpoint(deps: NodeDeps): NodeFn {
+  return async (state) => {
+    const updated = new Map<string, ApprovalItem>();
+    const drafts: Draft[] = [];
+    const actionEntries: ActionLedgerEntry[] = [];
+    const pending = () => {
+      const byId = new Map(state.approvals.map((a) => [a.id, a]));
+      for (const [id, a] of updated) byId.set(id, a);
+      return [...byId.values()].filter(due);
+    };
+
+    const dueNow = pending();
+    if (dueNow.length === 0) return {};
+    const resume = interrupt({
+      approvals: dueNow.map((a) => ({ id: a.id, kind: a.kind, title: a.title, lLevel: a.lLevel })),
+    }) as ResumePayload | undefined;
+    if (!resume) return {};
+    const target = state.approvals.find((a) => a.id === resume.approvalId);
+    if (target) {
+      updated.set(target.id, {
+        ...target,
+        status: resume.decision === "approve" ? "approved" : resume.decision === "edit" ? "edited" : "rejected",
+        reasonCode: resume.reasonCode,
+        decidedBy: "supervisor@larkspur.example",
+        decidedAt: simClock.now(),
+      });
+      await emit(state, "human_checkpoint", "resume", {
+        approvalId: target.id,
+        decision: resume.decision,
+      });
+
+      if (resume.decision === "approve" && target.id === PC_APPROVAL) {
+        const r = await deps.gateway.callWrite({
+          caseId: state.caseId, actionType: "reg_e_provisional_credit",
+          keySeed: `pc:${DISPUTE_EMAIL2.disputeId}`, body: { disputeId: DISPUTE_EMAIL2.disputeId },
+        });
+        actionEntries.push(r.entry);
+      }
+      if (resume.decision === "approve" && target.id === FRAUD_APPROVAL) {
+        const r = await deps.gateway.callWrite({
+          caseId: state.caseId, actionType: "notify_onfile",
+          keySeed: "sms:onfile-warning",
+          body: { to: CUSTOMER_JANE.phoneOnFile, channel: "sms", kind: "fraud_warning", text: onFileWarningSms() },
+        });
+        actionEntries.push(r.entry);
+        drafts.push(fraudLockedLetter()); // SAR locked template, NEVER sent to the forged address
+      }
+      if (target.id === ADJ_APPROVAL && resume.decision === "approve") {
+        const resultDraft =
+          resume.outcome === "error"
+            ? resultLetterError(state.customerId)
+            : resultLetterNoError(state.customerId);
+        drafts.push(resultDraft);
+        updated.set(SIGN_APPROVAL, {
+          id: SIGN_APPROVAL, kind: "draft_signoff", intentCode: "reg_e_adjudication",
+          risk: "R4", lLevel: "L1", title: "Sign and send investigation result letter",
+          draft: resultDraft, status: "pending",
+        });
+      }
+    }
+
+    const update = { approvals: [...updated.values()], drafts, actions: actionEntries };
+    const byId = new Map(state.approvals.map((a) => [a.id, a]));
+    for (const [id, a] of updated) byId.set(id, a);
+    // Persist the decision, then re-enter this node for any chained approval
+    // (e.g. adjudication → L1 result sign-off); updates must checkpoint before
+    // the next interrupt or they would be silently discarded.
+    if ([...byId.values()].filter(due).length > 0) {
+      return new Command({ update, goto: "n_human_checkpoint" });
+    }
+    return update;
+  };
+}

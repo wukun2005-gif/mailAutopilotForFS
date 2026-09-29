@@ -1,0 +1,40 @@
+{
+  "app": {
+    "title": "Email Autopilot for Financial Services",
+    "subtitle": "Usability prototype — Larkspur Bank (fictional institution and data)",
+    "bank": "Larkspur Bank"
+  },
+  "nav": {
+    "customer": "Customer Email",
+    "agent": "Agent Handoff",
+    "supervisor": "Supervisor",
+    "builder": "Policy Builder",
+    "settings": "Provider Settings"
+  },
+  "navHint": {
+    "customer": "Screen 1",
+    "agent": "Screen 2",
+    "supervisor": "Screen 3",
+    "builder": "Screen 4"
+  },
+  "mode": {
+    "mock": "Mock data",
+    "live": "Live LLM",
+    "simClock": "Sim clock"
+  },
+  "language": "中文",
+  "demo": {
+    "start": "Run demo",
+    "stop": "Exit demo"
+  },
+  "comingSoon": {
+    "customer": "Screen 1 Customer email — delivered in milestone M3",
+    "agent": "Screen 2 Agent handoff dossier — delivered in milestone M4",
+    "supervisor": "Screen 3 Supervisor cockpit — delivered in milestone M5",
+    "builder": "Screen 4 Policy builder — delivered in milestone M6",
+    "settings": "Provider settings — delivered in milestone M3"
+  },
+  "footer": {
+    "fictional": "All banks, customers, accounts and amounts are fictional; no legal, tax or investment advice."
+  }
+}
