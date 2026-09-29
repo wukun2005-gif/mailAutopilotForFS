@@ -2,7 +2,7 @@
 
 可用性原型（usability prototype），用于现场 demo 与 slides 讲解。所有银行、客户、账户、金额、回测数字均为**虚构数据**；默认全程录制数据离线可跑，不依赖网络。
 
-- 产品依据：PRD v0.2（`../email-autopilot-fs-prd-v0.1.html`）
+- 产品依据：PRD v0.2（`email-autopilot-fs-prd-v0.1.html`）
 - 实现依据：Dev Plan v0.4.1（`../email-autopilot-prototype-dev-plan-v0.1.html`）
 - 技术栈：Vite 8 + React 19 + TypeScript 7 + LangGraph（浏览器内 checkpoint）+ MSW（录制 API）+ IndexedDB 持久化 + zustand + react-i18next（中/英）+ Tailwind v4 + Recharts + framer-motion
 
