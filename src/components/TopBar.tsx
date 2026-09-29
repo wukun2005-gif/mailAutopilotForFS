@@ -1,7 +1,10 @@
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { format } from "date-fns";
 import { Mailbox, UserCheck, ShieldCheck, SlidersHorizontal, Settings2, Play, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SCREENS, useUIStore, type ScreenId } from "@/store/uiStore";
+import { simClock } from "@/runtime/simClock";
 
 const ICONS: Record<ScreenId, typeof Mailbox> = {
   customer: Mailbox,
@@ -16,9 +19,16 @@ export function TopBar() {
   const screen = useUIStore((s) => s.screen);
   const setScreen = useUIStore((s) => s.setScreen);
   const demoActive = useUIStore((s) => s.demoActive);
+  const [, setTick] = useState(0);
 
   const toggleLang = () =>
     i18n.changeLanguage(i18n.language?.startsWith("zh") ? "en" : "zh");
+
+  useEffect(() => {
+    const id = window.setInterval(() => setTick((v) => v + 1), 500);
+    return () => window.clearInterval(id);
+  }, []);
+  const clockLabel = format(new Date(simClock.now()), "MM/dd HH:mm");
 
   return (
     <header className="bg-navy text-white shadow-card">
@@ -79,7 +89,7 @@ export function TopBar() {
             title={t("mode.simClock")}
           >
             <Clock size={12} />
-            <span className="font-mono">--:--</span>
+            <span className="font-mono">{clockLabel}</span>
           </div>
 
           {/* Mock / live badge — live toggle lands in M3 */}

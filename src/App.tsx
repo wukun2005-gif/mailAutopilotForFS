@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { TopBar } from "@/components/TopBar";
+import { ScenarioBar } from "@/components/ScenarioBar";
 import { bindHashSync, useUIStore } from "@/store/uiStore";
 import { CustomerScreen } from "@/screens/CustomerScreen";
 import { AgentScreen } from "@/screens/AgentScreen";
@@ -17,7 +18,8 @@ export default function App() {
   return (
     <div className="flex h-full flex-col">
       <TopBar />
-      <main className="min-h-0 flex-1 overflow-hidden">
+      <ScenarioBar />
+      <main className="min-h-0 flex-1 overflow-hidden bg-paper">
         {screen === "customer" && <CustomerScreen />}
         {screen === "agent" && <AgentScreen />}
         {screen === "supervisor" && <SupervisorScreen />}

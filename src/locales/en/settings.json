@@ -1,1 +1,21 @@
-{}
+{
+  "title": "LLM provider settings",
+  "desc": "API keys stay on the local Dev BFF (server-data/settings.json), never in the browser bundle. Live calls power only the read-only general-inquiry node; the recorded demo runs offline.",
+  "enableFallback": "Two-level fallback",
+  "fallbackDesc": "switch model within the same provider, then switch provider",
+  "modelFallback": "model fallback",
+  "enabled": "enabled",
+  "configured": "configured",
+  "needKey": "needs key",
+  "queryModels": "Query models",
+  "save": "Save",
+  "saveAll": "Save all providers",
+  "saved": "Provider settings saved",
+  "queried": "Queried {{count}} models",
+  "verify": "verify",
+  "setDefault": "set default",
+  "probeTitle": "Live LLM probe (read-only easter egg)",
+  "probeDesc": "Sends one general-inquiry question through the Dev BFF using the default model. No case actions, no customer data.",
+  "probePlaceholder": "e.g. What are your branch hours?",
+  "probeSend": "Ask live"
+}
