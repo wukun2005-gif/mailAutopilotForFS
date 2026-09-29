@@ -4,7 +4,7 @@
 // stream and simulated clock.
 import { create } from "zustand";
 import { CaseRunner, type ClockTarget } from "@/runtime/caseRunner.ts";
-import { listEvents } from "@/runtime/eventStore.ts";
+import { appendEvent, listEvents } from "@/runtime/eventStore.ts";
 import { simClock, type ClockSnapshot } from "@/runtime/simClock.ts";
 import { faultController } from "@/tools/faultController.ts";
 import type { CaseStateType } from "@/runtime/caseState.ts";
@@ -30,6 +30,8 @@ export interface CaseStoreState {
   simulateRestart: () => Promise<void>;
   reset: () => Promise<void>;
   refresh: () => Promise<void>;
+  /** Agent edits a draft (FR-7.1): recorded into the dossier, never silent. */
+  recordDraftEdit: (draftId: string, editedText: string) => Promise<void>;
 }
 
 let runner: CaseRunner | null = null;
@@ -112,6 +114,17 @@ export const useCaseStore = create<CaseStoreState>((set, get) => ({
   reset: async () => {
     const id = get().scenarioId;
     if (id) await get().loadScenario(id);
+  },
+
+  recordDraftEdit: async (draftId, editedText) => {
+    if (!runner) return;
+    await appendEvent({
+      caseId: runner.scenario.caseId,
+      node: "agent_dossier",
+      type: "system",
+      data: { draftEdited: draftId, editedLength: editedText.length },
+    });
+    await pull(set, get);
   },
 }));
 

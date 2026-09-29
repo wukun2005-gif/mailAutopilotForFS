@@ -21,6 +21,7 @@ import { decideCell } from "./gates.ts";
 import { appendEvent } from "./eventStore.ts";
 import { faultController } from "@/tools/faultController.ts";
 import type { Gateway } from "./gateway.ts";
+import type { Command } from "@langchain/langgraph";
 
 export interface NodeDeps {
   gateway: Gateway;
@@ -29,7 +30,10 @@ export interface NodeDeps {
 export type NodeFn = (
   state: CaseStateType,
   config?: unknown,
-) => Promise<Partial<CaseStateType>> | Partial<CaseStateType>;
+) =>
+  | Promise<Partial<CaseStateType> | Command>
+  | Partial<CaseStateType>
+  | Command;
 
 export function unwrap<T>(r: unknown): T {
   return (r as { data: T }).data;

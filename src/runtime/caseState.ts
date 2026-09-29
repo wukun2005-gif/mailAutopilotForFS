@@ -129,9 +129,23 @@ export interface StepUpRecord {
 }
 
 export interface Turn {
-  kind: "email" | "step_up" | "clock" | "materials" | "adjudication" | "fraud_review";
+  // "approval" is the input-driven resume protocol: a paused case ends its run
+  // at END with status awaiting_human; the supervisor's decision arrives as a
+  // fresh turn (browser builds cannot rely on LangGraph interrupt()'s ALS).
+  kind:
+    | "email"
+    | "step_up"
+    | "clock"
+    | "materials"
+    | "adjudication"
+    | "fraud_review"
+    | "approval";
   emailId?: string;
   atDayN?: number;
+  approvalId?: string;
+  decision?: "approve" | "reject" | "edit";
+  reasonCode?: string;
+  outcome?: "error" | "no_error";
 }
 
 export interface GraphInput {

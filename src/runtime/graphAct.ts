@@ -1,8 +1,12 @@
 // Nodes 6–7 of the case machine (Dev Plan §6.1): orchestrate & act, then the
-// human checkpoint (LangGraph interrupt + Command resume). Nodes 8–9 and the
-// clock scheduler live in graphRespond.ts / graphClose.ts. Write tools only
-// run through the gateway (idempotent); R3 tools are not registered.
-import { Command, interrupt } from "@langchain/langgraph";
+// human checkpoint. The pause protocol is input-driven: a case with due
+// approvals ends its run at END (status awaiting_human / quarantined), and the
+// supervisor's decision arrives as a fresh {kind:"approval"} turn. This keeps
+// interrupt/resume working in browser builds, where LangGraph's interrupt()
+// has no AsyncLocalStorage. Nodes 8–9 and the clock scheduler live in
+// graphRespond.ts / graphClose.ts. Write tools only run through the gateway
+// (idempotent); R3 tools are not registered.
+import { Command, END } from "@langchain/langgraph";
 import type { CaseStateType } from "./caseState.ts";
 import type { ApprovalItem, Draft } from "./caseState.ts";
 import type { ActionLedgerEntry } from "./state.ts";
@@ -208,77 +212,84 @@ export function makeAct(deps: NodeDeps): NodeFn {
   };
 }
 
-// ── 7. human checkpoint (interrupt / Command resume) ─────────────────────────
+// ── 7. human checkpoint (input-driven pause / resume) ────────────────────────
 
 export function makeHumanCheckpoint(deps: NodeDeps): NodeFn {
   return async (state) => {
     const updated = new Map<string, ApprovalItem>();
     const drafts: Draft[] = [];
     const actionEntries: ActionLedgerEntry[] = [];
-    const pending = () => {
-      const byId = new Map(state.approvals.map((a) => [a.id, a]));
-      for (const [id, a] of updated) byId.set(id, a);
-      return [...byId.values()].filter(due);
+    const byId = () => {
+      const map = new Map(state.approvals.map((a) => [a.id, a]));
+      for (const [id, a] of updated) map.set(id, a);
+      return map;
     };
 
-    const dueNow = pending();
-    if (dueNow.length === 0) return {};
-    const resume = interrupt({
-      approvals: dueNow.map((a) => ({ id: a.id, kind: a.kind, title: a.title, lLevel: a.lLevel })),
-    }) as ResumePayload | undefined;
-    if (!resume) return {};
-    const target = state.approvals.find((a) => a.id === resume.approvalId);
-    if (target) {
-      updated.set(target.id, {
-        ...target,
-        status: resume.decision === "approve" ? "approved" : resume.decision === "edit" ? "edited" : "rejected",
-        reasonCode: resume.reasonCode,
-        decidedBy: "supervisor@larkspur.example",
-        decidedAt: simClock.now(),
-      });
-      await emit(state, "human_checkpoint", "resume", {
-        approvalId: target.id,
-        decision: resume.decision,
-      });
+    // A supervisor decision arrives as a fresh approval turn.
+    const t = state.turn;
+    let chained = false;
+    if (t.kind === "approval" && t.approvalId && t.decision) {
+      const target = byId().get(t.approvalId);
+      if (target && target.status === "pending") {
+        updated.set(target.id, {
+          ...target,
+          status: t.decision === "approve" ? "approved" : t.decision === "edit" ? "edited" : "rejected",
+          reasonCode: t.reasonCode,
+          decidedBy: "supervisor@larkspur.example",
+          decidedAt: simClock.now(),
+        });
+        await emit(state, "human_checkpoint", "resume", {
+          approvalId: target.id,
+          decision: t.decision,
+        });
 
-      if (resume.decision === "approve" && target.id === PC_APPROVAL) {
-        const r = await deps.gateway.callWrite({
-          caseId: state.caseId, actionType: "reg_e_provisional_credit",
-          keySeed: `pc:${DISPUTE_EMAIL2.disputeId}`, body: { disputeId: DISPUTE_EMAIL2.disputeId },
-        });
-        actionEntries.push(r.entry);
-      }
-      if (resume.decision === "approve" && target.id === FRAUD_APPROVAL) {
-        const r = await deps.gateway.callWrite({
-          caseId: state.caseId, actionType: "notify_onfile",
-          keySeed: "sms:onfile-warning",
-          body: { to: CUSTOMER_JANE.phoneOnFile, channel: "sms", kind: "fraud_warning", text: onFileWarningSms() },
-        });
-        actionEntries.push(r.entry);
-        drafts.push(fraudLockedLetter()); // SAR locked template, NEVER sent to the forged address
-      }
-      if (target.id === ADJ_APPROVAL && resume.decision === "approve") {
-        const resultDraft =
-          resume.outcome === "error"
-            ? resultLetterError(state.customerId)
-            : resultLetterNoError(state.customerId);
-        drafts.push(resultDraft);
-        updated.set(SIGN_APPROVAL, {
-          id: SIGN_APPROVAL, kind: "draft_signoff", intentCode: "reg_e_adjudication",
-          risk: "R4", lLevel: "L1", title: "Sign and send investigation result letter",
-          draft: resultDraft, status: "pending",
-        });
+        if (t.decision === "approve" && target.id === PC_APPROVAL) {
+          const r = await deps.gateway.callWrite({
+            caseId: state.caseId, actionType: "reg_e_provisional_credit",
+            keySeed: `pc:${DISPUTE_EMAIL2.disputeId}`, body: { disputeId: DISPUTE_EMAIL2.disputeId },
+          });
+          actionEntries.push(r.entry);
+        }
+        if (t.decision === "approve" && target.id === FRAUD_APPROVAL) {
+          const r = await deps.gateway.callWrite({
+            caseId: state.caseId, actionType: "notify_onfile",
+            keySeed: "sms:onfile-warning",
+            body: { to: CUSTOMER_JANE.phoneOnFile, channel: "sms", kind: "fraud_warning", text: onFileWarningSms() },
+          });
+          actionEntries.push(r.entry);
+          drafts.push(fraudLockedLetter()); // SAR locked template, NEVER sent to the forged address
+        }
+        if (target.id === ADJ_APPROVAL && t.decision === "approve") {
+          const resultDraft =
+            t.outcome === "error"
+              ? resultLetterError(state.customerId)
+              : resultLetterNoError(state.customerId);
+          drafts.push(resultDraft);
+          updated.set(SIGN_APPROVAL, {
+            id: SIGN_APPROVAL, kind: "draft_signoff", intentCode: "reg_e_adjudication",
+            risk: "R4", lLevel: "L1", title: "Sign and send investigation result letter",
+            draft: resultDraft, status: "pending",
+          });
+          chained = true;
+        }
       }
     }
 
     const update = { approvals: [...updated.values()], drafts, actions: actionEntries };
-    const byId = new Map(state.approvals.map((a) => [a.id, a]));
-    for (const [id, a] of updated) byId.set(id, a);
-    // Persist the decision, then re-enter this node for any chained approval
-    // (e.g. adjudication → L1 result sign-off); updates must checkpoint before
-    // the next interrupt or they would be silently discarded.
-    if ([...byId.values()].filter(due).length > 0) {
-      return new Command({ update, goto: "n_human_checkpoint" });
+    // Re-enter once to surface the chained approval (adjudication → L1 sign-off).
+    if (chained) return new Command({ update, goto: "n_human_checkpoint" });
+
+    // Still-due approvals pause the case at END; the durable checkpoint makes
+    // the pause survive restart, and idempotent tools prevent double execution.
+    const pendingNow = [...byId().values()].filter(due);
+    if (pendingNow.length > 0) {
+      return new Command({
+        update: {
+          ...update,
+          status: state.fraud.quarantined ? ("quarantined" as const) : ("awaiting_human" as const),
+        },
+        goto: END,
+      });
     }
     return update;
   };

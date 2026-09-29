@@ -35,7 +35,12 @@ export function buildCaseGraph(checkpointer?: IDBSaver) {
     .addEdge(START, "n_ingest")
     .addEdge("n_ingest", "n_triage")
     .addConditionalEdges("n_triage", (state: CaseStateType) =>
-      state.status === "awaiting_human" && state.intents.length > 0
+      // The triage handoff exit exists only for low-confidence EMAIL turns.
+      // Approval/clock/step-up turns replay the graph from START and must pass
+      // through to the checkpoint even when status persisted as awaiting_human.
+      state.status === "awaiting_human" &&
+      state.turn.kind === "email" &&
+      state.intents.length > 0
         ? "handoff_exit"
         : "n_identity",
     { n_identity: "n_identity", handoff_exit: END })

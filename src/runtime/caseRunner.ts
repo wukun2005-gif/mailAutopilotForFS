@@ -1,7 +1,6 @@
 // Headless case driver for tests and the demo Director (Dev Plan §8/§9).
 // One runner per scenario; every turn is a graph.invoke against the same
 // thread_id, with the IDBSaver checkpointer making interrupt/restart resumable.
-import { Command } from "@langchain/langgraph";
 import { buildCaseGraph } from "./graph.ts";
 import { IDBSaver } from "./saver.ts";
 import { SCENARIOS, type Scenario, type ScenarioId } from "./scenarios.ts";
@@ -101,18 +100,24 @@ export class CaseRunner {
     return this.invoke(this.baseTurn({ kind: "clock" }));
   }
 
-  /** Supervisor decision on a paused approval (Command resume). */
+  /** Supervisor decision on a paused approval (fresh approval turn). */
   async approve(payload: ResumePayload): Promise<RunnerSnapshot> {
-    return this.invoke(new Command({ resume: payload }) as unknown as Parameters<typeof this.graph.invoke>[0]);
+    return this.invoke(
+      this.baseTurn({
+        kind: "approval",
+        approvalId: payload.approvalId,
+        decision: payload.decision,
+        reasonCode: payload.reasonCode,
+        outcome: payload.outcome,
+      }),
+    );
   }
 
   /** Convenience: approve the single currently-paused approval. */
   async approveDue(extra: Partial<ResumePayload> = {}): Promise<RunnerSnapshot> {
     const snap = await this.snapshot();
-    const paused = snap.next.length > 0;
-    if (!paused) return snap;
     const state = snap.state;
-    const dueApproval = state.approvals.find((a) => a.status === "pending");
+    const dueApproval = state.approvals.find((a) => a.status === "pending" && this.isDue(a));
     if (!dueApproval) return snap;
     return this.approve({
       approvalId: dueApproval.id,
@@ -120,6 +125,11 @@ export class CaseRunner {
       outcome: "error",
       ...extra,
     });
+  }
+
+  private isDue(a: CaseStateType["approvals"][number]): boolean {
+    if (!a.clockDueAt) return true;
+    return simClock.now() >= a.clockDueAt - 48 * 3600 * 1000;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -133,11 +143,14 @@ export class CaseRunner {
       values: CaseStateType;
       next: string[];
     };
-    return {
-      state: state.values,
-      next: state.next ?? [],
-      interrupted: (state.next ?? []).length > 0,
-    };
+    const values = state.values;
+    const dueApproval = (values?.approvals ?? []).some(
+      (a) => a.status === "pending" && this.isDue(a),
+    );
+    // Only due human approvals count as a mid-flow interrupt; customer
+    // step-up pauses end the run naturally and report interrupted=false.
+    const next = dueApproval ? ["n_human_checkpoint"] : [];
+    return { state: values, next, interrupted: dueApproval };
   }
 }
 
