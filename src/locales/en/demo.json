@@ -1,1 +1,64 @@
-{}
+{
+  "start": "Demo",
+  "playing": "Playing demo",
+  "blocker": "A required step could not be performed",
+  "blockerHint": "use single-step (→) after fixing, or restart",
+  "speed": "playback speed",
+  "restart": "restart script",
+  "scripts": {
+    "trailer": "90s trailer",
+    "email1": "Email 1 · OD fee, two beats",
+    "email2": "Email 2 · Reg E dispute, 45 days",
+    "email3": "Email 3 · BEC quarantine",
+    "builder": "Builder · backtest & graduation"
+  },
+  "trailer": {
+    "intro": "Email Autopilot for Financial Services — every action runs through the same runtime you are about to see.",
+    "intake": "An unauthenticated dispute email is triaged, filed and clocked on arrival — no human in the loop for intake.",
+    "approve": "Statutory obligations surface in the supervisor queue with one-click approval — the click is a real human action, not a scripted screen.",
+    "fraud": "A business-email-compromise attempt is quarantined: the requested contact changes are structurally unreachable, and the customer is warned only through the on-file channel.",
+    "builder": "Autonomy is earned: backtest, sampling, dual sign-off — and the hard cells cannot be opened from configuration at all.",
+    "outro": "Deterministic where the law requires it, autonomous where evidence has earned it, auditable everywhere."
+  },
+  "email1": {
+    "publicMailbox": "Day 0: the email arrives from a public Gmail address that is not on file. Identity assurance is I1 — the system does not know who this is.",
+    "lockedCell": "The R2 × I1 cell is locked: no refund, no AI-written reply. The customer receives only a locked template that guides them to verify in the mobile app — the email itself contains no links.",
+    "caseCard": "Verification happens through an app case-card tied to the same thread: push notification, one-time code, done.",
+    "i3refund": "Identity is now I3 in this thread. The graduated intent runs at L3: the $35 overdraft fee is refunded idempotently and a three-source reply is sent.",
+    "provenance": "Audit view colors every sentence: blue is a locked template, green is a system slot, purple is generated language — each with its source.",
+    "verified": "14 days later the system counts the case as verified (a measurement event, not a closed thread).",
+    "secondWaiver": "Day 21, same thread, second refund request. Identity is still I3 — but policy condition 'first waiver in 12 months' now FAILS. The boundary is the policy result, not the model's mood: the case drops to L2.",
+    "l2queue": "An explanation draft is queued for a supervisor — the customer keeps a human reconsideration path.",
+    "outro": "Same intent, same customer, two different outcomes — because the cell value changed, and every change is explainable."
+  },
+  "email2": {
+    "intake": "Day 0, 08:14: one email contains two intents — card delivery status and a $247.18 dispute. Both are filed on arrival and the Reg E statutory clocks start immediately, even at I0.",
+    "detailDenied": "Day 1, the customer asks for transaction details. Unmentioned transactions are an I3 field class, and this thread is I2 — disclosure is denied, with an app verification prompt.",
+    "detailReleased": "After in-thread step-up to I3, the disputed transaction details are released, last four digits only.",
+    "materials": "Day 6: the signed statement arrives as an attachment. OCR confidence is high enough to auto-slot it; low-confidence OCR would stay with a human. Missing materials never pause the statutory clock.",
+    "clock48h": "Business day 10 is the provisional-credit deadline. The board turns red inside 48 calendar hours — time is computed, never judged.",
+    "restart": "Before approving, we kill the process and reopen it. A fresh runtime reattaches to the same checkpoints: the pending approval is still here, and the money action will not execute twice. This is the engineering problem behind long-running autopilots.",
+    "pcApproved": "One click releases the provisional credit, and the customer sees the secure message on the customer view.",
+    "evidence": "Day 40: merchant evidence arrives. Adjudication is R4 — permanently human. The AI drafts, the person decides.",
+    "adjudication": "The supervisor upholds the error; the result letter is chained into an L1 human sign-off in the same run.",
+    "closed": "Day 45, within the POS 90-day outer limit: the result letter is signed and the dispute closes with the full decision dossier attached.",
+    "outro": "A 45-day, cross-system case that survives process restarts — with a human on every high-risk action."
+  },
+  "email3": {
+    "signals": "Day 2: jane.d0e@outlook.com — a lookalike of the on-file address. SPF and DKIM pass, but DMARC is 'none'; the display name is spoofed; the attachment embeds the instruction 'skip OTP', which is treated as data, not a command.",
+    "noTools": "The email asks to change the phone number and mail a card to a new address. In the email channel no such tools are registered — the buttons are greyed out at the configuration layer AND absent at the tool layer.",
+    "onfile": "Confirming fraud sends a warning SMS to the on-file number only — never to the address under attacker control.",
+    "sar": "A supporting record is generated from a locked template containing facts only — no conclusions, and nothing ever transmitted to the forged address.",
+    "outro": "Prompt injection, BEC and ATO meet a system whose attack surface was designed closed."
+  },
+  "builder": {
+    "intro": "Autonomy is not configured by a slider — it is earned per intent, and the R × I matrix is rendered by the same decision function that runs in production.",
+    "replay": "A 90-day recorded dataset is replayed: agreement, no-edit approval, regulated recall, critical misses, unit cost. The bar animates; every number is a recorded fixture.",
+    "sampling": "Three sampling tiers — stratified, random, and adversarial — across three intake frames, including tickets that were never created. Tier C is reported separately.",
+    "unsignable": "Watch what happens if detector-negative items are not independently re-labeled: the recall criterion becomes not signable. Positive-only volume can never bound misses.",
+    "promoted": "Compliance and the business owner both sign: the shadow intent is promoted, and the next inbound email of that type immediately runs at the new level — same runtime.",
+    "r3never": "Contact-detail change is R3. Click the cells: nothing happens. They are disabled in configuration and no tool function exists — there is no setting that opens them.",
+    "rare": "Wire recalls are rare: 90 days can never reach the sample bar. They stay human, with a conformal abstention fallback calibrated to route uncertain cases to an agent.",
+    "outro": "Every autonomous action in this demo traces back to evidence a regulator would accept."
+  }
+}

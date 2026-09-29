@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
-import { Mailbox, UserCheck, ShieldCheck, SlidersHorizontal, Settings2, Play, Clock } from "lucide-react";
+import { Mailbox, UserCheck, ShieldCheck, SlidersHorizontal, Settings2, Play, Clock, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SCREENS, useUIStore, type ScreenId } from "@/store/uiStore";
 import { simClock } from "@/runtime/simClock";
+import { SCRIPTS } from "@/demo/scripts.ts";
+import { demoRunner } from "@/demo/runner.ts";
 
 const ICONS: Record<ScreenId, typeof Mailbox> = {
   customer: Mailbox,
@@ -15,11 +17,12 @@ const ICONS: Record<ScreenId, typeof Mailbox> = {
 };
 
 export function TopBar() {
-  const { t, i18n } = useTranslation("common");
+  const { t, i18n } = useTranslation(["common", "demo"]);
   const screen = useUIStore((s) => s.screen);
   const setScreen = useUIStore((s) => s.setScreen);
   const demoActive = useUIStore((s) => s.demoActive);
   const [, setTick] = useState(0);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const toggleLang = () =>
     i18n.changeLanguage(i18n.language?.startsWith("zh") ? "en" : "zh");
@@ -82,9 +85,8 @@ export function TopBar() {
         </nav>
 
         <div className="ml-auto flex items-center gap-2">
-          {/* Sim clock chip — wired to simClock in M1 */}
+          {/* Sim clock chip */}
           <div
-            data-testid="sim-clock-chip"
             className="hidden items-center gap-1.5 rounded-full border border-white/15 px-2.5 py-1 text-[11px] text-white/70 md:flex"
             title={t("mode.simClock")}
           >
@@ -92,36 +94,52 @@ export function TopBar() {
             <span className="font-mono">{clockLabel}</span>
           </div>
 
-          {/* Mock / live badge — live toggle lands in M3 */}
-          <div
-            data-testid="data-mode-badge"
-            className="rounded-full bg-teal/20 px-2.5 py-1 text-[11px] font-medium text-teal-soft"
-          >
+          {/* Mock / live badge */}
+          <div className="rounded-full bg-teal/20 px-2.5 py-1 text-[11px] font-medium text-teal-soft">
             {t("mode.mock")}
           </div>
 
           <button
             onClick={toggleLang}
-            data-testid="lang-toggle"
+            data-id="top.lang"
             className="rounded-full border border-white/20 px-2.5 py-1 text-[11px] text-white/80 transition-colors hover:bg-white/10"
           >
             {t("language")}
           </button>
 
-          <button
-            disabled
-            data-testid="demo-button"
-            className={cn(
-              "flex items-center gap-1.5 rounded-full px-3 py-1 text-[12px] font-medium",
-              demoActive
-                ? "bg-amber text-white"
-                : "cursor-not-allowed bg-white/10 text-white/40",
+          {/* Demo script picker */}
+          <div className="relative">
+            <button
+              data-id="top.demo"
+              onClick={() => setMenuOpen((v) => !v)}
+              onBlur={() => setTimeout(() => setMenuOpen(false), 150)}
+              className={cn(
+                "flex items-center gap-1.5 rounded-full px-3 py-1 text-[12px] font-medium",
+                demoActive ? "bg-amber-500 text-white" : "bg-teal text-white hover:bg-teal/90",
+              )}
+            >
+              <Play size={12} />
+              {demoActive ? t("demo:playing") : t("demo:start")}
+              <ChevronDown size={12} />
+            </button>
+            {menuOpen && (
+              <div className="absolute right-0 top-full z-50 mt-1 w-64 overflow-hidden rounded-lg border border-line bg-white py-1 text-navy shadow-xl">
+                {SCRIPTS.map((s) => (
+                  <button
+                    key={s.id}
+                    data-id={`demo.script.${s.id}`}
+                    onMouseDown={() => {
+                      setMenuOpen(false);
+                      void demoRunner.start(s.id);
+                    }}
+                    className="block w-full px-3 py-2 text-left text-[11.5px] hover:bg-paper"
+                  >
+                    {t(`demo:${s.nameKey}`)}
+                  </button>
+                ))}
+              </div>
             )}
-            title="M7"
-          >
-            <Play size={12} />
-            {demoActive ? t("demo.stop") : t("demo.start")}
-          </button>
+          </div>
         </div>
       </div>
     </header>
