@@ -9,7 +9,7 @@ export interface PublicProvider {
   nameEn: string;
   desc: string;
   descEn: string;
-  devOnly: boolean;
+  kind: "chat" | "decision";
   defaultBaseUrl: string;
   keyPlaceholder: string;
   starterModels: string[];
@@ -45,10 +45,11 @@ export const providerApi = {
   saveProviders: (
     providers: ProviderConfig[],
     enableProviderFallback: boolean,
+    enableDecisionProviderFallback?: boolean,
   ) =>
     jsonFetch<{ ok: true }>("/api/settings/providers", {
       method: "POST",
-      body: JSON.stringify({ providers, enableProviderFallback }),
+      body: JSON.stringify({ providers, enableProviderFallback, enableDecisionProviderFallback }),
     }),
 
   queryModels: (providerId: string, apiKey: string, baseUrl: string) =>

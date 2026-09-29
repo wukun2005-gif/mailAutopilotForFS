@@ -62,9 +62,9 @@ async function handleModels(body: Record<string, unknown>) {
   const baseUrl = (row.baseUrl || preset.defaultBaseUrl || "").trim().replace(/\/+$/, "");
   const key = rawKeyOf(row) || String(body["apiKey"] ?? "");
   if (!baseUrl)
-    return { status: 400, error: "缺少 baseUrl", models: preset.starterModels };
+    return { status: 400, error: "缺少 baseUrl", models: preset.starterModels ?? [] };
   if (!key)
-    return { status: 200, models: preset.starterModels, fromApi: false };
+    return { status: 200, models: preset.starterModels ?? [], fromApi: false };
   try {
     const r = await fetch(`${baseUrl}/models`, {
       headers: { Authorization: `Bearer ${key}` },
@@ -73,7 +73,7 @@ async function handleModels(body: Record<string, unknown>) {
     if (!r.ok)
       return {
         status: 200,
-        models: preset.starterModels,
+        models: preset.starterModels ?? [],
         fromApi: false,
         fetchError: `HTTP ${r.status}`,
       };
@@ -83,13 +83,13 @@ async function handleModels(body: Record<string, unknown>) {
       .filter((v): v is string => typeof v === "string" && v.length > 0);
     return {
       status: 200,
-      models: ids.length > 0 ? ids : preset.starterModels,
+      models: ids.length > 0 ? ids : preset.starterModels ?? [],
       fromApi: ids.length > 0,
     };
   } catch (e) {
     return {
       status: 200,
-      models: preset.starterModels,
+      models: preset.starterModels ?? [],
       fromApi: false,
       fetchError: e instanceof Error ? e.message : String(e),
     };

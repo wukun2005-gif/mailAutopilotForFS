@@ -34,7 +34,7 @@ npm run audit:prd  # PRD 口径断言（15 项）
 | ① | Customer Email | Webmail、手机银行 App 案件卡、step-up（OTP / App 案件卡）、三色文书（Tricolor Letter）、Trace Rail、Reg E 时钟条 |
 | ② | Agent Handoff | 案件卷宗：意图证据卡、政策求值卡、缺失材料、待办动作、可编辑草稿（L2）、中断恢复横幅 |
 | ③ | Supervisor | 审批队列（一键批 / 链式审批）、法定时钟看板、BEC/ATO 欺诈隔离 |
-| ④ | Policy Builder | R×I 自主权矩阵（可手动 cap）、90 天回测、三层抽样、就绪报告 + 合规/业务双签、Conformal 卡（P2） |
+| ④ | Admin | R×I 自主权矩阵（可手动 cap）、90 天回测、三层抽样、就绪报告 + 合规/业务双签、Conformal 卡（P2） |
 | 设置 | Provider Settings | LLM provider 配置（从 HarnessWindTunnel 移植），key 在服务端掩码落盘 |
 
 顶部琥珀色条是**原型控制面板**（Prototype controls）：注入邮件、拨模拟时钟、注入故障（超时/重复送达/政策版本/会话过期/新线程/OTP 锁定等）、重启进程、重置。
