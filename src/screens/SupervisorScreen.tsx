@@ -1,14 +1,95 @@
-import { useTranslation } from "react-i18next";
-import { ShieldCheck } from "lucide-react";
+// Screen 3 — Supervisor Cockpit (Dev Plan §7.3): approve fast, see every
+// statutory clock, keep fraud isolated. All three tabs read the same runtime
+// state as the customer and agent views; approvals resume the real graph.
+import { useEffect, useState } from "react";
+import { Inbox, Clock, ShieldAlert } from "lucide-react";
+import { useCaseStore } from "@/store/caseStore";
+import { ApprovalQueue } from "./supervisor/ApprovalQueue";
+import { ClockBoard } from "./supervisor/ClockBoard";
+import { FraudQuarantine } from "./supervisor/FraudQuarantine";
+import { regEClocks, DAY0_EPOCH, simClock } from "@/runtime/simClock.ts";
+import { cn } from "@/lib/utils";
+
+type Tab = "queue" | "clocks" | "fraud";
+
+const TABS: { id: Tab; label: string; icon: typeof Inbox }[] = [
+  { id: "queue", label: "Approval queue", icon: Inbox },
+  { id: "clocks", label: "Statutory clocks", icon: Clock },
+  { id: "fraud", label: "Fraud quarantine", icon: ShieldAlert },
+];
 
 export function SupervisorScreen() {
-  const { t } = useTranslation("common");
+  const scenarioId = useCaseStore((s) => s.scenarioId);
+  const loadScenario = useCaseStore((s) => s.loadScenario);
+  const caseState = useCaseStore((s) => s.caseState);
+  const [tab, setTab] = useState<Tab>("queue");
+
+  useEffect(() => {
+    if (!scenarioId) void loadScenario("email2");
+  }, [scenarioId, loadScenario]);
+
+  if (!scenarioId || !caseState) {
+    return <div className="p-6 text-[12px] text-faint">loading cockpit…</div>;
+  }
+
+  const pending = (caseState.approvals ?? []).filter((a) => a.status === "pending");
+  const quarantined = caseState.fraud?.quarantined ?? false;
+  let dueClocks = 0;
+  if (caseState.scenarioId === "email2" && caseState.clocksFiled) {
+    const c = regEClocks(DAY0_EPOCH);
+    const pcDone = (caseState.actions ?? []).some(
+      (a) => a.actionType === "reg_e_provisional_credit" && a.status === "done",
+    );
+    if (!pcDone && c.provisionalCreditDue - simClock.now() <= 5 * 86_400_000) dueClocks += 1;
+  }
+
   return (
-    <div className="flex h-full items-center justify-center p-8">
-      <div className="max-w-md rounded-xl border border-dashed border-navy-light/40 bg-paper p-8 text-center shadow-card">
-        <ShieldCheck className="mx-auto mb-3 text-navy-light" size={32} />
-        <p className="text-sm text-soft">{t("comingSoon.supervisor")}</p>
+    <div className="flex h-full flex-col gap-2 p-2">
+      <div className="grid grid-cols-3 gap-2">
+        <Kpi label="pending approvals" value={pending.length} hot={pending.length > 0} />
+        <Kpi label="clocks within 5 days" value={dueClocks} hot={dueClocks > 0} />
+        <Kpi label="quarantined messages" value={quarantined ? 1 : 0} hot={quarantined} />
       </div>
+
+      <div className="flex gap-1 border-b border-line">
+        {TABS.map(({ id, label, icon: Icon }) => (
+          <button
+            key={id}
+            data-id={`s3.tab.${id}`}
+            onClick={() => setTab(id)}
+            className={cn(
+              "inline-flex items-center gap-1.5 border-b-2 px-3 py-1.5 text-[11.5px]",
+              tab === id
+                ? "border-teal font-semibold text-teal"
+                : "border-transparent text-faint hover:text-navy",
+            )}
+          >
+            <Icon size={13} /> {label}
+          </button>
+        ))}
+      </div>
+
+      <div className="min-h-0 flex-1 overflow-y-auto pr-1">
+        {tab === "queue" && <ApprovalQueue state={caseState} />}
+        {tab === "clocks" && <ClockBoard state={caseState} />}
+        {tab === "fraud" && <FraudQuarantine state={caseState} />}
+      </div>
+    </div>
+  );
+}
+
+function Kpi({ label, value, hot }: { label: string; value: number; hot: boolean }) {
+  return (
+    <div
+      className={cn(
+        "rounded-lg border bg-white px-3 py-2",
+        hot && value > 0 ? "border-red-300 bg-red-50/50" : "border-line",
+      )}
+    >
+      <div className={cn("text-[20px] font-bold leading-none", hot ? "text-red-700" : "text-navy")}>
+        {value}
+      </div>
+      <div className="mt-1 text-[10px] uppercase tracking-wide text-faint">{label}</div>
     </div>
   );
 }
