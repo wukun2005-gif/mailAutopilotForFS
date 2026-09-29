@@ -4,6 +4,7 @@
 import { Check, X, HelpCircle } from "lucide-react";
 import type { CaseStateType, PolicyCard } from "@/runtime/caseState.ts";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 function VerdictIcon({ v }: { v: string }) {
   if (v === "PASS") return <Check size={12} className="text-emerald-600" />;
@@ -11,7 +12,7 @@ function VerdictIcon({ v }: { v: string }) {
   return <HelpCircle size={12} className="text-amber-600" />;
 }
 
-function Card({ card }: { card: PolicyCard }) {
+function Card({ card, t }: { card: PolicyCard; t: (k: string) => string }) {
   return (
     <div className="rounded border border-line p-2" data-id="s2.policy">
       <div className="flex items-center gap-2">
@@ -19,7 +20,7 @@ function Card({ card }: { card: PolicyCard }) {
         <span className="font-mono text-[10px] text-faint">{card.version}</span>
         {card.degraded && (
           <span className="rounded bg-amber-100 px-1 py-0.5 text-[9px] font-medium text-amber-800">
-            version degraded
+            {t("policy.degraded")}
           </span>
         )}
         <span
@@ -59,15 +60,16 @@ function Card({ card }: { card: PolicyCard }) {
 }
 
 export function PolicyEvaluationCard({ state }: { state: CaseStateType }) {
+  const { t } = useTranslation("agent");
   const cards = state.policyCards ?? [];
   return (
     <section className="rounded-lg border border-line bg-white p-3" data-id="s2.policy.section">
-      <h3 className="text-[12px] font-semibold text-navy">Policy evaluation</h3>
-      <p className="text-[10px] text-faint">deterministic policy pack · conditions evaluated from system data, not model mood</p>
+      <h3 className="text-[12px] font-semibold text-navy">{t("policy.title")}</h3>
+      <p className="text-[10px] text-faint">{t("policy.subtitle")}</p>
       <div className="mt-2 space-y-2">
-        {cards.length === 0 && <div className="text-[10.5px] text-faint">no policy evaluated for this case</div>}
+        {cards.length === 0 && <div className="text-[10.5px] text-faint">{t("policy.empty")}</div>}
         {cards.map((c) => (
-          <Card key={`${c.policyId}@${c.sourceEmailId}`} card={c} />
+          <Card key={`${c.policyId}@${c.sourceEmailId}`} card={c} t={t} />
         ))}
       </div>
     </section>

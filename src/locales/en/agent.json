@@ -1,1 +1,61 @@
-{}
+{
+  "loading": "loading dossier…",
+  "identityLabel": "identity {{level}}",
+  "caselist": {
+    "title": "Disputes & cases"
+  },
+  "resume": {
+    "title": "Resumed from checkpoint",
+    "body": "— the process was interrupted at {{time}} (simulated). A fresh runtime reattached to this case's durable thread; pending approvals are still queued and {{executed}} completed action(s) were not re-executed (idempotency ledger{{inflight}}).",
+    "inflight": ", {{count}} in flight"
+  },
+  "cell": {
+    "deny": "deny",
+    "never": "never"
+  },
+  "intent": {
+    "title": "Intent evidence · triage",
+    "subtitle": "recorded detector output · confidence < 0.90 routes to human",
+    "materialsOnly": "{{id}}: materials only, no new intent",
+    "regulated": " · regulated",
+    "conf": "conf {{value}}"
+  },
+  "policy": {
+    "title": "Policy evaluation",
+    "subtitle": "deterministic policy pack · conditions evaluated from system data, not model mood",
+    "empty": "no policy evaluated for this case",
+    "degraded": "version degraded"
+  },
+  "materials": {
+    "title": "Requested materials",
+    "subtitle": "all items optional · missing items never pause the statutory clock · police report never requested",
+    "receipt": "receipt / proof of purchase (optional)",
+    "screenshot": "screenshot of the charge (optional)",
+    "signed": "signed customer statement (optional)",
+    "received": "received · OCR {{value}}",
+    "ocrLow": "OCR low {{value}} · human confirm",
+    "notSubmitted": "not submitted"
+  },
+  "pending": {
+    "title": "waiting on human ({{count}})",
+    "due": "due {{time}}"
+  },
+  "drafts": {
+    "title": "AI drafts",
+    "subtitle": "blue template · green system slot · purple AI bridge · edits are logged",
+    "empty": "no drafts yet",
+    "lockedTemplate": "locked template",
+    "sent": "sent",
+    "signoff": "{{status}} · {{level}} signoff",
+    "edit": "edit",
+    "cancel": "cancel",
+    "saveEdit": "record edit in dossier"
+  },
+  "approvals": {
+    "AP-PCREDIT": "Post provisional credit before bd10 deadline",
+    "AP-ADJUDICATION": "Human adjudication — merchant evidence arrived (Day 40)",
+    "AP-RESULTSIGN": "Sign and send investigation result letter",
+    "AP-OD2-EXPLAIN": "Approve second-waiver explanation",
+    "AP-FRAUD-CONFIRM": "Confirm BEC/ATO quarantine"
+  }
+}

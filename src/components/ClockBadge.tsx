@@ -1,16 +1,18 @@
-// ClockBadge / StatutoryClockStrip — Reg E statutory clocks for email 2.
+// ClockBadge / StatutoryClockStrip — {t("clock.title")} for email 2.
 // Day 0 = intake; bd10 = provisional credit due (10th business day);
 // day45 greyed for POS debit (90-day branch applies); day90 = outer limit.
 // The <48h warning uses 48 *calendar* hours (Dev Plan v0.4.1).
 import { format } from "date-fns";
 import { regEClocks, simClock, diffCalendarDays, DAY0_EPOCH } from "@/runtime/simClock.ts";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 function fmt(ts: number) {
   return format(new Date(ts), "MM/dd");
 }
 
 export function ClockBadge({ pcDone = false }: { pcDone?: boolean }) {
+  const { t } = useTranslation("customer");
   const c = regEClocks(DAY0_EPOCH);
   const now = simClock.now();
   const hoursLeft = (c.provisionalCreditDue - now) / 3_600_000;
@@ -24,28 +26,29 @@ export function ClockBadge({ pcDone = false }: { pcDone?: boolean }) {
         danger ? "bg-red-100 text-red-700" : "bg-navy-soft text-navy",
       )}
     >
-      Reg E · Day {elapsed} · PC {pcDone ? "posted" : `due ${fmt(c.provisionalCreditDue)}`}
+      {t("clock.badge", { day: elapsed, state: pcDone ? t("clock.posted") : t("clock.due", { date: fmt(c.provisionalCreditDue) }) })}
     </span>
   );
 }
 
 export function StatutoryClockStrip({ pcDone = false }: { pcDone?: boolean }) {
+  const { t } = useTranslation("customer");
   const c = regEClocks(DAY0_EPOCH);
   const now = simClock.now();
   const hoursLeft = (c.provisionalCreditDue - now) / 3_600_000;
   const danger = !pcDone && hoursLeft <= 48;
 
   const milestones = [
-    { label: "intake", date: DAY0_EPOCH, done: true },
-    { label: "provisional credit bd10", date: c.provisionalCreditDue, done: pcDone },
-    { label: "day45 greyed: POS → 90d", date: c.day45, done: false, grey: true },
-    { label: "outer limit day90 POS debit", date: c.day90, done: false },
+    { label: t("clock.milestones.intake"), date: DAY0_EPOCH, done: true },
+    { label: t("clock.milestones.pc"), date: c.provisionalCreditDue, done: pcDone },
+    { label: t("clock.milestones.day45"), date: c.day45, done: false, grey: true },
+    { label: t("clock.milestones.day90"), date: c.day90, done: false },
   ];
 
   return (
     <div className="rounded-lg border border-line bg-white p-3" data-id="s2.clockstrip">
       <div className="mb-2 flex items-center justify-between">
-        <span className="text-[11px] font-semibold text-navy">Reg E statutory clocks</span>
+        <span className="text-[11px] font-semibold text-navy">{t("clock.title")}</span>
         <span
           className={cn(
             "rounded px-1.5 py-0.5 text-[10px] font-medium",
@@ -53,10 +56,10 @@ export function StatutoryClockStrip({ pcDone = false }: { pcDone?: boolean }) {
           )}
         >
           {pcDone
-            ? "provisional credit posted"
+            ? t("clock.pcPosted")
             : danger
-              ? "<48 calendar hours to bd10"
-              : `${Math.max(0, Math.floor(hoursLeft / 24))}d to bd10`}
+              ? t("clock.under48")
+              : t("clock.daysTo", { count: Math.max(0, Math.floor(hoursLeft / 24)) })}
         </span>
       </div>
       <div className="relative flex justify-between">

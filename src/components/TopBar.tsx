@@ -87,6 +87,7 @@ export function TopBar() {
         <div className="ml-auto flex items-center gap-2">
           {/* Sim clock chip */}
           <div
+            data-testid="sim-clock-chip"
             className="hidden items-center gap-1.5 rounded-full border border-white/15 px-2.5 py-1 text-[11px] text-white/70 md:flex"
             title={t("mode.simClock")}
           >
@@ -102,6 +103,7 @@ export function TopBar() {
           <button
             onClick={toggleLang}
             data-id="top.lang"
+            data-testid="lang-toggle"
             className="rounded-full border border-white/20 px-2.5 py-1 text-[11px] text-white/80 transition-colors hover:bg-white/10"
           >
             {t("language")}

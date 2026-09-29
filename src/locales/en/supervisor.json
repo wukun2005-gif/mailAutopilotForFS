@@ -1,1 +1,67 @@
-{}
+{
+  "loading": "loading cockpit…",
+  "tabs": {
+    "queue": "Approval queue",
+    "clocks": "Statutory clocks",
+    "fraud": "Fraud quarantine"
+  },
+  "kpi": {
+    "pending": "pending approvals",
+    "clocks": "clocks within 5 days",
+    "quarantined": "quarantined messages"
+  },
+  "approval": {
+    "overdue": "overdue",
+    "hoursLeft": "{{count}}h left",
+    "r4Outcome": "R4 adjudication outcome:",
+    "upholdError": "uphold error",
+    "noError": "no error found",
+    "confirmReject": "confirm reject",
+    "cancel": "cancel",
+    "approve": "one-click approve",
+    "handToAgent": "hand to agent",
+    "reject": "reject",
+    "batchInfo": "{{count}} same-template / same-intent items eligible for batch approve (each remains expandable for review, FR-8.1).",
+    "queueEmpty": "no approvals waiting — the queue is clear",
+    "batchFootnote": "clock-driven, case-specific obligations (e.g. provisional credit) are always single-item — they never enter batch lists."
+  },
+  "clockboard": {
+    "empty": "no open Reg E disputes in this case — load the dispute case from the dev panel",
+    "title": "Statutory clock board · Reg E",
+    "subtitle": "red < 48 calendar hours · amber < 5 days · dates are arithmetic, never model judgment",
+    "pc": "provisional credit (bd10)",
+    "day45": "investigation day45 (POS→90)",
+    "day90": "outer limit day90 POS debit",
+    "done": "done",
+    "overdue": "OVERDUE",
+    "hours": "{{count}}h",
+    "due": "due {{date}}",
+    "openCase": "open case"
+  },
+  "fraud": {
+    "empty": "no quarantined messages in this case — load the BEC/ATO case from the dev panel",
+    "title": "quarantined message · suspected BEC / ATO",
+    "onfile": "on-file",
+    "requestedTitle": "requested outbound actions",
+    "actions": {
+      "change phone number": "change phone number",
+      "mail card to new address": "mail card to new address",
+      "reply to sender": "reply to sender"
+    },
+    "unreachable": "no contact-change tool exists in the email channel — the actions are structurally unreachable",
+    "confirm": "confirm fraud · warn customer on-file number only",
+    "release": "false positive · release",
+    "smsSent": "warning SMS sent only to on-file {{phone}}",
+    "released": "released as false positive, logged.",
+    "sarTitle": "SAR supporting record · locked template (facts only, no conclusions)",
+    "sarNote": "recorded for the compliance queue; never transmitted to the forged address",
+    "signals": {
+      "LOCAL_PART_LOOKALIKE": "sender local-part lookalike (jane.d0e@ vs on-file jane.doe@gmail.com)",
+      "DISPLAY_NAME_SPOOF": "display-name spoof of the customer",
+      "PROMPT_INJECTION": "attachment embeds instruction text (“skip OTP”) — treated as data",
+      "R3_COMBO": "combined high-impact asks: change phone + mail replacement card to new address",
+      "DMARC_NONE": "DMARC policy none / SPF alignment failure on the inbound message"
+    },
+    "atoScore": "ATO risk score {{value}} / 100"
+  }
+}

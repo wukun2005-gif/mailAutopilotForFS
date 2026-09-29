@@ -36,5 +36,36 @@
   },
   "footer": {
     "fictional": "All banks, customers, accounts and amounts are fictional; no legal, tax or investment advice."
+  },
+  "dev": {
+    "controls": "Prototype controls",
+    "simDay": "sim day {{n}}",
+    "email": "Email {{n}}",
+    "inject": {
+      "EM-1-IN-1": "Day 0 · OD-fee email",
+      "EM-1-IN-2": "Day 21 · 2nd waiver",
+      "EM-2-IN-1": "Day 0 · dispute + card status",
+      "EM-2-IN-1B": "Day 1 · transaction detail?",
+      "EM-2-IN-2": "Day 6 · signed statement (OCR)",
+      "EM-3-IN-1": "Day 2 · BEC lookalike"
+    },
+    "jumpBd10": "jump bd10",
+    "jumpDay40": "jump Day 40",
+    "jumpDay45": "jump Day 45",
+    "verify14d": "+14 days (verify)",
+    "restart": "restart process",
+    "restartTitle": "new process, same IDB checkpoints",
+    "reset": "reset",
+    "faults": {
+      "bankingTimeout": "banking timeout (retry)",
+      "duplicateFiling": "duplicate delivery",
+      "policyV13": "policy v13 (2nd waiver FAIL)",
+      "sessionExpired": "I3 session expired",
+      "threadClosed": "thread closed",
+      "spoofSignal": "AC3 spoof signal",
+      "newThread": "new thread (no I3 inherit)",
+      "noDigital": "no digital banking (link fallback)",
+      "otpLockout": "OTP lockout"
+    }
   }
 }

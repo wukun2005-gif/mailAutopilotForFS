@@ -9,16 +9,17 @@ import { ClockBoard } from "./supervisor/ClockBoard";
 import { FraudQuarantine } from "./supervisor/FraudQuarantine";
 import { regEClocks, DAY0_EPOCH, simClock } from "@/runtime/simClock.ts";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 type Tab = "queue" | "clocks" | "fraud";
 
-const TABS: { id: Tab; label: string; icon: typeof Inbox }[] = [
-  { id: "queue", label: "Approval queue", icon: Inbox },
-  { id: "clocks", label: "Statutory clocks", icon: Clock },
-  { id: "fraud", label: "Fraud quarantine", icon: ShieldAlert },
-];
-
 export function SupervisorScreen() {
+  const { t } = useTranslation("supervisor");
+  const TABS: { id: Tab; label: string; icon: typeof Inbox }[] = [
+    { id: "queue", label: t("tabs.queue"), icon: Inbox },
+    { id: "clocks", label: t("tabs.clocks"), icon: Clock },
+    { id: "fraud", label: t("tabs.fraud"), icon: ShieldAlert },
+  ];
   const scenarioId = useCaseStore((s) => s.scenarioId);
   const loadScenario = useCaseStore((s) => s.loadScenario);
   const caseState = useCaseStore((s) => s.caseState);
@@ -29,7 +30,7 @@ export function SupervisorScreen() {
   }, [scenarioId, loadScenario]);
 
   if (!scenarioId || !caseState) {
-    return <div className="p-6 text-[12px] text-faint">loading cockpit…</div>;
+    return <div className="p-6 text-[12px] text-faint">{t("loading")}</div>;
   }
 
   const pending = (caseState.approvals ?? []).filter((a) => a.status === "pending");
@@ -46,9 +47,9 @@ export function SupervisorScreen() {
   return (
     <div className="flex h-full flex-col gap-2 p-2">
       <div className="grid grid-cols-3 gap-2">
-        <Kpi label="pending approvals" value={pending.length} hot={pending.length > 0} />
-        <Kpi label="clocks within 5 days" value={dueClocks} hot={dueClocks > 0} />
-        <Kpi label="quarantined messages" value={quarantined ? 1 : 0} hot={quarantined} />
+        <Kpi label={t("kpi.pending")} value={pending.length} hot={pending.length > 0} />
+        <Kpi label={t("kpi.clocks")} value={dueClocks} hot={dueClocks > 0} />
+        <Kpi label={t("kpi.quarantined")} value={quarantined ? 1 : 0} hot={quarantined} />
       </div>
 
       <div className="flex gap-1 border-b border-line">

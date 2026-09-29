@@ -5,8 +5,10 @@ import { RefreshCw } from "lucide-react";
 import { format } from "date-fns";
 import { simClock } from "@/runtime/simClock.ts";
 import type { CaseStateType } from "@/runtime/caseState.ts";
+import { useTranslation } from "react-i18next";
 
 export function ResumeBanner({ state, reattached }: { state: CaseStateType; reattached: boolean }) {
+  const { t } = useTranslation("agent");
   if (!reattached) return null;
   const executed = (state.actions ?? []).filter((a) => a.status === "done").length;
   const inflight = (state.actions ?? []).filter((a) => a.status === "inflight").length;
@@ -17,11 +19,12 @@ export function ResumeBanner({ state, reattached }: { state: CaseStateType; reat
     >
       <RefreshCw size={14} className="mt-0.5 shrink-0" />
       <div>
-        <b>Resumed from checkpoint</b> — the process was interrupted at{" "}
-        {format(new Date(simClock.now()), "MM/dd HH:mm")} (simulated). A fresh
-        runtime reattached to this case's durable thread; pending approvals are
-        still queued and <b>{executed}</b> completed action(s) were not
-        re-executed (idempotency ledger{inflight > 0 ? `, ${inflight} in flight` : ""}).
+        <b>{t("resume.title")}</b>{" "}
+        {t("resume.body", {
+          time: format(new Date(simClock.now()), "MM/dd HH:mm"),
+          executed,
+          inflight: inflight > 0 ? t("resume.inflight", { count: inflight }) : "",
+        })}
       </div>
     </div>
   );

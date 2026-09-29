@@ -3,6 +3,7 @@
 // the Larkspur app (secure messages + step-up case card). Right (audit view):
 // decision dossier trace + identity gate.
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { Eye, ScanSearch } from "lucide-react";
 import { useCaseStore } from "@/store/caseStore";
 import { useUIStore } from "@/store/uiStore";
@@ -16,12 +17,12 @@ import { StatutoryClockStrip } from "@/components/ClockBadge";
 import { LetterLegend } from "@/components/TricolorLetter";
 import { cn } from "@/lib/utils";
 
-const VIEW_TABS = [
-  { v: false, label: "customer view", Icon: Eye },
-  { v: true, label: "audit view", Icon: ScanSearch },
-] as const;
-
 export function CustomerScreen() {
+  const { t } = useTranslation("customer");
+  const VIEW_TABS = [
+    { v: false, label: t("tabs.customerView"), Icon: Eye },
+    { v: true, label: t("tabs.auditView"), Icon: ScanSearch },
+  ] as const;
   const scenarioId = useCaseStore((s) => s.scenarioId);
   const loadScenario = useCaseStore((s) => s.loadScenario);
   const caseState = useCaseStore((s) => s.caseState);
@@ -58,7 +59,7 @@ export function CustomerScreen() {
         </div>
         <div className="ml-2 hidden md:block"><LetterLegend /></div>
         <span className="ml-auto rounded bg-gray-100 px-2 py-0.5 font-mono text-[10px] text-gray-600">
-          status: {caseState?.status ?? "—"}
+          {t("tabs.status", { value: caseState?.status ?? "—" })}
         </span>
       </div>
 

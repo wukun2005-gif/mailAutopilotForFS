@@ -4,3 +4,4 @@ server-data/
 .DS_Store
 *.log
 tests/e2e/test-results/
+eval-results/

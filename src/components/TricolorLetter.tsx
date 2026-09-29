@@ -3,6 +3,7 @@
 // Audit view shows the source of every sentence on hover.
 import type { Draft } from "@/runtime/caseState.ts";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 const SECTION_STYLE: Record<string, string> = {
   template: "border-l-4 border-blue-400 bg-blue-50 text-blue-950",
@@ -23,11 +24,12 @@ export function TricolorLetter({
   draft: Draft;
   audit?: boolean;
 }) {
+  const { t } = useTranslation("customer");
   return (
     <div className="space-y-1.5">
       {draft.lockedTemplate && (
         <div className="mb-2 inline-flex items-center gap-1 rounded bg-blue-100 px-1.5 py-0.5 text-[10px] font-medium text-blue-800">
-          locked template
+          {t("legend.lockedTemplate")}
         </div>
       )}
       {draft.sections.map((s, i) => (
@@ -61,10 +63,11 @@ export function TricolorLetter({
 }
 
 export function LetterLegend() {
+  const { t } = useTranslation("customer");
   const items = [
-    ["template", "bg-blue-500", "固定合规模板"],
-    ["slot", "bg-emerald-500", "系统槽位（姓名/金额/日期/案号）"],
-    ["ai", "bg-violet-500", "AI 衔接句"],
+    ["template", "bg-blue-500", t("legend.template")],
+    ["slot", "bg-emerald-500", t("legend.slot")],
+    ["ai", "bg-violet-500", t("legend.ai")],
   ] as const;
   return (
     <div className="flex flex-wrap gap-2 text-[10px] text-faint">

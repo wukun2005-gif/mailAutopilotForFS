@@ -9,6 +9,7 @@ import { useCaseStore } from "@/store/caseStore";
 import { TricolorLetter } from "@/components/TricolorLetter";
 import { simClock } from "@/runtime/simClock.ts";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 const REJECT_REASONS = [
   "INSUFFIFICIENT_EVIDENCE",
@@ -26,6 +27,7 @@ function useCountdown(clockDueAt?: number) {
 }
 
 function ApprovalCard({ a }: { a: ApprovalItem }) {
+  const { t } = useTranslation(["supervisor", "agent"]);
   const approve = useCaseStore((s) => s.approve);
   const [rejecting, setRejecting] = useState(false);
   const [reason, setReason] = useState(REJECT_REASONS[0]);
@@ -45,7 +47,7 @@ function ApprovalCard({ a }: { a: ApprovalItem }) {
         <span className="rounded bg-gray-100 px-1.5 py-0.5 font-mono text-[9.5px] text-gray-600">
           {a.kind} · {a.lLevel}
         </span>
-        <span className="text-[11px] text-gray-700">{a.title}</span>
+        <span className="text-[11px] text-gray-700">{t(`agent:approvals.${a.id}`, { defaultValue: a.title })}</span>
         {a.amountCents != null && (
           <span className="font-mono text-[11px] font-semibold text-navy">
             ${(a.amountCents / 100).toFixed(2)}
@@ -66,7 +68,7 @@ function ApprovalCard({ a }: { a: ApprovalItem }) {
             )}
           >
             <Clock size={10} />
-            {cd.overdue ? "overdue" : `${cd.hours}h left`}
+            {cd.overdue ? t("approval.overdue") : t("approval.hoursLeft", { count: cd.hours })}
           </span>
         )}
       </div>
@@ -79,7 +81,7 @@ function ApprovalCard({ a }: { a: ApprovalItem }) {
 
       {a.id === "AP-ADJUDICATION" && (
         <div className="mt-2 flex items-center gap-2 text-[10.5px]">
-          <span className="text-faint">R4 adjudication outcome:</span>
+          <span className="text-faint">{t("approval.r4Outcome")}</span>
           {(["error", "no_error"] as const).map((o) => (
             <button
               key={o}
@@ -89,7 +91,7 @@ function ApprovalCard({ a }: { a: ApprovalItem }) {
                 outcome === o ? "bg-navy text-white ring-navy" : "bg-white text-navy ring-line",
               )}
             >
-              {o === "error" ? "uphold error" : "no error found"}
+              {o === "error" ? t("approval.upholdError") : t("approval.noError")}
             </button>
           ))}
         </div>
@@ -113,10 +115,10 @@ function ApprovalCard({ a }: { a: ApprovalItem }) {
             }
             className="rounded bg-red-700 px-2 py-1 text-[10.5px] text-white"
           >
-            confirm reject
+            {t("approval.confirmReject")}
           </button>
           <button onClick={() => setRejecting(false)} className="text-[10.5px] text-faint underline">
-            cancel
+            {t("approval.cancel")}
           </button>
         </div>
       ) : (
@@ -132,21 +134,21 @@ function ApprovalCard({ a }: { a: ApprovalItem }) {
             }
             className="inline-flex items-center gap-1 rounded bg-teal px-3 py-1 text-[10.5px] font-semibold text-white"
           >
-            <Check size={11} /> one-click approve
+            <Check size={11} /> {t("approval.approve")}
           </button>
           <button
             data-id="s3.edit"
             onClick={() => approve({ approvalId: a.id, decision: "edit" })}
             className="inline-flex items-center gap-1 rounded px-3 py-1 text-[10.5px] text-navy ring-1 ring-line"
           >
-            <PencilLine size={11} /> hand to agent
+            <PencilLine size={11} /> {t("approval.handToAgent")}
           </button>
           <button
             data-id="s3.reject"
             onClick={() => setRejecting(true)}
             className="inline-flex items-center gap-1 rounded px-3 py-1 text-[10.5px] text-red-700 ring-1 ring-red-300"
           >
-            <Ban size={11} /> reject
+            <Ban size={11} /> {t("approval.reject")}
           </button>
         </div>
       )}
@@ -155,6 +157,7 @@ function ApprovalCard({ a }: { a: ApprovalItem }) {
 }
 
 export function ApprovalQueue({ state }: { state: CaseStateType }) {
+  const { t } = useTranslation("supervisor");
   const pending = (state.approvals ?? []).filter((a) => a.status === "pending");
   // Batch eligibility: same intent + same locked template, L1/L2 drafts,
   // never clock-driven case-specific actions (e.g. provisional credit).
@@ -172,21 +175,19 @@ export function ApprovalQueue({ state }: { state: CaseStateType }) {
     <div className="space-y-2" data-id="s3.queue">
       {batchable.length > 1 && (
         <div className="rounded-lg border border-teal/40 bg-teal-soft p-2 text-[11px]">
-          {batchable.length} same-template / same-intent items eligible for batch approve
-          (each remains expandable for review, FR-8.1).
+          {t("approval.batchInfo", { count: batchable.length })}
         </div>
       )}
       {pending.length === 0 && (
         <div className="rounded-lg border border-dashed border-line bg-white p-6 text-center text-[11px] text-faint">
-          no approvals waiting — the queue is clear
+          {t("approval.queueEmpty")}
         </div>
       )}
       {pending.map((a) => (
         <ApprovalCard key={a.id} a={a} />
       ))}
       <p className="px-1 text-[10px] text-faint">
-        clock-driven, case-specific obligations (e.g. provisional credit) are always single-item —
-        they never enter batch lists.
+        {t("approval.batchFootnote")}
       </p>
     </div>
   );

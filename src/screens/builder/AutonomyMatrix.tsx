@@ -10,6 +10,7 @@ import { GRADUATION_TABLE } from "@/mocks/fixtures/index.ts";
 import type { CellValue, ILevel, LLevel, RLevel } from "@/runtime/state.ts";
 import type { GraduationEntry } from "@/mocks/fixtures/index.ts";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 const RISKS: RLevel[] = ["R0", "R1", "R2", "R3", "R4"];
 const IDENTITIES: ILevel[] = ["I0", "I1", "I2", "I3"];
@@ -21,14 +22,6 @@ const ROW_INTENT: Record<RLevel, string> = {
   R2: "od_fee_refund",
   R3: "contact_detail_change",
   R4: "reg_e_adjudication",
-};
-
-const RISK_LABEL: Record<RLevel, string> = {
-  R0: "R0 · public info",
-  R1: "R1 · read account data",
-  R2: "R2 · reversible writes",
-  R3: "R3 · high-impact changes",
-  R4: "R4 · adjudication / money movement",
 };
 
 const L_COLOR: Record<LLevel, string> = {
@@ -45,6 +38,7 @@ function CellView({
   capped,
   onClick,
   title,
+  t,
 }: {
   cell: CellValue;
   active: boolean;
@@ -52,6 +46,7 @@ function CellView({
   capped: boolean;
   onClick?: () => void;
   title?: string;
+  t: (k: string, o?: Record<string, unknown>) => string;
 }) {
   const base =
     "relative flex h-14 flex-col items-center justify-center rounded text-[10px] leading-tight";
@@ -60,10 +55,10 @@ function CellView({
       <div
         data-id="s4.matrix.never"
         className={cn(base, "cursor-not-allowed bg-gray-100 text-gray-400 line-through")}
-        title="Never automated in the email channel: disabled in config AND no tool function exists"
+        title={t("matrix.neverTitle")}
       >
         <Ban size={12} />
-        never
+        {t("matrix.never")}
       </div>
     );
   }
@@ -71,10 +66,10 @@ function CellView({
     return (
       <div
         className={cn(base, "bg-red-50 text-red-700 ring-1 ring-red-200")}
-        title="AI neither generates nor executes content; locked step-up template only"
+        title={t("matrix.lockedTitle")}
       >
         <Lock size={11} />
-        locked
+        {t("matrix.locked")}
       </div>
     );
   }
@@ -95,8 +90,8 @@ function CellView({
         {cell.level}
         {shadow && <Lock size={9} className="ml-0.5 inline" />}
       </span>
-      {shadow && <span>shadow · sign to unlock</span>}
-      {capped && <span className="text-[8.5px]">manual cap</span>}
+      {shadow && <span>{t("matrix.shadowUnlock")}</span>}
+      {capped && <span className="text-[8.5px]">{t("matrix.manualCap")}</span>}
       {clickable && !shadow && (
         <MousePointerClick size={9} className="absolute right-1 top-1 opacity-60" />
       )}
@@ -113,6 +108,7 @@ export function AutonomyMatrix({
   onDowngrade: (level: LLevel) => void;
   rev: number;
 }) {
+  const { t } = useTranslation("builder");
   void rev; // re-render trigger from override subscriptions
   const displayLevel = (intentCode: string, row: GraduationEntry | undefined): LLevel | null => {
     if (row && row.status === "shadow" && !graduationOverrides.get(intentCode)?.promotedTo) {
@@ -123,10 +119,9 @@ export function AutonomyMatrix({
 
   return (
     <div className="rounded-lg border border-line bg-white p-3" data-id="s4.matrix">
-      <h3 className="text-[12px] font-semibold text-navy">Autonomy matrix · R × I</h3>
+      <h3 className="text-[12px] font-semibold text-navy">{t("matrix.title")}</h3>
       <p className="text-[10px] text-faint">
-        same decideCell() as production · click an active L3/L2 cell to cap it · R3/R4 cells do not
-        respond — the config layer cannot reach them
+        {t("matrix.subtitle")}
       </p>
       <div className="mt-2 overflow-x-auto">
         <table className="w-full border-collapse text-center">
@@ -150,7 +145,7 @@ export function AutonomyMatrix({
               return (
                 <tr key={r} className={cn(!active && "text-faint")}>
                   <td className="pr-2 text-right text-[9.5px] font-medium text-gray-600">
-                    {RISK_LABEL[r]}
+                    {t(`matrix.risk.${r}`)}
                     {active && <div className="font-mono text-[8.5px] text-teal">{intentCode}</div>}
                   </td>
                   {IDENTITIES.map((i) => {
@@ -164,6 +159,7 @@ export function AutonomyMatrix({
                     return (
                       <td key={i} className="p-0.5">
                         <CellView
+                          t={t}
                           cell={decision.cell}
                           active={active}
                           shadow={!!(active && row?.status === "shadow" && !override?.promotedTo)}
@@ -185,9 +181,9 @@ export function AutonomyMatrix({
         </table>
       </div>
       <div className="mt-2 flex flex-wrap gap-3 text-[9.5px] text-faint">
-        <span className="inline-flex items-center gap-1"><Lock size={10} /> locked template / shadow</span>
-        <span className="inline-flex items-center gap-1"><Ban size={10} /> hard never: config + no tool</span>
-        <span>R4 is permanently human L0 decide / L1 AI-drafts-human-signs</span>
+        <span className="inline-flex items-center gap-1"><Lock size={10} /> {t("matrix.legendLocked")}</span>
+        <span className="inline-flex items-center gap-1"><Ban size={10} /> {t("matrix.legendNever")}</span>
+        <span>{t("matrix.legendR4")}</span>
       </div>
     </div>
   );

@@ -1,1 +1,104 @@
-{}
+{
+  "tabs": {
+    "customerView": "customer view",
+    "auditView": "audit view",
+    "status": "status: {{value}}"
+  },
+  "legend": {
+    "template": "fixed compliance template",
+    "slot": "system slot (name / amount / date / case id)",
+    "ai": "AI bridge sentence",
+    "lockedTemplate": "locked template"
+  },
+  "webmail": {
+    "title": "Jane's webmail",
+    "search": "search mail",
+    "folders": {
+      "inbox": "Inbox",
+      "sent": "Sent",
+      "drafts": "Drafts",
+      "spam": "Spam"
+    },
+    "disputes": "Larkspur Disputes",
+    "support": "Larkspur Support",
+    "msgCount": "{{count}} message(s) · sent by Jane",
+    "banner": "Account answers never arrive by email and contain no links — check secure messages in the Larkspur app.",
+    "noMail": "no mail at the current simulated time",
+    "identityAtIntake": "identity at intake: {{level}}"
+  },
+  "phone": {
+    "frameCaption": "recorded Larkspur Bank app · prototype",
+    "bank": "Larkspur Bank",
+    "push": {
+      "bank": "Larkspur Bank · now",
+      "body": "Secure message: a case needs your verification"
+    },
+    "card": {
+      "title": "Verify it is you",
+      "body": "We received a request about your account. For your protection, verify before we share details or move money. After verification, the case continues automatically.",
+      "i3basis": "I3 basis §6.2②: logged-in secure-message session",
+      "otpLabel": "One-time code sent to the phone number on file (••-0142)",
+      "placeholder": "6-digit code"
+    },
+    "err": {
+      "incorrect": "incorrect code",
+      "locked": "too many attempts — request locked (recorded)",
+      "busy": "verifying…"
+    },
+    "verifyCta": "Verify & continue case",
+    "verified": "Verified — identity level I3.",
+    "fraudSms": {
+      "title": "SMS · Larkspur Fraud",
+      "body": "We blocked a suspicious message claiming to be you. We will never ask you to change contact details by email. If unsure, call the number on your card."
+    },
+    "inboxTitle": "Secure messages",
+    "empty": "no messages yet",
+    "delivered": "delivered",
+    "draft": "draft",
+    "verifiedTail": "Case resumed autonomously."
+  },
+  "stepup": {
+    "fallbackNote": "FR-2.2 fallback branch — only for customers not enrolled in digital banking. Default path is the app case card; verification emails carry no links.",
+    "title": "Larkspur secure verification",
+    "body": "Enter the one-time code sent to the phone number on file.",
+    "placeholder": "6-digit code",
+    "err": {
+      "incorrect": "incorrect code",
+      "busy": "verifying…"
+    },
+    "cta": "Verify"
+  },
+  "identity": {
+    "empty": "no identity evaluation yet",
+    "title": "Identity assurance gate",
+    "assumptions": "Assumptions: {{values}}"
+  },
+  "clock": {
+    "badge": "Reg E · Day {{day}} · PC {{state}}",
+    "posted": "posted",
+    "due": "due {{date}}",
+    "title": "Reg E statutory clocks",
+    "milestones": {
+      "intake": "intake",
+      "pc": "provisional credit bd10",
+      "day45": "day45 greyed: POS → 90d",
+      "day90": "outer limit day90 POS debit"
+    },
+    "pcPosted": "provisional credit posted",
+    "under48": "<48 calendar hours to bd10",
+    "daysTo": "{{count}}d to bd10"
+  },
+  "trace": {
+    "title": "Decision dossier · Trace",
+    "subtitle": "every gate, tool call and clock tick is recorded",
+    "empty": "no events yet — inject an email",
+    "halted": "HALTED — {{count}} approval(s) due",
+    "resumed": "RESUMED — {{id}} {{decision}}",
+    "inbound": "inbound {{id}}",
+    "outbound": "outbound {{draft}}",
+    "outboundReplay": "outbound {{draft}} (replay-safe)",
+    "idempotent": "idempotent replay — {{action}} executed once",
+    "replay": "replay",
+    "policy": "policy {{version}}"
+  }
+}

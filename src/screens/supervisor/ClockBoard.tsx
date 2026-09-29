@@ -6,11 +6,13 @@ import { regEClocks, DAY0_EPOCH, simClock } from "@/runtime/simClock.ts";
 import type { CaseStateType } from "@/runtime/caseState.ts";
 import { useCaseStore } from "@/store/caseStore";
 import { format } from "date-fns";
+import { useTranslation } from "react-i18next";
 
 const HOUR = 3_600_000;
 
 interface Row {
   name: string;
+  nameKey: string;
   due: number;
   remainingH: number;
   totalH: number;
@@ -19,7 +21,7 @@ interface Row {
   done: boolean;
 }
 
-function rowsFor(state: CaseStateType): Row[] {
+function rowsFor(state: CaseStateType, t: (k: string, o?: Record<string, unknown>) => string): Row[] {
   if (state.scenarioId !== "email2") return [];
   const c = regEClocks(DAY0_EPOCH);
   const now = simClock.now();
@@ -29,6 +31,7 @@ function rowsFor(state: CaseStateType): Row[] {
   const resultSent = (state.outbound ?? []).some((o) => o.draftId?.startsWith("DR-RESULT"));
   const mk = (
     name: string,
+    nameKey: string,
     due: number,
     start: number,
     done: boolean,
@@ -45,42 +48,44 @@ function rowsFor(state: CaseStateType): Row[] {
             : "#0f766e";
     return {
       name,
+      nameKey,
       due,
       remainingH: done ? 0 : Math.max(remainingH, 0),
       totalH: Math.round((due - start) / HOUR),
       color,
-      label: done ? "done" : remainingH < 0 ? "OVERDUE" : `${remainingH}h`,
+      label: done ? t("clockboard.done") : remainingH < 0 ? t("clockboard.overdue") : t("clockboard.hours", { count: remainingH }),
       done,
     };
   };
   return [
-    mk("provisional credit (bd10)", c.provisionalCreditDue, DAY0_EPOCH, pcDone),
-    mk("investigation day45 (POS→90)", c.day45, DAY0_EPOCH, resultSent),
-    mk("outer limit day90 POS debit", c.day90, DAY0_EPOCH, resultSent),
+    mk("provisional credit (bd10)", "clockboard.pc", c.provisionalCreditDue, DAY0_EPOCH, pcDone),
+    mk("investigation day45 (POS→90)", "clockboard.day45", c.day45, DAY0_EPOCH, resultSent),
+    mk("outer limit day90 POS debit", "clockboard.day90", c.day90, DAY0_EPOCH, resultSent),
   ];
 }
 
 export function ClockBoard({ state }: { state: CaseStateType }) {
+  const { t } = useTranslation("supervisor");
   const loadScenario = useCaseStore((s) => s.loadScenario);
-  const rows = rowsFor(state);
+  const rows = rowsFor(state, t);
   if (rows.length === 0) {
     return (
       <div className="rounded-lg border border-dashed border-line bg-white p-6 text-center text-[11px] text-faint" data-id="s3.clockboard">
-        no open Reg E disputes in this case — load the dispute case from the dev panel
+        {t("clockboard.empty")}
       </div>
     );
   }
   return (
     <div className="rounded-lg border border-line bg-white p-3" data-id="s3.clockboard">
-      <h3 className="text-[12px] font-semibold text-navy">Statutory clock board · Reg E</h3>
+      <h3 className="text-[12px] font-semibold text-navy">{t("clockboard.title")}</h3>
       <p className="text-[10px] text-faint">
-        red &lt; 48 calendar hours · amber &lt; 5 days · dates are arithmetic, never model judgment
+        {t("clockboard.subtitle")}
       </p>
       <div className="mt-2 h-56">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={rows} layout="vertical" margin={{ left: 40, right: 48 }}>
             <XAxis type="number" hide domain={[0, "dataMax"]} />
-            <YAxis type="category" dataKey="name" width={200} tick={{ fontSize: 10 }} />
+            <YAxis type="category" dataKey="name" width={200} tick={{ fontSize: 10 }} tickFormatter={(v: string) => t(rows.find((r) => r.name === v)?.nameKey ?? "", { defaultValue: v })} />
             <Bar dataKey="remainingH" radius={[3, 3, 3, 3]} barSize={18}>
               {rows.map((r) => (
                 <Cell key={r.name} fill={r.color} />
@@ -98,15 +103,15 @@ export function ClockBoard({ state }: { state: CaseStateType }) {
         <tbody>
           {rows.map((r) => (
             <tr key={r.name} className="border-t border-line">
-              <td className="py-1 text-gray-700">{r.name}</td>
-              <td className="py-1 font-mono text-faint">due {format(new Date(r.due), "MM/dd")}</td>
+              <td className="py-1 text-gray-700">{t(r.nameKey)}</td>
+              <td className="py-1 font-mono text-faint">{t("clockboard.due", { date: format(new Date(r.due), "MM/dd") })}</td>
               <td className="py-1 text-right">
                 <button
                   onClick={() => loadScenario("email2")}
                   className="text-teal underline"
                   data-id="s3.clock.open"
                 >
-                  open case
+                  {t("clockboard.openCase")}
                 </button>
               </td>
             </tr>

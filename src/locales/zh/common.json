@@ -36,5 +36,36 @@
   },
   "footer": {
     "fictional": "全部银行、客户、账户、金额均为虚构；不构成法律、税务或投资建议。"
+  },
+  "dev": {
+    "controls": "原型控制面板",
+    "simDay": "模拟第 {{n}} 天",
+    "email": "邮件 {{n}}",
+    "inject": {
+      "EM-1-IN-1": "Day 0 · 透支费邮件",
+      "EM-1-IN-2": "Day 21 · 第二次豁免请求",
+      "EM-2-IN-1": "Day 0 · 争议 + 卡片状态",
+      "EM-2-IN-1B": "Day 1 · 交易明细？",
+      "EM-2-IN-2": "Day 6 · 签字声明（OCR）",
+      "EM-3-IN-1": "Day 2 · BEC 形近仿冒"
+    },
+    "jumpBd10": "跳到 bd10",
+    "jumpDay40": "跳到 Day 40",
+    "jumpDay45": "跳到 Day 45",
+    "verify14d": "+14 天（核验）",
+    "restart": "重启进程",
+    "restartTitle": "新进程，同一个 IDB checkpoint",
+    "reset": "重置",
+    "faults": {
+      "bankingTimeout": "核心银行超时（重试）",
+      "duplicateFiling": "重复送达",
+      "policyV13": "政策 v13（第二次豁免 FAIL）",
+      "sessionExpired": "I3 会话过期",
+      "threadClosed": "线程已关闭",
+      "spoofSignal": "AC3 仿冒信号",
+      "newThread": "新线程（不继承 I3）",
+      "noDigital": "未开通网银（链接兜底）",
+      "otpLockout": "OTP 锁定"
+    }
   }
 }

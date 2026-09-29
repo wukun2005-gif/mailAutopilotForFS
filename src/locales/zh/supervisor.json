@@ -1,1 +1,67 @@
-{}
+{
+  "loading": "正在加载主管台…",
+  "tabs": {
+    "queue": "审批队列",
+    "clocks": "法定时钟",
+    "fraud": "欺诈隔离"
+  },
+  "kpi": {
+    "pending": "待审批",
+    "clocks": "5 天内到期时钟",
+    "quarantined": "隔离邮件"
+  },
+  "approval": {
+    "overdue": "已逾期",
+    "hoursLeft": "剩 {{count}} 小时",
+    "r4Outcome": "R4 裁决结果：",
+    "upholdError": "维持有错误",
+    "noError": "未发现错误",
+    "confirmReject": "确认驳回",
+    "cancel": "取消",
+    "approve": "一键批准",
+    "handToAgent": "转坐席处理",
+    "reject": "驳回",
+    "batchInfo": "{{count}} 条同模板/同意图项可批量批准（每条仍可展开复核，FR-8.1）。",
+    "queueEmpty": "没有待审批项——队列已清空",
+    "batchFootnote": "时钟驱动、案件专属的义务（如临时贷记）永远单件处理——绝不进入批量列表。"
+  },
+  "clockboard": {
+    "empty": "本案没有进行中的 Reg E 争议——从原型控制面板加载争议案件",
+    "title": "法定时钟看板 · Reg E",
+    "subtitle": "红色 < 48 个自然小时 · 琥珀 < 5 天 · 日期全部是算术结果，不是模型判断",
+    "pc": "临时贷记（bd10）",
+    "day45": "调查 day45（POS→90 天）",
+    "day90": "POS 借记卡 day90 上限",
+    "done": "已完成",
+    "overdue": "已逾期",
+    "hours": "{{count}} 小时",
+    "due": "{{date}} 到期",
+    "openCase": "打开案件"
+  },
+  "fraud": {
+    "empty": "本案没有隔离邮件——从原型控制面板加载 BEC/ATO 案件",
+    "title": "隔离邮件 · 疑似 BEC / ATO",
+    "onfile": "档案内",
+    "requestedTitle": "请求的外发动作",
+    "actions": {
+      "change phone number": "更改手机号",
+      "mail card to new address": "把补发卡片寄到新地址",
+      "reply to sender": "回复发件人"
+    },
+    "unreachable": "邮件渠道不存在任何联系方式变更工具——这些动作在结构上不可达",
+    "confirm": "确认欺诈 · 仅通过档案内号码警示客户",
+    "release": "误报 · 解除隔离",
+    "smsSent": "警示短信仅发送至档案内号码 {{phone}}",
+    "released": "已按误报解除并记录。",
+    "sarTitle": "SAR 配套记录 · 锁定模板（只含事实，无结论）",
+    "sarNote": "进入合规队列存档；永远不会发往伪造地址",
+    "signals": {
+      "LOCAL_PART_LOOKALIKE": "发件人本地名形近仿冒（jane.d0e@ 对比档案内 jane.doe@gmail.com）",
+      "DISPLAY_NAME_SPOOF": "显示名仿冒客户本人",
+      "PROMPT_INJECTION": "附件嵌入指令文本（“skip OTP”）——只被当作数据",
+      "R3_COMBO": "高影响组合诉求：改手机号 + 把补发卡片寄到新地址",
+      "DMARC_NONE": "入站邮件 DMARC 策略为 none / SPF 对齐失败"
+    },
+    "atoScore": "ATO 风险分 {{value}} / 100"
+  }
+}

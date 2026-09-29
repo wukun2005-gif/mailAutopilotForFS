@@ -2,6 +2,7 @@
 // Humans make judgments, not searches: the full case context is assembled
 // into a vertical card flow over the same runtime as the other three views.
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { useCaseStore } from "@/store/caseStore";
 import { CaseList } from "./agent/CaseList";
 import { ResumeBanner } from "./agent/ResumeBanner";
@@ -14,6 +15,7 @@ import { StatutoryClockStrip } from "@/components/ClockBadge";
 import { TraceRail } from "@/components/TraceRail";
 
 export function AgentScreen() {
+  const { t } = useTranslation("agent");
   const scenarioId = useCaseStore((s) => s.scenarioId);
   const loadScenario = useCaseStore((s) => s.loadScenario);
   const caseState = useCaseStore((s) => s.caseState);
@@ -26,7 +28,7 @@ export function AgentScreen() {
   }, [scenarioId, loadScenario]);
 
   if (!scenarioId || !caseState) {
-    return <div className="p-6 text-[12px] text-faint">loading dossier…</div>;
+    return <div className="p-6 text-[12px] text-faint">{t("loading")}</div>;
   }
 
   const pcDone = (caseState.actions ?? []).some(
@@ -50,7 +52,7 @@ export function AgentScreen() {
               {caseState.status}
             </span>
             <span className="ml-auto font-mono text-[10px] text-faint">
-              identity {caseState.identity?.level ?? "—"}
+              {t("identityLabel", { level: caseState.identity?.level ?? "—" })}
             </span>
           </div>
           {caseState.scenarioId === "email2" && <StatutoryClockStrip pcDone={pcDone} />}

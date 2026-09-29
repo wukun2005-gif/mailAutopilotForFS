@@ -14,18 +14,20 @@ import { SamplingPanel } from "./builder/SamplingPanel";
 import { ReadinessReport } from "./builder/ReadinessReport";
 import { ConformalCard } from "./builder/ConformalCard";
 import { cn } from "@/lib/utils";
-
-const STATUS_META: Record<
-  GraduationEntry["status"],
-  { label: string; cls: string; icon: typeof Lock }
-> = {
-  graduated: { label: "graduated", cls: "bg-teal-soft text-teal", icon: GraduationCap },
-  shadow: { label: "shadow", cls: "bg-sky-100 text-sky-900", icon: Eye },
-  rare_hold: { label: "rare hold", cls: "bg-amber-100 text-amber-900", icon: PauseCircle },
-  never: { label: "never", cls: "bg-gray-200 text-gray-600", icon: Lock },
-};
+import { useTranslation } from "react-i18next";
 
 export function BuilderScreen() {
+  const { t, i18n } = useTranslation("builder");
+  const lang = i18n.language?.startsWith("zh") ? "zh" : "en";
+  const STATUS_META: Record<
+    GraduationEntry["status"],
+    { label: string; cls: string; icon: typeof Lock }
+  > = {
+    graduated: { label: t("status.graduated"), cls: "bg-teal-soft text-teal", icon: GraduationCap },
+    shadow: { label: t("status.shadow"), cls: "bg-sky-100 text-sky-900", icon: Eye },
+    rare_hold: { label: t("status.rare_hold"), cls: "bg-amber-100 text-amber-900", icon: PauseCircle },
+    never: { label: t("status.never"), cls: "bg-gray-200 text-gray-600", icon: Lock },
+  };
   const [selectedCode, setSelectedCode] = useState("reg_e_intake");
   const [negativeColumn, setNegativeColumn] = useState(true);
   const [rev, bump] = useReducer((x: number) => x + 1, 0);
@@ -41,7 +43,7 @@ export function BuilderScreen() {
       {/* Left: intent list */}
       <div className="min-h-0 overflow-y-auto rounded-lg border border-line bg-white p-2" data-id="s4.intents">
         <h2 className="px-1 text-[11px] font-semibold uppercase tracking-wide text-faint">
-          intents · graduation status
+          {t("intentsTitle")}
         </h2>
         <ul className="mt-1 space-y-1">
           {GRADUATION_TABLE.map((g) => {
@@ -70,7 +72,7 @@ export function BuilderScreen() {
                     </span>
                   </div>
                   <div className={cn("mt-0.5 text-[9.5px]", active ? "text-white/80" : "text-faint")}>
-                    {g.label.en}
+                    {g.label[lang]}
                   </div>
                 </button>
               </li>
@@ -84,19 +86,18 @@ export function BuilderScreen() {
         <AutonomyMatrix selected={selected} rev={rev} onDowngrade={(lvl) => graduationOverrides.cap(selected.intentCode, lvl)} />
         {override?.cap && (
           <div className="rounded border border-amber-300 bg-amber-50 px-3 py-1.5 text-[10.5px] text-amber-900" data-id="s4.cap.notice">
-            manual downgrade active: {selected.intentCode} capped at {override.cap} — new inbound
-            emails of this intent run at the lower level immediately.
+            {t("capNotice", { intent: selected.intentCode, level: override.cap })}
             <button
               className="ml-2 underline"
               onClick={() => graduationOverrides.clearCap(selected.intentCode)}
             >
-              clear cap
+              {t("clearCap")}
             </button>
           </div>
         )}
         {override?.promotedTo && (
           <div className="rounded border border-emerald-300 bg-emerald-50 px-3 py-1.5 text-[10.5px] text-emerald-900" data-id="s4.promote.notice">
-            dual sign-off applied: {selected.intentCode} promoted to {override.promotedTo}.
+            {t("promoteNotice", { intent: selected.intentCode, level: override.promotedTo })}
           </div>
         )}
         <BacktestRunner selectedIntent={selected.intentCode} />

@@ -3,20 +3,22 @@
 // email 2's four I2 requirements, email 1's I3 basis and downgrade triggers.
 import type { IdentityVerdict } from "@/runtime/identity.ts";
 import { Check, X } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 
 export function IdentityAudit({ identity }: { identity?: IdentityVerdict | null }) {
+  const { t } = useTranslation("customer");
   if (!identity) {
     return (
       <div className="rounded-lg border border-line bg-white p-3 text-[11px] text-faint">
-        no identity evaluation yet
+        {t("identity.empty")}
       </div>
     );
   }
   return (
     <div className="rounded-lg border border-line bg-white p-3" data-id="s1.identity">
       <div className="flex items-center justify-between">
-        <span className="text-[11px] font-semibold text-navy">Identity assurance gate</span>
+        <span className="text-[11px] font-semibold text-navy">{t("identity.title")}</span>
         <span className="rounded bg-navy px-2 py-0.5 font-mono text-[12px] font-bold text-white">
           {identity.level}
         </span>
@@ -44,7 +46,7 @@ export function IdentityAudit({ identity }: { identity?: IdentityVerdict | null 
       )}
       {identity.assumptions.length > 0 && (
         <div className="mt-1 rounded bg-amber-50 px-1.5 py-1 font-mono text-[9.5px] text-amber-800">
-          假设 {identity.assumptions.join(" · ")}
+          {t("identity.assumptions", { values: identity.assumptions.join(" · ") })}
         </div>
       )}
     </div>

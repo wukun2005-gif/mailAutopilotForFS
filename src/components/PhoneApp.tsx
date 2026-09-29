@@ -4,6 +4,7 @@
 // Also renders the secure-message inbox (case card, receipts, letters) and
 // the on-file fraud SMS (email 3).
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Bell, ShieldCheck, MessageSquareText, CheckCircle2 } from "lucide-react";
 import { useCaseStore } from "@/store/caseStore";
 import { TricolorLetter } from "./TricolorLetter";
@@ -13,19 +14,21 @@ import { cn } from "@/lib/utils";
 const FIXED_OTP = "482915";
 
 export function PhoneFrame({ children }: { children: React.ReactNode }) {
+  const { t } = useTranslation("customer");
   return (
     <div className="mx-auto w-[300px] shrink-0">
       <div className="rounded-[2.2rem] border-[7px] border-gray-900 bg-gray-900 shadow-xl">
         <div className="overflow-hidden rounded-[1.6rem] bg-white">{children}</div>
       </div>
       <div className="mt-1 text-center text-[9.5px] text-faint">
-        recorded Larkspur Bank app · prototype
+        {t("phone.frameCaption")}
       </div>
     </div>
   );
 }
 
 export function PhoneApp() {
+  const { t } = useTranslation("customer");
   const caseState = useCaseStore((s) => s.caseState);
   const stepUp = useCaseStore((s) => s.stepUp);
   const busy = useCaseStore((s) => s.busy);
@@ -46,7 +49,7 @@ export function PhoneApp() {
     } else {
       const n = attempts + 1;
       setAttempts(n);
-      setErr(n >= 3 ? "too many attempts — request locked (recorded)" : "incorrect code");
+      setErr(n >= 3 ? t("phone.err.locked") : t("phone.err.incorrect"));
     }
   };
 
@@ -62,7 +65,7 @@ export function PhoneApp() {
       {/* status bar */}
       <div className="flex items-center justify-between bg-navy px-4 py-1.5 text-[10px] text-white">
         <span className="font-mono">9:41</span>
-        <span className="font-semibold">Larkspur Bank</span>
+        <span className="font-semibold">{t("phone.bank")}</span>
         <span>5G ▮</span>
       </div>
 
@@ -75,10 +78,10 @@ export function PhoneApp() {
             className="w-full animate-pulse rounded-xl border border-navy/20 bg-white p-2.5 text-left shadow-md"
           >
             <div className="flex items-center gap-1.5 text-[10px] font-semibold text-navy">
-              <Bell size={11} /> Larkspur Bank · now
+              <Bell size={11} /> {t("phone.push.bank")}
             </div>
             <div className="mt-0.5 text-[11px] text-ink">
-              Secure message: a case needs your verification
+              {t("phone.push.body")}
             </div>
           </button>
         )}
@@ -87,25 +90,23 @@ export function PhoneApp() {
         {needsVerify && showCard && (
           <div className="rounded-xl border border-teal/30 bg-teal-soft/60 p-3" data-id="s1.phone.casecard">
             <div className="flex items-center gap-1.5 text-[11px] font-semibold text-teal-dark">
-              <ShieldCheck size={13} /> Verify it is you
+              <ShieldCheck size={13} /> {t("phone.card.title")}
             </div>
             <p className="mt-1 text-[10.5px] leading-snug text-ink">
-              We received a request about your account. For your protection, verify
-              before we share details or move money. After verification, the case
-              continues automatically.
+              {t("phone.card.body")}
             </p>
             <p className="mt-1 text-[9.5px] text-faint">
-              I3 basis §6.2②: logged-in secure-message session
+              {t("phone.card.i3basis")}
             </p>
             <label className="mt-2 block text-[10px] font-medium text-navy">
-              One-time code sent to the phone number on file (••-0142)
+              {t("phone.card.otpLabel")}
             </label>
             <input
               data-id="s1.phone.otp"
               value={otp}
               maxLength={6}
               onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
-              placeholder="6-digit code"
+              placeholder={t("phone.card.placeholder")}
               className="mt-1 w-full rounded-md border border-line px-2 py-1.5 font-mono text-[13px] tracking-widest"
             />
             {err && <div className="mt-1 text-[10px] text-red-600">{err}</div>}
@@ -115,7 +116,7 @@ export function PhoneApp() {
               onClick={submitOtp}
               className="mt-2 w-full rounded-md bg-teal py-1.5 text-[11px] font-semibold text-white disabled:opacity-40"
             >
-              {busy ? "verifying…" : "Verify & continue case"}
+              {busy ? t("phone.err.busy") : t("phone.verifyCta")}
             </button>
           </div>
         )}
@@ -124,7 +125,7 @@ export function PhoneApp() {
           <div className="flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 p-2.5">
             <CheckCircle2 size={16} className="text-emerald-600" />
             <div className="text-[10.5px] text-emerald-800">
-              Verified — identity level <b>I3</b>. Case resumed autonomously.
+              Verified — identity level <b>I3</b>. {t("phone.verifiedTail")}
             </div>
           </div>
         )}
@@ -132,11 +133,9 @@ export function PhoneApp() {
         {/* fraud SMS goes to the ON-FILE number only */}
         {fraudSms && (
           <div className="rounded-xl border border-gray-300 bg-gray-100 p-2.5" data-id="s1.phone.sms">
-            <div className="text-[9.5px] font-semibold text-gray-500">SMS · Larkspur Fraud</div>
+            <div className="text-[9.5px] font-semibold text-gray-500">{t("phone.fraudSms.title")}</div>
             <div className="mt-0.5 text-[11px] text-gray-800">
-              We blocked a suspicious message claiming to be you. We will never ask
-              you to change contact details by email. If unsure, call the number on
-              your card.
+              {t("phone.fraudSms.body")}
             </div>
           </div>
         )}
@@ -144,11 +143,11 @@ export function PhoneApp() {
         {/* secure-message inbox: approved/sent letters */}
         <div className="rounded-xl border border-line bg-white">
           <div className="flex items-center gap-1.5 border-b border-line px-2.5 py-1.5 text-[10.5px] font-semibold text-navy">
-            <MessageSquareText size={12} /> Secure messages
+            <MessageSquareText size={12} /> {t("phone.inboxTitle")}
           </div>
           <div className="divide-y divide-line">
             {visibleDrafts.length === 0 && (
-              <div className="px-2.5 py-3 text-[10px] text-faint">no messages yet</div>
+              <div className="px-2.5 py-3 text-[10px] text-faint">{t("phone.empty")}</div>
             )}
             {visibleDrafts.map((d) => {
               const sent = (caseState?.outbound ?? []).some((o) => o.draftId === d.id);
@@ -156,7 +155,7 @@ export function PhoneApp() {
                 <div key={d.id} className={cn("px-2.5 py-2", !sent && "opacity-60")}>
                   <div className="flex items-center justify-between text-[9.5px] text-faint">
                     <span className="font-mono">{d.id}</span>
-                    <span>{sent ? "delivered" : "draft"}</span>
+                    <span>{sent ? t("phone.delivered") : t("phone.draft")}</span>
                   </div>
                   <div className="mt-1">
                     <TricolorLetter draft={d} />

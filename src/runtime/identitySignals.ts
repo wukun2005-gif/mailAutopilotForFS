@@ -127,3 +127,22 @@ function lev1(a: string, b: string): boolean {
   }
   return diffs === 1;
 }
+
+/** Eval/guard helper: candidate local-part is a one-character typo of an on-file one. */
+export function localPartLookalike(onFileAddress: string, candidateAddress: string): boolean {
+  // Gmail-style providers ignore dots in local parts; compare without them.
+  const a = localPart(onFileAddress).replace(/\./g, "");
+  const b = localPart(candidateAddress).replace(/\./g, "");
+  if (!a || !b || a === b) return false;
+  return lev1(a, b);
+}
+
+/** Eval/guard helper: candidate domain is a one-edit typosquat of a reference domain. */
+export function domainLookalike(referenceDomains: string[], candidateAddress: string): boolean {
+  const d = candidateAddress.split("@")[1]?.toLowerCase().trim() ?? "";
+  if (!d) return false;
+  return referenceDomains.some((r) => {
+    const ref = r.toLowerCase().trim();
+    return d !== ref && lev1(ref, d);
+  });
+}

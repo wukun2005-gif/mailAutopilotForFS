@@ -3,15 +3,22 @@
 // and therefore arrive as secure messages in the app (PhoneApp), never as
 // email links. This is the anti-phishing story (FR-2.2 default path).
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Inbox, Paperclip, Search } from "lucide-react";
 import { INBOUND_EMAILS } from "@/mocks/fixtures/index.ts";
 import type { ScenarioId } from "@/runtime/scenarios.ts";
 import { useCaseStore } from "@/store/caseStore";
 import { cn } from "@/lib/utils";
 
-const FOLDERS = ["Inbox", "Sent", "Drafts", "Spam"];
 
 export function Webmail({ scenarioId }: { scenarioId: ScenarioId }) {
+  const { t } = useTranslation("customer");
+  const FOLDERS = [
+    { key: "inbox", label: t("webmail.folders.inbox") },
+    { key: "sent", label: t("webmail.folders.sent") },
+    { key: "drafts", label: t("webmail.folders.drafts") },
+    { key: "spam", label: t("webmail.folders.spam") },
+  ];
   const caseState = useCaseStore((s) => s.caseState);
   const emails = useMemo(
     () => INBOUND_EMAILS.filter((e) => e.scenarioId === scenarioId),
@@ -40,9 +47,9 @@ export function Webmail({ scenarioId }: { scenarioId: ScenarioId }) {
         <div className="flex h-6 w-6 items-center justify-center rounded bg-red-500 text-[10px] font-bold text-white">
           M
         </div>
-        <span className="text-[11px] font-semibold text-gray-600">Jane's webmail</span>
+        <span className="text-[11px] font-semibold text-gray-600">{t("webmail.title")}</span>
         <div className="ml-3 flex flex-1 items-center gap-1 rounded bg-white px-2 py-1 text-[10px] text-faint ring-1 ring-line">
-          <Search size={11} /> search mail
+          <Search size={11} /> {t("webmail.search")}
         </div>
       </div>
       <div className="flex min-h-0 flex-1">
@@ -50,13 +57,13 @@ export function Webmail({ scenarioId }: { scenarioId: ScenarioId }) {
         <div className="hidden w-32 shrink-0 border-r border-line bg-gray-50 p-2 sm:block">
           {FOLDERS.map((f) => (
             <div
-              key={f}
+              key={f.key}
               className={cn(
                 "flex items-center gap-1.5 rounded px-2 py-1 text-[11px]",
-                f === "Sent" ? "bg-white font-medium text-navy ring-1 ring-line" : "text-gray-500",
+                f.key === "sent" ? "bg-white font-medium text-navy ring-1 ring-line" : "text-gray-500",
               )}
             >
-              <Inbox size={12} /> {f}
+              <Inbox size={12} /> {f.label}
             </div>
           ))}
         </div>
@@ -74,10 +81,10 @@ export function Webmail({ scenarioId }: { scenarioId: ScenarioId }) {
                 )}
               >
                 <div className="truncate text-[11px] font-semibold text-ink">
-                  {first.to.includes("disputes") ? "Larkspur Disputes" : "Larkspur Support"}
+                  {first.to.includes("disputes") ? t("webmail.disputes") : t("webmail.support")}
                 </div>
                 <div className="truncate text-[10.5px] text-gray-600">{first.subject.en}</div>
-                <div className="text-[9.5px] text-faint">{list.length} message(s) · sent by Jane</div>
+                <div className="text-[9.5px] text-faint">{t("webmail.msgCount", { count: list.length })}</div>
               </button>
             );
           })}
@@ -85,12 +92,11 @@ export function Webmail({ scenarioId }: { scenarioId: ScenarioId }) {
         {/* open thread */}
         <div className="min-w-0 flex-1 overflow-y-auto p-3">
           <div className="mb-2 rounded bg-amber-50 px-2 py-1.5 text-[10px] text-amber-800">
-            Account answers never arrive by email and contain no links — check
-            secure messages in the Larkspur app.
+            {t("webmail.banner")}
           </div>
           {visible.length === 0 && (
             <div className="mt-10 text-center text-[11px] text-faint">
-              no mail at the current simulated time
+              {t("webmail.noMail")}
             </div>
           )}
           {visible.map((e) => (
@@ -111,7 +117,7 @@ export function Webmail({ scenarioId }: { scenarioId: ScenarioId }) {
                 </div>
               ))}
               <div className="mt-1 text-[9.5px] text-faint">
-                identity at intake: {caseState?.identity?.level ?? "—"} ·{" "}
+                {t("webmail.identityAtIntake", { level: caseState?.identity?.level ?? "—" })} ·{" "}
                 {caseState?.identity?.reasonCodes.join(", ")}
               </div>
             </article>

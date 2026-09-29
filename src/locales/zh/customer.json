@@ -1,1 +1,104 @@
-{}
+{
+  "tabs": {
+    "customerView": "客户视图",
+    "auditView": "审计视图",
+    "status": "状态：{{value}}"
+  },
+  "legend": {
+    "template": "固定合规模板",
+    "slot": "系统槽位（姓名/金额/日期/案号）",
+    "ai": "AI 衔接句",
+    "lockedTemplate": "锁定模板"
+  },
+  "webmail": {
+    "title": "Jane 的网页邮箱",
+    "search": "搜索邮件",
+    "folders": {
+      "inbox": "收件箱",
+      "sent": "已发送",
+      "drafts": "草稿箱",
+      "spam": "垃圾邮件"
+    },
+    "disputes": "Larkspur 争议中心",
+    "support": "Larkspur 客服",
+    "msgCount": "{{count}} 封 · Jane 发出",
+    "banner": "账户答复永远不会通过邮件发送，也不含任何链接——请在 Larkspur App 内查看 secure message。",
+    "noMail": "当前模拟时间还没有邮件",
+    "identityAtIntake": "受理时身份：{{level}}"
+  },
+  "phone": {
+    "frameCaption": "录制的 Larkspur Bank App · 原型",
+    "bank": "Larkspur Bank",
+    "push": {
+      "bank": "Larkspur Bank · 现在",
+      "body": "Secure message：有一个案件需要你核验"
+    },
+    "card": {
+      "title": "核验是你本人",
+      "body": "我们收到一条与你账户相关的请求。为保护你的资金安全，在披露信息或动钱之前需要先核验。核验完成后案件会自动继续。",
+      "i3basis": "I3 依据 §6.2②：已登录的 secure message 会话",
+      "otpLabel": "一次性验证码已发送至档案内手机号（••-0142）",
+      "placeholder": "6 位验证码"
+    },
+    "err": {
+      "incorrect": "验证码错误",
+      "locked": "尝试次数过多——请求已锁定（录制）",
+      "busy": "核验中…"
+    },
+    "verifyCta": "核验并继续案件",
+    "verified": "已核验——身份等级 I3。",
+    "fraudSms": {
+      "title": "短信 · Larkspur 反欺诈",
+      "body": "我们拦截了一封冒充你的可疑邮件。我们永远不会通过邮件要求你更改联系方式。如有疑问，请拨打卡片背面的电话。"
+    },
+    "inboxTitle": "Secure messages",
+    "empty": "暂无消息",
+    "delivered": "已送达",
+    "draft": "草稿",
+    "verifiedTail": "案件已自动恢复。"
+  },
+  "stepup": {
+    "fallbackNote": "FR-2.2 兜底分支——仅面向未开通数字银行的客户。默认路径是 App 案件卡；核验邮件不含任何链接。",
+    "title": "Larkspur 安全核验",
+    "body": "请输入发送至档案内手机号的一次性验证码。",
+    "placeholder": "6 位验证码",
+    "err": {
+      "incorrect": "验证码错误",
+      "busy": "核验中…"
+    },
+    "cta": "核验"
+  },
+  "identity": {
+    "empty": "尚无身份评估",
+    "title": "身份保障闸门",
+    "assumptions": "假设 {{values}}"
+  },
+  "clock": {
+    "badge": "Reg E · 第 {{day}} 天 · 临时贷记 {{state}}",
+    "posted": "已入账",
+    "due": "{{date}} 到期",
+    "title": "Reg E 法定时钟",
+    "milestones": {
+      "intake": "受理",
+      "pc": "临时贷记 bd10",
+      "day45": "day45 置灰：POS → 90 天",
+      "day90": "POS 借记卡 day90 上限"
+    },
+    "pcPosted": "临时贷记已入账",
+    "under48": "距 bd10 不足 48 个自然小时",
+    "daysTo": "距 bd10 还有 {{count}} 天"
+  },
+  "trace": {
+    "title": "决策卷宗 · Trace",
+    "subtitle": "每一次闸门判定、工具调用和时钟跳动都被记录",
+    "empty": "尚无事件——注入一封邮件",
+    "halted": "HALTED——{{count}} 项审批待处理",
+    "resumed": "RESUMED——{{id}} {{decision}}",
+    "inbound": "入站 {{id}}",
+    "outbound": "出站 {{draft}}",
+    "outboundReplay": "出站 {{draft}}（重放安全）",
+    "idempotent": "幂等重放——{{action}} 只执行一次",
+    "replay": "重放",
+    "policy": "政策版本 {{version}}"
+  }
+}

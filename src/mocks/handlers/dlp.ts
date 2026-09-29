@@ -43,9 +43,9 @@ const SSN_RE = /\b\d{3}-\d{2}-\d{4}\b/g;
 const CVV_RE = /\bCVV(?:[A-Za-z :#-]*)(\d{3,4})\b/gi;
 const SECRET_RE = /\b(password|passphrase|pin(?:\s*number)?|security question)\b/gi;
 const CONTACT_CHANGE_RE =
-  /(new (phone|mobile|number|address)|update my (phone|contact|number|address)|mail (the |my )?(new |replacement )?card to|change (my|the) (phone|address)|新手机号|改手机号|寄到新?地址|更新?(我的)?联系方式)/i;
+  /(new (phone|mobile|number|address)|update my (phone|mobile|cell|contact|number|address)|mail (the |my )?(new |replacement )?card to|change (my|the) (phone|address)|新手机号|改手机号|寄到新?地址|更新?(我的)?联系方式)/i;
 const INJECTION_RE =
-  /(SYSTEM NOTE|skip OTP|ignore (all |previous |prior )?instructions|act as (an? )?(admin|system))/gi;
+  /(SYSTEM NOTE|skip OTP|ignore (all |the |any )?(previous |prior |above )?instructions|act as (an? )?(admin|system)|忽略(以上|之前|前面|所有|先前|上面|以上所有)*(的)?(指令|规则|提示)|你现在是(管理员|系统)|无视(上述|之前)(的)?(指令|规则)|ignora (las )?instrucciones anteriores)/gi;
 
 export function scanDlp(text: string): { hits: DlpHit[]; clean: boolean } {
   const hits: DlpHit[] = [];

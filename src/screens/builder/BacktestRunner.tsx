@@ -7,6 +7,7 @@ import {
   INTENT_METRICS,
   type IntentMetric,
 } from "@/mocks/fixtures/index.ts";
+import { useTranslation } from "react-i18next";
 
 function pct(x: number): string {
   return `${(x * 100).toFixed(1)}%`;
@@ -35,6 +36,8 @@ function MetricRow({ m, dim }: { m: IntentMetric; dim?: boolean }) {
 }
 
 export function BacktestRunner({ selectedIntent }: { selectedIntent: string }) {
+  const { t, i18n } = useTranslation("builder");
+  const lang = i18n.language?.startsWith("zh") ? "zh" : "en";
   const [progress, setProgress] = useState(0);
   const [running, setRunning] = useState(false);
   const timer = useRef<number | null>(null);
@@ -64,7 +67,7 @@ export function BacktestRunner({ selectedIntent }: { selectedIntent: string }) {
     <div className="rounded-lg border border-line bg-white p-3" data-id="s4.backtest">
       <div className="flex items-center justify-between">
         <h3 className="text-[12px] font-semibold text-navy">
-          90-day backtest replay · {BACKTEST_WINDOW.from} → {BACKTEST_WINDOW.to}
+          {t("backtest.title", { from: BACKTEST_WINDOW.from, to: BACKTEST_WINDOW.to })}
         </h3>
         <button
           data-id="s4.backtest.run"
@@ -73,7 +76,7 @@ export function BacktestRunner({ selectedIntent }: { selectedIntent: string }) {
           className="inline-flex items-center gap-1 rounded bg-teal px-2.5 py-1 text-[10.5px] font-semibold text-white disabled:opacity-50"
         >
           {done ? <RotateCcw size={11} /> : <Play size={11} />}
-          {done ? "re-run replay" : "run replay"}
+          {done ? t("backtest.rerun") : t("backtest.run")}
         </button>
       </div>
       <div className="mt-2 h-2 overflow-hidden rounded bg-gray-100">
@@ -83,9 +86,11 @@ export function BacktestRunner({ selectedIntent }: { selectedIntent: string }) {
         />
       </div>
       <p className="mt-1 text-[9.5px] text-faint">
-        {BACKTEST_WINDOW.totalThreads.toLocaleString()} threads ·{" "}
-        {BACKTEST_WINDOW.validInbound.toLocaleString()} valid inbound · animation only — results are
-        recorded fixtures ({BACKTEST_WINDOW.notes.en})
+        {t("backtest.note", {
+          threads: BACKTEST_WINDOW.totalThreads.toLocaleString(),
+          valid: BACKTEST_WINDOW.validInbound.toLocaleString(),
+          notes: BACKTEST_WINDOW.notes[lang],
+        })}
       </p>
 
       {done && (
@@ -93,13 +98,13 @@ export function BacktestRunner({ selectedIntent }: { selectedIntent: string }) {
           <table className="w-full">
             <thead>
               <tr className="border-b border-line text-[9px] uppercase tracking-wide text-faint">
-                <th className="py-1 text-left">intent</th>
-                <th>triggers</th>
-                <th>AI/human agree</th>
-                <th>no-edit approve</th>
-                <th>regulated recall</th>
-                <th>critical misses</th>
-                <th>unit cost</th>
+                <th className="py-1 text-left">{t("backtest.headers.intent")}</th>
+                <th>{t("backtest.headers.triggers")}</th>
+                <th>{t("backtest.headers.agree")}</th>
+                <th>{t("backtest.headers.noedit")}</th>
+                <th>{t("backtest.headers.recall")}</th>
+                <th>{t("backtest.headers.misses")}</th>
+                <th>{t("backtest.headers.cost")}</th>
               </tr>
             </thead>
             <tbody>

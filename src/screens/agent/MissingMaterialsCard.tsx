@@ -3,15 +3,16 @@
 // a police report is deliberately NOT listed (CFPB EFT FAQ Q4).
 import { Check, AlertTriangle, CircleDashed } from "lucide-react";
 import type { CaseStateType, MaterialState } from "@/runtime/caseState.ts";
+import { useTranslation } from "react-i18next";
 
 // Canonical ask list for the POS debit dispute vignette.
-const CANONICAL: { code: string; label: string }[] = [
-  { code: "ATT-RECEIPT", label: "receipt / proof of purchase (optional)" },
-  { code: "ATT-SCREENSHOT", label: "screenshot of the charge (optional)" },
-  { code: "ATT-SIGNED", label: "signed customer statement (optional)" },
-];
+const CANONICAL = [
+  { code: "ATT-RECEIPT", labelKey: "materials.receipt" },
+  { code: "ATT-SCREENSHOT", labelKey: "materials.screenshot" },
+  { code: "ATT-SIGNED", labelKey: "materials.signed" },
+] as const;
 
-function Row({ code, label, m }: { code: string; label: string; m?: MaterialState }) {
+function Row({ code, label, m, t }: { code: string; label: string; m?: MaterialState; t: (k: string, o?: Record<string, unknown>) => string }) {
   const status = m?.status ?? "not_submitted";
   return (
     <div className="flex items-center gap-2 rounded border border-line px-2 py-1 text-[11px]">
@@ -34,26 +35,27 @@ function Row({ code, label, m }: { code: string; label: string; m?: MaterialStat
         }
       >
         {status === "received"
-          ? `received · OCR ${(m?.ocrConfidence ?? 0).toFixed(2)}`
+          ? t("materials.received", { value: (m?.ocrConfidence ?? 0).toFixed(2) })
           : status === "ocr_low_confidence"
-            ? `OCR low ${(m?.ocrConfidence ?? 0).toFixed(2)} · human confirm`
-            : "not submitted"}
+            ? t("materials.ocrLow", { value: (m?.ocrConfidence ?? 0).toFixed(2) })
+            : t("materials.notSubmitted")}
       </span>
     </div>
   );
 }
 
 export function MissingMaterialsCard({ state }: { state: CaseStateType }) {
+  const { t } = useTranslation("agent");
   if (state.scenarioId !== "email2") return null;
   return (
     <section className="rounded-lg border border-line bg-white p-3" data-id="s2.materials">
-      <h3 className="text-[12px] font-semibold text-navy">Requested materials</h3>
+      <h3 className="text-[12px] font-semibold text-navy">{t("materials.title")}</h3>
       <p className="text-[10px] text-faint">
-        all items optional · missing items never pause the statutory clock · police report never requested
+        {t("materials.subtitle")}
       </p>
       <div className="mt-2 space-y-1">
         {CANONICAL.map((c) => (
-          <Row key={c.code} code={c.code} label={c.label} m={state.materials.find((x) => x.code === c.code)} />
+          <Row key={c.code} code={c.code} label={t(c.labelKey)} m={state.materials.find((x) => x.code === c.code)} t={t} />
         ))}
       </div>
     </section>

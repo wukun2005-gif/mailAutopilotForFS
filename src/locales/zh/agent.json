@@ -1,1 +1,61 @@
-{}
+{
+  "loading": "正在加载卷宗…",
+  "identityLabel": "身份 {{level}}",
+  "caselist": {
+    "title": "争议与案件"
+  },
+  "resume": {
+    "title": "已从 checkpoint 恢复",
+    "body": "——进程于 {{time}}（模拟时间）中断。一个全新 runtime 重新挂上了本案的持久化线程；待审批项仍在队列中，已完成的 {{executed}} 个动作没有被重复执行（幂等台账{{inflight}}）。",
+    "inflight": "，{{count}} 个进行中"
+  },
+  "cell": {
+    "deny": "拒绝",
+    "never": "永不"
+  },
+  "intent": {
+    "title": "意图证据 · 分流",
+    "subtitle": "录制的检测器输出 · 置信度 < 0.90 转人工",
+    "materialsOnly": "{{id}}：仅材料，无新意图",
+    "regulated": " · 受监管",
+    "conf": "置信度 {{value}}"
+  },
+  "policy": {
+    "title": "政策求值",
+    "subtitle": "确定性政策包 · 条件全部由系统数据求值，不看模型心情",
+    "empty": "本案尚无政策求值",
+    "degraded": "版本降级"
+  },
+  "materials": {
+    "title": "索要材料",
+    "subtitle": "全部可选 · 缺材料从不暂停法定时钟 · 从不索要警方报告",
+    "receipt": "收据 / 消费凭证（可选）",
+    "screenshot": "交易截图（可选）",
+    "signed": "客户签署声明（可选）",
+    "received": "已收到 · OCR {{value}}",
+    "ocrLow": "OCR 偏低 {{value}} · 人工确认",
+    "notSubmitted": "未提交"
+  },
+  "pending": {
+    "title": "等待人工（{{count}}）",
+    "due": "{{time}} 到期"
+  },
+  "drafts": {
+    "title": "AI 草稿",
+    "subtitle": "蓝色模板 · 绿色系统槽位 · 紫色 AI 衔接句 · 编辑全部留痕",
+    "empty": "暂无草稿",
+    "lockedTemplate": "锁定模板",
+    "sent": "已发送",
+    "signoff": "{{status}} · {{level}} 签发",
+    "edit": "编辑",
+    "cancel": "取消",
+    "saveEdit": "把修改记录进卷宗"
+  },
+  "approvals": {
+    "AP-PCREDIT": "在 bd10 截止前发放临时贷记",
+    "AP-ADJUDICATION": "人工裁决——商户凭证已到达（Day 40）",
+    "AP-RESULTSIGN": "签发并发送调查结果函",
+    "AP-OD2-EXPLAIN": "批准第二次豁免的解释函",
+    "AP-FRAUD-CONFIRM": "确认 BEC/ATO 隔离"
+  }
+}
