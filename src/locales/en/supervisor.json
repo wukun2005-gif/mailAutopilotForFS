@@ -21,7 +21,7 @@
     "approve": "one-click approve",
     "handToAgent": "hand to agent",
     "reject": "reject",
-    "batchInfo": "{{count}} same-template / same-intent items eligible for batch approve (each remains expandable for review, FR-8.1).",
+    "batchInfo": "{{count}} same-template / same-intent items eligible for batch approve (each remains expandable for review).",
     "queueEmpty": "no approvals waiting — the queue is clear",
     "batchFootnote": "clock-driven, case-specific obligations (e.g. provisional credit) are always single-item — they never enter batch lists."
   },
@@ -29,7 +29,7 @@
     "empty": "no open Reg E disputes in this case — load the dispute case from the dev panel",
     "title": "Statutory clock board · Reg E",
     "subtitle": "red < 48 calendar hours · amber < 5 days · dates are arithmetic, never model judgment",
-    "pc": "provisional credit (bd10)",
+    "pc": "provisional credit (deadline)",
     "day45": "investigation day45 (POS→90)",
     "day90": "outer limit day90 POS debit",
     "done": "done",

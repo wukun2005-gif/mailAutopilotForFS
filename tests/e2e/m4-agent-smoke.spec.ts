@@ -26,7 +26,7 @@ test.describe("M4 agent dossier smoke", () => {
     await page.goto("/#/customer");
     await waitIdle(page, 400);
     await page.click("[data-id='s1.phone.push']");
-    await page.fill("[data-id='s1.phone.otp']", "482915");
+    await page.fill("[data-id='s1.phone.otp']", "111111");
     await page.click("[data-id='s1.phone.verify']");
     await waitIdle(page);
     await page.goto("/#/agent");

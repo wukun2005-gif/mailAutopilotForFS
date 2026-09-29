@@ -49,7 +49,7 @@ function CellView({
   t: (k: string, o?: Record<string, unknown>) => string;
 }) {
   const base =
-    "relative flex h-14 flex-col items-center justify-center rounded text-[10px] leading-tight";
+    "relative flex h-14 flex-col items-center justify-center rounded text-[13px] leading-tight";
   if (cell.kind === "never") {
     return (
       <div
@@ -86,12 +86,12 @@ function CellView({
         clickable && "cursor-pointer hover:ring-2 hover:ring-navy",
       )}
     >
-      <span className="font-mono text-[12px] font-bold">
+      <span className="font-mono text-[15px] font-bold">
         {cell.level}
         {shadow && <Lock size={9} className="ml-0.5 inline" />}
       </span>
       {shadow && <span>{t("matrix.shadowUnlock")}</span>}
-      {capped && <span className="text-[8.5px]">{t("matrix.manualCap")}</span>}
+      {capped && <span className="text-[12px]">{t("matrix.manualCap")}</span>}
       {clickable && !shadow && (
         <MousePointerClick size={9} className="absolute right-1 top-1 opacity-60" />
       )}
@@ -119,8 +119,8 @@ export function AutonomyMatrix({
 
   return (
     <div className="rounded-lg border border-line bg-white p-3" data-id="s4.matrix">
-      <h3 className="text-[12px] font-semibold text-navy">{t("matrix.title")}</h3>
-      <p className="text-[10px] text-faint">
+      <h3 className="text-[15px] font-semibold text-navy">{t("matrix.title")}</h3>
+      <p className="text-[13px] text-faint">
         {t("matrix.subtitle")}
       </p>
       <div className="mt-2 overflow-x-auto">
@@ -129,7 +129,7 @@ export function AutonomyMatrix({
             <tr>
               <th className="w-44" />
               {IDENTITIES.map((i) => (
-                <th key={i} className="pb-1 font-mono text-[10px] text-faint">
+                <th key={i} className="pb-1 font-mono text-[13px] text-faint">
                   {i}
                 </th>
               ))}
@@ -144,9 +144,9 @@ export function AutonomyMatrix({
               const override = graduationOverrides.get(intentCode);
               return (
                 <tr key={r} className={cn(!active && "text-faint")}>
-                  <td className="pr-2 text-right text-[9.5px] font-medium text-gray-600">
+                  <td className="pr-2 text-right text-[12.5px] font-medium text-gray-600">
                     {t(`matrix.risk.${r}`)}
-                    {active && <div className="font-mono text-[8.5px] text-teal">{intentCode}</div>}
+                    {active && <div className="font-mono text-[12px] text-teal">{intentCode}</div>}
                   </td>
                   {IDENTITIES.map((i) => {
                     const decision = decideCell({
@@ -180,7 +180,7 @@ export function AutonomyMatrix({
           </tbody>
         </table>
       </div>
-      <div className="mt-2 flex flex-wrap gap-3 text-[9.5px] text-faint">
+      <div className="mt-2 flex flex-wrap gap-3 text-[12.5px] text-faint">
         <span className="inline-flex items-center gap-1"><Lock size={10} /> {t("matrix.legendLocked")}</span>
         <span className="inline-flex items-center gap-1"><Ban size={10} /> {t("matrix.legendNever")}</span>
         <span>{t("matrix.legendR4")}</span>

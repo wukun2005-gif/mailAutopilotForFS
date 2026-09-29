@@ -52,7 +52,7 @@
     "tierA": "A 层",
     "tierB": "B 层",
     "tierC": "C 层",
-    "negativeLabel": "检测器判阴性随机复标（FR-3.3 AC5）：n = {{count}}",
+    "negativeLabel": "检测器判阴性随机复标：n = {{count}}",
     "negativePresent": "发现 {{missed}} 件漏检的受监管项 · {{neg}} 件非受监管假阴性回流为案件",
     "notSignable": "召回判据不可签——只看阳性样本量无法约束漏检"
   },

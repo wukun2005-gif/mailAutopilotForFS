@@ -10,7 +10,7 @@ export function IdentityAudit({ identity }: { identity?: IdentityVerdict | null 
   const { t } = useTranslation("customer");
   if (!identity) {
     return (
-      <div className="rounded-lg border border-line bg-white p-3 text-[11px] text-faint">
+      <div className="rounded-lg border border-line bg-white p-3 text-[14px] text-faint">
         {t("identity.empty")}
       </div>
     );
@@ -18,21 +18,24 @@ export function IdentityAudit({ identity }: { identity?: IdentityVerdict | null 
   return (
     <div className="rounded-lg border border-line bg-white p-3" data-id="s1.identity">
       <div className="flex items-center justify-between">
-        <span className="text-[11px] font-semibold text-navy">{t("identity.title")}</span>
-        <span className="rounded bg-navy px-2 py-0.5 font-mono text-[12px] font-bold text-white">
+        <span className="text-[14px] font-semibold text-navy">{t("identity.title")}</span>
+        <span className="rounded bg-navy px-2 py-0.5 text-[15px] font-bold text-white">
           {identity.level}
         </span>
       </div>
+      <div className="mt-0.5 text-[13px] text-faint">
+        {t(`identity.levels.${identity.level}`, { defaultValue: identity.level })}
+      </div>
       <ul className="mt-2 space-y-0.5">
         {identity.signals.map((s) => (
-          <li key={s.code} className="flex items-center gap-1.5 font-mono text-[10px]">
+          <li key={s.code} className="flex items-center gap-1.5 text-[13px]">
             {s.passed ? (
-              <Check size={11} className="text-emerald-600" />
+              <Check size={11} className="shrink-0 text-emerald-600" />
             ) : (
-              <X size={11} className="text-red-600" />
+              <X size={11} className="shrink-0 text-red-600" />
             )}
             <span className={cn(s.passed ? "text-gray-700" : "font-semibold text-red-700")}>
-              {s.code}
+              {t(`identity.signals.${s.code}`, { defaultValue: s.code })}
             </span>
           </li>
         ))}
@@ -40,12 +43,14 @@ export function IdentityAudit({ identity }: { identity?: IdentityVerdict | null 
       {identity.reasonCodes.length > 0 && (
         <div className="mt-2 border-t border-line pt-1.5">
           {identity.reasonCodes.map((r) => (
-            <div key={r} className="font-mono text-[9.5px] text-faint">{r}</div>
+            <div key={r} className="text-[12.5px] text-faint">
+              {t(`identity.reasons.${r}`, { defaultValue: r })}
+            </div>
           ))}
         </div>
       )}
       {identity.assumptions.length > 0 && (
-        <div className="mt-1 rounded bg-amber-50 px-1.5 py-1 font-mono text-[9.5px] text-amber-800">
+        <div className="mt-1 rounded bg-amber-50 px-1.5 py-1 font-mono text-[12.5px] text-amber-800">
           {t("identity.assumptions", { values: identity.assumptions.join(" · ") })}
         </div>
       )}

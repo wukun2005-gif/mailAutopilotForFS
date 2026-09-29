@@ -21,7 +21,7 @@ test.describe("M3 customer screen smoke", () => {
     // Open the app case card and complete OTP.
     await page.click("[data-id='s1.phone.push']");
     await expect(page.locator("[data-id='s1.phone.casecard']")).toBeVisible();
-    await page.fill("[data-id='s1.phone.otp']", "482915");
+    await page.fill("[data-id='s1.phone.otp']", "111111");
     await page.click("[data-id='s1.phone.verify']");
     await waitIdle(page);
 

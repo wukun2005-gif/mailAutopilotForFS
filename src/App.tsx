@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { useTranslation } from "react-i18next";
 import { TopBar } from "@/components/TopBar";
 import { ScenarioBar } from "@/components/ScenarioBar";
 import { FakeCursor } from "@/components/demo/FakeCursor";
@@ -13,7 +12,6 @@ import { SettingsScreen } from "@/screens/SettingsScreen";
 
 export default function App() {
   const screen = useUIStore((s) => s.screen);
-  const { t } = useTranslation("common");
 
   useEffect(() => bindHashSync(), []);
 
@@ -28,9 +26,6 @@ export default function App() {
         {screen === "builder" && <BuilderScreen />}
         {screen === "settings" && <SettingsScreen />}
       </main>
-      <footer className="shrink-0 border-t border-line bg-paper px-4 py-1.5 text-center text-[10px] text-faint">
-        {t("footer.fictional")}
-      </footer>
       <FakeCursor />
       <DemoControlBar />
     </div>

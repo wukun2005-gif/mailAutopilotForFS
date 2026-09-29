@@ -42,7 +42,7 @@ export function BuilderScreen() {
     <div className="grid h-full grid-cols-[260px_1fr] gap-2 overflow-hidden p-2">
       {/* Left: intent list */}
       <div className="min-h-0 overflow-y-auto rounded-lg border border-line bg-white p-2" data-id="s4.intents">
-        <h2 className="px-1 text-[11px] font-semibold uppercase tracking-wide text-faint">
+        <h2 className="px-1 text-[14px] font-semibold uppercase tracking-wide text-faint">
           {t("intentsTitle")}
         </h2>
         <ul className="mt-1 space-y-1">
@@ -61,17 +61,17 @@ export function BuilderScreen() {
                   )}
                 >
                   <div className="flex items-center justify-between gap-1">
-                    <span className="font-mono text-[10px] font-semibold">{g.intentCode}</span>
+                    <span className="font-mono text-[13px] font-semibold">{g.intentCode}</span>
                     <span
                       className={cn(
-                        "inline-flex items-center gap-0.5 rounded px-1 py-0.5 text-[8.5px] font-semibold",
+                        "inline-flex items-center gap-0.5 rounded px-1 py-0.5 text-[12px] font-semibold",
                         active ? "bg-white/20 text-white" : meta.cls,
                       )}
                     >
                       <Icon size={9} /> {meta.label}
                     </span>
                   </div>
-                  <div className={cn("mt-0.5 text-[9.5px]", active ? "text-white/80" : "text-faint")}>
+                  <div className={cn("mt-0.5 text-[12.5px]", active ? "text-white/80" : "text-faint")}>
                     {g.label[lang]}
                   </div>
                 </button>
@@ -85,7 +85,7 @@ export function BuilderScreen() {
       <div className="min-h-0 space-y-2 overflow-y-auto pr-1">
         <AutonomyMatrix selected={selected} rev={rev} onDowngrade={(lvl) => graduationOverrides.cap(selected.intentCode, lvl)} />
         {override?.cap && (
-          <div className="rounded border border-amber-300 bg-amber-50 px-3 py-1.5 text-[10.5px] text-amber-900" data-id="s4.cap.notice">
+          <div className="rounded border border-amber-300 bg-amber-50 px-3 py-1.5 text-[13.5px] text-amber-900" data-id="s4.cap.notice">
             {t("capNotice", { intent: selected.intentCode, level: override.cap })}
             <button
               className="ml-2 underline"
@@ -96,7 +96,7 @@ export function BuilderScreen() {
           </div>
         )}
         {override?.promotedTo && (
-          <div className="rounded border border-emerald-300 bg-emerald-50 px-3 py-1.5 text-[10.5px] text-emerald-900" data-id="s4.promote.notice">
+          <div className="rounded border border-emerald-300 bg-emerald-50 px-3 py-1.5 text-[13.5px] text-emerald-900" data-id="s4.promote.notice">
             {t("promoteNotice", { intent: selected.intentCode, level: override.promotedTo })}
           </div>
         )}

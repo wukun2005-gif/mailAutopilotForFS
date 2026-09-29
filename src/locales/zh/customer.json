@@ -8,7 +8,8 @@
     "template": "固定合规模板",
     "slot": "系统槽位（姓名/金额/日期/案号）",
     "ai": "AI 衔接句",
-    "lockedTemplate": "锁定模板"
+    "lockedTemplate": "锁定模板",
+    "edited": "坐席已改"
   },
   "webmail": {
     "title": "Jane 的网页邮箱",
@@ -22,7 +23,8 @@
     "disputes": "Larkspur 争议中心",
     "support": "Larkspur 客服",
     "msgCount": "{{count}} 封 · Jane 发出",
-    "banner": "账户答复永远不会通过邮件发送，也不含任何链接——请在 Larkspur App 内查看 secure message。",
+    "bankReply": "银行回复",
+    "banner": "完整卡号与密码永不进邮件；其余答复直接回复在本线程。",
     "noMail": "当前模拟时间还没有邮件",
     "identityAtIntake": "受理时身份：{{level}}"
   },
@@ -36,7 +38,6 @@
     "card": {
       "title": "核验是你本人",
       "body": "我们收到一条与你账户相关的请求。为保护你的资金安全，在披露信息或动钱之前需要先核验。核验完成后案件会自动继续。",
-      "i3basis": "I3 依据 §6.2②：已登录的 secure message 会话",
       "otpLabel": "一次性验证码已发送至档案内手机号（••-0142）",
       "placeholder": "6 位验证码"
     },
@@ -54,11 +55,10 @@
     "inboxTitle": "Secure messages",
     "empty": "暂无消息",
     "delivered": "已送达",
-    "draft": "草稿",
     "verifiedTail": "案件已自动恢复。"
   },
   "stepup": {
-    "fallbackNote": "FR-2.2 兜底分支——仅面向未开通数字银行的客户。默认路径是 App 案件卡；核验邮件不含任何链接。",
+    "fallbackNote": "仅面向未开通数字银行的客户。默认路径是 App 案件卡；核验邮件不含任何链接。",
     "title": "Larkspur 安全核验",
     "body": "请输入发送至档案内手机号的一次性验证码。",
     "placeholder": "6 位验证码",
@@ -71,7 +71,60 @@
   "identity": {
     "empty": "尚无身份评估",
     "title": "身份保障闸门",
-    "assumptions": "假设 {{values}}"
+    "assumptions": "假设 {{values}}",
+    "levels": {
+      "I0": "I0・无法确认是本人",
+      "I1": "I1・仅发件域名可信",
+      "I2": "I2・档案地址且验证通过",
+      "I3": "I3・已完成核验"
+    },
+    "signals": {
+      "ADDR_ON_FILE": "发件地址在客户档案里",
+      "SPF_PASS": "发件服务器验证通过",
+      "DKIM_PASS": "邮件签名验证通过",
+      "DMARC_PASS": "域名策略验证通过",
+      "DKIM_ALIGNED": "签名域名与发件人一致",
+      "LOOKALIKE_VARIANT": "无仿冒变形地址",
+      "DISPLAY_NAME_SPOOF": "无显示名仿冒",
+      "FRAUD_ATO_SIGNAL": "无盗号或欺诈信号",
+      "CONTACT_CHANGED_30D": "30 天内未改联系方式",
+      "AUTH_ALL_PASS": "三项协议验证全过",
+      "STEPUP_IN_THREAD": "本次对话已完成核验",
+      "SECURE_MESSAGE_SESSION": "已登录的安全消息会话"
+    },
+    "reasons": {
+      "I3_RETAINED": "核验有效，保持 I3",
+      "I1_DOMAIN_ONLY": "仅域名可信，判 I1",
+      "I2_SIGNAL_MATCH": "信号吻合，判 I2",
+      "I0_DOMAIN_DIRTY_OR_SPOOF": "域名异常或仿冒，判 I0",
+      "I0_FRAUD_SIGNAL": "有欺诈信号，判 I0",
+      "I0_PROTOCOL_FAILURE": "协议验证失败，判 I0",
+      "I0_ONFILE_ADDRESS_DMARC_FAIL": "档案地址但域名验证失败，判 I0",
+      "I1_CONTACT_CHANGE_WINDOW_AC5": "30 天内改过联系方式，限 I1",
+      "I1_MIDTHREAD_ADDRESS_CHANGE": "对话中途换了地址，降 I1",
+      "I3_DOWNGRADE_SESSION_EXPIRED": "核验会话过期，I3 降级",
+      "I3_DOWNGRADE_THREAD_CLOSED": "原对话已关闭，I3 降级",
+      "I3_DOWNGRADE_AC3_SPOOF": "发现仿冒信号，I3 降级",
+      "I3_DOWNGRADE_MIDTHREAD_ADDRESS": "对话中途换了地址，I3 降级",
+      "I3_NOT_INHERITED_AC2": "新对话不继承上次核验",
+      "AC3_LOOKALIKE": "发现仿冒变形地址",
+      "TX_DETAIL_REQUIRES_I3_STEPUP": "交易明细须 I3 核验后才给",
+      "GUIDE_STEPUP": "引导客户先完成核验",
+      "DRAFT_CHANNEL_CLOSED": "草稿通道关闭",
+      "R2_I1_NO_GRANT_GUIDE_STEPUP": "I1 不能放权，引导先核验",
+      "R1_I0_NO_DISCLOSE_STEPUP": "身份不明不披露，引导先核验",
+      "R1_I1_NO_DISCLOSE_STEPUP": "仅域名可信不披露，引导先核验",
+      "SECOND_WAIVER_12M_FORCED_HUMAN_L2": "12 个月内第二次豁免，转人工",
+      "LOW_CONFIDENCE_HANDOFF": "识别置信度不足，转人工",
+      "R0_PUBLIC_INFO_L3": "公开信息，可自动答复",
+      "FRAUD_REVIEW_L0": "疑似欺诈，只转人工",
+      "R4_ADJUDICATION_HUMAN_L0": "裁决归人工",
+      "R4_DRAFT_HUMAN_SIGNOFF_L1": "结果信须人工签发",
+      "NOT_GRADUATED_FAIL_CLOSED": "未毕业，先关闸转人工",
+      "POLICY_FAIL_EXPLANATION_DRAFT_L2": "政策不通过，起草说明待批",
+      "POLICY_UNKNOWN_FAIL_CLOSED_L0": "政策未知，先关闸转人工",
+      "HUMAN_RECONSIDERATION_OPEN": "可申请人工复议"
+    }
   },
   "clock": {
     "badge": "Reg E · 第 {{day}} 天 · 临时贷记 {{state}}",
@@ -80,25 +133,124 @@
     "title": "Reg E 法定时钟",
     "milestones": {
       "intake": "受理",
-      "pc": "临时贷记 bd10",
-      "day45": "day45 置灰：POS → 90 天",
-      "day90": "POS 借记卡 day90 上限"
+      "pc": "临时贷记期限",
+      "day45": "45 天期限（POS 案件用 90 天）",
+      "day90": "POS 借记卡 90 天上限"
     },
     "pcPosted": "临时贷记已入账",
-    "under48": "距 bd10 不足 48 个自然小时",
-    "daysTo": "距 bd10 还有 {{count}} 天"
+    "skipped": "跳过",
+    "under48": "距临时贷记期限不足 48 小时",
+    "daysTo": "临时贷记期限还有 {{count}} 天"
   },
   "trace": {
     "title": "决策卷宗 · Trace",
     "subtitle": "每一次闸门判定、工具调用和时钟跳动都被记录",
     "empty": "尚无事件——注入一封邮件",
-    "halted": "HALTED——{{count}} 项审批待处理",
-    "resumed": "RESUMED——{{id}} {{decision}}",
-    "inbound": "入站 {{id}}",
-    "outbound": "出站 {{draft}}",
-    "outboundReplay": "出站 {{draft}}（重放安全）",
+    "halted": "已暂停——{{count}} 项待审批",
+    "resumed": "审批恢复——{{approval}}：{{decision}}",
     "idempotent": "幂等重放——{{action}} 只执行一次",
     "replay": "重放",
-    "policy": "政策版本 {{version}}"
+    "policy": "政策版本 {{version}}",
+    "nodes": {
+      "ingest": "收件",
+      "triage": "分拣意图",
+      "identity": "身份核验",
+      "policy": "政策评估",
+      "autonomy": "放权判定",
+      "act": "执行",
+      "human_checkpoint": "人工审批",
+      "respond": "回复",
+      "close": "办结",
+      "clock": "时钟推进",
+      "runtime": "重启恢复"
+    },
+    "types": {
+      "gate": "判定",
+      "tool_call": "调工具",
+      "tool_result": "工具返回",
+      "idempotent_replay": "幂等重放",
+      "clock": "时钟",
+      "interrupt": "暂停待审",
+      "resume": "审批恢复",
+      "email_inbound": "收到邮件",
+      "email_outbound": "发出回复",
+      "system": "系统记录",
+      "node_enter": "进入",
+      "node_exit": "离开"
+    },
+    "gateLevel": "身份等级 {{level}}",
+    "gateFailed": "缺：{{values}}",
+    "intents": {
+      "general_inquiry": "一般咨询",
+      "card_delivery_status": "卡片寄送查询",
+      "transaction_detail": "交易明细查询",
+      "od_fee_refund": "透支费退费",
+      "reg_e_intake": "争议受理",
+      "reg_e_provisional_credit": "临时贷记",
+      "reg_e_adjudication": "争议裁决",
+      "contact_detail_change": "改联系方式"
+    },
+    "levels": {
+      "L0": "只转人工",
+      "L1": "起草待签发",
+      "L2": "一键审批",
+      "L3": "自动执行"
+    },
+    "actions": {
+      "refund_od_fee": "退透支费",
+      "send_secure_message": "发安全消息",
+      "create_dispute": "建争议单",
+      "reg_e_provisional_credit": "入临时贷记",
+      "notify_onfile": "给档案手机发短信"
+    },
+    "drafts": {
+      "DR-OD1-REFUND": "退费确认信",
+      "DR-STEPUP-NUDGE": "核验引导（邮件通知）",
+      "DR-OD2-HOLDING": "受理回执（主管复核中）",
+      "DR-OD2-EXPLAIN": "二次豁免说明",
+      "DR-REGE-RECEIPT": "争议受理回执",
+      "DR-PC-POSTED": "临时贷记已入账通知",
+      "DR-CARD-STATUS": "卡状态答复",
+      "DR-TX-DETAIL": "交易明细",
+      "DR-RESULT-ERROR": "调查结果信（有错）",
+      "DR-RESULT-NOERROR": "调查结果信（无错）",
+      "DR-MATERIALS-ACK": "补件确认",
+      "DR-FRAUD-LOCKED": "欺诈锁定模板（未发出）",
+      "DR-LOCKED-STEPUP": "核验引导"
+    },
+    "policies": {
+      "OD_FEE_WAIVER": "透支费豁免",
+      "REG_E_INTAKE": "争议受理",
+      "REG_E_POS_90": "POS 调查期"
+    },
+    "approvals": {
+      "AP-PCREDIT": "临时贷记",
+      "AP-ADJUDICATION": "人工裁决",
+      "AP-RESULTSIGN": "结果信签发",
+      "AP-FRAUD-CONFIRM": "欺诈确认",
+      "AP-OD2-EXPLAIN": "二次豁免说明"
+    },
+    "decisions": {
+      "approve": "通过",
+      "reject": "驳回",
+      "edit": "改后通过"
+    },
+    "triageFound": "识别出意图：{{values}}",
+    "lowConfidence": "意图识别置信度不足，转人工",
+    "policyVerdict": "{{policy}} {{version}}：{{verdict}}",
+    "pass": "通过",
+    "fail": "不通过",
+    "toolDone": "{{action}}完成",
+    "ocrDone": "附件文字识别完成",
+    "mailReceived": "收到客户邮件",
+    "replySent": "发出：{{draft}}（{{code}}）",
+    "disputeFiled": "争议已受理，法定时钟启动",
+    "caseClosed": "案件办结",
+    "verified14d": "14 天无重复来信，核验通过办结",
+    "quarantinedLine": "风险隔离：发现仿冒欺诈信号",
+    "restarted": "进程重启，新 runtime 已接管同一案件，状态无丢失",
+    "blockedDraft": "{{draft}}被拦截未发出",
+    "handedToAgent": "转坐席处理：{{approval}}待改",
+    "draftEdited": "坐席已改草稿：{{draft}}（已记录）"
   }
 }

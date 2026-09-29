@@ -12,13 +12,13 @@ export function ConformalCard() {
   return (
     <div className="rounded-lg border border-dashed border-amber-400 bg-amber-50/60 p-3" data-id="s4.conformal">
       <div className="flex items-center justify-between">
-        <h3 className="text-[12px] font-semibold text-navy">{t("conformal.title")}</h3>
-        <span className="rounded bg-amber-200/70 px-1.5 py-0.5 text-[9px] font-semibold text-amber-900">
+        <h3 className="text-[15px] font-semibold text-navy">{t("conformal.title")}</h3>
+        <span className="rounded bg-amber-200/70 px-1.5 py-0.5 text-[12px] font-semibold text-amber-900">
           {t("conformal.methodDemo")}
         </span>
       </div>
-      <p className="mt-0.5 text-[10px] text-faint">{c.method[lang]}</p>
-      <div className="mt-2 grid grid-cols-4 gap-2 text-center font-mono text-[10px]">
+      <p className="mt-0.5 text-[13px] text-faint">{c.method[lang]}</p>
+      <div className="mt-2 grid grid-cols-4 gap-2 text-center font-mono text-[13px]">
         <Stat label={t("conformal.targetAlpha")} value={c.alpha.toString()} />
         <Stat label={t("conformal.calibrationN")} value={c.calibrationSize.toString()} />
         <Stat label={t("conformal.observedCoverage")} value={`${(c.coverageObserved * 100).toFixed(1)}%`} />
@@ -30,16 +30,16 @@ export function ConformalCard() {
             <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
             <XAxis
               dataKey="coverage"
-              tick={{ fontSize: 9 }}
-              label={{ value: t("conformal.coveragePct"), position: "insideBottom", offset: -10, fontSize: 9 }}
+              tick={{ fontSize: 12 }}
+              label={{ value: t("conformal.coveragePct"), position: "insideBottom", offset: -10, fontSize: 12 }}
             />
-            <YAxis tick={{ fontSize: 9 }} label={{ value: t("conformal.avgSetSize"), angle: -90, position: "insideLeft", fontSize: 9 }} />
+            <YAxis tick={{ fontSize: 12 }} label={{ value: t("conformal.avgSetSize"), angle: -90, position: "insideLeft", fontSize: 12 }} />
             <Tooltip formatter={(v) => [`${v}`, t("conformal.avgSetSize")]} />
             <Line type="monotone" dataKey="setSize" stroke="#0f766e" strokeWidth={2} dot={{ r: 3 }} />
           </LineChart>
         </ResponsiveContainer>
       </div>
-      <p className="text-[9.5px] text-faint">{c.verdict[lang]}</p>
+      <p className="text-[12.5px] text-faint">{c.verdict[lang]}</p>
     </div>
   );
 }
@@ -47,8 +47,8 @@ export function ConformalCard() {
 function Stat({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded border border-line bg-white py-1">
-      <div className="text-[12px] font-bold text-navy">{value}</div>
-      <div className="text-[8.5px] text-faint">{label}</div>
+      <div className="text-[15px] font-bold text-navy">{value}</div>
+      <div className="text-[12px] text-faint">{label}</div>
     </div>
   );
 }

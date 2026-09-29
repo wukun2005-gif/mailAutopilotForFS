@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
-import { Mailbox, UserCheck, ShieldCheck, SlidersHorizontal, Settings2, Play, Clock, ChevronDown } from "lucide-react";
+import { Mailbox, UserCheck, ShieldCheck, SlidersHorizontal, Settings, Play, Clock, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SCREENS, useUIStore, type ScreenId } from "@/store/uiStore";
 import { simClock } from "@/runtime/simClock";
@@ -13,7 +13,7 @@ const ICONS: Record<ScreenId, typeof Mailbox> = {
   agent: UserCheck,
   supervisor: ShieldCheck,
   builder: SlidersHorizontal,
-  settings: Settings2,
+  settings: Settings,
 };
 
 export function TopBar() {
@@ -42,16 +42,16 @@ export function TopBar() {
             <Mailbox size={18} />
           </div>
           <div className="leading-tight">
-            <div className="text-[13px] font-semibold tracking-wide">
+            <div className="text-[16px] font-semibold tracking-wide">
               {t("app.title")}
             </div>
-            <div className="text-[10px] text-white/60">{t("app.bank")}</div>
+            <div className="text-[13px] text-white/60">{t("app.bank")}</div>
           </div>
         </div>
 
-        {/* Nav tabs */}
+        {/* Nav tabs (settings lives as a gear at the far right) */}
         <nav className="ml-2 flex h-full items-stretch gap-0.5">
-          {SCREENS.map((id) => {
+          {SCREENS.filter((id) => id !== "settings").map((id) => {
             const Icon = ICONS[id];
             const active = screen === id;
             return (
@@ -59,8 +59,9 @@ export function TopBar() {
                 key={id}
                 data-nav={id}
                 onClick={() => setScreen(id)}
+                title={t(`nav.${id}`)}
                 className={cn(
-                  "relative flex items-center gap-1.5 px-3 text-[13px] transition-colors",
+                  "relative flex items-center gap-1.5 px-3 text-[16px] transition-colors",
                   active
                     ? "font-semibold text-white"
                     : "text-white/65 hover:text-white",
@@ -68,14 +69,6 @@ export function TopBar() {
               >
                 <Icon size={15} />
                 <span>{t(`nav.${id}`)}</span>
-                <span
-                  className={cn(
-                    "rounded px-1 text-[9px]",
-                    active ? "bg-teal text-white" : "bg-white/10 text-white/50",
-                  )}
-                >
-                  {t(`navHint.${id}`)}
-                </span>
                 {active && (
                   <span className="absolute inset-x-2 bottom-0 h-0.5 rounded-full bg-teal" />
                 )}
@@ -88,23 +81,18 @@ export function TopBar() {
           {/* Sim clock chip */}
           <div
             data-testid="sim-clock-chip"
-            className="hidden items-center gap-1.5 rounded-full border border-white/15 px-2.5 py-1 text-[11px] text-white/70 md:flex"
+            className="hidden items-center gap-1.5 rounded-full border border-white/15 px-2.5 py-1 text-[14px] text-white/70 md:flex"
             title={t("mode.simClock")}
           >
             <Clock size={12} />
             <span className="font-mono">{clockLabel}</span>
           </div>
 
-          {/* Mock / live badge */}
-          <div className="rounded-full bg-teal/20 px-2.5 py-1 text-[11px] font-medium text-teal-soft">
-            {t("mode.mock")}
-          </div>
-
           <button
             onClick={toggleLang}
             data-id="top.lang"
             data-testid="lang-toggle"
-            className="rounded-full border border-white/20 px-2.5 py-1 text-[11px] text-white/80 transition-colors hover:bg-white/10"
+            className="rounded-full border border-white/20 px-2.5 py-1 text-[14px] text-white/80 transition-colors hover:bg-white/10"
           >
             {t("language")}
           </button>
@@ -116,7 +104,7 @@ export function TopBar() {
               onClick={() => setMenuOpen((v) => !v)}
               onBlur={() => setTimeout(() => setMenuOpen(false), 150)}
               className={cn(
-                "flex items-center gap-1.5 rounded-full px-3 py-1 text-[12px] font-medium",
+                "flex items-center gap-1.5 rounded-full px-3 py-1 text-[15px] font-medium",
                 demoActive ? "bg-amber-500 text-white" : "bg-teal text-white hover:bg-teal/90",
               )}
             >
@@ -134,7 +122,7 @@ export function TopBar() {
                       setMenuOpen(false);
                       void demoRunner.start(s.id);
                     }}
-                    className="block w-full px-3 py-2 text-left text-[11.5px] hover:bg-paper"
+                    className="block w-full px-3 py-2 text-left text-[14.5px] hover:bg-paper"
                   >
                     {t(`demo:${s.nameKey}`)}
                   </button>
@@ -142,6 +130,19 @@ export function TopBar() {
               </div>
             )}
           </div>
+
+          {/* Settings gear, far right */}
+          <button
+            data-nav="settings"
+            onClick={() => setScreen("settings")}
+            title={t("nav.settings")}
+            className={cn(
+              "rounded-full p-1.5 transition-colors",
+              screen === "settings" ? "bg-white/15 text-white" : "text-white/65 hover:bg-white/10 hover:text-white",
+            )}
+          >
+            <Settings size={17} />
+          </button>
         </div>
       </div>
     </header>

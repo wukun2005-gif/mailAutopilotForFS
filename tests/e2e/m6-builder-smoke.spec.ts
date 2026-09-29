@@ -64,7 +64,7 @@ test.describe("M6 builder smoke", () => {
     await page.click("[data-id='dev.inject.EM-1-IN-1']");
     await idle(page);
     await page.click("[data-id='s1.phone.push']");
-    await page.fill("[data-id='s1.phone.otp']", "482915");
+    await page.fill("[data-id='s1.phone.otp']", "111111");
     await page.click("[data-id='s1.phone.verify']");
     await idle(page);
 

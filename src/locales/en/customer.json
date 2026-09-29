@@ -8,7 +8,8 @@
     "template": "fixed compliance template",
     "slot": "system slot (name / amount / date / case id)",
     "ai": "AI bridge sentence",
-    "lockedTemplate": "locked template"
+    "lockedTemplate": "locked template",
+    "edited": "edited by agent"
   },
   "webmail": {
     "title": "Jane's webmail",
@@ -22,7 +23,8 @@
     "disputes": "Larkspur Disputes",
     "support": "Larkspur Support",
     "msgCount": "{{count}} message(s) · sent by Jane",
-    "banner": "Account answers never arrive by email and contain no links — check secure messages in the Larkspur app.",
+    "bankReply": "Bank reply",
+    "banner": "Full card numbers and passwords never travel by email; everything else is answered right in this thread.",
     "noMail": "no mail at the current simulated time",
     "identityAtIntake": "identity at intake: {{level}}"
   },
@@ -36,7 +38,6 @@
     "card": {
       "title": "Verify it is you",
       "body": "We received a request about your account. For your protection, verify before we share details or move money. After verification, the case continues automatically.",
-      "i3basis": "I3 basis §6.2②: logged-in secure-message session",
       "otpLabel": "One-time code sent to the phone number on file (••-0142)",
       "placeholder": "6-digit code"
     },
@@ -54,11 +55,10 @@
     "inboxTitle": "Secure messages",
     "empty": "no messages yet",
     "delivered": "delivered",
-    "draft": "draft",
     "verifiedTail": "Case resumed autonomously."
   },
   "stepup": {
-    "fallbackNote": "FR-2.2 fallback branch — only for customers not enrolled in digital banking. Default path is the app case card; verification emails carry no links.",
+    "fallbackNote": "Only for customers not enrolled in digital banking. Default path is the app case card; verification emails carry no links.",
     "title": "Larkspur secure verification",
     "body": "Enter the one-time code sent to the phone number on file.",
     "placeholder": "6-digit code",
@@ -71,7 +71,60 @@
   "identity": {
     "empty": "no identity evaluation yet",
     "title": "Identity assurance gate",
-    "assumptions": "Assumptions: {{values}}"
+    "assumptions": "Assumptions: {{values}}",
+    "levels": {
+      "I0": "I0 · sender not verified",
+      "I1": "I1 · sending domain only",
+      "I2": "I2 · on-file address, checks passed",
+      "I3": "I3 · verification completed"
+    },
+    "signals": {
+      "ADDR_ON_FILE": "Sender address is on file",
+      "SPF_PASS": "Sending-server check passed",
+      "DKIM_PASS": "Email signature check passed",
+      "DMARC_PASS": "Domain policy check passed",
+      "DKIM_ALIGNED": "Signature domain matches sender",
+      "LOOKALIKE_VARIANT": "No lookalike address",
+      "DISPLAY_NAME_SPOOF": "No display-name spoof",
+      "FRAUD_ATO_SIGNAL": "No takeover or fraud signal",
+      "CONTACT_CHANGED_30D": "No contact change in 30 days",
+      "AUTH_ALL_PASS": "All protocol checks passed",
+      "STEPUP_IN_THREAD": "Step-up completed in this thread",
+      "SECURE_MESSAGE_SESSION": "Logged-in secure-message session"
+    },
+    "reasons": {
+      "I3_RETAINED": "Verification valid, held at I3",
+      "I1_DOMAIN_ONLY": "Domain-only trust, rated I1",
+      "I2_SIGNAL_MATCH": "Signals match, rated I2",
+      "I0_DOMAIN_DIRTY_OR_SPOOF": "Dirty domain or spoof, rated I0",
+      "I0_FRAUD_SIGNAL": "Fraud signal present, rated I0",
+      "I0_PROTOCOL_FAILURE": "Protocol check failed, rated I0",
+      "I0_ONFILE_ADDRESS_DMARC_FAIL": "On-file address but domain check failed, rated I0",
+      "I1_CONTACT_CHANGE_WINDOW_AC5": "Contact changed within 30 days, capped at I1",
+      "I1_MIDTHREAD_ADDRESS_CHANGE": "Address changed mid-thread, lowered to I1",
+      "I3_DOWNGRADE_SESSION_EXPIRED": "Verification session expired, I3 downgraded",
+      "I3_DOWNGRADE_THREAD_CLOSED": "Original thread closed, I3 downgraded",
+      "I3_DOWNGRADE_AC3_SPOOF": "Spoof signal found, I3 downgraded",
+      "I3_DOWNGRADE_MIDTHREAD_ADDRESS": "Address changed mid-thread, I3 downgraded",
+      "I3_NOT_INHERITED_AC2": "New threads never inherit verification",
+      "AC3_LOOKALIKE": "Lookalike address found",
+      "TX_DETAIL_REQUIRES_I3_STEPUP": "Transaction details need I3 verification first",
+      "GUIDE_STEPUP": "Customer guided to verify first",
+      "DRAFT_CHANNEL_CLOSED": "Draft channel closed",
+      "R2_I1_NO_GRANT_GUIDE_STEPUP": "I1 cannot be granted, guided to verify first",
+      "R1_I0_NO_DISCLOSE_STEPUP": "Unknown identity, nothing disclosed, guided to verify",
+      "R1_I1_NO_DISCLOSE_STEPUP": "Domain-only trust, nothing disclosed, guided to verify",
+      "SECOND_WAIVER_12M_FORCED_HUMAN_L2": "Second waiver in 12 months, routed to human",
+      "LOW_CONFIDENCE_HANDOFF": "Low recognition confidence, handed to human",
+      "R0_PUBLIC_INFO_L3": "Public info, auto-reply allowed",
+      "FRAUD_REVIEW_L0": "Suspected fraud, human only",
+      "R4_ADJUDICATION_HUMAN_L0": "Adjudication stays human",
+      "R4_DRAFT_HUMAN_SIGNOFF_L1": "Result letter needs human sign-off",
+      "NOT_GRADUATED_FAIL_CLOSED": "Not graduated, fail closed to human",
+      "POLICY_FAIL_EXPLANATION_DRAFT_L2": "Policy failed, explanation drafted for approval",
+      "POLICY_UNKNOWN_FAIL_CLOSED_L0": "Unknown policy, fail closed to human",
+      "HUMAN_RECONSIDERATION_OPEN": "Human reconsideration available"
+    }
   },
   "clock": {
     "badge": "Reg E · Day {{day}} · PC {{state}}",
@@ -80,25 +133,124 @@
     "title": "Reg E statutory clocks",
     "milestones": {
       "intake": "intake",
-      "pc": "provisional credit bd10",
-      "day45": "day45 greyed: POS → 90d",
-      "day90": "outer limit day90 POS debit"
+      "pc": "provisional credit deadline",
+      "day45": "45-day mark (POS cases use 90 days)",
+      "day90": "90-day outer limit for POS debit"
     },
     "pcPosted": "provisional credit posted",
-    "under48": "<48 calendar hours to bd10",
-    "daysTo": "{{count}}d to bd10"
+    "skipped": "Skipped",
+    "under48": "<48 calendar hours to the provisional-credit deadline",
+    "daysTo": "{{count}}d to the provisional-credit deadline"
   },
   "trace": {
     "title": "Decision dossier · Trace",
     "subtitle": "every gate, tool call and clock tick is recorded",
     "empty": "no events yet — inject an email",
-    "halted": "HALTED — {{count}} approval(s) due",
-    "resumed": "RESUMED — {{id}} {{decision}}",
-    "inbound": "inbound {{id}}",
-    "outbound": "outbound {{draft}}",
-    "outboundReplay": "outbound {{draft}} (replay-safe)",
+    "halted": "Paused — {{count}} approval(s) due",
+    "resumed": "Resumed — {{approval}}: {{decision}}",
     "idempotent": "idempotent replay — {{action}} executed once",
     "replay": "replay",
-    "policy": "policy {{version}}"
+    "policy": "policy {{version}}",
+    "nodes": {
+      "ingest": "Intake",
+      "triage": "Intent triage",
+      "identity": "Identity check",
+      "policy": "Policy evaluation",
+      "autonomy": "Autonomy decision",
+      "act": "Execution",
+      "human_checkpoint": "Human approval",
+      "respond": "Reply",
+      "close": "Closure",
+      "clock": "Clock advance",
+      "runtime": "Restart recovery"
+    },
+    "types": {
+      "gate": "decision",
+      "tool_call": "tool call",
+      "tool_result": "tool result",
+      "idempotent_replay": "idempotent replay",
+      "clock": "clock",
+      "interrupt": "paused for review",
+      "resume": "approval resumed",
+      "email_inbound": "email received",
+      "email_outbound": "reply sent",
+      "system": "system note",
+      "node_enter": "enter",
+      "node_exit": "leave"
+    },
+    "gateLevel": "identity level {{level}}",
+    "gateFailed": "missing: {{values}}",
+    "intents": {
+      "general_inquiry": "General inquiry",
+      "card_delivery_status": "Card delivery status",
+      "transaction_detail": "Transaction details",
+      "od_fee_refund": "Overdraft fee refund",
+      "reg_e_intake": "Dispute intake",
+      "reg_e_provisional_credit": "Provisional credit",
+      "reg_e_adjudication": "Dispute adjudication",
+      "contact_detail_change": "Contact detail change"
+    },
+    "levels": {
+      "L0": "human only",
+      "L1": "draft for sign-off",
+      "L2": "one-click approval",
+      "L3": "auto-execute"
+    },
+    "actions": {
+      "refund_od_fee": "Refund overdraft fee",
+      "send_secure_message": "Send secure message",
+      "create_dispute": "File dispute",
+      "reg_e_provisional_credit": "Post provisional credit",
+      "notify_onfile": "Text on-file phone"
+    },
+    "drafts": {
+      "DR-OD1-REFUND": "Refund confirmation letter",
+      "DR-STEPUP-NUDGE": "Step-up nudge (email notice)",
+      "DR-OD2-HOLDING": "Holding reply (under supervisor review)",
+      "DR-OD2-EXPLAIN": "Second-waiver explanation",
+      "DR-REGE-RECEIPT": "Dispute receipt",
+      "DR-PC-POSTED": "Provisional credit notice",
+      "DR-CARD-STATUS": "Card status reply",
+      "DR-TX-DETAIL": "Transaction details",
+      "DR-RESULT-ERROR": "Investigation result (error found)",
+      "DR-RESULT-NOERROR": "Investigation result (no error)",
+      "DR-MATERIALS-ACK": "Materials acknowledgement",
+      "DR-FRAUD-LOCKED": "Fraud locked template (never sent)",
+      "DR-LOCKED-STEPUP": "Verification guide"
+    },
+    "policies": {
+      "OD_FEE_WAIVER": "Overdraft waiver",
+      "REG_E_INTAKE": "Dispute intake",
+      "REG_E_POS_90": "POS investigation window"
+    },
+    "approvals": {
+      "AP-PCREDIT": "Provisional credit",
+      "AP-ADJUDICATION": "Human adjudication",
+      "AP-RESULTSIGN": "Result letter sign-off",
+      "AP-FRAUD-CONFIRM": "Fraud confirmation",
+      "AP-OD2-EXPLAIN": "Second-waiver explanation"
+    },
+    "decisions": {
+      "approve": "approved",
+      "reject": "rejected",
+      "edit": "approved with edits"
+    },
+    "triageFound": "Intents detected: {{values}}",
+    "lowConfidence": "Low intent confidence, handed to human",
+    "policyVerdict": "{{policy}} {{version}}: {{verdict}}",
+    "pass": "PASS",
+    "fail": "FAIL",
+    "toolDone": "{{action}} done",
+    "ocrDone": "Attachment text recognition done",
+    "mailReceived": "Customer email received",
+    "replySent": "Sent: {{draft}} ({{code}})",
+    "disputeFiled": "Dispute filed, statutory clocks started",
+    "caseClosed": "Case closed",
+    "verified14d": "No repeat contact in 14 days, verified and closed",
+    "quarantinedLine": "Quarantined: spoof/fraud signals found",
+    "restarted": "Process restarted, fresh runtime reattached to the same case with no state lost",
+    "blockedDraft": "{{draft}} blocked, never sent",
+    "handedToAgent": "Handed to agent: {{approval}} pending edits",
+    "draftEdited": "Agent edited draft: {{draft}} (recorded)"
   }
 }

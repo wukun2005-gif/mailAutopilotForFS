@@ -1,6 +1,6 @@
 {
   "title": "LLM Provider 设置",
-  "desc": "API Key 只保存在本地 Dev BFF（server-data/settings.json），不会进入浏览器 bundle。live 调用仅用于只读的“一般咨询”彩蛋节点；录制演示完全离线运行。",
+  "desc": "API Key 只保存在本地服务端（server-data/settings.json），不会进入浏览器 bundle。live 调用仅用于只读的“一般咨询”彩蛋节点；录制演示完全离线运行。",
   "tabs": {
     "llm": "大模型 Provider",
     "decision": "判定模型 Provider"
@@ -38,7 +38,8 @@
   "verifyingTitle": "验证中",
   "loadFailed": "加载设置失败：{{error}}",
   "probeTitle": "Live LLM 试探（只读彩蛋）",
-  "probeDesc": "通过 Dev BFF 用默认模型发送一个一般咨询问题，不触发任何案件动作，不携带客户数据。",
+  "probeDesc": "基于预制 FAQ 资料回答并标注来源；只读，不触发任何案件动作，不携带客户数据。未配置 key 或调用失败时显示录制回答。",
   "probePlaceholder": "例如：你们的网点营业时间是？",
-  "probeSend": "实时提问"
+  "probeSend": "实时提问",
+  "probeRecorded": "录制回答（FAQ 原文）"
 }

@@ -1,26 +1,27 @@
 {
   "app": {
-    "title": "Email Autopilot for Financial Services",
+    "title": "Email Autopilot",
     "subtitle": "Usability prototype — Larkspur Bank (fictional institution and data)",
     "bank": "Larkspur Bank"
   },
   "nav": {
-    "customer": "Customer Email",
-    "agent": "Agent Handoff",
+    "customer": "Customer",
+    "agent": "Agent",
     "supervisor": "Supervisor",
     "builder": "Admin",
     "settings": "Provider Settings"
   },
-  "navHint": {
-    "customer": "Screen 1",
-    "agent": "Screen 2",
-    "supervisor": "Screen 3",
-    "builder": "Screen 4"
-  },
   "mode": {
-    "mock": "Mock data",
     "live": "Live LLM",
     "simClock": "Sim clock"
+  },
+  "caseStatus": {
+    "open": "In progress",
+    "awaiting_human": "Waiting on supervisor",
+    "awaiting_customer": "Waiting on customer verification",
+    "pending_verify": "Replied · 14-day watch",
+    "closed": "Closed",
+    "quarantined": "Quarantined for review"
   },
   "language": "中文",
   "demo": {
@@ -34,9 +35,6 @@
     "builder": "Screen 4 Admin — delivered in milestone M6",
     "settings": "Provider settings — delivered in milestone M3"
   },
-  "footer": {
-    "fictional": "All banks, customers, accounts and amounts are fictional; no legal, tax or investment advice."
-  },
   "dev": {
     "controls": "Prototype controls",
     "simDay": "sim day {{n}}",
@@ -49,7 +47,7 @@
       "EM-2-IN-2": "Day 6 · signed statement (OCR)",
       "EM-3-IN-1": "Day 2 · BEC lookalike"
     },
-    "jumpBd10": "jump bd10",
+    "jumpBd10": "jump to provisional-credit deadline",
     "jumpDay40": "jump Day 40",
     "jumpDay45": "jump Day 45",
     "verify14d": "+14 days (verify)",

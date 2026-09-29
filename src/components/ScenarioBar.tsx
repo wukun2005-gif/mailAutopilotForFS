@@ -44,12 +44,12 @@ export function ScenarioBar() {
       <div className="flex flex-wrap items-center gap-1.5 px-3 py-1.5">
         <button
           onClick={() => setOpen((v) => !v)}
-          className="flex items-center gap-1 text-[11px] font-semibold text-amber-900"
+          className="flex items-center gap-1 text-[14px] font-semibold text-amber-900"
         >
           <Wrench size={12} /> {t("dev.controls")}
           {open ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
         </button>
-        <span className="font-mono text-[10px] text-amber-800">
+        <span className="font-mono text-[13px] text-amber-800">
           {t("dev.simDay", { n: clock.dayN })}
         </span>
         <div className="ml-1 flex gap-1">
@@ -59,7 +59,7 @@ export function ScenarioBar() {
               data-id={`dev.load.${id}`}
               onClick={() => loadScenario(id)}
               className={cn(
-                "rounded px-2 py-0.5 text-[10.5px]",
+                "rounded px-2 py-0.5 text-[13.5px]",
                 scenarioId === id ? "bg-navy text-white" : "bg-white text-navy ring-1 ring-line",
               )}
             >
@@ -73,7 +73,7 @@ export function ScenarioBar() {
             data-id={`dev.inject.${e.id}`}
             disabled={busy}
             onClick={() => inject(e.id)}
-            className="flex items-center gap-1 rounded bg-teal px-2 py-0.5 text-[10.5px] text-white disabled:opacity-40"
+            className="flex items-center gap-1 rounded bg-teal px-2 py-0.5 text-[13.5px] text-white disabled:opacity-40"
           >
             <Play size={10} /> {t(`dev.inject.${e.id}`)}
           </button>
@@ -81,31 +81,31 @@ export function ScenarioBar() {
         {scenarioId === "email2" && (
           <>
             <button data-id="dev.clock.bd10" disabled={busy} onClick={() => advance("bd10")}
-              className="rounded bg-sky-700 px-2 py-0.5 text-[10.5px] text-white disabled:opacity-40">
+              className="rounded bg-sky-700 px-2 py-0.5 text-[13.5px] text-white disabled:opacity-40">
               {t("dev.jumpBd10")}
             </button>
             <button data-id="dev.clock.day40" disabled={busy} onClick={() => advance("day40")}
-              className="rounded bg-sky-700 px-2 py-0.5 text-[10.5px] text-white disabled:opacity-40">
+              className="rounded bg-sky-700 px-2 py-0.5 text-[13.5px] text-white disabled:opacity-40">
               {t("dev.jumpDay40")}
             </button>
             <button data-id="dev.clock.day45" disabled={busy} onClick={() => advance("day45")}
-              className="rounded bg-sky-700 px-2 py-0.5 text-[10.5px] text-white disabled:opacity-40">
+              className="rounded bg-sky-700 px-2 py-0.5 text-[13.5px] text-white disabled:opacity-40">
               {t("dev.jumpDay45")}
             </button>
           </>
         )}
         {scenarioId === "email1" && (
           <button data-id="dev.clock.verify14d" disabled={busy} onClick={() => advance("verify14d")}
-            className="rounded bg-sky-700 px-2 py-0.5 text-[10.5px] text-white disabled:opacity-40">
+            className="rounded bg-sky-700 px-2 py-0.5 text-[13.5px] text-white disabled:opacity-40">
             {t("dev.verify14d")}
           </button>
         )}
-        <button data-id="dev.restart" onClick={simulateRestart} title={t("dev.restartTitle")}
-          className="flex items-center gap-1 rounded bg-white px-2 py-0.5 text-[10.5px] text-navy ring-1 ring-line">
-          <RefreshCw size={10} /> {t("dev.restart")}
+        <button data-id="dev.restart" onClick={simulateRestart} title={t("dev.restartTitle")} disabled={busy}
+          className="flex items-center gap-1 rounded bg-white px-2 py-0.5 text-[13.5px] text-navy ring-1 ring-line disabled:opacity-50">
+          <RefreshCw size={10} className={cn(busy && "animate-spin")} /> {t("dev.restart")}
         </button>
         <button data-id="dev.reset" onClick={reset}
-          className="flex items-center gap-1 rounded bg-white px-2 py-0.5 text-[10.5px] text-red-700 ring-1 ring-line">
+          className="flex items-center gap-1 rounded bg-white px-2 py-0.5 text-[13.5px] text-red-700 ring-1 ring-line">
           <RotateCcw size={10} /> {t("dev.reset")}
         </button>
       </div>
@@ -121,7 +121,7 @@ export function ScenarioBar() {
                 setFaultTick((v) => v + 1);
               }}
               className={cn(
-                "rounded px-1.5 py-0.5 text-[10px] ring-1",
+                "rounded px-1.5 py-0.5 text-[13px] ring-1",
                 faultController.isOn(f.flag)
                   ? "bg-red-600 text-white ring-red-700"
                   : "bg-white text-gray-600 ring-line",

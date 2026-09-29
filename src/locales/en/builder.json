@@ -52,7 +52,7 @@
     "tierA": "tier A",
     "tierB": "tier B",
     "tierC": "tier C",
-    "negativeLabel": "detector-NEGATIVE random re-label (FR-3.3 AC5): n = {{count}}",
+    "negativeLabel": "detector-NEGATIVE random re-label: n = {{count}}",
     "negativePresent": "{{missed}} missed regulated items · {{neg}} non-regulated false negatives fed back as cases",
     "notSignable": "recall criterion NOT SIGNABLE — positive-only volume cannot bound misses"
   },

@@ -100,6 +100,8 @@ export const DraftSchema = z.object({
   sections: z.array(DraftSectionSchema),
   lockedTemplate: z.boolean().default(false),
   dlpClean: z.boolean().default(true),
+  /** Agent-edited full text (FR-7.1): shown everywhere and sent on approval. */
+  editedText: z.string().optional(),
 });
 export type Draft = z.infer<typeof DraftSchema>;
 
@@ -112,6 +114,8 @@ export interface OutboundRecord {
   lockedTemplate: boolean;
   atSimTime: number;
   blockedReason?: string;
+  /** Mail thread this reply belongs to (email channel only). */
+  threadId?: string;
 }
 
 export interface MaterialState {
@@ -139,13 +143,16 @@ export interface Turn {
     | "materials"
     | "adjudication"
     | "fraud_review"
-    | "approval";
+    | "approval"
+    | "draft_edit";
   emailId?: string;
   atDayN?: number;
   approvalId?: string;
   decision?: "approve" | "reject" | "edit";
   reasonCode?: string;
   outcome?: "error" | "no_error";
+  draftId?: string;
+  editedText?: string;
 }
 
 export interface GraphInput {

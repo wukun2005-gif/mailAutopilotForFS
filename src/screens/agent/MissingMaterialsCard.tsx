@@ -15,7 +15,7 @@ const CANONICAL = [
 function Row({ code, label, m, t }: { code: string; label: string; m?: MaterialState; t: (k: string, o?: Record<string, unknown>) => string }) {
   const status = m?.status ?? "not_submitted";
   return (
-    <div className="flex items-center gap-2 rounded border border-line px-2 py-1 text-[11px]">
+    <div className="flex items-center gap-2 rounded border border-line px-2 py-1 text-[14px]">
       {status === "received" ? (
         <Check size={13} className="text-emerald-600" />
       ) : status === "ocr_low_confidence" ? (
@@ -24,14 +24,14 @@ function Row({ code, label, m, t }: { code: string; label: string; m?: MaterialS
         <CircleDashed size={13} className="text-gray-400" />
       )}
       <span className="flex-1 text-gray-700">{label}</span>
-      <span className="font-mono text-[9.5px] text-faint">{code}</span>
+      <span className="font-mono text-[12.5px] text-faint">{code}</span>
       <span
         className={
           status === "received"
-            ? "rounded bg-emerald-50 px-1.5 py-0.5 text-[9.5px] text-emerald-700"
+            ? "rounded bg-emerald-50 px-1.5 py-0.5 text-[12.5px] text-emerald-700"
             : status === "ocr_low_confidence"
-              ? "rounded bg-amber-50 px-1.5 py-0.5 text-[9.5px] text-amber-800"
-              : "rounded bg-gray-100 px-1.5 py-0.5 text-[9.5px] text-gray-500"
+              ? "rounded bg-amber-50 px-1.5 py-0.5 text-[12.5px] text-amber-800"
+              : "rounded bg-gray-100 px-1.5 py-0.5 text-[12.5px] text-gray-500"
         }
       >
         {status === "received"
@@ -49,8 +49,8 @@ export function MissingMaterialsCard({ state }: { state: CaseStateType }) {
   if (state.scenarioId !== "email2") return null;
   return (
     <section className="rounded-lg border border-line bg-white p-3" data-id="s2.materials">
-      <h3 className="text-[12px] font-semibold text-navy">{t("materials.title")}</h3>
-      <p className="text-[10px] text-faint">
+      <h3 className="text-[15px] font-semibold text-navy">{t("materials.title")}</h3>
+      <p className="text-[13px] text-faint">
         {t("materials.subtitle")}
       </p>
       <div className="mt-2 space-y-1">

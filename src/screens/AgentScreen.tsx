@@ -15,7 +15,7 @@ import { StatutoryClockStrip } from "@/components/ClockBadge";
 import { TraceRail } from "@/components/TraceRail";
 
 export function AgentScreen() {
-  const { t } = useTranslation("agent");
+  const { t } = useTranslation(["agent", "common"]);
   const scenarioId = useCaseStore((s) => s.scenarioId);
   const loadScenario = useCaseStore((s) => s.loadScenario);
   const caseState = useCaseStore((s) => s.caseState);
@@ -28,7 +28,7 @@ export function AgentScreen() {
   }, [scenarioId, loadScenario]);
 
   if (!scenarioId || !caseState) {
-    return <div className="p-6 text-[12px] text-faint">{t("loading")}</div>;
+    return <div className="p-6 text-[15px] text-faint">{t("loading")}</div>;
   }
 
   const pcDone = (caseState.actions ?? []).some(
@@ -45,13 +45,13 @@ export function AgentScreen() {
         <div className="space-y-2">
           <ResumeBanner state={caseState} reattached={reattached} />
           <div className="flex items-center gap-2 rounded-lg border border-line bg-white px-3 py-2">
-            <h2 className="text-[13px] font-semibold text-navy">
+            <h2 className="text-[16px] font-semibold text-navy">
               {caseState.caseId} · {caseState.scenarioId}
             </h2>
-            <span className="rounded bg-gray-100 px-1.5 py-0.5 font-mono text-[10px] text-gray-600">
-              {caseState.status}
+            <span className="rounded bg-gray-100 px-1.5 py-0.5 text-[13px] text-gray-600">
+              {t(`common:caseStatus.${caseState.status}`)}
             </span>
-            <span className="ml-auto font-mono text-[10px] text-faint">
+            <span className="ml-auto font-mono text-[13px] text-faint">
               {t("identityLabel", { level: caseState.identity?.level ?? "—" })}
             </span>
           </div>

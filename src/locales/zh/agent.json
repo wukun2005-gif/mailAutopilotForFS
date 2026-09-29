@@ -52,7 +52,7 @@
     "saveEdit": "把修改记录进卷宗"
   },
   "approvals": {
-    "AP-PCREDIT": "在 bd10 截止前发放临时贷记",
+    "AP-PCREDIT": "在法定期限前发放临时贷记",
     "AP-ADJUDICATION": "人工裁决——商户凭证已到达（Day 40）",
     "AP-RESULTSIGN": "签发并发送调查结果函",
     "AP-OD2-EXPLAIN": "批准第二次豁免的解释函",

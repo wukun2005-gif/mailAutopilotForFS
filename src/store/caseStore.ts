@@ -32,6 +32,9 @@ export interface CaseStoreState {
   refresh: () => Promise<void>;
   /** Agent edits a draft (FR-7.1): recorded into the dossier, never silent. */
   recordDraftEdit: (draftId: string, editedText: string) => Promise<void>;
+  /** Supervisor hands a pending approval back to the agent: handoff recorded,
+   *  approval stays pending, nothing sent. */
+  handToAgent: (approvalId: string) => Promise<void>;
 }
 
 let runner: CaseRunner | null = null;
@@ -106,9 +109,26 @@ export const useCaseStore = create<CaseStoreState>((set, get) => ({
     if (!runner) return;
     const id = get().scenarioId;
     if (!id) return;
-    // A brand-new runner compiles a fresh graph but opens the same IDB thread.
-    runner = new CaseRunner(id);
-    await pull(set, get, true);
+    set({ busy: true });
+    const started = Date.now();
+    try {
+      // A brand-new runner compiles a fresh graph but opens the same IDB thread.
+      runner = new CaseRunner(id);
+      // The restart itself is recorded: it is the visible proof in the trace
+      // that a fresh runtime reattached without losing state.
+      await appendEvent({
+        caseId: runner.scenario.caseId,
+        node: "runtime",
+        type: "system",
+        data: { restarted: true },
+      });
+      await pull(set, get, true);
+      // Keep the feedback visible for at least a second so the click registers.
+      const elapsed = Date.now() - started;
+      if (elapsed < 1000) await new Promise((r) => setTimeout(r, 1000 - elapsed));
+    } finally {
+      set({ busy: false });
+    }
   },
 
   reset: async () => {
@@ -118,11 +138,19 @@ export const useCaseStore = create<CaseStoreState>((set, get) => ({
 
   recordDraftEdit: async (draftId, editedText) => {
     if (!runner) return;
+    set({ busy: true });
+    await runner.editDraft(draftId, editedText);
+    await pull(set, get);
+    set({ busy: false });
+  },
+
+  handToAgent: async (approvalId) => {
+    if (!runner) return;
     await appendEvent({
       caseId: runner.scenario.caseId,
-      node: "agent_dossier",
+      node: "human_checkpoint",
       type: "system",
-      data: { draftEdited: draftId, editedLength: editedText.length },
+      data: { handedToAgent: approvalId },
     });
     await pull(set, get);
   },

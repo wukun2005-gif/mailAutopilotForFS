@@ -18,7 +18,7 @@ import { LetterLegend } from "@/components/TricolorLetter";
 import { cn } from "@/lib/utils";
 
 export function CustomerScreen() {
-  const { t } = useTranslation("customer");
+  const { t } = useTranslation(["customer", "common"]);
   const VIEW_TABS = [
     { v: false, label: t("tabs.customerView"), Icon: Eye },
     { v: true, label: t("tabs.auditView"), Icon: ScanSearch },
@@ -49,7 +49,7 @@ export function CustomerScreen() {
               key={label}
               onClick={() => setAuditView(v)}
               className={cn(
-                "flex items-center gap-1 rounded-full px-3 py-1 text-[11px]",
+                "flex items-center gap-1 rounded-full px-3 py-1 text-[14px]",
                 auditView === v ? "bg-navy text-white" : "text-gray-600",
               )}
             >
@@ -58,8 +58,8 @@ export function CustomerScreen() {
           ))}
         </div>
         <div className="ml-2 hidden md:block"><LetterLegend /></div>
-        <span className="ml-auto rounded bg-gray-100 px-2 py-0.5 font-mono text-[10px] text-gray-600">
-          {t("tabs.status", { value: caseState?.status ?? "—" })}
+        <span className="ml-auto rounded bg-gray-100 px-2 py-0.5 text-[13px] text-gray-600">
+          {t("tabs.status", { value: caseState?.status ? t(`common:caseStatus.${caseState.status}`) : "—" })}
         </span>
       </div>
 

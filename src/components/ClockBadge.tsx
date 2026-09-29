@@ -22,7 +22,7 @@ export function ClockBadge({ pcDone = false }: { pcDone?: boolean }) {
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1 rounded-full px-2 py-0.5 font-mono text-[10.5px]",
+        "inline-flex items-center gap-1 rounded-full px-2 py-0.5 font-mono text-[13.5px]",
         danger ? "bg-red-100 text-red-700" : "bg-navy-soft text-navy",
       )}
     >
@@ -41,17 +41,17 @@ export function StatutoryClockStrip({ pcDone = false }: { pcDone?: boolean }) {
   const milestones = [
     { label: t("clock.milestones.intake"), date: DAY0_EPOCH, done: true },
     { label: t("clock.milestones.pc"), date: c.provisionalCreditDue, done: pcDone },
-    { label: t("clock.milestones.day45"), date: c.day45, done: false, grey: true },
+    { label: t("clock.milestones.day45"), date: c.day45, done: false, skipped: true },
     { label: t("clock.milestones.day90"), date: c.day90, done: false },
   ];
 
   return (
     <div className="rounded-lg border border-line bg-white p-3" data-id="s2.clockstrip">
       <div className="mb-2 flex items-center justify-between">
-        <span className="text-[11px] font-semibold text-navy">{t("clock.title")}</span>
+        <span className="text-[14px] font-semibold text-navy">{t("clock.title")}</span>
         <span
           className={cn(
-            "rounded px-1.5 py-0.5 text-[10px] font-medium",
+            "rounded px-1.5 py-0.5 text-[13px] font-medium",
             danger ? "bg-red-100 text-red-700" : "bg-emerald-50 text-emerald-700",
           )}
         >
@@ -66,27 +66,28 @@ export function StatutoryClockStrip({ pcDone = false }: { pcDone?: boolean }) {
         <div className="absolute left-2 right-2 top-[7px] h-0.5 bg-line" />
         {milestones.map((m) => {
           const reached = now >= m.date;
+          const skipped = "skipped" in m && m.skipped;
           return (
             <div key={m.label} className="relative z-10 flex w-1/4 flex-col items-center gap-1">
               <span
                 className={cn(
                   "h-3.5 w-3.5 rounded-full border-2",
-                  m.grey
-                    ? "border-gray-300 bg-gray-100"
+                  skipped
+                    ? "border-dashed border-gray-300 bg-white"
                     : m.done || reached
                       ? "border-teal bg-teal"
                       : "border-navy-light bg-white",
                 )}
               />
-              <span
-                className={cn(
-                  "text-center text-[9.5px] leading-tight",
-                  m.grey ? "text-gray-400 line-through" : "text-ink",
-                )}
-              >
+              <span className={cn("text-center text-[12.5px] leading-tight", skipped ? "text-faint" : "text-ink")}>
                 {m.label}
               </span>
-              <span className="font-mono text-[9.5px] text-faint">{fmt(m.date)}</span>
+              {skipped && (
+                <span className="rounded bg-gray-100 px-1.5 py-px text-[12px] font-medium text-gray-500">
+                  {t("clock.skipped")}
+                </span>
+              )}
+              <span className="font-mono text-[12.5px] text-faint">{fmt(m.date)}</span>
             </div>
           );
         })}

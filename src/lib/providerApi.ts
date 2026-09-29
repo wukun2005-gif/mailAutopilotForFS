@@ -74,7 +74,7 @@ export const providerApi = {
     }),
 
   chat: (messages: { role: string; content: string }[], model?: string) =>
-    jsonFetch<{ ok: boolean; content?: string; error?: string; used?: unknown }>(
+    jsonFetch<{ ok: boolean; content?: string; error?: string; used?: unknown; recorded?: boolean }>(
       "/api/llm/chat",
       { method: "POST", body: JSON.stringify({ messages, model }) },
     ),

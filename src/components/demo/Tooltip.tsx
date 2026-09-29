@@ -16,7 +16,7 @@ export function Tooltip({ text, position }: { text: string; position: { x: numbe
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: -8, scale: 0.95 }}
         transition={{ duration: 0.25 }}
-        className="pointer-events-none fixed max-w-[520px] rounded-xl bg-navy/95 px-4 py-2.5 text-center text-[12.5px] font-medium leading-relaxed text-white shadow-xl"
+        className="pointer-events-none fixed max-w-[520px] rounded-xl bg-navy/95 px-4 py-2.5 text-center text-[15.5px] font-medium leading-relaxed text-white shadow-xl"
         style={{ left, top, zIndex: 9998 }}
       >
         {text}

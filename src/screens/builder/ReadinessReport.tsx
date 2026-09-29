@@ -100,7 +100,7 @@ export function ReadinessReport({
 
   return (
     <div className="rounded-lg border border-line bg-white p-3" data-id="s4.readiness">
-      <h3 className="flex items-center gap-1.5 text-[12px] font-semibold text-navy">
+      <h3 className="flex items-center gap-1.5 text-[15px] font-semibold text-navy">
         {verdict.signable ? (
           <CheckCircle2 size={14} className="text-emerald-600" />
         ) : (
@@ -108,10 +108,10 @@ export function ReadinessReport({
         )}
         {t("readiness.title", { intent: entry.intentCode })}
       </h3>
-      <p className="mt-0.5 text-[10.5px] text-gray-700">{verdict.headline}</p>
+      <p className="mt-0.5 text-[13.5px] text-gray-700">{verdict.headline}</p>
       <ul className="mt-1 space-y-0.5">
         {verdict.details.map((d) => (
-          <li key={d.text} className="flex items-center gap-1 font-mono text-[10px] text-gray-600">
+          <li key={d.text} className="flex items-center gap-1 font-mono text-[13px] text-gray-600">
             {d.pass == null ? (
               <span className="w-3.5 text-faint">·</span>
             ) : d.pass ? (
@@ -125,10 +125,10 @@ export function ReadinessReport({
       </ul>
 
       <details className="mt-2">
-        <summary className="cursor-pointer text-[10px] text-teal">{t("readiness.globalChecks")}</summary>
+        <summary className="cursor-pointer text-[13px] text-teal">{t("readiness.globalChecks")}</summary>
         <ul className="mt-1 space-y-0.5">
           {READINESS_CHECKS.map((c) => (
-            <li key={c.code} className="flex items-start gap-1 text-[10px]">
+            <li key={c.code} className="flex items-start gap-1 text-[13px]">
               <CheckCircle2 size={11} className={cn("mt-0.5 shrink-0", c.pass ? "text-emerald-600" : "text-red-600")} />
               <span>
                 <span className="font-medium">{c.label[lang]}</span>
@@ -141,11 +141,11 @@ export function ReadinessReport({
 
       {entry.status !== "never" && entry.status !== "rare_hold" && (
         <div className="mt-2 rounded border border-line bg-paper p-2">
-          <div className="text-[10px] font-semibold uppercase tracking-wide text-faint">
+          <div className="text-[13px] font-semibold uppercase tracking-wide text-faint">
             {t("readiness.dualSignoff")}
           </div>
           {alreadySigned ? (
-            <div className="mt-1 space-y-0.5 text-[10px]">
+            <div className="mt-1 space-y-0.5 text-[13px]">
               {entry.signedBy?.map((rec) => (
                 <div key={rec.role.en} className="flex items-center gap-1">
                   <CheckCircle2 size={11} className="text-emerald-600" />
@@ -175,7 +175,7 @@ export function ReadinessReport({
                 <button
                   data-id="s4.sign.apply"
                   onClick={onPromote}
-                  className="inline-flex items-center gap-1 rounded bg-navy px-2.5 py-1 text-[10.5px] font-semibold text-white"
+                  className="inline-flex items-center gap-1 rounded bg-navy px-2.5 py-1 text-[13.5px] font-semibold text-white"
                 >
                   <PenLine size={11} /> {t("readiness.apply")}
                 </button>
@@ -210,7 +210,7 @@ function SignButton({
       onClick={onClick}
       disabled={disabled || signed}
       className={cn(
-        "inline-flex items-center gap-1 rounded px-2.5 py-1 text-[10.5px] ring-1",
+        "inline-flex items-center gap-1 rounded px-2.5 py-1 text-[13.5px] ring-1",
         signed
           ? "bg-emerald-50 text-emerald-800 ring-emerald-300"
           : "bg-white text-navy ring-line disabled:opacity-40",

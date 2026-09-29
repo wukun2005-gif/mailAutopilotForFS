@@ -58,9 +58,9 @@ function rowsFor(state: CaseStateType, t: (k: string, o?: Record<string, unknown
     };
   };
   return [
-    mk("provisional credit (bd10)", "clockboard.pc", c.provisionalCreditDue, DAY0_EPOCH, pcDone),
-    mk("investigation day45 (POS→90)", "clockboard.day45", c.day45, DAY0_EPOCH, resultSent),
-    mk("outer limit day90 POS debit", "clockboard.day90", c.day90, DAY0_EPOCH, resultSent),
+    mk("provisional credit (deadline)", "clockboard.pc", c.provisionalCreditDue, DAY0_EPOCH, pcDone),
+    mk("investigation day45 (POS cases use day90)", "clockboard.day45", c.day45, DAY0_EPOCH, resultSent),
+    mk("outer limit day90 for POS debit", "clockboard.day90", c.day90, DAY0_EPOCH, resultSent),
   ];
 }
 
@@ -70,22 +70,22 @@ export function ClockBoard({ state }: { state: CaseStateType }) {
   const rows = rowsFor(state, t);
   if (rows.length === 0) {
     return (
-      <div className="rounded-lg border border-dashed border-line bg-white p-6 text-center text-[11px] text-faint" data-id="s3.clockboard">
+      <div className="rounded-lg border border-dashed border-line bg-white p-6 text-center text-[14px] text-faint" data-id="s3.clockboard">
         {t("clockboard.empty")}
       </div>
     );
   }
   return (
     <div className="rounded-lg border border-line bg-white p-3" data-id="s3.clockboard">
-      <h3 className="text-[12px] font-semibold text-navy">{t("clockboard.title")}</h3>
-      <p className="text-[10px] text-faint">
+      <h3 className="text-[15px] font-semibold text-navy">{t("clockboard.title")}</h3>
+      <p className="text-[13px] text-faint">
         {t("clockboard.subtitle")}
       </p>
       <div className="mt-2 h-56">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={rows} layout="vertical" margin={{ left: 40, right: 48 }}>
             <XAxis type="number" hide domain={[0, "dataMax"]} />
-            <YAxis type="category" dataKey="name" width={200} tick={{ fontSize: 10 }} tickFormatter={(v: string) => t(rows.find((r) => r.name === v)?.nameKey ?? "", { defaultValue: v })} />
+            <YAxis type="category" dataKey="name" width={200} tick={{ fontSize: 13 }} tickFormatter={(v: string) => t(rows.find((r) => r.name === v)?.nameKey ?? "", { defaultValue: v })} />
             <Bar dataKey="remainingH" radius={[3, 3, 3, 3]} barSize={18}>
               {rows.map((r) => (
                 <Cell key={r.name} fill={r.color} />
@@ -93,13 +93,13 @@ export function ClockBoard({ state }: { state: CaseStateType }) {
               <LabelList
                 dataKey="label"
                 position="right"
-                style={{ fontSize: 10, fontFamily: "monospace" }}
+                style={{ fontSize: 13, fontFamily: "monospace" }}
               />
             </Bar>
           </BarChart>
         </ResponsiveContainer>
       </div>
-      <table className="mt-2 w-full text-[10.5px]">
+      <table className="mt-2 w-full text-[13.5px]">
         <tbody>
           {rows.map((r) => (
             <tr key={r.name} className="border-t border-line">

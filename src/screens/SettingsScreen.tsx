@@ -49,7 +49,7 @@ export function SettingsScreen() {
   const [providerOrder, setProviderOrder] = useState<string[]>(loadOrder);
   const [enableFallback, setEnableFallback] = useState(true);
   const [toast, setToast] = useState<{ type: "success" | "error"; msg: string } | null>(null);
-  const [probe, setProbe] = useState<{ q: string; a: string; busy: boolean }>({ q: "", a: "", busy: false });
+  const [probe, setProbe] = useState<{ q: string; a: string; busy: boolean; recorded: boolean }>({ q: "", a: "", busy: false, recorded: false });
   const dragProviderItem = useRef<{ index: number } | null>(null);
   const dragProviderOver = useRef<{ index: number } | null>(null);
 
@@ -130,10 +130,10 @@ export function SettingsScreen() {
 
   const liveProbe = async () => {
     if (!probe.q.trim()) return;
-    setProbe((p) => ({ ...p, busy: true, a: "" }));
+    setProbe((p) => ({ ...p, busy: true, a: "", recorded: false }));
     try {
       const r = await providerApi.chat([{ role: "user", content: probe.q }]);
-      setProbe((p) => ({ ...p, busy: false, a: r.ok ? r.content ?? "" : r.error ?? "error" }));
+      setProbe((p) => ({ ...p, busy: false, recorded: r.recorded === true, a: r.ok ? r.content ?? "" : r.error ?? "error" }));
     } catch (e) {
       setProbe((p) => ({ ...p, busy: false, a: e instanceof Error ? e.message : String(e) }));
     }
@@ -174,13 +174,13 @@ export function SettingsScreen() {
     <div className="h-full overflow-y-auto" data-id="settings.screen">
       <div className="mx-auto max-w-3xl space-y-4 p-5">
         <div>
-          <h1 className="text-[19px] font-semibold text-navy">{t("title")}</h1>
-          <p className="text-[13px] text-faint">{t("desc")}</p>
+          <h1 className="text-[22px] font-semibold text-navy">{t("title")}</h1>
+          <p className="text-[16px] text-faint">{t("desc")}</p>
         </div>
 
         {toast && (
           <div
-            className={`rounded-md px-4 py-2 text-[14px] text-white ${
+            className={`rounded-md px-4 py-2 text-[17px] text-white ${
               toast.type === "success" ? "bg-emerald-600" : "bg-red-600"
             }`}
           >
@@ -195,7 +195,7 @@ export function SettingsScreen() {
               key={k}
               type="button"
               onClick={() => switchTab(k)}
-              className={`rounded-md border px-4 py-1.5 text-[14px] ${
+              className={`rounded-md border px-4 py-1.5 text-[17px] ${
                 tab === k
                   ? "border-navy-light bg-navy-soft font-semibold text-navy"
                   : "border-line bg-white text-soft hover:border-navy-light"
@@ -209,24 +209,24 @@ export function SettingsScreen() {
         {/* Panel header + save */}
         <div className="rounded-lg border border-line bg-white p-4">
           <div className="mb-1 flex items-center gap-4">
-            <h3 className="text-[15px] font-semibold text-navy">
+            <h3 className="text-[18px] font-semibold text-navy">
               {tab === "decision" ? t("decisionTitle") : t("llmTitle")}
             </h3>
             <span className="flex-1" />
             <button
               data-id="settings.save"
               onClick={save}
-              className="flex items-center gap-1.5 rounded bg-teal px-4 py-1.5 text-[14px] font-semibold text-white"
+              className="flex items-center gap-1.5 rounded bg-teal px-4 py-1.5 text-[17px] font-semibold text-white"
             >
               <Save size={14} /> {t("save")}
             </button>
           </div>
-          <div className="mb-3 text-[13px] text-faint">
+          <div className="mb-3 text-[16px] text-faint">
             {tab === "decision" ? t("decisionDesc") : t("llmDesc")}
           </div>
 
           {/* Fallback master toggle */}
-          <label className="mb-3 flex items-center gap-2 rounded-lg border border-line bg-gray-50 px-3 py-2 text-[14px]">
+          <label className="mb-3 flex items-center gap-2 rounded-lg border border-line bg-gray-50 px-3 py-2 text-[17px]">
             <input
               type="checkbox"
               checked={enableFallback}
@@ -243,32 +243,37 @@ export function SettingsScreen() {
 
           {/* Live LLM probe (read-only easter egg) */}
           <div className="mb-3 rounded-lg border border-dashed border-navy-light/50 bg-navy-soft/50 p-3">
-            <div className="flex items-center gap-1.5 text-[14px] font-semibold text-navy">
+            <div className="flex items-center gap-1.5 text-[17px] font-semibold text-navy">
               <MessageSquareText size={15} /> {t("probeTitle")}
             </div>
-            <p className="mt-0.5 text-[13px] text-faint">{t("probeDesc")}</p>
+            <p className="mt-0.5 text-[16px] text-faint">{t("probeDesc")}</p>
             <div className="mt-2 flex gap-2">
               <input
                 data-id="settings.probe.input"
                 value={probe.q}
                 onChange={(e) => setProbe((p) => ({ ...p, q: e.target.value }))}
                 placeholder={t("probePlaceholder")}
-                className="flex-1 rounded border border-line px-2.5 py-1.5 text-[14px]"
+                className="flex-1 rounded border border-line px-2.5 py-1.5 text-[17px]"
               />
               <button
                 data-id="settings.probe.send"
                 onClick={liveProbe}
                 disabled={probe.busy}
-                className="flex items-center gap-1 rounded bg-navy px-3.5 py-1.5 text-[14px] text-white disabled:opacity-40"
+                className="flex items-center gap-1 rounded bg-navy px-3.5 py-1.5 text-[17px] text-white disabled:opacity-40"
               >
                 {probe.busy && <Loader2 size={13} className="animate-spin" />}
                 {t("probeSend")}
               </button>
             </div>
             {probe.a && (
-              <pre className="mt-2 whitespace-pre-wrap rounded bg-white p-2 text-[13px]">
-                {probe.a}
-              </pre>
+              <div className="mt-2 rounded bg-white p-2">
+                {probe.recorded && (
+                  <span className="mb-1 inline-block rounded bg-gray-100 px-1.5 py-0.5 text-[14px] text-faint">
+                    {t("probeRecorded")}
+                  </span>
+                )}
+                <pre className="whitespace-pre-wrap text-[16px]">{probe.a}</pre>
+              </div>
             )}
           </div>
 
@@ -319,7 +324,7 @@ export function SettingsScreen() {
 
       {toast && (
         <div
-          className={`fixed right-5 top-16 z-50 rounded px-4 py-2 text-[14px] text-white ${
+          className={`fixed right-5 top-16 z-50 rounded px-4 py-2 text-[17px] text-white ${
             toast.type === "success" ? "bg-emerald-600" : "bg-red-600"
           }`}
         >

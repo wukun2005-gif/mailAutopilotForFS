@@ -77,7 +77,7 @@ export class CaseRunner {
     });
     if (!(start as { data: { started: boolean } }).data.started)
       throw new Error("otp start failed");
-    const verify = await this.gateway.postRead("/mock/otp/verify", { code: "482915" });
+    const verify = await this.gateway.postRead("/mock/otp/verify", { code: "111111" });
     const ok = (verify as { data: { verified: boolean } }).data.verified;
     if (!ok) throw new Error("step-up verification failed");
     return this.invoke(
@@ -85,6 +85,13 @@ export class CaseRunner {
         { kind: "step_up", emailId },
         { stepUp: { verified: true, method, emailId } },
       ),
+    );
+  }
+
+  /** Agent edits a draft (FR-7.1): persisted onto the checkpointed draft. */
+  async editDraft(draftId: string, editedText: string): Promise<RunnerSnapshot> {
+    return this.invoke(
+      this.baseTurn({ kind: "draft_edit", draftId, editedText }),
     );
   }
 
@@ -97,7 +104,9 @@ export class CaseRunner {
     } else if (target === "day45") {
       simClock.jumpToCalendarDay(45, 9, 0);
     } else {
-      simClock.jumpToCalendarDay(14, 9, 0);
+      // Relative +14d watch window: never travels back, so Day-21 content
+      // stays visible when the button is pressed after the second request.
+      simClock.jumpToCalendarDay(simClock.dayN() + 14, 9, 0);
     }
     return this.invoke(this.baseTurn({ kind: "clock" }));
   }

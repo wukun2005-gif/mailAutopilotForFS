@@ -29,7 +29,7 @@ export function FraudQuarantine({ state }: { state: CaseStateType }) {
 
   if (state.scenarioId !== "email3") {
     return (
-      <div className="rounded-lg border border-dashed border-line bg-white p-6 text-center text-[11px] text-faint" data-id="s3.quarantine">
+      <div className="rounded-lg border border-dashed border-line bg-white p-6 text-center text-[14px] text-faint" data-id="s3.quarantine">
         {t("fraud.empty")}
       </div>
     );
@@ -38,26 +38,26 @@ export function FraudQuarantine({ state }: { state: CaseStateType }) {
   return (
     <div className="space-y-2" data-id="s3.quarantine">
       <div className="rounded-lg border-2 border-red-300 bg-red-50/60 p-3">
-        <h3 className="flex items-center gap-1.5 text-[12px] font-semibold text-red-800">
+        <h3 className="flex items-center gap-1.5 text-[15px] font-semibold text-red-800">
           <ShieldAlert size={14} /> {t("fraud.title")}
         </h3>
-        <div className="mt-1 text-[10.5px] text-gray-700">
+        <div className="mt-1 text-[13.5px] text-gray-700">
           <div>
             from <span className="font-mono font-semibold">{email3?.from}</span> → {t("fraud.onfile")}{" "}
             <span className="font-mono">{CUSTOMER_JANE.emailsOnFile[0]}</span>
           </div>
           {email3?.auth && (
-            <div className="mt-0.5 font-mono text-[10px] text-red-700">
+            <div className="mt-0.5 font-mono text-[13px] text-red-700">
               SPF {email3.auth.spf} · DKIM {email3.auth.dkim} · DMARC {email3.auth.dmarc}
             </div>
           )}
         </div>
         <ul className="mt-2 space-y-1">
           {(state.fraud?.signals ?? []).map((s) => (
-            <li key={s} className="flex items-start gap-1.5 rounded bg-white px-2 py-1 text-[10.5px]">
+            <li key={s} className="flex items-start gap-1.5 rounded bg-white px-2 py-1 text-[13.5px]">
               <Lock size={11} className="mt-0.5 shrink-0 text-red-600" />
               <span>
-                <span className="font-mono text-[9.5px] text-faint">{s}</span>
+                <span className="font-mono text-[12.5px] text-faint">{s}</span>
                 <br />
                 {signalLabel(s, t)}
               </span>
@@ -67,7 +67,7 @@ export function FraudQuarantine({ state }: { state: CaseStateType }) {
 
         {/* Requested actions are unreachable, not just denied */}
         <div className="mt-2 rounded border border-line bg-gray-100 p-2">
-          <div className="text-[10px] font-semibold uppercase tracking-wide text-gray-500">
+          <div className="text-[13px] font-semibold uppercase tracking-wide text-gray-500">
             {t("fraud.requestedTitle")}
           </div>
           <div className="mt-1 flex flex-wrap gap-2">
@@ -75,14 +75,14 @@ export function FraudQuarantine({ state }: { state: CaseStateType }) {
               <button
                 key={x}
                 disabled
-                className="cursor-not-allowed rounded bg-gray-200 px-2 py-1 text-[10.5px] text-gray-400 line-through"
+                className="cursor-not-allowed rounded bg-gray-200 px-2 py-1 text-[13.5px] text-gray-400 line-through"
                 title={t("fraud.unreachable")}
               >
                 {t(`fraud.actions.${x}`)}
               </button>
             ))}
           </div>
-          <div className="mt-1 text-[9.5px] text-gray-500">
+          <div className="mt-1 text-[12.5px] text-gray-500">
             {t("fraud.unreachable")}
           </div>
         </div>
@@ -92,7 +92,7 @@ export function FraudQuarantine({ state }: { state: CaseStateType }) {
             data-id="s3.fraud.confirm"
             disabled={!!decided}
             onClick={() => approve({ approvalId: "AP-FRAUD-CONFIRM", decision: "approve" })}
-            className="inline-flex items-center gap-1 rounded bg-red-700 px-3 py-1.5 text-[10.5px] font-semibold text-white disabled:opacity-40"
+            className="inline-flex items-center gap-1 rounded bg-red-700 px-3 py-1.5 text-[13.5px] font-semibold text-white disabled:opacity-40"
           >
             <PhoneCall size={11} /> {t("fraud.confirm")}
           </button>
@@ -106,25 +106,25 @@ export function FraudQuarantine({ state }: { state: CaseStateType }) {
                 reasonCode: "FALSE_POSITIVE",
               })
             }
-            className="rounded px-3 py-1.5 text-[10.5px] text-navy ring-1 ring-line disabled:opacity-40"
+            className="rounded px-3 py-1.5 text-[13.5px] text-navy ring-1 ring-line disabled:opacity-40"
           >
             {t("fraud.release")}
           </button>
         </div>
         {smsSent && (
-          <div className="mt-1.5 text-[10.5px] text-emerald-700">
+          <div className="mt-1.5 text-[13.5px] text-emerald-700">
             {t("fraud.smsSent", { phone: CUSTOMER_JANE.phoneOnFile })}
           </div>
         )}
-        {rejected && <div className="mt-1.5 text-[10.5px] text-gray-600">{t("fraud.released")}</div>}
+        {rejected && <div className="mt-1.5 text-[13.5px] text-gray-600">{t("fraud.released")}</div>}
       </div>
 
       {confirmed && sarDraft && (
         <div className="rounded-lg border border-line bg-white p-3" data-id="s3.sar">
-          <h3 className="flex items-center gap-1.5 text-[12px] font-semibold text-navy">
+          <h3 className="flex items-center gap-1.5 text-[15px] font-semibold text-navy">
             <FileText size={13} /> {t("fraud.sarTitle")}
           </h3>
-          <p className="text-[10px] text-faint">
+          <p className="text-[13px] text-faint">
             {t("fraud.sarNote")}
           </p>
           <div className="mt-2 rounded border border-line bg-paper p-2">

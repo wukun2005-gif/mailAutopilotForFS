@@ -15,7 +15,7 @@ export function ResumeBanner({ state, reattached }: { state: CaseStateType; reat
   return (
     <div
       data-id="s2.resumebanner"
-      className="flex items-start gap-2 rounded-lg border border-teal/40 bg-teal-soft px-3 py-2 text-[11px] text-teal-dark"
+      className="flex items-start gap-2 rounded-lg border border-teal/40 bg-teal-soft px-3 py-2 text-[14px] text-teal-dark"
     >
       <RefreshCw size={14} className="mt-0.5 shrink-0" />
       <div>

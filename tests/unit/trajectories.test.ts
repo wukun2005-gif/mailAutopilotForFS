@@ -6,6 +6,7 @@ import "fake-indexeddb/auto";
 import { handlers } from "@/mocks/handlers.ts";
 import { setGatewayBase } from "@/runtime/gateway.ts";
 import { CaseRunner } from "@/runtime/caseRunner.ts";
+import { draftText } from "@/runtime/graphRespond.ts";
 import { faultController } from "@/tools/faultController.ts";
 
 const server = setupServer(...handlers);
@@ -36,6 +37,8 @@ describe("email 1 — overdraft fee: deny → step-up → auto refund → verifi
     expect(
       snap.state.actions.some((a) => a.actionType === "refund_od_fee"),
     ).toBe(false);
+    // The email thread tells the customer to open the app (no silent stall).
+    expect(snap.state.outbound.some((o) => o.draftId === "DR-STEPUP-NUDGE")).toBe(true);
 
     // Customer completes App case-card step-up → I3 → L3 refund + letter.
     snap = await r.stepUp("app_case_card");
@@ -63,6 +66,8 @@ describe("email 1 — overdraft fee: deny → step-up → auto refund → verifi
     expect(snap.interrupted).toBe(true);
     const approval = snap.state.approvals.find((a) => a.id === "AP-OD2-EXPLAIN");
     expect(approval?.lLevel).toBe("L2");
+    // Holding reply is auto-sent on arrival; final explanation waits.
+    expect(snap.state.outbound.some((o) => o.draftId === "DR-OD2-HOLDING")).toBe(true);
     // No explanation sent before supervisor approval.
     expect(snap.state.outbound.some((o) => o.draftId === "DR-OD2-EXPLAIN")).toBe(false);
 
@@ -72,6 +77,35 @@ describe("email 1 — overdraft fee: deny → step-up → auto refund → verifi
     expect(
       done.state.actions.filter((a) => a.actionType === "refund_od_fee" && a.status === "done"),
     ).toHaveLength(1);
+
+    // +14d watch after the beat-2 resolution closes the case (no time travel:
+    // Day-21 content stays visible).
+    const closed = await r.advance("verify14d");
+    expect(closed.state.status).toBe("closed");
+    expect(closed.state.emails.some((e) => e.id === "EM-1-IN-2")).toBe(true);
+  });
+
+  it("agent edit persists on the checkpoint and is what gets sent", async () => {
+    const r = new CaseRunner("email1");
+    await r.reset();
+    await r.injectEmail("EM-1-IN-1");
+    await r.stepUp("app_case_card");
+    await r.advance("verify14d");
+    await r.injectEmail("EM-1-IN-2");
+
+    const edited = await r.editDraft("DR-OD2-EXPLAIN", "Jane, custom agent wording here.");
+    const draft = edited.state.drafts.find((d) => d.id === "DR-OD2-EXPLAIN");
+    expect(draft?.editedText).toBe("Jane, custom agent wording here.");
+    expect(draftText(draft!)).toBe("Jane, custom agent wording here.");
+    // Approval still pending, nothing new sent by the edit turn itself.
+    expect(edited.state.approvals.find((a) => a.id === "AP-OD2-EXPLAIN")?.status).toBe("pending");
+    expect(edited.state.outbound.some((o) => o.draftId === "DR-OD2-EXPLAIN")).toBe(false);
+
+    const done = await r.approve({ approvalId: "AP-OD2-EXPLAIN", decision: "approve" });
+    expect(done.state.outbound.some((o) => o.draftId === "DR-OD2-EXPLAIN")).toBe(true);
+    expect(done.state.drafts.find((d) => d.id === "DR-OD2-EXPLAIN")?.editedText).toBe(
+      "Jane, custom agent wording here.",
+    );
   });
 });
 
@@ -132,6 +166,12 @@ describe("email 2 — Reg E dispute: intake, clocks, restart-safe provisional cr
       (a) => a.actionType === "reg_e_provisional_credit" && a.status === "done",
     );
     expect(pc).toHaveLength(1);
+    // Exactly one customer update email (demo runs at I3 past Day-1 step-up).
+    const notices = retry.state.outbound.filter((o) => o.draftId === "DR-PC-POSTED");
+    expect(notices).toHaveLength(1);
+    expect(notices[0]?.channel).toBe("email");
+    const notice = retry.state.drafts.find((d) => d.id === "DR-PC-POSTED");
+    expect(notice && draftText(notice)).toContain("247.18");
   });
 
   it("routes Day-40 merchant evidence to human adjudication then L1 result sign-off", async () => {
@@ -154,6 +194,8 @@ describe("email 2 — Reg E dispute: intake, clocks, restart-safe provisional cr
 
     snap = await r.approve({ approvalId: "AP-RESULTSIGN", decision: "approve" });
     expect(snap.state.outbound.some((o) => o.draftId === "DR-RESULT-ERROR")).toBe(true);
+    const result = snap.state.drafts.find((d) => d.id === "DR-RESULT-ERROR");
+    expect(result && draftText(result)).toContain("4,465.55");
 
     snap = await r.advance("day45");
     expect(snap.state.status).toBe("closed");

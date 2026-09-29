@@ -55,7 +55,7 @@ export function DemoControlBar() {
       data-total={totalBeats}
     >
       {blocker && (
-        <div data-id="demo.blocker" className="mb-1 rounded bg-red-50 px-2 py-1 text-[10.5px] text-red-800">
+        <div data-id="demo.blocker" className="mb-1 rounded bg-red-50 px-2 py-1 text-[13.5px] text-red-800">
           {t("blocker")} · beat {blocker} — {t("blockerHint")}
         </div>
       )}
@@ -81,7 +81,7 @@ export function DemoControlBar() {
         <button
           data-id="demo.speed"
           onClick={cycleSpeed}
-          className="inline-flex items-center gap-1 rounded px-1.5 py-1 font-mono text-[10.5px] text-navy ring-1 ring-line"
+          className="inline-flex items-center gap-1 rounded px-1.5 py-1 font-mono text-[13.5px] text-navy ring-1 ring-line"
           title={t("speed")}
         >
           <Gauge size={12} /> {speed}×
@@ -95,7 +95,7 @@ export function DemoControlBar() {
           <RotateCcw size={14} />
         </button>
         <div className="min-w-0 flex-1">
-          <div className="flex items-center justify-between text-[10px]">
+          <div className="flex items-center justify-between text-[13px]">
             <span className="truncate font-semibold text-navy">
               {script ? t(script.nameKey) : ""} · <span className="text-faint">{chapter}</span>
             </span>

@@ -52,7 +52,7 @@
     "saveEdit": "record edit in dossier"
   },
   "approvals": {
-    "AP-PCREDIT": "Post provisional credit before bd10 deadline",
+    "AP-PCREDIT": "Post provisional credit before the statutory deadline",
     "AP-ADJUDICATION": "Human adjudication — merchant evidence arrived (Day 40)",
     "AP-RESULTSIGN": "Sign and send investigation result letter",
     "AP-OD2-EXPLAIN": "Approve second-waiver explanation",

@@ -3,8 +3,15 @@
 import type { Connect } from "vite";
 import type { ServerResponse } from "node:http";
 import { presetOf } from "../shared/provider.ts";
-import { resolveChatTarget } from "./llmClient.ts";
+import { llmLog, resolveChatTarget } from "./llmClient.ts";
 import type { ChatMessage, ChatToolSpec } from "./llmClient.ts";
+import {
+  buildFaqSystemPrompt,
+  detectFaqLang,
+  faqSourceLine,
+  recordedFaqAnswer,
+  retrieveFaq,
+} from "./faq.ts";
 import { chatCompletionWithFallback } from "./llmFallback.ts";
 import { persistProviders, publicSettings, rawKeyOf, storedBundle } from "./bffSettings.ts";
 
@@ -141,31 +148,75 @@ async function handleChat(body: Record<string, unknown>) {
     ? String(body["providerId"])
     : undefined;
   const model = body["model"] ? String(body["model"]) : undefined;
-  const target = resolveChatTarget({ providerId, model });
-  if ("error" in target) return { status: 400, error: target.error };
   const tools = body["tools"] as ChatToolSpec[] | undefined;
-  const res = await chatCompletionWithFallback(target, {
-    messages,
-    tools: Array.isArray(tools) ? tools : undefined,
-    temperature:
-      typeof body["temperature"] === "number"
-        ? (body["temperature"] as number)
-        : 0.2,
-    maxTokens:
-      typeof body["maxTokens"] === "number"
-        ? (body["maxTokens"] as number)
-        : undefined,
-    seed:
-      typeof body["seed"] === "number" ? (body["seed"] as number) : undefined,
-  });
-  return {
-    status: 200,
-    text: res.text,
-    usage: res.usage,
-    stopReason: res.stopReason,
-    used: res.used,
-    switchedFrom: res.switchedFrom,
+  // Probe-only grounding: pin the answer to the read-only FAQ library.
+  const lastUser =
+    [...messages].reverse().find((m) => m?.role === "user")?.content ?? "";
+  const faqLang = detectFaqLang(String(lastUser));
+  const faqMatches = retrieveFaq(String(lastUser), 2);
+  const grounded: ChatMessage[] = [
+    { role: "system", content: buildFaqSystemPrompt(faqMatches, faqLang) },
+    ...messages,
+  ];
+  const recordedFallback = () => {
+    const recorded = recordedFaqAnswer(String(lastUser));
+    if (!recorded) return null;
+    llmLog("info", "chat 录制兜底（FAQ 原文）");
+    return { status: 200, ok: true, content: recorded, recorded: true };
   };
+  llmLog(
+    "info",
+    `chat 收到请求 provider=${providerId ?? "-"} model=${model ?? "-"} msgs=${messages.length} tools=${Array.isArray(tools) ? tools.length : 0} faq=[${faqMatches.map((m) => m.chunk.id).join(",") || "-"}]`,
+  );
+  const target = resolveChatTarget({ providerId, model });
+  if ("error" in target) {
+    llmLog("warn", `chat 中止（目标解析失败）: ${target.error}`);
+    return recordedFallback() ?? { status: 400, error: target.error };
+  }
+  try {
+    const res = await chatCompletionWithFallback(target, {
+      messages: grounded,
+      tools: Array.isArray(tools) ? tools : undefined,
+      temperature:
+        typeof body["temperature"] === "number"
+          ? (body["temperature"] as number)
+          : 0.2,
+      maxTokens:
+        typeof body["maxTokens"] === "number"
+          ? (body["maxTokens"] as number)
+          : undefined,
+      seed:
+        typeof body["seed"] === "number"
+          ? (body["seed"] as number)
+          : undefined,
+    });
+    llmLog(
+      "info",
+      `chat 成功 used=${res.used.providerId}/${res.used.model}` +
+        (res.switchedFrom
+          ? ` 切换自 ${res.switchedFrom.providerId}/${res.switchedFrom.model}(${res.switchedFrom.reason})`
+          : ""),
+    );
+    const content =
+      faqMatches.length > 0
+        ? `${res.text}\n\n${faqSourceLine(faqMatches, faqLang)}`
+        : res.text;
+    return {
+      status: 200,
+      ok: true,
+      content,
+      usage: res.usage,
+      stopReason: res.stopReason,
+      used: res.used,
+      switchedFrom: res.switchedFrom,
+    };
+  } catch (e) {
+    llmLog(
+      "warn",
+      `chat 失败: ${e instanceof Error ? e.message : String(e)}`,
+    );
+    return recordedFallback() ?? { status: 500, error: e instanceof Error ? e.message : String(e) };
+  }
 }
 
 /** Dispatch an /api/* request. Returns true when it was handled. */

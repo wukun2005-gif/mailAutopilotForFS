@@ -1,5 +1,5 @@
 // Handler groups #4 (OTP / step-up) and #5 (secure message).
-// Fixed OTP code "482915" — recorded demo, zero randomness. Three wrong tries
+// Fixed OTP code "111111" — recorded demo, zero randomness. Three wrong tries
 // lock the session (fault panel can pre-lock it too).
 import { http } from "msw";
 import { CUSTOMER_JANE } from "@/mocks/fixtures/index.ts";
@@ -8,7 +8,7 @@ import { mockStore } from "@/mocks/mockState.ts";
 import { simClock } from "@runtime/simClock";
 import { envelope, jsonError, jsonOk, mockLatency } from "./util.ts";
 
-export const RECORDED_OTP_CODE = "482915";
+export const RECORDED_OTP_CODE = "111111";
 
 export const identityHandlers = [
   http.post("*/mock/otp/start", async ({ request }) => {

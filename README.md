@@ -2,8 +2,7 @@
 
 可用性原型（usability prototype），用于现场 demo 与 slides 讲解。所有银行、客户、账户、金额、回测数字均为**虚构数据**；默认全程录制数据离线可跑，不依赖网络。
 
-- 产品依据：PRD v0.2（`email-autopilot-fs-prd-v0.1.html`）
-- 实现依据：Dev Plan v0.4.1（`../email-autopilot-prototype-dev-plan-v0.1.html`）
+- 产品依据：PRD v0.2（`email-autopilot-fs-prd.html`）
 - 技术栈：Vite 8 + React 19 + TypeScript 7 + LangGraph（浏览器内 checkpoint）+ MSW（录制 API）+ IndexedDB 持久化 + zustand + react-i18next（中/英）+ Tailwind v4 + Recharts + framer-motion
 
 ## 1. 启动（一条命令）
@@ -46,7 +45,7 @@ npm run audit:prd  # PRD 口径断言（15 项）
 | 脚本 | 时长（1×） | 内容 |
 |---|---|---|
 | `trailer90s` | ~90s | 三封邮件精华串烧，适合开场 |
-| `email1` | ~2 min | 透支费两拍：未认证不放权 → App 案件卡 step-up（**OTP 固定码 `482915`**）→ 自动退费；21 天后第二次豁免降 L2 进主管队列 |
+| `email1` | ~2 min | 透支费两拍：未认证不放权 → App 案件卡 step-up（**OTP 固定码 `111111`**）→ 自动退费；21 天后第二次豁免降 L2 进主管队列 |
 | `email2` | ~3 min | Reg E 争议全周期：立案起钟、Day 6 OCR 自动归件、**bd10 前刷新页面"重启进程"——checkpoint 恢复、临时贷记只发一次**、Day40 人工裁决、结果函 L1 签发 |
 | `email3` | ~1 min | BEC/ATO：形近仿冒域名 + 附件注入 → 隔离；改手机号/寄卡动作在邮件渠道**结构上不可达**；只向档案内号码发短信；SAR 锁定模板 |
 | `builder` | ~1.5 min | 矩阵手动 cap、回测回放、阴性复标栏（取消勾选演示"不可签"）、双签毕业即时生效 |

@@ -4,6 +4,7 @@
 // Content-level validate() failure moves straight to the next target.
 import {
   chatCompletion,
+  llmLog,
   modelChain,
   providerFallbackEnabled,
   resolveChatTargets,
@@ -131,18 +132,31 @@ export async function chatCompletionWithFallback(
         } catch (err) {
           if (req.signal?.aborted) throw err;
           const cls = classifyFallback(err);
-          if (cls === "auth") throw err;
+          const why = err instanceof Error ? err.message : String(err);
+          if (cls === "auth") {
+            llmLog(
+              "warn",
+              `回退中止（鉴权失败 401）${t.providerId}/${m}: ${why}`,
+            );
+            throw err;
+          }
           if (
             retries < 2 &&
             (cls === "server" || cls === "timeout" || cls === "network")
           ) {
             retries++;
+            llmLog(
+              "warn",
+              `同目标重试 ${t.providerId}/${m} 第${retries}/2 类型=${cls}: ${why}`,
+            );
             await sleep(backoffMs[retries - 1] ?? 0);
             continue;
           }
-          attempts.push(
-            `${t.providerId}/${m}: ${err instanceof Error ? err.message : String(err)}`,
+          llmLog(
+            "warn",
+            `换下一模型 ${t.providerId}/${m}（类型=${cls}）: ${why}`,
           );
+          attempts.push(`${t.providerId}/${m}: ${why}`);
           lastErr = err;
           break;
         }
@@ -162,14 +176,23 @@ export async function chatCompletionWithFallback(
       "error" in chain
         ? []
         : chain.targets.filter((t) => t.providerId !== primary.providerId);
-    if (candidates.length === 0) throw err;
+    if (candidates.length === 0) {
+      llmLog("warn", `回退耗尽，无其他可试 provider: ${String(err)}`);
+      throw err;
+    }
     for (const t of candidates) {
       try {
+        llmLog("info", `跨 provider 回退 → 尝试 ${t.providerId}`);
         return await runCard(t);
       } catch (e2) {
         if (req.signal?.aborted) throw e2;
+        llmLog(
+          "warn",
+          `跨 provider ${t.providerId} 也失败: ${e2 instanceof Error ? e2.message : String(e2)}`,
+        );
       }
     }
+    llmLog("warn", "所有 provider 均失败");
     throw new Error(`所有可用服务商均失败：${attempts.join("；")}`);
   }
 }

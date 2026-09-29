@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Check, Ban, PencilLine, Clock } from "lucide-react";
 import type { CaseStateType, ApprovalItem } from "@/runtime/caseState.ts";
 import { useCaseStore } from "@/store/caseStore";
+import { useUIStore } from "@/store/uiStore";
 import { TricolorLetter } from "@/components/TricolorLetter";
 import { simClock } from "@/runtime/simClock.ts";
 import { cn } from "@/lib/utils";
@@ -29,6 +30,8 @@ function useCountdown(clockDueAt?: number) {
 function ApprovalCard({ a }: { a: ApprovalItem }) {
   const { t } = useTranslation(["supervisor", "agent"]);
   const approve = useCaseStore((s) => s.approve);
+  const handToAgent = useCaseStore((s) => s.handToAgent);
+  const setScreen = useUIStore((s) => s.setScreen);
   const [rejecting, setRejecting] = useState(false);
   const [reason, setReason] = useState(REJECT_REASONS[0]);
   const [outcome, setOutcome] = useState<"error" | "no_error">("error");
@@ -43,13 +46,13 @@ function ApprovalCard({ a }: { a: ApprovalItem }) {
       )}
     >
       <div className="flex flex-wrap items-center gap-2">
-        <span className="font-mono text-[11px] font-semibold text-navy">{a.id}</span>
-        <span className="rounded bg-gray-100 px-1.5 py-0.5 font-mono text-[9.5px] text-gray-600">
+        <span className="font-mono text-[14px] font-semibold text-navy">{a.id}</span>
+        <span className="rounded bg-gray-100 px-1.5 py-0.5 font-mono text-[12.5px] text-gray-600">
           {a.kind} · {a.lLevel}
         </span>
-        <span className="text-[11px] text-gray-700">{t(`agent:approvals.${a.id}`, { defaultValue: a.title })}</span>
+        <span className="text-[14px] text-gray-700">{t(`agent:approvals.${a.id}`, { defaultValue: a.title })}</span>
         {a.amountCents != null && (
-          <span className="font-mono text-[11px] font-semibold text-navy">
+          <span className="font-mono text-[14px] font-semibold text-navy">
             ${(a.amountCents / 100).toFixed(2)}
           </span>
         )}
@@ -57,7 +60,7 @@ function ApprovalCard({ a }: { a: ApprovalItem }) {
           <span
             data-id="s3.clockremaining"
             className={cn(
-              "ml-auto inline-flex items-center gap-1 rounded px-1.5 py-0.5 font-mono text-[10px]",
+              "ml-auto inline-flex items-center gap-1 rounded px-1.5 py-0.5 font-mono text-[13px]",
               cd.overdue
                 ? "bg-red-100 text-red-800"
                 : cd.hours <= 48
@@ -74,13 +77,13 @@ function ApprovalCard({ a }: { a: ApprovalItem }) {
       </div>
 
       {a.draft && (
-        <div className="mt-2 rounded border border-line bg-paper p-2 text-[10.5px]">
+        <div className="mt-2 rounded border border-line bg-paper p-2 text-[13.5px]">
           <TricolorLetter draft={a.draft} audit={false} />
         </div>
       )}
 
       {a.id === "AP-ADJUDICATION" && (
-        <div className="mt-2 flex items-center gap-2 text-[10.5px]">
+        <div className="mt-2 flex items-center gap-2 text-[13.5px]">
           <span className="text-faint">{t("approval.r4Outcome")}</span>
           {(["error", "no_error"] as const).map((o) => (
             <button
@@ -102,7 +105,7 @@ function ApprovalCard({ a }: { a: ApprovalItem }) {
           <select
             value={reason}
             onChange={(e) => setReason(e.target.value)}
-            className="rounded border border-line px-1.5 py-1 text-[10.5px]"
+            className="rounded border border-line px-1.5 py-1 text-[13.5px]"
           >
             {REJECT_REASONS.map((r) => (
               <option key={r}>{r}</option>
@@ -113,11 +116,11 @@ function ApprovalCard({ a }: { a: ApprovalItem }) {
             onClick={() =>
               approve({ approvalId: a.id, decision: "reject", reasonCode: reason })
             }
-            className="rounded bg-red-700 px-2 py-1 text-[10.5px] text-white"
+            className="rounded bg-red-700 px-2 py-1 text-[13.5px] text-white"
           >
             {t("approval.confirmReject")}
           </button>
-          <button onClick={() => setRejecting(false)} className="text-[10.5px] text-faint underline">
+          <button onClick={() => setRejecting(false)} className="text-[13.5px] text-faint underline">
             {t("approval.cancel")}
           </button>
         </div>
@@ -132,21 +135,24 @@ function ApprovalCard({ a }: { a: ApprovalItem }) {
                 ...(a.id === "AP-ADJUDICATION" ? { outcome } : {}),
               })
             }
-            className="inline-flex items-center gap-1 rounded bg-teal px-3 py-1 text-[10.5px] font-semibold text-white"
+            className="inline-flex items-center gap-1 rounded bg-teal px-3 py-1 text-[13.5px] font-semibold text-white"
           >
             <Check size={11} /> {t("approval.approve")}
           </button>
           <button
             data-id="s3.edit"
-            onClick={() => approve({ approvalId: a.id, decision: "edit" })}
-            className="inline-flex items-center gap-1 rounded px-3 py-1 text-[10.5px] text-navy ring-1 ring-line"
+            onClick={() => {
+              void handToAgent(a.id);
+              setScreen("agent");
+            }}
+            className="inline-flex items-center gap-1 rounded px-3 py-1 text-[13.5px] text-navy ring-1 ring-line"
           >
             <PencilLine size={11} /> {t("approval.handToAgent")}
           </button>
           <button
             data-id="s3.reject"
             onClick={() => setRejecting(true)}
-            className="inline-flex items-center gap-1 rounded px-3 py-1 text-[10.5px] text-red-700 ring-1 ring-red-300"
+            className="inline-flex items-center gap-1 rounded px-3 py-1 text-[13.5px] text-red-700 ring-1 ring-red-300"
           >
             <Ban size={11} /> {t("approval.reject")}
           </button>
@@ -174,19 +180,19 @@ export function ApprovalQueue({ state }: { state: CaseStateType }) {
   return (
     <div className="space-y-2" data-id="s3.queue">
       {batchable.length > 1 && (
-        <div className="rounded-lg border border-teal/40 bg-teal-soft p-2 text-[11px]">
+        <div className="rounded-lg border border-teal/40 bg-teal-soft p-2 text-[14px]">
           {t("approval.batchInfo", { count: batchable.length })}
         </div>
       )}
       {pending.length === 0 && (
-        <div className="rounded-lg border border-dashed border-line bg-white p-6 text-center text-[11px] text-faint">
+        <div className="rounded-lg border border-dashed border-line bg-white p-6 text-center text-[14px] text-faint">
           {t("approval.queueEmpty")}
         </div>
       )}
       {pending.map((a) => (
         <ApprovalCard key={a.id} a={a} />
       ))}
-      <p className="px-1 text-[10px] text-faint">
+      <p className="px-1 text-[13px] text-faint">
         {t("approval.batchFootnote")}
       </p>
     </div>

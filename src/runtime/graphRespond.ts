@@ -9,6 +9,7 @@ import { appendEvent } from "./eventStore.ts";
 import { simClock } from "./simClock.ts";
 
 export function draftText(d: Draft): string {
+  if (d.editedText) return d.editedText;
   return d.sections.map((s) => s.textEn).join("\n\n");
 }
 
@@ -61,6 +62,22 @@ export function makeRespond(deps: NodeDeps): NodeFn {
           id: `OB:${draft.id}`, channel: "email", to: "(forged address — no reply)",
           intentCode: "fraud_locked", draftId: draft.id, lockedTemplate: true,
           atSimTime: simClock.now(), blockedReason: "ZERO_REPLY_TO_FORGED_ADDRESS",
+        });
+        continue;
+      }
+      // Non-sensitive replies go back into the original mail thread so the
+      // customer keeps a single conversation history (report §3.2 case model).
+      if (draft.channel === "email") {
+        const inThread =
+          state.emails.find((e) => e.id === state.currentEmailId) ?? state.emails[0];
+        outbound.push({
+          id: `OB:${draft.id}`, channel: "email", to: state.customerId,
+          intentCode: draft.intentCode, draftId: draft.id, lockedTemplate: draft.lockedTemplate,
+          atSimTime: simClock.now(), threadId: inThread?.threadId,
+        });
+        await emitOutbound(state, "respond", "email_outbound", {
+          draft: draft.id,
+          replayed: state.outbound.some((o) => o.id === `OB:${draft.id}`),
         });
         continue;
       }

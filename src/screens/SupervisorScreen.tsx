@@ -30,7 +30,7 @@ export function SupervisorScreen() {
   }, [scenarioId, loadScenario]);
 
   if (!scenarioId || !caseState) {
-    return <div className="p-6 text-[12px] text-faint">{t("loading")}</div>;
+    return <div className="p-6 text-[15px] text-faint">{t("loading")}</div>;
   }
 
   const pending = (caseState.approvals ?? []).filter((a) => a.status === "pending");
@@ -59,7 +59,7 @@ export function SupervisorScreen() {
             data-id={`s3.tab.${id}`}
             onClick={() => setTab(id)}
             className={cn(
-              "inline-flex items-center gap-1.5 border-b-2 px-3 py-1.5 text-[11.5px]",
+              "inline-flex items-center gap-1.5 border-b-2 px-3 py-1.5 text-[14.5px]",
               tab === id
                 ? "border-teal font-semibold text-teal"
                 : "border-transparent text-faint hover:text-navy",
@@ -87,10 +87,10 @@ function Kpi({ label, value, hot }: { label: string; value: number; hot: boolean
         hot && value > 0 ? "border-red-300 bg-red-50/50" : "border-line",
       )}
     >
-      <div className={cn("text-[20px] font-bold leading-none", hot ? "text-red-700" : "text-navy")}>
+      <div className={cn("text-[23px] font-bold leading-none", hot ? "text-red-700" : "text-navy")}>
         {value}
       </div>
-      <div className="mt-1 text-[10px] uppercase tracking-wide text-faint">{label}</div>
+      <div className="mt-1 text-[13px] uppercase tracking-wide text-faint">{label}</div>
     </div>
   );
 }

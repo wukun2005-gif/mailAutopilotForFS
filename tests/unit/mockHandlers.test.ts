@@ -104,7 +104,7 @@ describe("#4 OTP lockout", () => {
     await postJson("/mock/otp/verify", { code: "000000" });
     const third = await postJson("/mock/otp/verify", { code: "000000" });
     expect(third.json.data.locked).toBe(true);
-    const correct = await postJson("/mock/otp/verify", { code: "482915" });
+    const correct = await postJson("/mock/otp/verify", { code: "111111" });
     expect(correct.json.data.locked).toBe(true);
     expect(correct.json.data.verified).toBe(false);
   });

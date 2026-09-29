@@ -16,16 +16,16 @@ function Card({ card, t }: { card: PolicyCard; t: (k: string) => string }) {
   return (
     <div className="rounded border border-line p-2" data-id="s2.policy">
       <div className="flex items-center gap-2">
-        <span className="font-mono text-[11px] font-semibold text-navy">{card.policyId}</span>
-        <span className="font-mono text-[10px] text-faint">{card.version}</span>
+        <span className="font-mono text-[14px] font-semibold text-navy">{card.policyId}</span>
+        <span className="font-mono text-[13px] text-faint">{card.version}</span>
         {card.degraded && (
-          <span className="rounded bg-amber-100 px-1 py-0.5 text-[9px] font-medium text-amber-800">
+          <span className="rounded bg-amber-100 px-1 py-0.5 text-[12px] font-medium text-amber-800">
             {t("policy.degraded")}
           </span>
         )}
         <span
           className={cn(
-            "ml-auto rounded px-1.5 py-0.5 font-mono text-[10px]",
+            "ml-auto rounded px-1.5 py-0.5 font-mono text-[13px]",
             card.overall === "PASS"
               ? "bg-emerald-50 text-emerald-700"
               : card.overall === "FAIL"
@@ -36,8 +36,8 @@ function Card({ card, t }: { card: PolicyCard; t: (k: string) => string }) {
           {card.overall}
         </span>
       </div>
-      <div className="mt-0.5 text-[10px] text-faint">{card.effect}</div>
-      <table className="mt-1.5 w-full text-[10.5px]">
+      <div className="mt-0.5 text-[13px] text-faint">{card.effect}</div>
+      <table className="mt-1.5 w-full text-[13.5px]">
         <tbody>
           {card.conditions.map((c) => (
             <tr key={c.code} className="border-t border-line">
@@ -64,10 +64,10 @@ export function PolicyEvaluationCard({ state }: { state: CaseStateType }) {
   const cards = state.policyCards ?? [];
   return (
     <section className="rounded-lg border border-line bg-white p-3" data-id="s2.policy.section">
-      <h3 className="text-[12px] font-semibold text-navy">{t("policy.title")}</h3>
-      <p className="text-[10px] text-faint">{t("policy.subtitle")}</p>
+      <h3 className="text-[15px] font-semibold text-navy">{t("policy.title")}</h3>
+      <p className="text-[13px] text-faint">{t("policy.subtitle")}</p>
       <div className="mt-2 space-y-2">
-        {cards.length === 0 && <div className="text-[10.5px] text-faint">{t("policy.empty")}</div>}
+        {cards.length === 0 && <div className="text-[13.5px] text-faint">{t("policy.empty")}</div>}
         {cards.map((c) => (
           <Card key={`${c.policyId}@${c.sourceEmailId}`} card={c} t={t} />
         ))}

@@ -25,19 +25,28 @@ export function TricolorLetter({
   audit?: boolean;
 }) {
   const { t } = useTranslation("customer");
+  const edited = draft.editedText?.trim() ? draft.editedText : null;
   return (
     <div className="space-y-1.5">
       {draft.lockedTemplate && (
-        <div className="mb-2 inline-flex items-center gap-1 rounded bg-blue-100 px-1.5 py-0.5 text-[10px] font-medium text-blue-800">
+        <div className="mb-2 inline-flex items-center gap-1 rounded bg-blue-100 px-1.5 py-0.5 text-[13px] font-medium text-blue-800">
           {t("legend.lockedTemplate")}
         </div>
       )}
-      {draft.sections.map((s, i) => (
+      {edited != null && (
+        <div className="mb-1 inline-flex items-center gap-1 rounded bg-violet-100 px-1.5 py-0.5 text-[13px] font-medium text-violet-800">
+          {t("legend.edited")}
+        </div>
+      )}
+      {(edited != null
+        ? [{ kind: "ai", textEn: edited, source: "agent:edit" } as const]
+        : draft.sections
+      ).map((s, i) => (
         <p
           key={i}
           title={audit ? s.source : undefined}
           className={cn(
-            "whitespace-pre-wrap rounded-r px-2.5 py-1.5 text-[12.5px] leading-relaxed",
+            "whitespace-pre-wrap rounded-r px-2.5 py-1.5 text-[15.5px] leading-relaxed",
             SECTION_STYLE[s.kind],
             audit && "cursor-help",
           )}
@@ -52,7 +61,7 @@ export function TricolorLetter({
           )}
           {s.textEn}
           {audit && (
-            <span className="mt-0.5 block font-mono text-[9.5px] opacity-55">
+            <span className="mt-0.5 block font-mono text-[12.5px] opacity-55">
               {s.kind} · {s.source}
             </span>
           )}
@@ -70,7 +79,7 @@ export function LetterLegend() {
     ["ai", "bg-violet-500", t("legend.ai")],
   ] as const;
   return (
-    <div className="flex flex-wrap gap-2 text-[10px] text-faint">
+    <div className="flex flex-wrap gap-2 text-[13px] text-faint">
       {items.map(([kind, cls, label]) => (
         <span key={kind} className="inline-flex items-center gap-1">
           <span className={`h-2 w-2 rounded-sm ${cls}`} />

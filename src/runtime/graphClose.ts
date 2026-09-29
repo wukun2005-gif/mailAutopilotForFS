@@ -84,6 +84,22 @@ export function makeClose(): NodeFn {
         (a) => a.actionType === "refund_od_fee" && a.status === "done",
       );
       if (state.scenarioId === "email1" && refund) {
+        // Beat 2 resolution has its own 14-day watch anchored at send time.
+        const od2 = state.outbound.find((o) => o.draftId === "DR-OD2-EXPLAIN");
+        if (od2) {
+          const sentDay = diffCalendarDays(DAY0_EPOCH, od2.atSimTime);
+          const inboundAfterOd2 = state.emails.filter(
+            (e) => e.dir === "in" && e.atDayN > sentDay,
+          ).length;
+          if (simClock.dayN() >= sentDay + 14 && inboundAfterOd2 === 0 && state.status !== "closed") {
+            await appendEvent({
+              caseId: state.caseId, node: "close", type: "system",
+              data: { verifiedResolution: true, atDayN: simClock.dayN() },
+              reasonCodes: ["FR-11.5_VERIFIED_14D_NO_REPEAT"],
+            });
+            return { status: "closed" as const };
+          }
+        }
         const refundDay = diffCalendarDays(DAY0_EPOCH, refund.simTime);
         const inboundAfter = state.emails.filter(
           (e) => e.dir === "in" && e.atDayN > refundDay,

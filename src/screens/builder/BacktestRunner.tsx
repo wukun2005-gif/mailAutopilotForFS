@@ -16,19 +16,19 @@ function pct(x: number): string {
 function MetricRow({ m, dim }: { m: IntentMetric; dim?: boolean }) {
   return (
     <tr className={dim ? "text-faint" : ""}>
-      <td className="whitespace-nowrap py-0.5 pr-2 text-left font-mono text-[10px]">{m.intentCode}</td>
-      <td className="px-2 font-mono text-[10px]">{m.triggers.toLocaleString()}</td>
-      <td className="px-2 font-mono text-[10px]">{pct(m.aiVsHumanAgreement)}</td>
-      <td className="px-2 font-mono text-[10px]">
+      <td className="whitespace-nowrap py-0.5 pr-2 text-left font-mono text-[13px]">{m.intentCode}</td>
+      <td className="px-2 font-mono text-[13px]">{m.triggers.toLocaleString()}</td>
+      <td className="px-2 font-mono text-[13px]">{pct(m.aiVsHumanAgreement)}</td>
+      <td className="px-2 font-mono text-[13px]">
         {m.noEditApproval > 0 ? pct(m.noEditApproval) : "—"}
       </td>
-      <td className="px-2 font-mono text-[10px]">
+      <td className="px-2 font-mono text-[13px]">
         {m.recallRegulated != null ? pct(m.recallRegulated) : "—"}
       </td>
-      <td className={`px-2 font-mono text-[10px] ${m.criticalMisses > 0 ? "font-bold text-red-700" : ""}`}>
+      <td className={`px-2 font-mono text-[13px] ${m.criticalMisses > 0 ? "font-bold text-red-700" : ""}`}>
         {m.criticalMisses}
       </td>
-      <td className="px-2 font-mono text-[10px]">
+      <td className="px-2 font-mono text-[13px]">
         {m.unitCostUsd > 0 ? `$${m.unitCostUsd.toFixed(2)}` : "—"}
       </td>
     </tr>
@@ -66,14 +66,14 @@ export function BacktestRunner({ selectedIntent }: { selectedIntent: string }) {
   return (
     <div className="rounded-lg border border-line bg-white p-3" data-id="s4.backtest">
       <div className="flex items-center justify-between">
-        <h3 className="text-[12px] font-semibold text-navy">
+        <h3 className="text-[15px] font-semibold text-navy">
           {t("backtest.title", { from: BACKTEST_WINDOW.from, to: BACKTEST_WINDOW.to })}
         </h3>
         <button
           data-id="s4.backtest.run"
           onClick={run}
           disabled={running}
-          className="inline-flex items-center gap-1 rounded bg-teal px-2.5 py-1 text-[10.5px] font-semibold text-white disabled:opacity-50"
+          className="inline-flex items-center gap-1 rounded bg-teal px-2.5 py-1 text-[13.5px] font-semibold text-white disabled:opacity-50"
         >
           {done ? <RotateCcw size={11} /> : <Play size={11} />}
           {done ? t("backtest.rerun") : t("backtest.run")}
@@ -85,7 +85,7 @@ export function BacktestRunner({ selectedIntent }: { selectedIntent: string }) {
           style={{ width: `${progress}%` }}
         />
       </div>
-      <p className="mt-1 text-[9.5px] text-faint">
+      <p className="mt-1 text-[12.5px] text-faint">
         {t("backtest.note", {
           threads: BACKTEST_WINDOW.totalThreads.toLocaleString(),
           valid: BACKTEST_WINDOW.validInbound.toLocaleString(),
@@ -97,7 +97,7 @@ export function BacktestRunner({ selectedIntent }: { selectedIntent: string }) {
         <div className="mt-2 overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-line text-[9px] uppercase tracking-wide text-faint">
+              <tr className="border-b border-line text-[12px] uppercase tracking-wide text-faint">
                 <th className="py-1 text-left">{t("backtest.headers.intent")}</th>
                 <th>{t("backtest.headers.triggers")}</th>
                 <th>{t("backtest.headers.agree")}</th>

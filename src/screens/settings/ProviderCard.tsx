@@ -105,23 +105,23 @@ export function ProviderCard({
       <div className="flex items-center gap-3 px-3 py-2.5">
         {dragHandle}
         <button onClick={onToggleExpanded} className="flex flex-1 items-center gap-2 text-left">
-          <span className="text-[12px] text-faint">{expanded ? "▼" : "▶"}</span>
+          <span className="text-[15px] text-faint">{expanded ? "▼" : "▶"}</span>
           <span
             className={cn(
               "inline-block h-2.5 w-2.5 rounded-full",
               form.enabled ? "bg-emerald-500" : "bg-gray-300",
             )}
           />
-          <b className="text-[15px] text-navy">{name}</b>
+          <b className="text-[18px] text-navy">{name}</b>
           {isDecision && (
-            <span className="rounded-full border border-amber/40 bg-amber-soft px-2 py-0.5 text-[12px] text-amber">
+            <span className="rounded-full border border-amber/40 bg-amber-soft px-2 py-0.5 text-[15px] text-amber">
               {t("decisionBadge")}
             </span>
           )}
-          <span className="hidden truncate text-[13px] text-faint md:inline">{desc}</span>
+          <span className="hidden truncate text-[16px] text-faint md:inline">{desc}</span>
         </button>
         <label
-          className="flex items-center gap-1.5 text-[13px] text-faint"
+          className="flex items-center gap-1.5 text-[16px] text-faint"
           onClick={(e) => e.stopPropagation()}
         >
           <input
@@ -132,7 +132,7 @@ export function ProviderCard({
           {t("modelFallback")}
         </label>
         <label
-          className="flex items-center gap-1.5 text-[13px]"
+          className="flex items-center gap-1.5 text-[16px]"
           onClick={(e) => e.stopPropagation()}
         >
           <input
@@ -144,7 +144,7 @@ export function ProviderCard({
         </label>
         <span
           className={cn(
-            "whitespace-nowrap rounded-full border px-2 py-0.5 text-[12px]",
+            "whitespace-nowrap rounded-full border px-2 py-0.5 text-[15px]",
             isConfigured
               ? "border-emerald-200 bg-emerald-50 text-emerald-700"
               : "border-gray-200 bg-gray-100 text-gray-500",
@@ -153,7 +153,7 @@ export function ProviderCard({
           {isConfigured ? t("configured") : t("needKey")}
         </span>
         {form.modelIds.length > 0 && (
-          <span className="whitespace-nowrap text-[13px] text-faint">
+          <span className="whitespace-nowrap text-[16px] text-faint">
             {t("models", { count: form.modelIds.length })}
           </span>
         )}
@@ -162,7 +162,7 @@ export function ProviderCard({
       {/* Expanded detail */}
       {expanded && (
         <div className="space-y-3 border-t border-line px-3 py-3">
-          <label className="grid gap-1 text-[13px] text-faint">
+          <label className="grid gap-1 text-[16px] text-faint">
             API Key
             <input
               type="password"
@@ -171,31 +171,31 @@ export function ProviderCard({
               value={form.apiKey}
               placeholder={form.hasKey ? `stored (${form.apiKey ? "" : "••••"})` : preset.keyPlaceholder}
               onChange={(e) => onChange({ apiKey: e.target.value })}
-              className="rounded border border-line px-2.5 py-1.5 font-mono text-[14px] text-ink"
+              className="rounded border border-line px-2.5 py-1.5 font-mono text-[17px] text-ink"
             />
           </label>
-          <label className="grid gap-1 text-[13px] text-faint">
+          <label className="grid gap-1 text-[16px] text-faint">
             Base URL
             <input
               type="text"
               value={form.baseUrl}
               onChange={(e) => onChange({ baseUrl: e.target.value })}
               placeholder={preset.defaultBaseUrl || "https://api.example.com/v1"}
-              className="rounded border border-line px-2.5 py-1.5 font-mono text-[14px] text-ink"
+              className="rounded border border-line px-2.5 py-1.5 font-mono text-[17px] text-ink"
             />
           </label>
           <div className="flex items-center gap-2">
             <button
               onClick={queryModels}
               disabled={busy !== "" || (!form.apiKey && !form.hasKey)}
-              className="flex items-center gap-1 rounded bg-navy px-3 py-1.5 text-[14px] text-white disabled:opacity-40"
+              className="flex items-center gap-1 rounded bg-navy px-3 py-1.5 text-[17px] text-white disabled:opacity-40"
             >
               {busy !== "" && <Loader2 size={13} className="animate-spin" />}
               {busy === "models" ? t("querying") : t("queryModels")}
             </button>
             <button
               onClick={() => void onSaved()}
-              className="rounded bg-teal px-3 py-1.5 text-[14px] text-white"
+              className="rounded bg-teal px-3 py-1.5 text-[17px] text-white"
             >
               {t("save")}
             </button>
@@ -203,8 +203,8 @@ export function ProviderCard({
 
           {fallbacks.length > 0 && (
             <div>
-              <div className="mb-1.5 text-[13px] text-faint">{t("defaultModel")}</div>
-              <table className="w-full text-[13px]">
+              <div className="mb-1.5 text-[16px] text-faint">{t("defaultModel")}</div>
+              <table className="w-full text-[16px]">
                 <thead className="text-faint">
                   <tr>
                     <th className="w-7 text-left">#</th>
@@ -235,10 +235,10 @@ export function ProviderCard({
                         <td className="cursor-grab text-faint">
                           <GripVertical size={13} />
                         </td>
-                        <td className="font-mono text-[13px]">
+                        <td className="font-mono text-[16px]">
                           {m}
                           {isDefault && (
-                            <span className="ml-2 rounded bg-teal px-1.5 py-0.5 text-[11px] text-white">
+                            <span className="ml-2 rounded bg-teal px-1.5 py-0.5 text-[14px] text-white">
                               {t("currentDefault")}
                             </span>
                           )}
@@ -249,13 +249,13 @@ export function ProviderCard({
                             <AlertTriangle size={14} className="ml-1 inline text-amber-600" />
                           )}
                         </td>
-                        <td className="text-[13px] text-soft">—</td>
-                        <td className="text-[13px] text-soft">—</td>
+                        <td className="text-[16px] text-soft">—</td>
+                        <td className="text-[16px] text-soft">—</td>
                         <td>
                           {!isDefault && (
                             <button
                               onClick={() => setDefault(m)}
-                              className="rounded border border-line px-2 py-0.5 text-[13px] text-navy hover:border-navy-light"
+                              className="rounded border border-line px-2 py-0.5 text-[16px] text-navy hover:border-navy-light"
                             >
                               {t("setDefault")}
                             </button>

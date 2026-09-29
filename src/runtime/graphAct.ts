@@ -21,11 +21,14 @@ import {
   lockedStepUpLetter,
   materialsAckLetter,
   onFileWarningSms,
+  pcPostedLetter,
   refundConfirmationLetter,
   regEReceiptLetter,
   resultLetterError,
   resultLetterNoError,
   secondWaiverExplanationDraft,
+  secondWaiverHoldingLetter,
+  stepupNudgeLetter,
   transactionDetailLetter,
   caseCardMessage,
 } from "./letters.ts";
@@ -37,7 +40,6 @@ import {
   SIGN_APPROVAL,
   actOnClock,
 } from "./graphClose.ts";
-
 export interface ResumePayload {
   approvalId: string;
   decision: "approve" | "reject" | "edit";
@@ -90,6 +92,9 @@ export function makeAct(deps: NodeDeps): NodeFn {
           `${caseCardMessage().body}\n\n${draftText(letter)}`,
         ),
       );
+      // The email thread must say where to go: otherwise the customer has no
+      // reason to open the app and the case stalls on their side.
+      addDraft(stepupNudgeLetter(state.customerId));
     };
 
     // Fraud quarantine (email 3): signals converged in ingest.
@@ -198,6 +203,9 @@ export function makeAct(deps: NodeDeps): NodeFn {
           addDraft(refundConfirmationLetter(state.customerId));
           updates.status = "pending_verify";
         } else if (cell.kind === "L" && cell.level === "L2") {
+          // Holding reply goes out immediately (no approval linked); the
+          // final explanation waits for the supervisor.
+          addDraft(secondWaiverHoldingLetter(state.customerId));
           const explanation = secondWaiverExplanationDraft(state.customerId);
           addDraft(explanation);
           addApproval({
@@ -225,6 +233,22 @@ export function makeHumanCheckpoint(deps: NodeDeps): NodeFn {
       return map;
     };
 
+    // Agent edit turn (FR-7.1): persist the edited text onto the checkpointed
+    // draft and record it. The edited text is what respond will send on a
+    // later supervisor approval. Falls through to respond/close (no-ops).
+    const t0 = state.turn;
+    if (t0.kind === "draft_edit" && t0.draftId) {
+      const text = t0.editedText ?? "";
+      const kept = (state.drafts ?? []).map((d) =>
+        d.id === t0.draftId ? { ...d, editedText: text } : d,
+      );
+      await emit(state, "human_checkpoint", "system", {
+        draftEdited: t0.draftId,
+        editedLength: text.length,
+      });
+      return { drafts: kept };
+    }
+
     // A supervisor decision arrives as a fresh approval turn.
     const t = state.turn;
     let chained = false;
@@ -249,6 +273,9 @@ export function makeHumanCheckpoint(deps: NodeDeps): NodeFn {
             keySeed: `pc:${DISPUTE_EMAIL2.disputeId}`, body: { disputeId: DISPUTE_EMAIL2.disputeId },
           });
           actionEntries.push(r.entry);
+          // Customer update email: amount-free so it stays sendable at I2.
+          if (!state.drafts.some((x) => x.id === "DR-PC-POSTED"))
+            drafts.push(pcPostedLetter(state.customerId));
         }
         if (t.decision === "approve" && target.id === FRAUD_APPROVAL) {
           const r = await deps.gateway.callWrite({

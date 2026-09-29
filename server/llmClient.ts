@@ -3,6 +3,15 @@
 // round live here; the two-level fallback orchestration lives in
 // llmFallback.ts (kept under the 300-line/file limit).
 import { getSetting } from "./settingsStore.ts";
+import { maskKey } from "../shared/provider.ts";
+
+/** Terminal log line for the LLM call path (npm run dev console). */
+export function llmLog(level: "info" | "warn", msg: string): void {
+  const time = new Date().toISOString().slice(11, 23);
+  const line = `[llm ${time}] ${msg}`;
+  if (level === "warn") console.warn(line);
+  else console.log(line);
+}
 
 export interface ChatUsage {
   promptTokens: number;
@@ -227,23 +236,38 @@ export async function chatCompletion(
 
   const started = Date.now();
   const where = `${target.providerId}/${target.model}`;
-  const r = await fetch(`${target.baseUrl}/chat/completions`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${target.apiKey}`,
-    },
-    body: JSON.stringify(body),
-    signal: req.signal ?? AbortSignal.timeout(120_000),
-  });
+  const url = `${target.baseUrl}/chat/completions`;
+  llmLog(
+    "info",
+    `→ POST ${url} key=${maskKey(target.apiKey)} msgs=${req.messages.length} tools=${req.tools?.length ?? 0} temp=${req.temperature ?? 0.2}`,
+  );
+  let r: Response;
+  try {
+    r = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${target.apiKey}`,
+      },
+      body: JSON.stringify(body),
+      signal: req.signal ?? AbortSignal.timeout(120_000),
+    });
+  } catch (e) {
+    llmLog(
+      "warn",
+      `← 网络失败 ${where} ${Date.now() - started}ms: ${e instanceof Error ? e.message : String(e)}`,
+    );
+    throw e;
+  }
   if (!r.ok) {
     const text = await r.text().catch(() => "");
     const err = new Error(
       `LLM API HTTP ${r.status}: ${text.slice(0, 400)}`,
     ) as Error & { status?: number };
     err.status = r.status;
-    console.warn(
-      `[llm] HTTP ${r.status} ← ${where} ${Date.now() - started}ms`,
+    llmLog(
+      "warn",
+      `← HTTP ${r.status} ${where} ${Date.now() - started}ms body=${text.slice(0, 300).replace(/\s+/g, " ")}`,
     );
     throw err;
   }
@@ -260,7 +284,17 @@ export async function chatCompletion(
     };
   };
   const choice = data.choices?.[0];
-  if (!choice) throw new Error("LLM API 返回缺少 choices");
+  if (!choice) {
+    llmLog(
+      "warn",
+      `← 200 但缺少 choices ${where} ${Date.now() - started}ms`,
+    );
+    throw new Error("LLM API 返回缺少 choices");
+  }
+  llmLog(
+    "info",
+    `← 200 ${where} ${Date.now() - started}ms stop=${choice.finish_reason ?? "?"} tokens=${data.usage?.prompt_tokens ?? "?"}/${data.usage?.completion_tokens ?? "?"} chars=${(choice.message?.content ?? "").length}`,
+  );
 
   const usage: ChatUsage | null = data.usage
     ? {

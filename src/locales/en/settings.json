@@ -1,6 +1,6 @@
 {
   "title": "LLM provider settings",
-  "desc": "API keys stay on the local Dev BFF (server-data/settings.json), never in the browser bundle. Live calls power only the read-only general-inquiry node; the recorded demo runs offline.",
+  "desc": "API keys stay on the local server (server-data/settings.json), never in the browser bundle. Live calls power only the read-only general-inquiry node; the recorded demo runs offline.",
   "tabs": {
     "llm": "LLM Providers",
     "decision": "Decision Providers"
@@ -38,7 +38,8 @@
   "verifyingTitle": "Verifying",
   "loadFailed": "Failed to load settings: {{error}}",
   "probeTitle": "Live LLM probe (read-only easter egg)",
-  "probeDesc": "Sends one general-inquiry question through the Dev BFF using the default model. No case actions, no customer data.",
+  "probeDesc": "Answers from a built-in FAQ library with sources cited. Read-only: no case actions, no customer data. Shows a recorded answer when no key is configured or the call fails.",
   "probePlaceholder": "e.g. What are your branch hours?",
-  "probeSend": "Ask live"
+  "probeSend": "Ask live",
+  "probeRecorded": "Recorded answer (FAQ text)"
 }

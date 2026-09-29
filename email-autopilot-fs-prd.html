@@ -684,7 +684,7 @@ table.rvlog td:first-child{white-space:nowrap;font-weight:700;color:#5b21b6}
 <p class="fd">客户数据字段按敏感度分级（公共 / 低 / 中 / 高，如完整卡号、凭证、余额、交易明细、地址）；每个放权矩阵单元定义可披露字段集合，生成与发送前由质量闸门强制校验。</p>
 <ul class="ac">
 <li>AC1：<span class="rvt">I0/I1 案件的回复中不得出现任何账户字段（低/中/高均不可）；账号末四位仅在 I2 以上</span>。<span class="rv" title="v0.1 只禁中/高敏，与 §6.2 矩阵 R1×I0/I1“不披露”冲突">v0.2 修订</span></li>
-<li>AC2：附件外发（对账单、证明信）仅在 I3 且走安全投递（secure message/加密链接），不以明文邮件附件发送。</li>
+<li>AC2：<span class="rvt">附件外发：凭证类永不（Never ⑩）；其余附件仅在 I3 且仅发往已核验地址，默认走安全投递（secure message/加密链接），Admin 可配；不以明文邮件附件发往未核验地址。</span> <span class="rv" title="与高·其他行同因">v0.2 修订</span></li>
 <li>AC3：越权字段尝试写入回复时被拦截、记录并降级转人。</li>
 <li><span class="rvt">AC4：默认字段 × 身份档位（Admin 只能调紧）：</span><span class="rv add" title="把“按敏感度分级”落成可验收的默认表，与 §6.2 矩阵 R1 行一一对应">v0.2 新增</span>
 <div class="table-wrap"><table class="fixed"><colgroup><col style="width:12%"><col style="width:46%"><col style="width:14%"><col style="width:14%"><col style="width:14%"></colgroup>
@@ -692,7 +692,8 @@ table.rvlog td:first-child{white-space:nowrap;font-weight:700;color:#5b21b6}
 <tr><td>公共</td><td>费率表、网点、流程说明</td><td>可</td><td>可</td><td>可</td></tr>
 <tr><td>低</td><td>案件/配送状态、材料是否收到、账号末四位、客户来信中自己提到的那笔交易</td><td>否</td><td>可</td><td>可</td></tr>
 <tr><td>中</td><td>余额、客户未提及的交易明细、扣款/还款日期与金额</td><td>否</td><td>否</td><td>可</td></tr>
-<tr><td>高</td><td>完整卡号/账号、凭证、完整地址、对账单等附件</td><td>否</td><td>否</td><td>不进邮件正文；仅经安全投递（AC2）</td></tr>
+<tr><td>高·凭证</td><td>完整卡号（PAN）/CVV、密码、OTP 等凭证</td><td>否</td><td>否</td><td><span class="rvt">永不进邮件（Never ⑩；依据 PCI DSS、FFIEC 认证指引）</span></td></tr>
+<tr><td>高·其他</td><td>完整银行账号、完整地址、对账单等非凭证附件</td><td>否</td><td>否</td><td><span class="rvt">仅 I3 且仅发往已核验地址；默认走安全投递（Admin 可配）</span> <span class="rv" title="v0.1 高字段一律禁入邮件正文，比法律法规和调研报告口径更严；凭证类保留禁令（PCI DSS/FFIEC 依据），其余回到报告口径">v0.2 修订</span></td></tr>
 </table></div></li>
 </ul>
 <div class="fr-m">依赖：FR-5.2 质量闸门、FR-9.5 字段分级配置。</div>
