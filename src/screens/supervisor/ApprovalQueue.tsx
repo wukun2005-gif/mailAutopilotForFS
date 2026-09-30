@@ -46,9 +46,9 @@ function ApprovalCard({ a }: { a: ApprovalItem }) {
       )}
     >
       <div className="flex flex-wrap items-center gap-2">
-        <span className="font-mono text-[14px] font-semibold text-navy">{a.id}</span>
-        <span className="rounded bg-gray-100 px-1.5 py-0.5 font-mono text-[12.5px] text-gray-600">
-          {a.kind} · {a.lLevel}
+        <span className="rounded bg-gray-100 px-1.5 py-0.5 text-[12.5px] text-gray-600">
+          {t("common:approvalKind." + a.kind, { defaultValue: a.kind })} ·{" "}
+          {t("customer:trace.levels." + a.lLevel, { defaultValue: a.lLevel })}
         </span>
         <span className="text-[14px] text-gray-700">{t(`agent:approvals.${a.id}`, { defaultValue: a.title })}</span>
         {a.amountCents != null && (
@@ -108,7 +108,9 @@ function ApprovalCard({ a }: { a: ApprovalItem }) {
             className="rounded border border-line px-1.5 py-1 text-[13.5px]"
           >
             {REJECT_REASONS.map((r) => (
-              <option key={r}>{r}</option>
+              <option key={r} value={r}>
+                {t("approval.rejectReasons." + r, { defaultValue: r })}
+              </option>
             ))}
           </select>
           <button

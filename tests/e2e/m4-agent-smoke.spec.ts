@@ -15,9 +15,9 @@ test.describe("M4 agent dossier smoke", () => {
   test("email 2 dossier: intake cards, restart-safe provisional credit, adjudication", async ({ page }) => {
     await page.click("[data-id='dev.inject.EM-2-IN-1']");
     await waitIdle(page);
-    await expect(page.locator("[data-id='s2.intent']")).toContainText("reg_e_intake");
-    await expect(page.locator("[data-id='s2.policy.section']")).toContainText("REG_E");
-    await expect(page.locator("[data-id='s2.drafts']")).toContainText("DR-REGE-RECEIPT");
+    await expect(page.locator("[data-id='s2.intent']")).toContainText("Dispute intake");
+    await expect(page.locator("[data-id='s2.policy.section']")).toContainText("Reg E error-notice intake");
+    await expect(page.locator("[data-id='s2.drafts']")).toContainText("Dispute receipt");
 
     // transaction detail denied below I3 → case card, then OTP step-up.
     // Step-up happens on the customer phone, so switch views for it.
@@ -40,12 +40,11 @@ test.describe("M4 agent dossier smoke", () => {
     // Jump to bd10: provisional credit approval queued.
     await page.click("[data-id='dev.clock.bd10']");
     await waitIdle(page);
-    await expect(page.locator("[data-id='s2.dossier']")).toContainText("AP-PCREDIT");
-
+    await expect(page.locator("[data-id='s2.dossier']")).toContainText("Post provisional credit");
     // Restart the process BEFORE approving: banner appears, approval survives.
     await page.click("[data-id='dev.restart']");
     await waitIdle(page);
     await expect(page.locator("[data-id='s2.resumebanner']")).toBeVisible();
-    await expect(page.locator("[data-id='s2.dossier']")).toContainText("AP-PCREDIT");
+    await expect(page.locator("[data-id='s2.dossier']")).toContainText("Post provisional credit");
   });
 });

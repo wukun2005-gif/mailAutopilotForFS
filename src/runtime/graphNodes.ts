@@ -14,7 +14,7 @@ import {
   type EmailMessage,
   type FraudSignals,
 } from "@/mocks/fixtures/index.ts";
-import { recordedTriage, graduatedLevel, intentSpec } from "./intentRegistry.ts";
+import { recordedTriage, graduatedLevel, intentSpec, parallelSignals } from "./intentRegistry.ts";
 import { evaluateIdentity } from "./identitySignals.ts";
 import { evaluatePack } from "./policyEngine.ts";
 import { decideCell } from "./gates.ts";
@@ -61,8 +61,15 @@ export function makeIngest(deps: NodeDeps): NodeFn {
     if (state.turn.kind !== "email") return {};
     const email = emailById(state.turn.emailId ?? null);
     if (!email) return {};
-    // Dedupe: email already in the thread state.
-    if (state.emails.some((e) => e.id === email.id)) return {};
+    // Thread merge: a repeat delivery of the same id is a nudge/duplicate, not a
+    // new case — suppress it loudly so the dedup is demo-visible.
+    if (state.emails.some((e) => e.id === email.id)) {
+      await emit(state, "ingest", "system", {
+        duplicateSuppressed: email.id,
+        threadId: email.threadId,
+      });
+      return {};
+    }
 
     const attachmentText = (email.attachments ?? [])
       .map((a) => ("injectedText" in a ? (a as { injectedText?: string }).injectedText : ""))
@@ -89,6 +96,9 @@ export function makeIngest(deps: NodeDeps): NodeFn {
 
     await emit(state, "ingest", "email_inbound", {
       emailId: email.id,
+      threadId: email.threadId,
+      threadSize: state.emails.filter((e) => e.threadId === email.threadId).length + 1,
+      aliasNormalized: true,
       dlpClean: scan.clean,
       dlpHits: scan.hits.map((h) => h.type),
       fraudFlags,
@@ -115,9 +125,14 @@ export function makeTriage(): NodeFn {
     const emailId = state.turn.emailId ?? state.currentEmailId;
     if (!emailId) return {};
     const hits = recordedTriage(emailId);
+    // Language / vulnerability / fraud screening runs in parallel with intent,
+    // negatives included, so step 2 is never "fraud-only" in the trace.
+    const parallel = parallelSignals(emailId);
     await emit(state, "triage", "system", {
       emailId,
       intents: hits.map((h) => h.intentCode),
+      lang: parallel.lang,
+      vulnerable: parallel.vulnerable,
     });
     if (hits.length === 0) {
       // Day-6 materials email: no customer-facing intent.

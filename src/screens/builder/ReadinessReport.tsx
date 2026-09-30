@@ -21,9 +21,11 @@ function evaluate(g: GraduationEntry, negativeColumnPresent: boolean, t: (k: str
     return {
       signable: false,
       headline:
-        g.risk === "R4"
-          ? t("readiness.neverR4Headline")
-          : t("readiness.neverR3Headline"),
+        g.clockDriven
+          ? t("readiness.neverClockHeadline")
+          : g.risk === "R4"
+            ? t("readiness.neverR4Headline")
+            : t("readiness.neverR3Headline"),
       details: [{ text: t("readiness.neverDetail"), pass: null }],
     };
   }
@@ -106,12 +108,12 @@ export function ReadinessReport({
         ) : (
           <XCircle size={14} className="text-red-600" />
         )}
-        {t("readiness.title", { intent: entry.intentCode })}
+        {t("readiness.title", { intent: entry.label[lang] })}
       </h3>
       <p className="mt-0.5 text-[13.5px] text-gray-700">{verdict.headline}</p>
       <ul className="mt-1 space-y-0.5">
         {verdict.details.map((d) => (
-          <li key={d.text} className="flex items-center gap-1 font-mono text-[13px] text-gray-600">
+          <li key={d.text} className="flex items-center gap-1 text-[13px] text-gray-600">
             {d.pass == null ? (
               <span className="w-3.5 text-faint">·</span>
             ) : d.pass ? (
@@ -132,7 +134,7 @@ export function ReadinessReport({
               <CheckCircle2 size={11} className={cn("mt-0.5 shrink-0", c.pass ? "text-emerald-600" : "text-red-600")} />
               <span>
                 <span className="font-medium">{c.label[lang]}</span>
-                <span className="text-faint"> — {c.detail}</span>
+                <span className="text-faint"> — {c.detail[lang]}</span>
               </span>
             </li>
           ))}

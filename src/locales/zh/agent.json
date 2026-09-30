@@ -16,7 +16,7 @@
   "intent": {
     "title": "意图证据 · 分流",
     "subtitle": "录制的检测器输出 · 置信度 < 0.90 转人工",
-    "materialsOnly": "{{id}}：仅材料，无新意图",
+    "materialsOnly": "{{subject}}：仅材料，无新意图",
     "regulated": " · 受监管",
     "conf": "置信度 {{value}}"
   },
@@ -24,7 +24,19 @@
     "title": "政策求值",
     "subtitle": "确定性政策包 · 条件全部由系统数据求值，不看模型心情",
     "empty": "本案尚无政策求值",
-    "degraded": "版本降级"
+    "degraded": "版本降级",
+    "version": "版本 {{v}}",
+    "effects": {
+      "refund_fee": "生效：退还透支费",
+      "deny_refund": "生效：不予退还",
+      "open_dispute_start_clocks": "生效：建争议案并启动法定时钟",
+      "human_review": "生效：转人工复核"
+    },
+    "verdict": {
+      "PASS": "通过",
+      "FAIL": "不通过",
+      "UNKNOWN": "无法判定"
+    }
   },
   "materials": {
     "title": "索要材料",
@@ -46,7 +58,7 @@
     "empty": "暂无草稿",
     "lockedTemplate": "锁定模板",
     "sent": "已发送",
-    "signoff": "{{status}} · {{level}} 签发",
+    "signoff": "审批状态：{{status}}",
     "edit": "编辑",
     "cancel": "取消",
     "saveEdit": "把修改记录进卷宗"

@@ -7,7 +7,15 @@ import type { FaultFlag } from "@/tools/faultController.ts";
 import type { ScreenId } from "@/store/uiStore.ts";
 
 export type BeatAction =
-  | { t: "tooltip"; key: string; ms?: number }
+  /**
+   * Narration beat. `focus` is the data-id the caption is about: the fake
+   * cursor points at it and the element itself is marked with `data-hl`
+   * (styled in index.css), so a caption that names one line of a dense screen
+   * is findable without moving or resizing the page. A target of the form
+   * `<prefix>@last` resolves to the LAST element whose data-id starts with
+   * `<prefix>` — that is how the newest trace line is addressed.
+   */
+  | { t: "tooltip"; key: string; ms?: number; focus?: string }
   | { t: "cursor"; target: string; click?: boolean; type?: string; wait?: number; require?: boolean }
   | { t: "load"; scenario: ScenarioId }
   | { t: "inject"; emailId: string }

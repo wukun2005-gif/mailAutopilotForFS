@@ -29,6 +29,28 @@ function ai(text: string, source = "llm:bridge-v1"): DraftSection {
 const usd = (cents: number): string =>
   `$${(cents / 100).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
+// ── FR-10.2 / FR-10.3 footer ────────────────────────────────────────────────
+// Every customer-facing email carries a locked AI-identity disclosure plus a
+// one-click human handoff. The respond node (FR-5.2) refuses to send email
+// drafts that lack this footer; agent-edited L1/L2 text stays human-owned.
+const DISCLOSURE_SOURCE = "TPL_AI_DISCLOSURE_V1";
+const HANDOFF_SOURCE = "TPL_HANDOFF_V1";
+
+export function disclosureFooter(): DraftSection[] {
+  return [
+    tpl(
+      "You are writing with Larkspur Bank's AI assistant. A supervised automated system " +
+        "drafted this message; it does not change your legal rights or deadlines.",
+      DISCLOSURE_SOURCE,
+    ),
+    tpl(
+      "Prefer a person? Just reply HUMAN and an agent will pick up with the full case " +
+        "history — no need to repeat yourself.",
+      HANDOFF_SOURCE,
+    ),
+  ];
+}
+
 function base(
   id: string,
   intentCode: string,
@@ -63,6 +85,7 @@ export function stepupNudgeLetter(to: string): Draft {
       "Please open the Larkspur app and complete the one-time verification in secure messages; " +
         "your case will continue automatically afterwards.",
     ),
+    ...disclosureFooter(),
   ], { subject: "Action needed: verify in the Larkspur app" });
 }
 
@@ -107,6 +130,7 @@ export function refundConfirmationLetter(to: string): Draft {
         "we will review it. Larkspur Bank Customer Service.",
       "TPL_REFUND_CONFIRM_V2",
     ),
+    ...disclosureFooter(),
   ]);
 }
 
@@ -123,6 +147,7 @@ export function secondWaiverHoldingLetter(to: string): Draft {
       "A supervisor is reviewing your request and will reply within one business day; " +
         "you can also ask us to reconsider if you believe there is a special circumstance.",
     ),
+    ...disclosureFooter(),
   ], { subject: "About your recent overdraft fee" });
 }
 
@@ -142,6 +167,7 @@ export function secondWaiverExplanationDraft(to: string): Draft {
       "A supervisor has reviewed your request and upheld this outcome; " +
         "you can still ask us to reconsider if you believe there is a special circumstance.",
     ),
+    ...disclosureFooter(),
   ], { subject: "About your recent overdraft fee" });
 }
 
@@ -161,6 +187,7 @@ export function cardDeliveryLetter(to: string): Draft {
         "For security, delivery addresses are never sent over email.",
       "TPL_CARD_STATUS_V1",
     ),
+    ...disclosureFooter(),
   ], { subject: "Your replacement card is on its way" });
 }
 
@@ -178,6 +205,7 @@ export function regEReceiptLetter(to: string): Draft {
       "If we ever need to show you sensitive details — like full transaction information — " +
         "the secure messages in the app will walk you through a one-time verification first.",
     ),
+    ...disclosureFooter(),
   ], {
     subject: REGE_RECEIPT_TEMPLATE.subject.en,
     lockedTemplate: true,
@@ -197,6 +225,7 @@ export function pcPostedLetter(to: string): Draft {
         "If we find no error, this credit will be reversed — you will always receive a written explanation first.",
       "REG E 1005.11(c)(2)(i) provisional credit",
     ),
+    ...disclosureFooter(),
   ], { subject: "Provisional credit posted to your account" });
 }
 
@@ -215,6 +244,7 @@ export function transactionDetailLetter(to: string): Draft {
       "Please share only the last four digits of any card, never the full number or CVV.",
       "TPL_PCI_REMINDER_V1",
     ),
+    ...disclosureFooter(),
   ], { subject: "Transaction details you asked for" });
 }
 
@@ -228,6 +258,7 @@ export function materialsAckLetter(to: string, ocrLow = false): Draft {
         : "We received your signed statement and attached it to case DSP-10452. This material is optional; the investigation does not wait on it.",
       "TPL_MATERIALS_ACK_V1",
     ),
+    ...disclosureFooter(),
   ], { subject: "We received your statement" });
 }
 
@@ -247,6 +278,7 @@ export function resultLetterError(to: string): Draft {
         `and your signed statement. Your corrected checking balance is ${usd(correctedCents)}.`,
       "REG E 1005.11(c)(1) correction within 1 business day, notice within 3",
     ),
+    ...disclosureFooter(),
   ], { subject: "Case DSP-10452: investigation complete — error found" });
 }
 
@@ -260,6 +292,7 @@ export function resultLetterNoError(to: string): Draft {
         "and ask us to reconsider within 60 days.",
       "REG E 1005.11(d) written explanation + documents on request",
     ),
+    ...disclosureFooter(),
   ], { subject: "Case DSP-10452: investigation complete" });
 }
 

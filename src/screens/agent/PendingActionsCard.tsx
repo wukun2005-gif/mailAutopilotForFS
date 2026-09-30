@@ -17,10 +17,12 @@ export function PendingActionsCard({ state }: { state: CaseStateType }) {
       <div className="mt-1.5 space-y-1">
         {pending.map((a) => (
           <div key={a.id} className="flex items-center gap-2 rounded bg-white px-2 py-1 text-[13.5px]">
-            <span className="font-mono font-semibold text-navy">{a.id}</span>
-            <span className="text-gray-700">{t(`approvals.${a.id}`, { defaultValue: a.title })}</span>
-            <span className="rounded bg-gray-100 px-1 py-0.5 font-mono text-[12.5px] text-gray-600">
-              {a.kind} · {a.lLevel}
+            <span className="font-semibold text-navy">
+              {t(`approvals.${a.id}`, { defaultValue: a.title })}
+            </span>
+            <span className="rounded bg-gray-100 px-1 py-0.5 text-[12.5px] text-gray-600">
+              {t("common:approvalKind." + a.kind, { defaultValue: a.kind })} ·{" "}
+              {t("customer:trace.levels." + a.lLevel, { defaultValue: a.lLevel })}
             </span>
             {a.amountCents != null && (
               <span className="font-mono text-gray-700">${(a.amountCents / 100).toFixed(2)}</span>

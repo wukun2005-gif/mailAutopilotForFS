@@ -50,7 +50,7 @@
     "verified": "Verified — identity level I3.",
     "fraudSms": {
       "title": "SMS · Larkspur Fraud",
-      "body": "We blocked a suspicious message claiming to be you. We will never ask you to change contact details by email. If unsure, call the number on your card."
+      "body": "We blocked a suspicious email pretending to be you, asking us to change your contact details and mail a replacement card to a new address. No changes were made. If this really was you, or if you have questions, call the number on the back of your card. Do not reply to this message."
     },
     "inboxTitle": "Secure messages",
     "empty": "no messages yet",
@@ -123,7 +123,19 @@
       "NOT_GRADUATED_FAIL_CLOSED": "Not graduated, fail closed to human",
       "POLICY_FAIL_EXPLANATION_DRAFT_L2": "Policy failed, explanation drafted for approval",
       "POLICY_UNKNOWN_FAIL_CLOSED_L0": "Unknown policy, fail closed to human",
-      "HUMAN_RECONSIDERATION_OPEN": "Human reconsideration available"
+      "HUMAN_RECONSIDERATION_OPEN": "Human reconsideration available",
+      "NEVER_NO_TOOL_REGISTERED": "No such tool exists in the email channel",
+      "NEVER_CONFIG_LOCKED": "Locked at the configuration layer, never enabled",
+      "R3_EMAIL_CHANNEL_HARD_NEVER": "High-risk actions are never enabled in the email channel",
+      "R2_I0_INTERNAL_INTAKE_ONLY": "Identity unknown: internal filing and clocks only",
+      "EXTERNAL_LOCKED_TEMPLATE": "External reply is a locked template with no account details",
+      "INTAKE_CLOCKS_STILL_AUTO": "Filing and statutory clocks still run automatically",
+      "R2_WRITE_L2_TO_GRADUATED_L3": "Graduated intent executes automatically at L3",
+      "R1_I2_LOW_SENSITIVITY_FIELDS_ONLY": "I2 identity releases low-sensitivity fields only",
+      "R1_I3": "I3 identity, read and disclosure allowed",
+      "NOT_GRADUATED_FAIL_CLOSED_L0": "Intent not graduated, fail closed to human",
+      "POLICY_VERSION_FALLBACK_CAP_L2": "Policy version degraded, capped at L2",
+      "UNKNOWN_RISK_FAIL_CLOSED": "Risk level unknown, fail closed to human"
     }
   },
   "clock": {
@@ -183,12 +195,15 @@
     "intents": {
       "general_inquiry": "General inquiry",
       "card_delivery_status": "Card delivery status",
+      "card_lock": "Debit card lock",
       "transaction_detail": "Transaction details",
       "od_fee_refund": "Overdraft fee refund",
       "reg_e_intake": "Dispute intake",
       "reg_e_provisional_credit": "Provisional credit",
       "reg_e_adjudication": "Dispute adjudication",
-      "contact_detail_change": "Contact detail change"
+      "contact_detail_change": "Contact detail change",
+      "transaction_lookup": "Transaction lookup",
+      "wire_recall_request": "Wire recall request"
     },
     "levels": {
       "L0": "human only",
@@ -243,7 +258,7 @@
     "toolDone": "{{action}} done",
     "ocrDone": "Attachment text recognition done",
     "mailReceived": "Customer email received",
-    "replySent": "Sent: {{draft}} ({{code}})",
+    "replySent": "Sent: {{draft}}",
     "disputeFiled": "Dispute filed, statutory clocks started",
     "caseClosed": "Case closed",
     "verified14d": "No repeat contact in 14 days, verified and closed",
@@ -251,6 +266,22 @@
     "restarted": "Process restarted, fresh runtime reattached to the same case with no state lost",
     "blockedDraft": "{{draft}} blocked, never sent",
     "handedToAgent": "Handed to agent: {{approval}} pending edits",
-    "draftEdited": "Agent edited draft: {{draft}} (recorded)"
+    "draftEdited": "Agent edited draft: {{draft}} (recorded)",
+    "threadMerge": "same email thread · message {{n}}",
+    "duplicateSuppressed": "Duplicate delivery suppressed — same thread, no new case",
+    "langValues": {
+      "en": "language: English",
+      "other": "language: other"
+    },
+    "vulnValues": {
+      "negative": "vulnerability signals: none",
+      "positive": "vulnerability signals: detected",
+      "other": "vulnerability signals: other"
+    },
+    "reasonFallback": "decided by the matrix rules",
+    "signalFallback": "this verification did not pass",
+    "gateGeneric": "gate evaluation complete",
+    "fr52Pass": "Outbound check: {{draft}} carries AI disclosure and human handoff → released",
+    "fr52Blocked": "{{draft}} blocked: AI disclosure or human handoff missing"
   }
 }

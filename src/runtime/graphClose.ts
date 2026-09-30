@@ -65,6 +65,22 @@ export function makeClose(): NodeFn {
       const confirmed = state.approvals.some(
         (a) => a.id === FRAUD_APPROVAL && a.status === "approved",
       );
+      if (!confirmed) {
+        return { fraud: { ...state.fraud, confirmed }, status: "quarantined" as const };
+      }
+      // Step 9 for fraud cases: on-file warning sent → seal the dossier (WORM)
+      // and close. False-positive releases stay open for the restored thread.
+      const smsDone = state.actions.some(
+        (a) => a.actionType === "notify_onfile" && a.status === "done",
+      );
+      if (smsDone) {
+        await appendEvent({
+          caseId: state.caseId, node: "close", type: "system",
+          data: { closed: true, reason: "fraud confirmed, on-file notified, dossier sealed" },
+          reasonCodes: ["FR-11.1_WORM_SEALED"],
+        });
+        return { fraud: { ...state.fraud, confirmed }, status: "closed" as const };
+      }
       return { fraud: { ...state.fraud, confirmed }, status: "quarantined" as const };
     }
     const pendingApprovals = state.approvals.filter((a) => a.status === "pending");

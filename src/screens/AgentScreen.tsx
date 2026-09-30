@@ -13,9 +13,10 @@ import { PendingActionsCard } from "./agent/PendingActionsCard";
 import { DraftPanel } from "./agent/DraftPanel";
 import { StatutoryClockStrip } from "@/components/ClockBadge";
 import { TraceRail } from "@/components/TraceRail";
+import { SCENARIOS } from "@/runtime/scenarios.ts";
 
 export function AgentScreen() {
-  const { t } = useTranslation(["agent", "common"]);
+  const { t, i18n } = useTranslation(["agent", "common"]);
   const scenarioId = useCaseStore((s) => s.scenarioId);
   const loadScenario = useCaseStore((s) => s.loadScenario);
   const caseState = useCaseStore((s) => s.caseState);
@@ -34,6 +35,11 @@ export function AgentScreen() {
   const pcDone = (caseState.actions ?? []).some(
     (a) => a.actionType === "reg_e_provisional_credit" && a.status === "done",
   );
+  const scen = (
+    SCENARIOS as Record<string, { label: { zh: string; en: string } } | undefined>
+  )[caseState.scenarioId];
+  const scenarioLabel =
+    scen?.label[i18n.language?.startsWith("zh") ? "zh" : "en"] ?? caseState.scenarioId;
 
   return (
     <div className="grid h-full grid-cols-[220px_1fr_340px] gap-2 overflow-hidden p-2">
@@ -46,7 +52,7 @@ export function AgentScreen() {
           <ResumeBanner state={caseState} reattached={reattached} />
           <div className="flex items-center gap-2 rounded-lg border border-line bg-white px-3 py-2">
             <h2 className="text-[16px] font-semibold text-navy">
-              {caseState.caseId} · {caseState.scenarioId}
+              {caseState.caseId} · {scenarioLabel}
             </h2>
             <span className="rounded bg-gray-100 px-1.5 py-0.5 text-[13px] text-gray-600">
               {t(`common:caseStatus.${caseState.status}`)}
@@ -65,7 +71,7 @@ export function AgentScreen() {
       </section>
 
       <aside className="min-h-0 overflow-hidden rounded-lg border border-line bg-white">
-        <TraceRail events={events} />
+        <TraceRail events={events} dataId="s2.tracerail" />
       </aside>
     </div>
   );

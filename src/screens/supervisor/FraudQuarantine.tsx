@@ -51,22 +51,23 @@ export function FraudQuarantine({ state }: { state: CaseStateType }) {
               SPF {email3.auth.spf} · DKIM {email3.auth.dkim} · DMARC {email3.auth.dmarc}
             </div>
           )}
+          {state.identity && (
+            <div className="mt-0.5 font-mono text-[13px] text-red-700">
+              {t("fraud.identityLevel", { level: state.identity.level })}
+            </div>
+          )}
         </div>
         <ul className="mt-2 space-y-1">
           {(state.fraud?.signals ?? []).map((s) => (
             <li key={s} className="flex items-start gap-1.5 rounded bg-white px-2 py-1 text-[13.5px]">
               <Lock size={11} className="mt-0.5 shrink-0 text-red-600" />
-              <span>
-                <span className="font-mono text-[12.5px] text-faint">{s}</span>
-                <br />
-                {signalLabel(s, t)}
-              </span>
+              <span>{signalLabel(s, t)}</span>
             </li>
           ))}
         </ul>
 
         {/* Requested actions are unreachable, not just denied */}
-        <div className="mt-2 rounded border border-line bg-gray-100 p-2">
+        <div className="mt-2 rounded border border-line bg-gray-100 p-2" data-id="s3.fraud.requested">
           <div className="text-[13px] font-semibold uppercase tracking-wide text-gray-500">
             {t("fraud.requestedTitle")}
           </div>
@@ -112,7 +113,7 @@ export function FraudQuarantine({ state }: { state: CaseStateType }) {
           </button>
         </div>
         {smsSent && (
-          <div className="mt-1.5 text-[13.5px] text-emerald-700">
+          <div className="mt-1.5 text-[13.5px] text-emerald-700" data-id="s3.fraud.onfile">
             {t("fraud.smsSent", { phone: CUSTOMER_JANE.phoneOnFile })}
           </div>
         )}

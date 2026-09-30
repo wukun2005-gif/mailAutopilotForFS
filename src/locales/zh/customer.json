@@ -50,7 +50,7 @@
     "verified": "已核验——身份等级 I3。",
     "fraudSms": {
       "title": "短信 · Larkspur 反欺诈",
-      "body": "我们拦截了一封冒充你的可疑邮件。我们永远不会通过邮件要求你更改联系方式。如有疑问，请拨打卡片背面的电话。"
+      "body": "我们拦截了一封冒充你、要求修改联系方式并把补卡寄到新地址的可疑邮件。没有为您做任何更改。如确系本人操作或有疑问，请拨打卡片背面的电话。请勿回复本短信。"
     },
     "inboxTitle": "Secure messages",
     "empty": "暂无消息",
@@ -123,7 +123,19 @@
       "NOT_GRADUATED_FAIL_CLOSED": "未毕业，先关闸转人工",
       "POLICY_FAIL_EXPLANATION_DRAFT_L2": "政策不通过，起草说明待批",
       "POLICY_UNKNOWN_FAIL_CLOSED_L0": "政策未知，先关闸转人工",
-      "HUMAN_RECONSIDERATION_OPEN": "可申请人工复议"
+      "HUMAN_RECONSIDERATION_OPEN": "可申请人工复议",
+      "NEVER_NO_TOOL_REGISTERED": "邮件渠道没有注册这类工具",
+      "NEVER_CONFIG_LOCKED": "配置层锁死，永不开放",
+      "R3_EMAIL_CHANNEL_HARD_NEVER": "高风险动作在邮件渠道永不开放",
+      "R2_I0_INTERNAL_INTAKE_ONLY": "身份不明：只做内部立案与起钟",
+      "EXTERNAL_LOCKED_TEMPLATE": "对外只发不含账户信息的锁定模板",
+      "INTAKE_CLOCKS_STILL_AUTO": "立案与法定时钟照常自动进行",
+      "R2_WRITE_L2_TO_GRADUATED_L3": "已毕业意图按 L3 自动执行",
+      "R1_I2_LOW_SENSITIVITY_FIELDS_ONLY": "I2 身份只放低敏字段",
+      "R1_I3": "I3 身份，可读可披露",
+      "NOT_GRADUATED_FAIL_CLOSED_L0": "意图未毕业，先关闸转人工",
+      "POLICY_VERSION_FALLBACK_CAP_L2": "政策版本降级，上限压到 L2",
+      "UNKNOWN_RISK_FAIL_CLOSED": "风险档未知，先关闸转人工"
     }
   },
   "clock": {
@@ -183,12 +195,15 @@
     "intents": {
       "general_inquiry": "一般咨询",
       "card_delivery_status": "卡片寄送查询",
+      "card_lock": "借记卡锁卡",
       "transaction_detail": "交易明细查询",
       "od_fee_refund": "透支费退费",
       "reg_e_intake": "争议受理",
       "reg_e_provisional_credit": "临时贷记",
       "reg_e_adjudication": "争议裁决",
-      "contact_detail_change": "改联系方式"
+      "contact_detail_change": "改联系方式",
+      "transaction_lookup": "交易查询",
+      "wire_recall_request": "电汇撤销请求"
     },
     "levels": {
       "L0": "只转人工",
@@ -243,7 +258,7 @@
     "toolDone": "{{action}}完成",
     "ocrDone": "附件文字识别完成",
     "mailReceived": "收到客户邮件",
-    "replySent": "发出：{{draft}}（{{code}}）",
+    "replySent": "发出：{{draft}}",
     "disputeFiled": "争议已受理，法定时钟启动",
     "caseClosed": "案件办结",
     "verified14d": "14 天无重复来信，核验通过办结",
@@ -251,6 +266,22 @@
     "restarted": "进程重启，新 runtime 已接管同一案件，状态无丢失",
     "blockedDraft": "{{draft}}被拦截未发出",
     "handedToAgent": "转坐席处理：{{approval}}待改",
-    "draftEdited": "坐席已改草稿：{{draft}}（已记录）"
+    "draftEdited": "坐席已改草稿：{{draft}}（已记录）",
+    "threadMerge": "同一邮件线程 · 第 {{n}} 封",
+    "duplicateSuppressed": "重复送达已去重——同一线程，不新建案件",
+    "langValues": {
+      "en": "语言：英语",
+      "other": "语言：其他"
+    },
+    "vulnValues": {
+      "negative": "弱势信号：未命中",
+      "positive": "弱势信号：命中",
+      "other": "弱势信号：其他"
+    },
+    "reasonFallback": "按矩阵规则判定",
+    "signalFallback": "该项核验未通过",
+    "gateGeneric": "闸门已完成判定",
+    "fr52Pass": "外发检查：{{draft}} 含 AI 披露与转人工入口 → 放行",
+    "fr52Blocked": "{{draft}} 拦截：缺少 AI 披露或转人工入口"
   }
 }

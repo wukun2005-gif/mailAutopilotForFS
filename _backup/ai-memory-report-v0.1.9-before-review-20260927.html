@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Memory for Financial Services — 产品定位调研报告 v0.1.9</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230f766e'/%3E%3Ccircle cx='10' cy='11' r='3' fill='none' stroke='white' stroke-width='2'/%3E%3Ccircle cx='22' cy='11' r='3' fill='none' stroke='white' stroke-width='2'/%3E%3Ccircle cx='16' cy='22' r='3' fill='%235eead4'/%3E%3Cpath d='M12.5 12.5 14 19.5M19.5 12.5 18 19.5M13 11h6' stroke='white' stroke-width='1.6'/%3E%3C/svg%3E">
+<style>
+:root{
+  --paper:#f5f3ec; --card:#ffffff; --ink:#1c2430; --soft:#4b5563; --faint:#6b7280;
+  --line:#e3dfd4; --line2:#efece3;
+  --accent:#0f766e; --accent-d:#0b5852; --accent-s:#ccfbf1; --navy:#16324f; --navy-s:#e7eef5;
+  --fact:#1d4ed8; --fact-bg:#e0ebff;
+  --ana:#b45309; --ana-bg:#fdf0d7;
+  --hyp:#6d28d9; --hyp-bg:#ede9fe;
+  --todo:#6b7280; --todo-bg:#f1f1ef;
+  --yes:#047857; --yes-bg:#d3f5e5;
+  --part:#b45309; --part-bg:#fdeec8;
+  --no:#be123c; --no-bg:#ffe1e8;
+  --unk:#6b7280; --unk-bg:#eceeea;
+  --danger:#9f1239;
+  --shadow:0 1px 2px rgba(20,30,40,.05),0 4px 16px rgba(20,30,40,.05);
+  --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Segoe UI",Roboto,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);
+  font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased;}
+a{color:var(--accent-d);text-decoration:none;word-break:break-all}
+a:hover{text-decoration:underline}
+code{font-family:var(--mono);font-size:.86em;background:#efece3;padding:.1em .35em;border-radius:4px}
+h1,h2,h3,h4{line-height:1.35;color:#13202e;font-weight:700}
+::selection{background:var(--accent-s)}
+
+/* layout */
+.sidebar{position:fixed;top:0;left:0;bottom:0;width:268px;background:#fbfaf6;border-right:1px solid var(--line);
+  overflow-y:auto;padding:22px 14px 40px;z-index:40}
+.sidebar .brand{font-size:12.5px;font-weight:700;letter-spacing:.08em;color:var(--accent-d);
+  text-transform:uppercase;padding:0 10px 10px;border-bottom:1px solid var(--line);margin-bottom:12px}
+.sidebar .brand small{display:block;color:var(--faint);font-weight:500;letter-spacing:0;text-transform:none;margin-top:3px;font-size:11.5px}
+.nav-group{font-size:11px;color:var(--faint);font-weight:700;letter-spacing:.1em;margin:14px 10px 5px}
+.nav-item{display:block;padding:5px 10px;border-radius:6px;font-size:13px;color:#374151;line-height:1.35;border-left:3px solid transparent}
+.nav-item:hover{background:#f0eee6;text-decoration:none}
+.nav-item.active{background:var(--accent-s);color:var(--accent-d);font-weight:600;border-left-color:var(--accent)}
+.nav-item .n{display:inline-block;width:26px;color:var(--faint);font-family:var(--mono);font-size:11px}
+.main{margin-left:268px;min-width:0}
+.wrap{max-width:940px;margin:0 auto;padding:0 36px 80px}
+.topbar{position:sticky;top:0;z-index:30;background:rgba(245,243,236,.92);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);padding:10px 36px;display:none;align-items:center;gap:12px}
+.topbar strong{font-size:14px}
+.menu-btn,.print-btn,#toTop{border:1px solid var(--line);background:#fff;border-radius:7px;padding:6px 12px;
+  font-size:13px;color:var(--ink);cursor:pointer;font-family:var(--sans)}
+.menu-btn:hover,.print-btn:hover,#toTop:hover{border-color:var(--accent);color:var(--accent-d)}
+#toTop{position:fixed;right:26px;bottom:26px;width:42px;height:42px;border-radius:50%;display:none;
+  align-items:center;justify-content:center;box-shadow:var(--shadow);z-index:35;font-size:17px;padding:0}
+
+/* hero */
+.hero{background:linear-gradient(150deg,#12324a 0%,#0f4f4c 100%);color:#eaf2f4;margin:0 -36px 0;padding:54px 56px 44px;border-bottom:4px solid var(--accent)}
+.hero .kicker{font-size:12.5px;letter-spacing:.18em;text-transform:uppercase;color:#7fd3c9;font-weight:700}
+.hero h1{color:#fff;font-size:33px;margin:12px 0 6px;letter-spacing:-.01em}
+.hero .sub{font-size:16px;color:#c7d9dc;margin:0 0 22px;max-width:740px}
+.hero .meta{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.16);
+  border:1px solid rgba(255,255,255,.16);border-radius:10px;overflow:hidden;margin-top:8px}
+.hero .meta div{background:rgba(13,38,52,.55);padding:11px 14px}
+.hero .meta span{display:block;font-size:11px;color:#9fc0c2;letter-spacing:.05em;margin-bottom:2px}
+.hero .meta b{font-size:13.5px;font-weight:600;color:#fff}
+.hero .note{margin-top:18px;font-size:12.5px;color:#a9c4c7}
+
+/* sections */
+section{padding-top:46px}
+.sec-head{display:flex;align-items:baseline;gap:14px;border-bottom:2px solid #13202e;padding-bottom:9px;margin-bottom:20px}
+.sec-head .num{font-family:var(--mono);font-size:13px;color:var(--accent);font-weight:700}
+.sec-head h2{font-size:24px;margin:0}
+h3{font-size:17.5px;margin:28px 0 10px;padding-left:11px;border-left:4px solid var(--accent)}
+h4{font-size:15px;margin:20px 0 7px;color:#22303f}
+p{margin:9px 0}
+ul,ol{margin:8px 0;padding-left:23px}
+li{margin:4px 0}
+.small{font-size:12.8px;color:var(--faint)}
+.lead{font-size:15.5px;color:#334155}
+
+/* badges & callouts */
+.badge{display:inline-block;font-size:11px;font-weight:700;padding:1px 8px;border-radius:20px;white-space:nowrap;line-height:1.7;vertical-align:.05em}
+.b-fact{background:var(--fact-bg);color:var(--fact)}
+.b-ana{background:var(--ana-bg);color:var(--ana)}
+.b-hyp{background:var(--hyp-bg);color:var(--hyp)}
+.b-todo{background:var(--todo-bg);color:var(--todo)}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+.callout{border-radius:10px;padding:14px 18px;margin:16px 0;border:1px solid var(--line);background:var(--card);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:13.5px;margin-bottom:5px;display:block}
+.callout.key{border-left:5px solid var(--accent);background:#f2faf8}
+.callout.warn{border-left:5px solid var(--part);background:#fef9ef}
+.callout.gap{border-left:5px solid var(--no);background:#fef3f5}
+.callout.note{border-left:5px solid #94a3b8;background:#f8f8f6}
+.callout p:first-child{margin-top:0}.callout p:last-child{margin-bottom:0}
+.kpi-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px 15px;box-shadow:var(--shadow)}
+.kpi .v{font-size:20px;font-weight:800;color:var(--accent-d);font-family:var(--mono)}
+.kpi .l{font-size:12px;color:var(--faint);margin-top:2px;line-height:1.4}
+
+/* tables */
+.table-wrap{overflow-x:auto;margin:14px 0;border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);background:#fff}
+table{border-collapse:collapse;width:100%;font-size:13px;line-height:1.55}
+table.fixed{table-layout:fixed}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line2);vertical-align:top;text-align:left}
+thead th{background:#16324f;color:#eef4f7;font-weight:600;font-size:12.3px;position:sticky;top:0;z-index:2}
+tbody tr:nth-child(even){background:#faf9f5}
+tbody tr:hover{background:#f1f8f6}
+.matrix{font-size:12px;min-width:880px}
+.matrix th,.matrix td{padding:6px 8px}
+.matrix td:first-child,.matrix th:first-child{position:sticky;left:0;z-index:1;background:#fbfaf6;font-weight:600;white-space:nowrap}
+.matrix thead th:first-child{z-index:3;background:#16324f}
+.matrix tbody tr:nth-child(even) td:first-child{background:#f4f2ea}
+.s{display:inline-block;min-width:20px;text-align:center;font-weight:800;border-radius:5px;padding:0 5px;font-size:11.5px}
+.s-y{background:var(--yes-bg);color:var(--yes)} .s-p{background:var(--part-bg);color:var(--part)}
+.s-n{background:var(--no-bg);color:var(--no)} .s-u{background:var(--unk-bg);color:var(--unk)}
+.m-lab{background:#ffe1e8;color:var(--no)} .m-early{background:#fdeec8;color:var(--part)} .m-prod{background:#d3f5e5;color:var(--yes)}
+.mat-m{display:inline-block;font-size:10.8px;font-weight:700;padding:1px 7px;border-radius:20px;white-space:nowrap}
+.stars{color:var(--accent);letter-spacing:1px;font-weight:700;font-size:12px}
+.tag{display:inline-block;font-size:11px;background:#eef2f4;color:#334155;border-radius:5px;padding:0 6px;margin:1px 2px 1px 0;white-space:nowrap}
+
+/* vendor cards */
+details.vendor{border:1px solid var(--line);border-radius:9px;background:#fff;margin:9px 0;box-shadow:var(--shadow)}
+details.vendor summary{cursor:pointer;padding:11px 16px;font-weight:600;font-size:13.8px;list-style:none;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+details.vendor summary::-webkit-details-marker{display:none}
+details.vendor summary::before{content:"+";font-family:var(--mono);color:var(--accent);font-size:17px;font-weight:700;width:16px}
+details.vendor[open] summary::before{content:"–"}
+details.vendor summary .vrole{font-weight:400;font-size:11.5px;color:var(--faint)}
+details.vendor .vbody{padding:2px 16px 13px 42px;font-size:13px;border-top:1px dashed var(--line)}
+details.vendor .vbody p{margin:7px 0}
+.vflag{font-size:10.5px;font-weight:700;padding:1px 8px;border-radius:20px;margin-left:auto}
+.flag-hot{background:#ffe1e8;color:var(--no)} .flag-ref{background:#e0ebff;color:var(--fact)} .flag-bg{background:#eceeea;color:var(--faint)}
+
+/* diagrams */
+.fig{background:#fff;border:1px solid var(--line);border-radius:10px;padding:20px 22px;margin:16px 0;box-shadow:var(--shadow)}
+.fig .cap{font-size:12px;color:var(--faint);margin-top:10px;text-align:center}
+.arch{display:grid;grid-template-rows:auto auto auto;gap:10px;justify-items:center}
+.arch .box{border-radius:9px;padding:11px 18px;font-size:13px;font-weight:600;text-align:center;min-width:300px}
+.arch .b1{background:#16324f;color:#fff}
+.arch .b2{background:var(--accent-s);border:1.5px solid var(--accent);color:var(--accent-d)}
+.arch .b3{background:#fdf0d7;border:1.5px solid var(--part);color:var(--ana)}
+.arch .b4{background:#eef2f4;border:1.5px solid #94a3b8;color:#334155}
+.arch .b5{background:#ffe1e8;border:1.5px solid var(--no);color:var(--no)}
+.arch .arrow{color:var(--faint);font-family:var(--mono);font-size:16px;line-height:1}
+.arch .row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;width:100%}
+.arch-key{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:10px;font-size:12px;font-weight:600}
+.arch-key span{border-radius:7px;padding:4px 10px;border:1.5px solid transparent}
+.arch-key .kb1{background:#16324f;color:#fff}
+.arch-key .kb2{background:var(--accent-s);border-color:var(--accent);color:var(--accent-d)}
+.arch-key .kb3{background:#fdf0d7;border-color:var(--part);color:var(--ana)}
+.arch-key .kb4{background:#eef2f4;border-color:#94a3b8;color:#334155}
+.arch-key .kb5{background:#ffe1e8;border-color:var(--no);color:var(--no)}
+.arch-key .knote{border:none;color:var(--faint);font-weight:400;align-self:center}
+
+/* layer cards */
+.layers{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0}
+.layer{border-radius:10px;padding:13px 14px;color:#fff;font-size:12.3px;min-height:150px;box-shadow:var(--shadow)}
+.layer .lt{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;opacity:.85;text-transform:uppercase}
+.layer b{display:block;font-size:14.5px;margin:5px 0 6px}
+.layer span{line-height:1.55;display:block;opacity:.95}
+.l1{background:#94a3b8}.l2{background:#0e7490}.l3{background:#0b5852}.l4{background:#6b7280}
+
+/* persona */
+.persona-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.pcard{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 16px;box-shadow:var(--shadow)}
+.pcard h4{margin:0 0 4px;color:var(--accent-d)}
+.pcard .who{font-size:11.5px;color:var(--faint);margin-bottom:7px}
+
+/* timeline */
+.tl{margin:18px 0;padding-left:4px}
+.tlrow{display:grid;grid-template-columns:118px 26px 1fr;gap:0 12px;align-items:start}
+.tlrow .td{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--accent-d);text-align:right;padding-top:3px}
+.tlrow .tm{position:relative;align-self:stretch;display:flex;justify-content:center}
+.tlrow .tm::before{content:"";width:11px;height:11px;border-radius:50%;background:var(--accent);border:2.5px solid #fff;box-shadow:0 0 0 2px var(--accent);margin-top:5px;z-index:1}
+.tlrow .tm::after{content:"";position:absolute;top:14px;bottom:-14px;width:2px;background:#bcd9d4}
+.tlrow:last-child .tm::after{display:none}
+.tlrow .tc{background:#fff;border:1px solid var(--line);border-radius:9px;padding:9px 13px;margin-bottom:14px;box-shadow:var(--shadow);font-size:12.8px}
+.tlrow .tc b{font-size:13.3px}
+
+/* level ladder */
+.levels{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0}
+.lvl{border-radius:10px;padding:14px 16px;box-shadow:var(--shadow);background:#fff;border:1px solid var(--line)}
+.lvl.lv0{border-top:4px solid #94a3b8}.lvl.lv1{border-top:4px solid #0e7490}.lvl.lv2{border-top:4px solid var(--no)}
+.lvl h4{margin:0 0 6px}.lvl .gap-tag{font-size:11px;font-weight:700;color:var(--no);margin-top:8px;display:inline-block;background:var(--no-bg);padding:2px 9px;border-radius:20px}
+
+/* FOR vs ABOUT */
+.ns-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+.ns{border-radius:11px;padding:16px 18px;box-shadow:var(--shadow)}
+.ns.for{background:#f2faf8;border:1.5px solid var(--accent)}
+.ns.about{background:#fef3f5;border:1.5px solid var(--no)}
+.ns h4{margin:0 0 8px;font-size:15.5px}
+.ns .nsd{font-size:12.5px;color:var(--soft);margin-bottom:8px}
+.ns ul{margin:6px 0 0;padding-left:19px;font-size:12.8px}
+
+/* mock UI */
+.mock{border:1px solid #c9c5b8;border-radius:12px;overflow:hidden;box-shadow:var(--shadow);margin:16px 0;background:#fff}
+.mock .mbar{background:#16324f;color:#dbe7ee;font-size:12px;padding:8px 14px;display:flex;align-items:center;gap:8px;font-weight:600}
+.mock .mbar .dot{width:9px;height:9px;border-radius:50%;background:#5eead4}
+.mock .mbody{padding:12px 16px;font-size:12.8px}
+.mrow{display:grid;grid-template-columns:1fr auto;gap:6px 12px;padding:9px 4px;border-bottom:1px dashed var(--line2);align-items:start}
+.mrow:last-child{border-bottom:none}
+.mrow .mtext b{font-size:13px}
+.mrow .mmeta{font-size:11px;color:var(--faint);margin-top:2px}
+.mconf{font-family:var(--mono);font-size:10.5px;font-weight:700;padding:1px 7px;border-radius:20px;white-space:nowrap}
+.c-hi{background:var(--yes-bg);color:var(--yes)}.c-mid{background:var(--part-bg);color:var(--part)}.c-lo{background:var(--no-bg);color:var(--no)}
+.mact{font-size:11px;color:var(--accent-d);font-weight:700;white-space:nowrap}
+
+/* bars */
+.bars{margin:10px 0}
+.bar-row{display:grid;grid-template-columns:210px 1fr 110px;gap:10px;align-items:center;margin:7px 0;font-size:12.5px}
+.bar-track{background:#e9e6dc;border-radius:6px;height:19px;position:relative;overflow:hidden}
+.bar-fill{position:absolute;left:0;top:0;bottom:0;border-radius:6px;background:linear-gradient(90deg,#0f766e,#14b8a6)}
+.bar-fill.alt{background:linear-gradient(90deg,#16324f,#3b6ea5)}
+.bar-fill.warn{background:linear-gradient(90deg,#b45309,#f59e0b)}
+.bar-val{font-family:var(--mono);font-size:11.5px;color:var(--soft)}
+
+/* refs */
+.refs details{border:1px solid var(--line);border-radius:9px;background:#fff;margin:8px 0}
+.refs summary{cursor:pointer;padding:9px 15px;font-weight:600;font-size:13.5px;list-style:none}
+.refs summary::-webkit-details-marker{display:none}
+.refs summary::before{content:"▸ ";color:var(--accent)}
+.refs details[open] summary::before{content:"▾ "}
+.refs ul{font-size:12.3px;margin:4px 0 10px}
+.refs li{margin:3px 0;word-break:break-all}
+
+@media (max-width:980px){
+  .sidebar{transform:translateX(-100%);transition:transform .25s;box-shadow:0 0 40px rgba(0,0,0,.2);width:280px}
+  .sidebar.open{transform:none}
+  .main{margin-left:0}.topbar{display:flex}
+  .wrap{padding:0 18px 60px}.hero{margin:0 -18px;padding:36px 24px}
+  .hero .meta{grid-template-columns:repeat(2,1fr)}.kpi-strip{grid-template-columns:repeat(2,1fr)}
+  .persona-grid,.ns-grid{grid-template-columns:1fr}.layers,.levels{grid-template-columns:1fr}
+  .bar-row{grid-template-columns:130px 1fr 96px;font-size:11.5px}
+  .tlrow{grid-template-columns:84px 22px 1fr}
+  .fig{padding:14px}
+  .arch{justify-items:stretch}
+  .arch .box{min-width:0!important;width:100%}
+  .arch .row{flex-direction:column;gap:10px}
+  .table-wrap table.fixed:not(.narrow){min-width:620px}
+  .table-wrap .matrix{min-width:880px}
+}
+@media print{
+  .sidebar,.topbar,#toTop,.menu-btn,.print-btn{display:none!important}
+  .main{margin:0}.wrap{max-width:100%;padding:0}
+  .hero{margin:0;background:#fff!important;color:#000;border-bottom:2px solid #000}
+  .hero h1{color:#000}.hero .sub,.hero .note{color:#333}
+  details:not([open]) > *:not(summary){display:block!important}
+  body{background:#fff;font-size:11.5px}
+  .table-wrap,.callout,.fig,.pcard,.kpi,.mock{box-shadow:none}
+}
+</style>
+</head>
+<body>
+
+<nav class="sidebar" id="sidebar">
+  <div class="brand">AI Memory · FS<small>产品定位调研 · v0.1.9</small></div>
+  <div class="nav-group">概览</div>
+  <a class="nav-item" href="#summary"><span class="n">00</span>执行摘要 · 核心结论</a>
+  <div class="nav-group">A · 领域扫盲</div>
+  <a class="nav-item" href="#primer"><span class="n">01</span>白话 Primer · 术语表</a>
+  <a class="nav-item" href="#model"><span class="n">02</span>记忆分层 · Persona · 剧本</a>
+  <div class="nav-group">B · 市场调研</div>
+  <a class="nav-item" href="#market"><span class="n">03</span>品类成型 · 成熟度三层</a>
+  <a class="nav-item" href="#compete"><span class="n">04</span>竞品矩阵 · 逐家证据</a>
+  <a class="nav-item" href="#academia"><span class="n">05</span>学术界地图（2023–2026）</a>
+  <a class="nav-item" href="#oss"><span class="n">06</span>开源生态（GitHub 实查）</a>
+  <a class="nav-item" href="#economics"><span class="n">07</span>市场规模 · 采购经济</a>
+  <div class="nav-group">C · 治理（核心主张）</div>
+  <a class="nav-item" href="#governed"><span class="n">08</span>Governed Memory · 双赢机制</a>
+  <a class="nav-item" href="#regulation"><span class="n">09</span>监管全景（硬约束）</a>
+  <div class="nav-group">D · 产品判断</div>
+  <a class="nav-item" href="#verdict"><span class="n">10</span>会不会白做 · Build vs Buy</a>
+  <a class="nav-item" href="#ux"><span class="n">11</span>核心体验 · 数据流设计</a>
+  <a class="nav-item" href="#risks"><span class="n">12</span>风险地图</a>
+  <a class="nav-item" href="#metrics"><span class="n">13</span>指标 · ROI 量化</a>
+  <a class="nav-item" href="#strategy"><span class="n">14</span>差异化 · 红线 · 备选</a>
+  <div class="nav-group">附录</div>
+  <a class="nav-item" href="#open"><span class="n">15</span>待核实清单</a>
+  <a class="nav-item" href="#refs"><span class="n">16</span>完整参考资料（URL）</a>
+  <a class="nav-item" href="#version"><span class="n">17</span>版本记录</a>
+</nav>
+
+<div class="main">
+<div class="topbar">
+  <button class="menu-btn" id="menuBtn" type="button">目录</button>
+  <strong>AI Memory for FS — 产品定位调研 v0.1.9</strong>
+  <span style="flex:1"></span>
+  <button class="print-btn" id="printBtn" type="button">打印 / 存 PDF</button>
+</div>
+<div class="wrap">
+
+<header class="hero" id="top">
+  <div class="kicker">Product Positioning Research · AI Memory for Financial Services</div>
+  <h1>AI Memory for Financial Services<br>产品定位调研报告（v0.1.9）</h1>
+  <p class="sub">围绕"跨 voice / chat / SMS / email、跨时间的客户记忆（AI Memory）"做五条线实查：CCaaS/CRM 成熟厂商、AI 新贵与横向记忆基础设施、学术界进展、高 star 开源项目、市场规模与金融监管。目的：判断下一步 PRD 方向是否有价值、有人买、有差异点，会不会白做。</p>
+  <div class="meta">
+    <div><span>版本 / 日期</span><b>v0.1.9 · 2026-09-26</b></div>
+    <div><span>文档定位</span><b>产品调研 · 领域入门可读</b></div>
+    <div><span>状态</span><b>调研阶段 · 未最终决策</b></div>
+    <div><span>证据基准日</span><b>2026-09-24/25 实查</b></div>
+  </div>
+  <div class="legend" style="margin-top:18px">
+    <span class="badge b-fact">事实 = 外部来源可溯源</span>
+    <span class="badge b-ana">分析 = 基于事实的推理</span>
+    <span class="badge b-hyp">假设 = 未经市场验证</span>
+    <span class="badge b-todo">待核实 = 公开渠道查不到，不编造</span>
+  </div>
+  <p class="note">正文简体中文；业界术语保留英文原文，首次出现配中文大白话。厂商营销数字均标注口径。GitHub star/license 为 2026-09-24 GitHub API 实查；arXiv 编号经本轮核实。</p>
+</header>
+
+<!-- ============ 00 SUMMARY ============ -->
+<section id="summary">
+  <div class="sec-head"><span class="num">00</span><h2>执行摘要：核心结论</h2></div>
+
+  <div class="callout key"><span class="ct">一句话结论</span>
+    <p><b>不会白做，但钱不在"记忆技术"，在"受治理的记忆产品层（governed memory product layer）"。</b> 记忆抽取/召回的开源技术已经成熟（Mem0 65.9k★、Graphiti 31.1k★），而"带时间维、可审计、可删除、用途隔离、客户可见可控"的 Level 2 记忆，在整个客服产品层<b>公开材料未见有人交付</b>——这正是 CCaaS 厂商相对记忆基础设施厂商和 AI 新贵的结构性空档（判定口径：截至 2026-09-25 的公开站点、发布记录与案例页）。窗口约 12–18 个月。</p>
+  </div>
+
+  <div class="kpi-strip">
+    <div class="kpi"><div class="v">2025-11</div><div class="l">"卖记忆"作为独立品类的起点：Sierra 发布 Agent Data Platform；Twilio 2026-05 已明码标价</div></div>
+    <div class="kpi"><div class="v">Level 2 = 空</div><div class="l">带时间维/可审计/可删除/用途隔离/客户可见的记忆，客服产品层公开材料未见有人交付，仅 infra 触达（判定口径见 §04）</div></div>
+    <div class="kpi"><div class="v">~98%</div><div class="l">GhostWriter 实验中记忆投毒注入成功率；平均激活率约 60%——记忆是新攻击面</div></div>
+    <div class="kpi"><div class="v">57.7% vs 91.8%</div><div class="l">LongMemEval（同模型 GPT-4o）：全量读历史 91.8% vs ChatGPT 自带记忆 57.7%（mini 71.1%、Coze 33%；商用组为 Appendix B 97 题子集口径）→ 商用记忆只还原 6–8 成 → 记忆只配参考，不配自动决策</div></div>
+  </div>
+
+  <h3>六条核心发现</h3>
+  <ol>
+    <li><b>品类刚被命名，整层空档真实存在。</b><span class="badge b-fact">事实</span>（发布条目）<span class="badge b-ana">分析</span>（空档判定） Twilio Conversation Memory（GA 2026-05-06，$0.0028/1k 字生成 + $0.007/次召回）、Salesforce Data 360 Persistent Agent Memory（发布日 2026-01 <span class="badge b-todo">待核实</span>）、NICE Enlighten XM（2024-03）、Google Memory Bank（2025-07 preview）把记忆做成一等功能；但截至 2026-09-25 的公开材料里各家都停在 Level 0/1（见 §03），<b>Level 2 治理层在客服产品里未见有人交付</b>——"空档"是本报告基于公开材料的判定，不是可引用的第三方结论。</li>
+    <li><b>最大威胁是 Sierra，不是 infra 公司。</b><span class="badge b-fact">事实</span>（发布/上线条目）<span class="badge b-ana">分析</span>（缺口判定） Sierra 2025-11 发 Agent Data Platform、2026-07 Horizon 明写 persistent memory、2026-08 BBVA 上线 long-running agent（估值 &gt;$15B）。但其记忆是通用叙事，截至 2026-09-25 公开材料<b>未见按金融监管把服务/营销/授信切开，也未见客户侧记忆台账</b>。</li>
+    <li><b>Talkdesk 现状缺口具体而清晰。</b><span class="badge b-fact">事实</span> Data Cloud 是 RAG 语料层（记忆的原料）、Copilot 是历史展示、Navigator 是营销画像；公开站点<b>找不到一个被命名的客户级长期记忆产品，更没有客户可看/可删的记忆台账</b>。底座好（全渠道编排 + FS 行业云 + 开箱对接 6 家核心/数字银行平台——core：Fiserv/FIS/Jack Henry；digital：Q2/Candescent/Alkami），缺的正是这一层。</li>
+    <li><b>买 Mem0/Zep ≠ 有产品：中间隔着四堵墙，且这四层由平台商盖而非银行自建。</b><span class="badge b-ana">分析</span> 四墙=①跨渠道身份合并（合并错=把 A 的贷款信息念给 B）；②服务/营销/授信用途隔离；③删除权级联到向量/录音/CRM/备份；④contact center 业务语义（case、dispute、Reg E 时钟）。①③跨厂商、单体银行推不动别家 roadmap；②④对滩头的中型银行是 5 年平台维护而非项目；大行自建得动，故滩头不选大行（详见 §10.3）。</li>
+    <li><b>合规×体验存在双赢解，且是一级主张。</b><span class="badge b-ana">分析</span> "remember FOR the customer（服务记忆，默认开、客户可见、锁死服务用途）" 与 "remember ABOUT the customer（营销画像，单独同意、默认关、一键删）" 的切分，是 GDPR、FTC、FCRA/ECOA、PIPL 第 24 条共同画出的边界。十个机制每条同时改善体验与合规（§08）。</li>
+    <li><b>记忆刚出现独立市场科目，但银行预算仍挂体验结果。</b><span class="badge b-ana">分析</span> 更正（外部评审，v0.1.5）：此前"没有任何主流分析师机构发布 agent memory 独立市场报告"不成立——Mordor《Agentic AI Orchestration and Memory Systems Market》$6.27B(2025)→$28.45B(2030)、CAGR 35.32%；Gartner《Innovation Insight for AI Agent Memory Platforms》(2026-08-17，doc 8269957——条目元数据 2026-09-26 已独立复核：官网 documents/8269957 标题/编号/发布日一致；全文付费墙<span class="badge b-todo">待核实</span>)。分析师建科目反而佐证品类成型（§03）；但美国中型银行采购线目仍无"记忆平台"，银行不为记忆买单，为"不重复问客户、一次解决"买单——GTM 结论不变。</li>
+  </ol>
+
+  <div class="callout warn"><span class="ct">滩头建议（工作假设，待决策）</span>
+    <p style="margin-bottom:6px"><b>滩头：</b>美国中型银行/信用联社的语音存量客户加购（非新采购）；<b>入口：voice → 跨渠道续接</b>（电话认证最强、记忆价值最直观，AI voice agent 是增速最快的盘；voice 是 GTM 首入场景而非产品边界，全渠道都记，台账页在 App/网银等认证数字面上、由 voice 通话后下发链接触发，见 §10）。</p>
+    <p style="margin-bottom:6px"><b>差异化钉子（wedge）：</b>"认证后立刻认出你 + 在办案件 brief + 客户能看能删的记忆台账"——不是"记得多牢"，而是"记得住、且记得合规、客户管得了"。</p>
+    <p style="margin-bottom:0"><b>Build vs Buy：</b>存储买 pgvector/Qdrant；记忆引擎先用 graphiti/mem0 跑 PoC、12–18 个月内把核心 schema 握在自己手里；<b>受治理记忆产品层必须自研</b>。</p>
+  </div>
+</section>
+
+<!-- ============ 01 PRIMER ============ -->
+<section id="primer">
+  <div class="sec-head"><span class="num">01</span><h2>白话 Primer：AI Memory 是什么，不是什么</h2></div>
+
+  <h3>1.1 一句话定义</h3>
+  <p><b>AI Memory = 把分散在跨渠道、跨时间对话里的事实，自动抽成结构化、可召回、可治理的"客户档案记忆层"，让下一次（无论哪个渠道）的坐席或 AI agent 不用再问客户一遍。</b></p>
+  <p>消费级类比：ChatGPT 的 Memory（记住"用户偏好简短回答"，下次直接用）。本题要做的是它的<b>企业级、金融客服版</b>——服务对象是银行的客户、坐席、管理者和管理员。</p>
+
+  <h3>1.2 和四个常被混淆的东西的区别 <span class="badge b-ana">分析</span></h3>
+  <div class="table-wrap"><table class="fixed">
+    <colgroup><col style="width:17%"><col style="width:33%"><col style="width:50%"></colgroup>
+    <thead><tr><th>对比对象</th><th>它是什么</th><th>和 AI Memory 的区别</th></tr></thead>
+    <tbody>
+      <tr><td><b>CRM 备注</b></td><td>坐席手动打字记的客户笔记</td><td>记忆由 AI <b>自动从对话抽取</b>、结构化、带时间和置信度、跨渠道召回；CRM 备注靠人写、人读、格式乱、没人看</td></tr>
+      <tr><td><b>聊天记录 / 录音</b></td><td>原始全文归档</td><td>原文是"原料"（进 WORM 审计库）；记忆是从中<b>提炼的事实条目</b>（进记忆层）。原文不进向量库</td></tr>
+      <tr><td><b>CDP</b><br>（Customer Data Platform）</td><td>把 App/网站行为事件攒起来，主要服务<b>营销</b></td><td>CDP 回答"这是谁、点过什么、买过什么"；记忆回答"他这次说了什么、上次说到哪、我们承诺过什么"。<b>对接消费银行已有 CDP，不重做营销 CDP</b></td></tr>
+      <tr><td><b>RAG 拼历史</b></td><td>每次现捞历史工单塞进 prompt</td><td>RAG 没有 per-customer 抽象，<b>换个渠道就失忆</b>，也没有"哪条事实何时为真、何时过期"；记忆是独立的客户级存储</td></tr>
+    </tbody>
+  </table></div>
+  <p class="small">Twilio 官方对分工的原话："Segment handles data unification and activation while Conversation Memory adds the observation extraction, semantic retrieval, and conversation context"（2026-07-20）。</p>
+
+  <h3>1.3 术语表（首次出现的黑话，大白话）</h3>
+  <div class="table-wrap"><table class="fixed narrow">
+    <colgroup><col style="width:24%"><col style="width:76%"></colgroup>
+    <thead><tr><th>术语</th><th>大白话</th></tr></thead>
+    <tbody>
+      <tr><td><b>CCaaS</b></td><td>云客服中心（Contact Center as a Service）：坐席在浏览器里接电话/聊天，厂商在云端管路由、录音、质检。Talkdesk、NICE、Genesys、Amazon Connect 属此</td></tr>
+      <tr><td><b>agent</b></td><td>两个含义，注意区分：①<b>真人坐席</b>（contact center agent，接电话的客服员工）；②<b>AI agent</b>（能自己理解意图、查系统、多步行动的 AI 程序）。本报告"坐席"指真人</td></tr>
+      <tr><td><b>AI Memory / 记忆</b></td><td>把过去对话里"值得记住的事实"写下来、下次能翻出来用。区别于把整段聊天记录塞进上下文（那叫 RAG/长上下文）</td></tr>
+      <tr><td><b>三命名空间（N1/N2/N3）</b></td><td>按用途把记忆<b>物理</b>分区：N1 服务（案件/待办/偏好，合同履行、默认开）、N2 个性化（称呼/沟通风格，开但可关）、N3 营销画像（单独同意、默认关、一键删）。N = namespace，<b>与 §3.2 成熟度 Level 0/1/2 是两套编号，勿混淆</b></td></tr>
+      <tr><td><b>embedding（向量嵌入）</b></td><td>把一段文字压成一串数字，意思相近的数字也相近，用来"按语义找东西"</td></tr>
+      <tr><td><b>vector DB（向量数据库）</b></td><td>专门存 embedding、按相似度检索的库，记忆最常见的底座（pgvector/Qdrant/Milvus/Weaviate）</td></tr>
+      <tr><td><b>knowledge graph（知识图谱）</b></td><td>把事实存成"实体—关系—实体"（如"张三—持有—白金卡"），能查关系、能给每条边标时间</td></tr>
+      <tr><td><b>bi-temporal（双时间维）</b></td><td>一条记忆同时记"事实什么时候发生"和"系统什么时候知道"。客户搬家后旧地址何时失效，靠它回答。Zep/Graphiti 主打</td></tr>
+      <tr><td><b>profiling（画像）</b></td><td>用算法自动评估人的行为、信用、偏好等特征——金融监管重点盯防对象</td></tr>
+      <tr><td><b>PII / NPI</b></td><td>PII = 个人身份信息；NPI = GLBA 下的"非公开个人金融信息"（账户、余额、交易）</td></tr>
+      <tr><td><b>identity resolution（身份解析）</b></td><td>把同一个人在 App、网站、电话、邮件里的不同身份碎片拼回"一个客户"——拼错就是信息泄露事故</td></tr>
+      <tr><td><b>FCR（First Contact Resolution，一次接触解决率）</b></td><td>客户问题在<b>第一次</b>联系（电话/chat/邮件）中就解决、无需再次来电或转线的比例。"系统没记住、客户只能再讲一遍"直接拉低 FCR；它是记忆价值最直接的结果指标</td></tr>
+      <tr><td><b>AHT（Average Handle Time，平均处理时长）</b></td><td>坐席处理一次接触的平均耗时（通话时间 + 事后整理 ACW）。记忆让坐席不用翻历史、不用重新发问，AHT 下降</td></tr>
+      <tr><td><b>CSAT（Customer Satisfaction，客户满意度）</b></td><td>接触后请客户打分（常见 1–5 星）算出的满意度；记忆相关口径是"AI/坐席是否了解我的情况"</td></tr>
+      <tr><td><b>重复接触 / 重复来电率（repeat contact rate）</b></td><td>客户就同一件事再次联系的比例——"没记住客户"最直接的后果，本报告主指标 Repeat-Info Rate 的近邻指标</td></tr>
+      <tr><td><b>IVR（Interactive Voice Response，交互式语音应答）</b></td><td>打电话进来"中文请按 1、英文请按 2"的自动语音系统；也是电话渠道做身份验证（如输入 SSN 后四位）的地方，认证闸门（C.5）常在此完成</td></tr>
+      <tr><td><b>ACW（After-Call Work，话后处理）</b></td><td>挂断后坐席写工单、补备注、归档的时间，计入 AHT；记忆自动抽取事实可压缩 ACW</td></tr>
+      <tr><td><b>loaded cost（全成本）</b></td><td>不只工资，还含福利、管理、系统与场地分摊后的坐席成本；§7.2 的 $12–20/电话即用此口径</td></tr>
+      <tr><td><b>TTL（time-to-live）</b></td><td>记忆自动过期时间；<b>tombstone/级联删除</b> = 删除请求下把原文、向量、摘要、缓存一起标记失效并清除</td></tr>
+      <tr><td><b>memory poisoning（记忆投毒）</b></td><td>把假/恶意"记忆"写进长期库，这次写进去、以后自动生效（如骗子让系统相信"此客户喜欢用邮件改收款账户"）</td></tr>
+      <tr><td><b>indirect prompt injection</b></td><td>攻击者把恶意指令埋在模型会读到的外部内容（邮件正文、聊天记录、网页）里</td></tr>
+      <tr><td><b>machine unlearning / certified deletion</b></td><td>让系统把某条数据的影响擦掉；"数学上证明删干净了"在深度学习下仍是开放难题</td></tr>
+      <tr><td><b>GLBA / FCRA / ECOA / UDAAP</b></td><td>美国金融隐私法 / 公平征信报告法 / 平等信贷机会法 / 不公平或欺骗性行为禁令（详见 §09）</td></tr>
+      <tr><td><b>GDPR Art.5/17/21/22</b></td><td>欧盟数据法：数据处理七原则 / 删除权 / 反对权（含绝对营销反对）/ 不受纯自动化重大决定约束</td></tr>
+      <tr><td><b>PIPL 第 24 条</b></td><td>中国个人信息保护法：自动化决策须透明公平、不得差别定价；营销推送须提供"不针对个人特征"的选项或便捷拒绝方式</td></tr>
+      <tr><td><b>TCPA（Telephone Consumer Protection Act）</b></td><td>美国《电话消费者保护法》（1991，FCC 执法）：未经同意不得用自动拨号/预录语音打手机、发营销短信；同意随时可用<b>任何合理方式</b>撤回——该标准由 FCC 24-24（2024-02-16 发布，编入 47 CFR §64.1200(a)(10)）确立，其后两份都是<b>窄口径延期令、不涉实体规则</b>：DA-25-312（2025-04-07 签发）把该条生效日从 2025-04-11 推到 2026-04-11；DA-26-12（2026-01-06 签发）只把"针对一类信息类消息的撤回自动延伸到同一主叫方<b>全部无关主题</b>消息"这一<b>跨主题延伸要求</b>延到 2027-01-31，(a)(10) 其余部分 2025-04-11 起已生效，<b>没有任何条款被废止</b>（v0.1.5 更正实体规则归属；v0.1.8 更正 DA-25-312 日期与 DA-26-12 适用范围）；"对 AI 语音说'别再发了'也生效"是合理方式标准下的<b>推论</b>，FCC 未逐字点名 AI。违者每次 $500–$1,500 且可集体诉讼。对产品的硬要求：拒联/联系偏好必须是一等记忆字段 + 独立 consent gate，跨渠道立即生效</td></tr>
+      <tr><td><b>BYOC / BYOK / RLS / RBAC / ABAC</b></td><td>部署进客户自己云 / 用客户自己密钥 / Postgres 行级权限 / 按角色控权 / 按"谁的、什么用途、哪法域"属性控权</td></tr>
+      <tr><td><b>WORM / legal hold</b></td><td>只写一次、不可篡改的审计存储 / 诉讼或调查期间暂停删除的合规冻结</td></tr>
+    </tbody>
+  </table></div>
+</section>
+<!-- ============ 02 MODEL & PERSONAS ============ -->
+<section id="model">
+  <div class="sec-head"><span class="num">02</span><h2>记忆分层、四个 Persona 与跨渠道剧本</h2></div>
+
+  <h3>2.1 四层记忆产品模型 <span class="badge b-ana">分析</span>（学术骨架来自 CoALA arXiv:2309.02427 与 TOIS 综述 arXiv:2404.13501）</h3>
+  <div class="layers">
+    <div class="layer l1"><div class="lt">Layer 1 · Semantic</div><b>Profile 档案</b><span>相对稳定的事实：语言/渠道偏好、称呼、认证状态、持有产品。变化慢、敏感度中。</span></div>
+    <div class="layer l2"><div class="lt">Layer 2 · Episodic</div><b>互动历史</b><span>具体事件："8/12 客户称账单被多收 $14.99，已开 dispute"。带时间、渠道、来源。</span></div>
+    <div class="layer l3"><div class="lt">Layer 3 · Working Case</div><b>在办案件（最有价值）</b><span>正在进行、带法定时钟的案件：Reg E 争议倒计时、待回电承诺、待补材料。通用记忆厂商不懂的领域模型。</span></div>
+    <div class="layer l4"><div class="lt">Layer 4 · Collective</div><b>群体经验（本期不做）</b><span>从多客户交互提炼匿名群体经验。与个体删除权冲突、金融反演风险高，需单独合规评审。</span></div>
+  </div>
+  <p class="small">学术对应：semantic（事实）/ episodic（事件）/ procedural（流程）三层是业界事实标准术语；working case 是本报告为客服场景增加的产品层，本质是"有状态、有时钟的 episodic 记忆"。</p>
+
+  <h3>2.2 四个 Persona 各自怎么用记忆</h3>
+  <div class="persona-grid">
+    <div class="pcard"><h4>Agent（真人坐席 / AI agent）</h4><div class="who">负责解决客户问题</div>
+      <b>pre-contact brief（接起前 3 秒面板）</b>：在办案件、法定时钟剩余、上次未决事项、语言/渠道偏好、认证状态；跨渠道续接不重复问。每条记忆带来源水印与置信度。</div>
+    <div class="pcard"><h4>Manager / Supervisor</h4><div class="who">负责日常运营与 KPI</div>
+      团队记忆质量看板：记忆正确率、过期/矛盾记忆率、重复信息率、brief 使用率；抽查低置信记忆；重复来电客户自动路由资深坐席。</div>
+    <div class="pcard"><h4>Customer（客户本人）</h4><div class="who">要快、要准、别让我重复</div>
+      <b>记忆台账页（memory ledger）</b>：查看银行记得我什么、来源渠道/时间/置信度，可纠正、可删除、可声明"这条别记"。对标 ChatGPT Memory、Apple Siri。</div>
+    <div class="pcard"><h4>Admin（银行合规 / IT）</h4><div class="who">负责配置与合规</div>
+      <b>记忆策略台</b>：按法域配保留期矩阵、三命名空间开关、数据驻留 region、RBAC、consent 默认值、N3 营销白名单；EU/纽约/中国开箱模板。</div>
+  </div>
+
+  <h3>2.3 跨渠道剧本（认证闸门是硬约束）</h3>
+  <div class="fig">
+    <div class="tl">
+      <div class="tlrow"><div class="td">8/12 · chat</div><div class="tm"></div><div class="tc"><b>未登录会话</b>：客户问"我的 dispute 到哪一步了"。系统不加载任何 PII 记忆，只做通用受理与身份引导；会话结束后以"待认领事件"暂存，<b>不并入客户档案</b>。</div></div>
+      <div class="tlrow"><div class="td">8/20 · voice</div><div class="tm"></div><div class="tc"><b>IVR 验证 SSN 后四位（认证通过）</b>：坐席/AI 立刻看到"该客户有一笔 Reg E 争议处于 10 工作日时钟第 6 天、8/12 曾在 chat 询问进度"，直接回答进度，不从头问起。待认领事件在此刻经身份匹配并入档案。</div></div>
+      <div class="tlrow"><div class="td">8/25 · email</div><div class="tm"></div><div class="tc"><b>未认证发件渠道</b>：系统<b>不加载任何客户记忆</b>，只回通用受理与安全链接（记忆召回的认证闸门，§08-C.5）。客户经链接登录后才解锁个性化续接。</div></div>
+    </div>
+    <div class="cap">同一客户跨 chat → voice → email：认证匹配是跨渠道身份合并的唯一合法闸门；未认证零 PII 暴露</div>
+  </div>
+</section>
+
+<!-- ============ 03 MARKET FORMATION ============ -->
+<section id="market">
+  <div class="sec-head"><span class="num">03</span><h2>品类成型时间线与成熟度三层</h2></div>
+
+  <h3>3.1 "AI 客户记忆"刚被命名为一等功能（2024–2026）<span class="badge b-fact">事实</span></h3>
+  <div class="fig">
+    <div class="tl">
+      <div class="tlrow"><div class="td">2020-12</div><div class="tm"></div><div class="tc"><b>Amazon Connect Customer Profiles</b> 发布：80+ 数据源做 identity resolution + 统一档案。本质是 CDP 式聚合，不是对话级长期记忆。</div></div>
+      <div class="tlrow"><div class="td">2024-03</div><div class="tm"></div><div class="tc"><b>NICE Enlighten XM</b>：新闻稿标题直接叫 "Next Generation AI Contextual Memory"，CCaaS 里最早打记忆牌。<b>v0.1.5 更正：</b>原标注"FS 案例 Revolut"撤下——Revolut 公开口径的语音 AI 供应商是 ElevenLabs，NICE 案例页未见 Revolut <span class="badge b-todo">待核实</span>。</div></div>
+      <div class="tlrow"><div class="td">2025-07</div><div class="tm"></div><div class="tc"><b>Google Vertex Agent Engine Memory Bank</b> public preview：managed memory API（"dynamically generate long-term memories across sessions"）；2026-04 加 Memory Profiles。云厂卖 infra，不做行业成品。</div></div>
+      <div class="tlrow"><div class="td">2025-09/11</div><div class="tm"></div><div class="tc"><b>Anthropic Claude</b>（09-11）上线 memory + Incognito + org owner 一键全删；<b>Microsoft Ignite</b>（11 月）给 M365 Copilot 加 conversational memory（员工记忆，非客户记忆）。C 端预期被定义。</div></div>
+      <div class="tlrow"><div class="td">2025-11</div><div class="tm"></div><div class="tc"><b>Sierra Agent Data Platform（ADP）</b>："gives agents memory, context, and intelligence"——AI 客服新贵里第一个把记忆做成独立数据平台叙事。</div></div>
+      <div class="tlrow"><div class="td">2026-01 <span class="badge b-todo">待核实</span></div><div class="tm"></div><div class="tc"><b>Salesforce Data 360</b> 功能列表写入 "Persistent Agent Memory"（v0.1.5：条目在架属实，"2026-01" 具体发布日经外部评审提示为自述口径、未独立复核）；Dreamforce 2026（09-15）把 memory 列入 agent 的 "trusted context" 七要素。</div></div>
+      <div class="tlrow"><div class="td">2026-05</div><div class="tm"></div><div class="tc"><b>Twilio Conversation Memory</b>（Signal 2026）：明码标价 <b>$0.0028/1k 字生成 + $0.007/次召回</b>，删除/保留期/分区/审计变更历史写进治理面。<b>成熟阵营里最像产品、最透明的一家，最直接对标。</b></div></div>
+      <div class="tlrow"><div class="td">2026-07/08</div><div class="tm"></div><div class="tc"><b>Sierra Horizon</b>（07-16）产品页明列 Persistent memory；<b>BBVA</b>（08-04 官宣，08 月上线）首个 long-running Horizon agent。<b>Intercom Fin</b> 08-13 才补跨渠道记忆；第三方评测（agenticindex.io）批评其"无 scope/lifetime 定义"——官方 Help 口径为摘要 45 天/事实 180 天保留，该批评作第三方观点存证、不作事实引用。</div></div>
+    </div>
+  </div>
+
+  <h3>3.2 成熟度三层：Level 2 整层是空的 <span class="badge b-ana">分析</span></h3>
+  <div class="levels">
+    <div class="lvl lv0"><h4>Level 0 · RAG 拼历史</h4>
+      <p class="small" style="margin:0">每次现捞历史工单/聊天塞进 prompt。没有 per-customer 抽象，<b>换渠道就失忆</b>。</p>
+      <p class="small" style="margin:6px 0 0">代表：Forethought、Ada、Kore.ai、Intercom Fin（2026-08 前）、Genesys/Five9/Zendesk/Freshworks 的多数能力。</p>
+      <span class="gap-tag">2023–25 主流，已同质化</span>
+    </div>
+    <div class="lvl lv1"><h4>Level 1 · 跨会话事实抽取</h4>
+      <p class="small" style="margin:0">同一客户跨会话/跨渠道抽偏好、事件、历史，自动接续。Mem0 类 infra 在做；Sierra ADP、Decagon User Memory、Cresta shared memory 2026 年开到这层。</p>
+      <span class="gap-tag" style="background:var(--part-bg);color:var(--part)">2025H2 起爆发，正在变成入场券</span>
+    </div>
+    <div class="lvl lv2"><h4>Level 2 · 受治理的长期记忆</h4>
+      <p class="small" style="margin:0">带<b>时间维（bi-temporal）、provenance 溯源、用途隔离、TTL/legal hold、客户可见可纠正可删除、级联删除审计</b>。</p>
+      <p class="small" style="margin:6px 0 0">客服产品层：<b>公开材料未见有人交付</b>（判定口径 §04）。仅 Zep/Graphiti 类 infra 触达，但其不懂 contact center 业务语义。</p>
+      <span class="gap-tag">结构性空档 = 本产品位置</span>
+    </div>
+  </div>
+
+  <h3>3.3 四股势力，四种生意（它们互相不是竞品）</h3>
+  <div class="table-wrap"><table class="fixed">
+    <colgroup><col style="width:21%"><col style="width:30%"><col style="width:24%"><col style="width:25%"></colgroup>
+    <thead><tr><th>势力</th><th>代表</th><th>卖什么 / 客户是谁</th><th>记忆的角色</th></tr></thead>
+    <tbody>
+      <tr><td><b>A. 横向 memory infra</b></td><td>Mem0、Zep/Graphiti、Letta、Cognee、Supermemory</td><td>一个 API/SDK"给 agent 加记忆"；卖给开发者与 AI 应用团队</td><td><b>产品本体</b>，但无行业治理成品</td></tr>
+      <tr><td><b>B. AI-native 客服产品</b></td><td>Sierra、Decagon、Intercom Fin、Cresta、Crescendo、Forethought</td><td>能结案的客服 agent；卖给客服/运营负责人</td><td>卖点/模块，不单独卖</td></tr>
+      <tr><td><b>C. Hyperscaler / 平台内置</b></td><td>OpenAI、Anthropic、Google（Memory Bank）、Microsoft（Copilot Studio）、AWS</td><td>C 端留存功能或云 API；不做 FS 行业成品</td><td>留存功能 / infra API</td></tr>
+      <tr><td><b>D. 治理 / 评测 / 同意</b></td><td>Lakera、Galileo、Patronus、Arize Phoenix、Langfuse、OneTrust</td><td>安全护栏、trace 评测、consent 管理；卖给安全/合规/平台团队</td><td>配套，不是记忆本身</td></tr>
+    </tbody>
+  </table></div>
+  <div class="callout note"><span class="ct">Hyperscaler 已经定义了用户预期（银行会照此要求 vendor）</span>
+    <p style="margin-bottom:4px"><b>OpenAI</b>：memory summary 可查看（2026-06-04）、个性化回复下 View Sources 溯源+可编辑（<b>2026-05-05</b>，官方 release notes "memory sources … Tap the Sources icon"；summary 页内输入/高亮纠正为 2026-06-12；v0.1.8 更正：原写 2026-06-25 当天无 memory 条目）；<b>删除对话 30 天清除的是对话本身，记忆需单独关闭/清除（删对话≠删记忆，v0.1.5 澄清）</b>。<b>Anthropic</b>（2025-09-11）：Incognito（这次别记）+ org owner 一键熔断并永久删除全组织记忆。<b>Microsoft</b>：per-user 隔离记忆夹、用户可审阅删除。</p>
+    <p style="margin-bottom:0">三条产品范式——<b>可查看、可溯源、可纠正，加一键熔断</b>——就是客户记忆台账页的设计基准。</p>
+  </div>
+</section>
+
+<!-- ============ 04 COMPETITION ============ -->
+<section id="compete">
+  <div class="sec-head"><span class="num">04</span><h2>竞品矩阵与逐家证据</h2></div>
+
+  <h3>4.1 CCaaS / CRM 成熟厂商（14 家）</h3>
+  <p class="small">口径：✓ 有独立命名产品/官方能力；◐ 有能力但未独立命名/仍 preview/依赖 CRM；✗ 公开材料未见。"客户可见/可控"指终端客户能否查看/纠正/删除关于自己的记忆。</p>
+  <div class="table-wrap"><table class="matrix">
+    <thead><tr><th>厂商</th><th>渠道覆盖</th><th>独立命名的长期记忆</th><th>记忆层级</th><th>客户可见/可控</th><th>FS 行业化</th><th>治理与删除</th><th>定价</th></tr></thead>
+    <tbody>
+      <tr><td>Twilio</td><td>Voice/SMS/WA/Chat/Email/Flex</td><td><span class="s s-y">✓</span> Conversation Memory（2026-05）</td><td>profile+episodic+working</td><td><span class="s s-p">◐</span> 有删除/保留/审计，未见客户侧台账</td><td><span class="s s-p">◐</span></td><td><span class="s s-y">✓</span> 删除/保留期/分区/变更历史</td><td><b>$0.0028/1k 字 + $0.007/召回</b></td></tr>
+      <tr><td>NICE</td><td>全渠道 CXone</td><td><span class="s s-y">✓</span> Enlighten XM（2024-03）</td><td>profile+episodic</td><td><span class="s s-p">◐</span> 未公开</td><td><span class="s s-p">◐</span> 待核实（外部评审：Revolut 公开语音供应商为 ElevenLabs，未见 NICE 案例页）</td><td><span class="s s-p">◐</span></td><td>per-seat，记忆单价未公开</td></tr>
+      <tr><td>Salesforce</td><td>Service Cloud 全渠道</td><td><span class="s s-y">✓</span> Data 360 Persistent Agent Memory</td><td>profile+episodic+CRM</td><td><span class="s s-p">◐</span> 继承平台 RBAC，客户侧粒度待核实</td><td><span class="s s-p">◐</span> 无核心银行开箱</td><td><span class="s s-y">✓</span> 平台级治理</td><td>Data 360 用量 + Agentforce</td></tr>
+      <tr><td>Google</td><td>Vertex/Agent Assist（非成品 CCaaS）</td><td><span class="s s-y">✓</span> Memory Bank（2025-07 preview）</td><td>episodic+profile（API）</td><td><span class="s s-n">✗</span> infra 无客户侧 UI</td><td><span class="s s-p">◐</span></td><td><span class="s s-p">◐</span> scope 隔离，治理自建</td><td>云用量</td></tr>
+      <tr><td>Microsoft</td><td>Dynamics 365 CS</td><td><span class="s s-p">◐</span> Copilot Studio Memory（GA 自带 per-user 跨会话持久，官方文档口径；preview）</td><td>episodic+profile</td><td><span class="s s-p">◐</span> per-user 隔离、可删</td><td><span class="s s-p">◐</span></td><td><span class="s s-p">◐</span></td><td>per-app 席位 + 云用量</td></tr>
+      <tr><td>Amazon Connect</td><td>Voice/Chat/Email</td><td><span class="s s-p">◐</span> Customer Profiles（CDP 式档案，2020）+ Contact Lens + Cases</td><td>profile+working case</td><td><span class="s s-p">◐</span></td><td><span class="s s-y">✓</span> Capital One/Barclays</td><td><span class="s s-y">✓</span> PII 脱敏原生、GDPR/HIPAA eligible</td><td>按用量</td></tr>
+      <tr><td><b>Talkdesk（现状）</b></td><td>Voice/Chat/SMS/Email/WA/Fax</td><td><span class="s s-n">✗</span> 无独立命名；Data Cloud=RAG 语料、Copilot=历史展示、Navigator=营销画像</td><td>会话内 episodic + CRM profile</td><td><span class="s s-n">✗</span> 未公开</td><td><span class="s s-y">✓</span> FS 行业云 + 6 家核心/数字银行平台连接器</td><td><span class="s s-p">◐</span> 有租户/录音/编排，无记忆治理面</td><td>per-seat + AI add-on</td></tr>
+      <tr><td>Genesys</td><td>全渠道</td><td><span class="s s-n">✗</span> CRM 面板 + 预测触达</td><td>profile+episodic</td><td><span class="s s-n">✗</span></td><td><span class="s s-p">◐</span> "DM 金融案例"原注未标出处、所指不明 <span class="badge b-todo">待核实</span></td><td><span class="s s-p">◐</span></td><td>席位 + token</td></tr>
+      <tr><td>Five9</td><td>语音优先</td><td><span class="s s-n">✗</span> warm handoff 上下文</td><td>working case+profile</td><td><span class="s s-n">✗</span></td><td><span class="s s-p">◐</span></td><td><span class="s s-y">✓</span> LLM blinding（敏感数据对 LLM 不可见）</td><td>席位/用量</td></tr>
+      <tr><td>Zendesk</td><td>数字为主，语音弱</td><td><span class="s s-n">✗</span> customer database + RAG</td><td>profile+ticket</td><td><span class="s s-p">◐</span> Advanced Customer Data &amp; Privacy</td><td><span class="s s-p">◐</span></td><td><span class="s s-p">◐</span></td><td>席位 + AI per-resolution</td></tr>
+      <tr><td>Freshworks</td><td>全渠道数字</td><td><span class="s s-n">✗</span> Freddy "retains context" 话术</td><td>会话内 episodic</td><td><span class="s s-n">✗</span></td><td><span class="s s-p">◐</span></td><td><span class="s s-p">◐</span></td><td>席位</td></tr>
+      <tr><td>ServiceNow</td><td>Contact Center（ITSM 起家）</td><td><span class="s s-p">◐</span> "one case, one history, one AI layer"</td><td>working case 强</td><td><span class="s s-p">◐</span></td><td><span class="s s-p">◐</span></td><td><span class="s s-y">✓</span> AI Control Tower</td><td>企业订阅</td></tr>
+      <tr><td>8x8</td><td>Voice + 数字</td><td><span class="s s-p">◐</span> Customer 360（Open Beta 2026-07）</td><td>profile+episodic</td><td><span class="s s-n">✗</span></td><td><span class="s s-p">◐</span></td><td><span class="s s-p">◐</span></td><td>席位</td></tr>
+      <tr><td>Avaya</td><td>Voice 强</td><td><span class="s s-n">✗</span> 统一桌面 + CRM screen pop</td><td>profile+working case</td><td><span class="s s-n">✗</span></td><td><span class="s s-y">✓</span> Access Bank</td><td><span class="s s-p">◐</span></td><td>席位/订阅</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>4.2 AI 新贵与横向 memory infra</h3>
+  <div class="table-wrap"><table class="matrix">
+    <thead><tr><th>厂商</th><th>形态</th><th>记忆能力</th><th>企业治理</th><th>FS 案例</th><th>融资 / 定价</th></tr></thead>
+    <tbody>
+      <tr><td><b>Sierra</b></td><td>客服产品</td><td>ADP（context + persistent memory + next-best-action）；Horizon long-running</td><td>SOC 2 Type II；<b>监管专属的用途隔离/客户台账未公开</b></td><td><b>BBVA、Santander、SoFi、Chime、Ramp、Brex</b></td><td>估值 &gt;$15B；outcome 定价不公开</td></tr>
+      <tr><td>Decagon</td><td>客服产品</td><td>User Memory：跨会话/跨渠道、data portability、自称 granular control</td><td>保留期/可见性/PII 细节待核实</td><td>Chime（数字银行）</td><td>$65M B 轮（2024）；估约 $0.99/对话</td></tr>
+      <tr><td>Intercom Fin</td><td>客服产品</td><td>2026-08-13 才加跨渠道记忆；官方 Help：摘要 45 天/事实 180 天保留（第三方评测称"无 scope/lifetime 定义"，观点存证）</td><td>平台级</td><td>无标志性 FS</td><td>per-resolution</td></tr>
+      <tr><td>Cresta</td><td>外挂产品</td><td>shared memory：人/AI 交接与跨渠道不丢上下文（CCaaS 最该有的场景）</td><td>企业级</td><td>传统 contact center</td><td>B/C 轮</td></tr>
+      <tr><td>Crescendo</td><td>客服产品</td><td>Influence（2026-03）：personalization + memory，接 Shopify/Salesforce/Zendesk</td><td>未深究</td><td>零售为主，FS 未见</td><td>待核实</td></tr>
+      <tr><td><b>Mem0</b></td><td>infra（OSS+云）</td><td>扁平 facts + 关系图（Pro）；Memory Compression、Dream consolidation</td><td>SOC 2 <b>Type I</b>（注意非 II）、HIPAA、on-prem/BYOK；<b>无原生时间维/ABAC/用途隔离</b></td><td>公开未见银行 logo</td><td>$24M（Seed+A，2025-10）；$19/$249 月起</td></tr>
+      <tr><td><b>Zep / Graphiti</b></td><td>infra（OSS+云+BYOC）</td><td><b>bi-temporal 时序知识图谱</b>：旧事实标 superseded 不覆盖，保留完整时间线</td><td><b>SOC 2 Type II、HIPAA BAA、1 年 audit log、ABAC、retention/legal hold、EU 驻留、BYOK/BYOC</b></td><td>公开未见银行 logo</td><td>YC seed，A 轮待核实；$125/$375 月起</td></tr>
+      <tr><td>Letta</td><td>infra（agent runtime）</td><td>agent 自编辑分层记忆（Core/Recall/Archival，MemGPT 商业化）；<b>范式是 agent 私有记忆，非围绕客户的共享记忆</b></td><td>治理材料薄</td><td>无</td><td>$10–20M seed（口径打架，待核实）；$20 月起</td></tr>
+      <tr><td>LangMem</td><td>库（非产品）</td><td>LangChain 官方记忆读写 SDK，接 LangGraph BaseStore</td><td>无（治理全在存储层）</td><td>—</td><td>开源 MIT</td></tr>
+      <tr><td>Cognee</td><td>infra + BYOC 咨询</td><td>graph + vector + RDF ontology，"remember/recall/improve/forget" API</td><td>自定义 ontology；前期投入大</td><td>Bayer（非客服）</td><td>$7.5M seed（2026-02）</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>4.3 关键玩家证据卡（折叠展开）</h3>
+  <details class="vendor"><summary>Twilio Conversation Memory <span class="vrole">最直接对标 · 同时拥有 Segment(CDP)</span><span class="vflag flag-hot">直接竞品</span></summary><div class="vbody">
+    <p><b>产品</b>（GA 2026-05-06；2026-07-15 官方博客为产品详解帖——v0.1.5 两日期互注，非两个发布事件）："managed AI memory layer built specifically for customer-facing AI agents"；Recall API 做 hybrid semantic + lexical 检索；记忆独立于 LLM runtime（换模型不丢记忆）；治理面含 deletion、retention policies、partitioning、full change history；与 Salesforce、Segment、Snowflake 同步。</p>
+    <p><b>定价</b>（twilio.com/pricing，2026-09-25 抓取）：memory generation $0.0028/1k characters（input+output）；memory recall $0.007/次。</p>
+    <p><b>与 CDP 分工原话</b>（2026-07-20）："Segment handles data unification and activation while Conversation Memory adds the observation extraction, semantic retrieval, and conversation context"。</p>
+    <p><b>缺口（机会）</b>：删除/分区是<b>管理员</b>能力，<b>未见终端客户自助记忆台账</b>；无 FS 行业实体模型（case/dispute/Reg E 时钟）；无服务/营销/授信三命名空间的开箱切分。</p>
+  </div></details>
+  <details class="vendor"><summary>Amazon Connect Customer Profiles <span class="vrole">最像 memory 的成熟产品 · FS 案例最硬</span><span class="vflag flag-ref">重点参照</span></summary><div class="vbody">
+    <p>80+ 数据源，ML 检测相似 name/email/地址/电话做 identity resolution 合并统一档案（2020-12 发布，2023-11 加生成式聚合，2026-02 加实时 click-stream）。Contact Lens 提供转录、<b>PII 原生脱敏</b>、情绪检测；规则可自动建 Case。Q in Connect 文档明确 GDPR compliant、HIPAA eligible。</p>
+    <p>FS 客户：Capital One（direct bank + fraud operations，"5 个月 100% 上线" <span class="badge b-fact">事实</span>：AWS 官方案例页引 Capital One VP Rajiv Sondhi 原话 "…achieved 100 percent adoption for our direct bank and fraud operations in just five months"——<b>厂商客户案例口径</b>，非独立第三方报道）、Barclays。<b>v0.1.6 更正：~25% AHT↓、~10% CSAT↑ 不是上面任何一家 FS 客户的数据</b>——出处已查明为 <b>Traeger Grills</b>（pellet 烧烤炉零售商，联系人 Lizzy Mitchell, Head of Customer Experience Analytics），见 AWS Customer Profiles 产品页 + re:Invent 2020 PDF，2020-12 博客原话限定 "<i>In early trials</i>, AWS customer Traeger Grills…"。非 FS、2020 年 early trials，<b>不可作为银行业绩引用</b>；FS 渠道至今没有可引用的公开 AHT 硬数字——对外话术用本行试点数据，不用这个数字。</p>
+    <p><b>边界</b>：本质是 identity resolution + 数据聚合（把各系统已有的记录拼起来），不是"AI 从对话里自动提炼长期事实"；无客户侧记忆台账。</p>
+  </div></details>
+  <details class="vendor"><summary>Sierra（ADP + Horizon + BBVA）<span class="vrole">最大威胁 · 把记忆写进融资故事</span><span class="vflag flag-hot">头号威胁</span></summary><div class="vbody">
+    <p>2025-11-05 Agent Data Platform："gives agents memory, context, and intelligence"；2026-07-16 Horizon 产品页三条：Customer context、<b>Persistent memory（"Recall what matters to each customer, so every conversation builds off the last"）</b>、Next-best-action；2026-08-04 Bret Taylor X 官宣 BBVA 上线首个 long-running Horizon agent（30 天，西班牙/阿根廷）。</p>
+    <p>融资叙事原话："the memory of your customer interactions becomes a durable, expanding moat"。</p>
+    <p><b>缺口（机会）</b>：memory 是通用叙事，官网无独立的删除/审计/用途隔离治理细页（<span class="badge b-todo">待核实</span>），没有按金融监管把服务/营销/授信切开；无 CCaaS 原生的录音/质检/排班同一套治理；无客户侧台账。</p>
+  </div></details>
+  <details class="vendor"><summary>Mem0 与 Zep/Graphiti <span class="vrole">横向 infra 双雄 · build-vs-buy 的评估起点</span><span class="vflag flag-bg">底座候选</span></summary><div class="vbody">
+    <p><b>Mem0</b>（65,960★，Apache-2.0，当天仍有 push）：采用最广、文档最全；扁平 durable facts + 自动矛盾消解，Pro 以上开 entity linking 图；2026 年加 Compression Engine 与 Dream 离线整理。治理：SOC 2 <b>Type I</b>、HIPAA、GDPR ready、BYOK、on-prem/air-gapped；<b>没有原生时间维、ABAC、用途 taxonomy</b>。$24M 融资（2025-10）。</p>
+    <p><b>Zep/Graphiti</b>（graphiti 31,144★，Apache-2.0）：bi-temporal knowledge graph——"doesn't just track what is true, it tracks when something was true and when that changed"；DMR 基准 94.8% vs MemGPT 93.4%（论文口径）。治理是 infra 里最强：SOC 2 <b>Type II</b>、HIPAA BAA、1 年 audit log、ABAC、retention + legal hold、EU residency、BYOK/BYOC、sub-200ms p95。</p>
+    <p><b>共同边界</b>：按 <code>user_id</code> 字符串隔离，不管跨渠道身份合并、不管删除权级联到 CRM/录音/备份、不懂 case/dispute/Reg E 语义；公开材料<b>未见任何银行 logo</b>。</p>
+  </div></details>
+  <details class="vendor"><summary>Talkdesk 现状（Data Cloud / Copilot / Navigator）<span class="vrole">本题主场 · 缺口即机会</span><span class="vflag flag-ref">内部盘点</span></summary><div class="vbody">
+    <p><b>Data Cloud</b>：把 transcripts、call recordings、messages、case notes 加 CRM 数据点洗成 "actionable knowledge"——是 RAG 语料/检索底座，不是客户可看可控的记忆产品。</p>
+    <p><b>Copilot</b>（v0.1.9 复核：<b>Release Notes 原始出处已找到</b>——Talkdesk KB 文章 <code>support.talkdesk.com/hc/en-us/articles/10465518079003</code>，Published 2022-11-17、Last Updated 2026-09-23、最新条目 2026-09-28；v0.1.8 记的"release-notes 两条路径 404、最晚内容 2026-02-09"是抓错了 talkdesk.com/release-notes 营销路径，原"更新至 2026-09-15"与页面实际口径也不符；产品页标注"2026-05-18 更新"仍未找到出处 <span class="badge b-todo">待核实</span>，疑为 JSON-LD dateModified）：实时转写 + 推荐/Smart Scripts + 自动摘要与 disposition + Interaction history（一键看历史互动）——展示与实时辅助层。<b>已核实的三条关键时间线</b>：Copilot Agentic 2026-02-12 preview → <b>2026-09-02 GA</b>（Agentic Reasoning + 自然语言跨 CRM/知识库/企业系统触发动作）；2026-06-25 voice transcripts 进 Activities、删除记入 Audit Logs；<b>2026-09-25 实时转写 PII redaction</b>（18 类 PII，release notes 明示面向 FS/保险/医疗等受监管行业）。<b>口径提示</b>：这三条说明 Talkdesk 在坐席侧实时数据治理已动手，但都停在<b>转写层脱敏与实时辅助</b>，不构成长期记忆治理（仍无客户级记忆台账/保留期/用途隔离）——§00 缺口判定不变。</p>
+    <p><b>Navigator + Mood Insights</b>（2024-06-04 CCW Vegas 官宣，页面仍在架）：基于 unique profile、usage patterns、location、demographics、<b>current emotional state</b> 做超个性化推荐——营销/路由向，踩在 remember ABOUT 一侧；情绪叙事在 EU AI Act Art.50(3) 下有告知义务风险。</p>
+    <p><b>底座优势</b>：全渠道统一编排（Voice/Chat/SMS/Email/Messaging/WhatsApp/Fax）+ 2025-04 FS 行业云预置 6 家核心/数字银行平台连接器（core：Fiserv/FIS/Jack Henry；digital：Q2/Candescent/Alkami）。<b>明确缺失</b>：被命名的客户级长期记忆产品、对话事实自动抽取的产品化描述、客户记忆台账、记忆治理面（保留期/TTL/法域/用途隔离）。<span class="badge b-todo">待核实：未公开 roadmap/私享 demo</span></p>
+  </div></details>
+  <details class="vendor"><summary>CDP 玩家（Segment / Tealium / Treasure Data / RudderStack）<span class="vrole">上游底座，不是竞品</span><span class="vflag flag-bg">对接关系</span></summary><div class="vbody">
+    <p>CDP 收行为事件 → identity resolution → 统一画像 → <b>激活到营销</b>；AI memory 从<b>对话内容</b>抽事实/偏好/待办 → 服务<b>连续性</b>。2026 年两侧在收敛：Treasure Data 更名 Treasure AI（"agentic CDP"，2026-04），RudderStack 发 RudderAI（CLI+MCP，2026-06），Tealium 自我定位 "governed, real-time data foundation that fuels whatever AI you choose"。</p>
+    <p><b>PRD 含义</b>：银行已有营销 CDP，不重做；消费 CDP/CRM 的 profile 作为已知身份，专注从联络中心对话长出 episodic + working-case 记忆。</p>
+  </div></details>
+</section>
+<!-- ============ 05 ACADEMIA ============ -->
+<section id="academia">
+  <div class="sec-head"><span class="num">05</span><h2>学术界地图（2023–2026，arXiv 已核实编号）</h2></div>
+  <p class="small">成熟度：<span class="mat-m m-prod">生产可用思路</span> 结论被工业界普遍接受，可直接进 PRD ｜ <span class="mat-m m-early">早期落地</span> 有开源/商业早期产品 ｜ <span class="mat-m m-lab">实验室</span> 论文原型。</p>
+  <div class="table-wrap"><table class="fixed">
+    <colgroup><col style="width:17%"><col style="width:24%"><col style="width:13%"><col style="width:11%"><col style="width:35%"></colgroup>
+    <thead><tr><th>方向</th><th>代表工作</th><th>arXiv</th><th>成熟度</th><th>对金融客服记忆的含义</th></tr></thead>
+    <tbody>
+      <tr><td>记忆机制综述</td><td>A Survey on the Memory Mechanism of LLM-based Agents（人大，ACM TOIS）</td><td class="small">2404.13501</td><td><span class="mat-m m-prod">生产</span></td><td>"存储→检索→反思→更新"标准骨架，直接当记忆模块拆解框架</td></tr>
+      <tr><td>认知架构分类学</td><td>CoALA：Cognitive Architectures for Language Agents</td><td class="small">2309.02427</td><td><span class="mat-m m-prod">生产</span></td><td>episodic/semantic/procedural 三层成为事实标准术语</td></tr>
+      <tr><td>OS 式分层记忆</td><td>MemGPT（UC Berkeley，后商业化 Letta）</td><td class="small">2310.08560</td><td><span class="mat-m m-early">早期</span></td><td>main/archival block + 自管理读写；范式偏 agent 私有记忆</td></tr>
+      <tr><td>记忆流 + 反思</td><td>Generative Agents（Stanford）</td><td class="small">2304.03442</td><td><span class="mat-m m-lab">实验室</span></td><td>memory stream + reflection 是"自动画像"原型；自动画像触 profiling 监管，只能做草稿供人参考</td></tr>
+      <tr><td>主动式记忆</td><td>A-Mem: Agentic Memory for LLM Agents</td><td class="small">2502.12110</td><td><span class="mat-m m-early">早期</span></td><td>写入时自组织成图、自动提炼；LoCoMo 上显著优于固定 RAG</td></tr>
+      <tr><td>遗忘曲线</td><td>MemoryBank</td><td class="small">2305.10250</td><td><span class="mat-m m-lab">实验室</span></td><td>Ebbinghaus 衰减为 TTL/重要性加权提供依据；法定留存字段永不自动衰减</td></tr>
+      <tr><td>图谱检索</td><td>HippoRAG（NeurIPS）</td><td class="small">2405.14831</td><td><span class="mat-m m-early">早期</span></td><td>开放知识图谱 + Personalized PageRank，多跳问答强于普通 RAG</td></tr>
+      <tr><td>时序知识图谱</td><td>Zep: A Temporal Knowledge Graph Architecture（Graphiti 论文）</td><td class="small">2501.13956</td><td><span class="mat-m m-early">早期</span></td><td>bi-temporal 边回答"何时为真/何时被改"；无 FS 大规模生产证据，借鉴不押注</td></tr>
+      <tr><td><b>基准：超长对话记忆</b></td><td>LoCoMo（50 段超长对话、共 7,512 问；均 19.3 sessions/段、304.9 turns、9,209 tokens。分类：single-hop 2,705 / multi-hop 1,104 / temporal 1,547 / open-domain 285 / adversarial 1,871）</td><td class="small">2402.17753</td><td><span class="mat-m m-prod">生产</span></td><td>接上长上下文/RAG 后仍比人类低约 56%（temporal 子集落后约 73%）；<b>adversarial 题型上各家系统准确率相对自己 base 配置下跌约 83%</b>（是"抗诱导能力掉得最狠"，不是"比人类低 83%"）</td></tr>
+      <tr><td><b>基准：助手长期记忆</b></td><td>LongMemEval（全量 500 题；商用系统因输入长度限制，论文另随机抽 <b>97 题</b>子集、每系统仅喂 <b>3–6 sessions</b>（约比全量短 10 倍），分析章节为 Appendix B——口径比全量更宽松）</td><td class="small">2410.10813</td><td><span class="mat-m m-prod">生产</span></td><td>GPT-4o 全量读历史 91.8%（Offline Reading 上限）vs ChatGPT 自带记忆同模型 57.7%、mini 71.1%、Coze 33%：即便按宽松口径，商用记忆仍只还原 6–8 成</td></tr>
+      <tr><td>间接提示注入命名</td><td>Not what you've signed up for（Greshake 等）</td><td class="small">2302.12173</td><td><span class="mat-m m-prod">生产</span></td><td>外部内容=指令；客户邮件/聊天记录不可信</td></tr>
+      <tr><td>注入基准</td><td>INJECAGENT（Stanford，1054 用例）</td><td class="small">2403.02691</td><td><span class="mat-m m-prod">生产</span></td><td>ReAct 提示的 GPT-4 有 24% 被注入成功——agent 工具权限越大越危险</td></tr>
+      <tr><td>动态攻防（含银行）</td><td>AgentDojo（97 任务，含 e-banking）</td><td class="small">2406.13352</td><td><span class="mat-m m-early">早期</span></td><td>过滤器降攻击率也降任务成功率：安全与可用要工程权衡，不能只装过滤器</td></tr>
+      <tr><td>记忆注入</td><td>MINJA：仅靠正常对话教坏记忆</td><td class="small">2503.03704</td><td><span class="mat-m m-early">早期</span></td><td>恶意记录可经正常交互写入、由特定受害者触发</td></tr>
+      <tr><td><b>记忆投毒</b></td><td>GhostWriter: Memory Poisoning Attacks</td><td class="small">2607.06595</td><td><span class="mat-m m-early">早期</span></td><td><b>注入成功率约 98%、平均激活率约 60%</b>；一次投毒、跨会话反复生效</td></tr>
+      <tr><td>休眠式投毒</td><td>Sleeper Memory Poisoning</td><td class="small">2605.15338</td><td><span class="mat-m m-lab">实验室</span></td><td>改外部文档→存假记忆→沉睡多轮后复现</td></tr>
+      <tr><td>跨用户记忆泄露</td><td>MAMA；PrivacyPeek（1182 用例，覆盖金融/客服 16 域）</td><td class="small">2512.04668；2606.00152</td><td><span class="mat-m m-early">早期</span></td><td>共享记忆状态会让 A 的 PII 从 B 的答案冒出；读写都必须带 tenant/customer_id</td></tr>
+      <tr><td>多模态删除残留</td><td>MemLeak</td><td class="small">2606.29788</td><td><span class="mat-m m-early">早期</span></td><td>内容级删除后，图片等多模态记忆仍有约 2% 语义残留</td></tr>
+      <tr><td>机器遗忘综述</td><td>Machine Unlearning: A Comprehensive Survey</td><td class="small">2405.07406</td><td><span class="mat-m m-prod">生产</span></td><td>参数级遗忘贵且难；检索库级遗忘是工业主路线</td></tr>
+      <tr><td>RAG 遗忘</td><td>When Machine Unlearning Meets RAG</td><td class="small">2410.15267</td><td><span class="mat-m m-early">早期</span></td><td>闭源模型不改权重，删外部知识库即可"模拟遗忘"——本产品删除路径</td></tr>
+      <tr><td>遗忘验证</td><td>Towards Reliable Forgetting（综述）</td><td class="small">2506.15115</td><td><span class="mat-m m-lab">实验室</span></td><td>certified deletion 仍是开放难题；对外只能承诺工程级删除+审计+抽样</td></tr>
+      <tr><td>Agent 隐私综述</td><td>Agents That Know Too Much</td><td class="small">2606.26627</td><td><span class="mat-m m-early">早期</span></td><td>持久化记忆被列为最高风险面之一：跨会话、跨用户、难审计</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="callout gap"><span class="ct">学术给出的三条硬约束（直接决定产品形态）</span>
+    <ol style="margin-bottom:0">
+      <li><b>记忆只配做参考，不配自动决策。</b>LongMemEval：自带记忆（GPT-4o 57.7%、mini 71.1%）只有全量读历史（91.8%）的 6–8 成；LoCoMo：整体落后人类 56%、temporal 子集 73%，adversarial 题型相对自家 base 配置再跌约 83%（口径见本节表格）。关键事实以 CRM/核心银行系统为准，记忆只做 pre-contact brief 与核实提示。</li>
+      <li><b>写入侧必须审核。</b>GhostWriter 投毒成功率约 98%，而"写进长期记忆之前先过滤"目前<b>没有专门商用厂商</b>（Lakera/Galileo 防的是当次 prompt）。空白叙事不再是"没人想到"——威胁已有<b>两家独立标准机构背书</b>（v0.1.7 按原始数据源逐字核对）：① <b>OWASP Top 10 for Agentic Applications 2026</b>（2025-12-09 发布，100+ 专家）单列 <b>ASI06: Memory &amp; Context Poisoning</b>（正文 p.24；其在 OWASP 体系内映射自家 Agentic AI Threats T1/T4/T6/T12 与 LLM01/04/08:2025——注意<b>不是"映射进 MITRE ATLAS"</b>）；② <b>MITRE ATLAS 是平行体系、独立收录</b>：技术 <b>AML.T0080 "AI Agent Context Poisoning"</b>（子技术 .000 Memory / .001 Thread，战术 Persistence，成熟度 Realized）+ 缓解 <b>AML.M0031 "Memory Hardening"</b>，且 AML.M0031 官方描述<b>逐字点名</b> "Open-source tools that implement memory hardening controls include OWASP Agent Memory Guard and Microsoft Agent Governance Toolkit"——是 ATLAS 引用 OWASP 项目，背书方向经 ATLAS 侧独立证实。参考实现：<b>OWASP Agent Memory Guard</b>（Incubator，2026-02 建仓，Apache-2.0）。准确表述仍是<b>"标准已立、参考实现已有、商用空位未被占据"</b>——钩子点反而更强：窗口约 6–12 个月，威胁等级由两家第三方标准背书，非我方自证。</li>
+      <li><b>删除承诺要收窄。</b>检索库级级联删除 + tombstone + 定期重建可工程交付；"数学上证明删干净"做不到，话术停在"工程级删除 + 审计 + 抽样核验"。</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ 06 OSS ============ -->
+<section id="oss">
+  <div class="sec-head"><span class="num">06</span><h2>开源生态（GitHub API 2026-09-24 实查）</h2></div>
+  <div class="table-wrap"><table class="fixed">
+    <colgroup><col style="width:16%"><col style="width:9%"><col style="width:14%"><col style="width:13%"><col style="width:48%"></colgroup>
+    <thead><tr><th>项目</th><th>Stars</th><th>License</th><th>最近 push</th><th>定位与 build-vs-buy 判断</th></tr></thead>
+    <tbody>
+      <tr><td><b>mem0ai/mem0</b></td><td class="stars">65,960</td><td>Apache-2.0</td><td>2026-09-24</td><td>采用最广的记忆层，add/search/entity extraction 原语；RBAC/审计/级联删除在商业云，OSS 内 feature parity <span class="badge b-todo">待核实</span>。<b>PoC 首选起点，但治理层不白送</b></td></tr>
+      <tr><td><b>getzep/graphiti</b></td><td class="stars">31,144</td><td>Apache-2.0</td><td>2026-09-24</td><td>实时时序知识图谱引擎，天然适合"客户×产品×事件"事实建模与时间旅行。<b>客户事实图谱最值得做 PoC 的开源引擎</b></td></tr>
+      <tr><td>getzep/zep（老仓）</td><td class="stars">4,930</td><td>Apache-2.0</td><td>2026-09-18</td><td>⚠️ 已空壳化为 examples/integrations，引擎迁到 graphiti，<b>别引错 repo</b></td></tr>
+      <tr><td>letta-ai/letta</td><td class="stars">24,870</td><td>Apache-2.0</td><td>2026-09-10</td><td>MemGPT 商业化，stateful agent runtime；<b>范式是 agent 私有自传，不是围绕客户的共享记忆，不适合当 CCaaS 中间件</b></td></tr>
+      <tr><td>topoteretes/cognee</td><td class="stars">30,971</td><td>Apache-2.0</td><td>2026-09-24</td><td>graph + vector + RDF ontology，BYOC 咨询式 enterprise；需自定义 ontology，前期投入大</td></tr>
+      <tr><td>langchain-ai/langmem</td><td class="stars">1,684</td><td>MIT</td><td>2026-09-09</td><td>LangChain 官方记忆读写 SDK（2025-02 发布），不带存储；已选 LangGraph 才顺带用</td></tr>
+      <tr><td>langchain-ai/langgraph</td><td class="stars">42,242</td><td>MIT</td><td>2026-09-23</td><td>agent 编排框架，checkpoint/store 是记忆原语；治理（保留期/删除/隔离）全自建</td></tr>
+      <tr><td>run-llama/llama_index</td><td class="stars">52,310</td><td>MIT</td><td>2026-09-25</td><td>RAG 框架，memory 是 pipeline 一环，非独立记忆产品</td></tr>
+      <tr><td>deepset-ai/haystack</td><td class="stars">26,591</td><td>Apache-2.0</td><td>2026-09-24</td><td>LLM orchestration，pipeline 内显式 memory，同上</td></tr>
+      <tr><td>pgvector/pgvector</td><td class="stars">23,154</td><td>PostgreSQL License</td><td>2026-09-22</td><td><b>金融首选向量底座</b>：直接继承 Postgres RBAC/RLS/审计/备份，行级隔离与级联删除最好做（GitHub 显示 NOASSERTION 是未识别，非 license 问题）</td></tr>
+      <tr><td>qdrant/qdrant</td><td class="stars">34,804</td><td>Apache-2.0</td><td>2026-09-24</td><td>高性能向量库；collection 级隔离 OSS 有，细粒度 RBAC/审计在商业版 <span class="badge b-todo">待核实</span></td></tr>
+      <tr><td>milvus-io/milvus</td><td class="stars">46,249</td><td>Apache-2.0</td><td>2026-09-24</td><td>云原生向量库；企业级 RBAC/审计在 Zilliz 商业版</td></tr>
+      <tr><td>weaviate/weaviate</td><td class="stars">16,843</td><td>双许可（BSD-3 + <code>wl/</code> 商业）</td><td>2026-09-24</td><td>选功能须逐文件确认是否落在 <code>wl/</code> 目录，否则触发商业授权</td></tr>
+      <tr><td>chatwoot/chatwoot</td><td class="stars">37,164</td><td>核心 MIT，<code>enterprise/</code> 商业</td><td>2026-09-25</td><td>开源全渠道客服台；contact 是 CRM 式档案而非 AI 向量记忆——数据模型参照，不可作引擎</td></tr>
+      <tr><td>open-webui/open-webui</td><td class="stars">153,092</td><td>⚠️ 自定义 source-available（≤50 用户可去 branding）</td><td>2026-09-24</td><td>不能白包装进商业 CCaaS；但其"用户可见/可管理记忆"设置页是台账 UX 的好参照</td></tr>
+      <tr><td>kingjulio8238/Memary</td><td class="stars">2,649</td><td>MIT</td><td><b>2024-10-22</b></td><td>❌ 停更约 23 个月，排除</td></tr>
+      <tr><td>microsoft/autogen</td><td class="stars">61,149</td><td>⚠️ LICENSE 实为 <b>CC-BY-4.0</b>（内容许可非软件许可）</td><td>2026-04 起约 5.5 个月无提交</td><td>❌ 不可按开源软件直接依赖；记忆设计（记忆流+自编辑）仅作参考</td></tr>
+    </tbody>
+  </table></div>
+  <div class="callout note"><span class="ct">选型避坑（实查结论）</span>
+    <p style="margin-bottom:0">老 zep 仓已空壳、Memary 停更、AutoGen 是 CC-BY 且长期无提交、Open WebUI 是 source-available、Weaviate 有 <code>wl/</code> 商业目录。记忆引擎 PoC 只在 <b>graphiti 与 mem0</b> 之间做 A/B；存储优先 <b>pgvector</b>。</p>
+  </div>
+</section>
+
+<!-- ============ 07 ECONOMICS ============ -->
+<section id="economics">
+  <div class="sec-head"><span class="num">07</span><h2>市场规模与采购经济</h2></div>
+
+  <h3>7.1 相关市场盘子（第三方机构口径，2026-09 检索；数字不可相加，高度重叠）</h3>
+  <div class="bars">
+    <div class="bar-row"><div>AI voice agents（$3.5B/2026）</div><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><div class="bar-val">CAGR 39.0%</div></div>
+    <div class="bar-row"><div>Agentic AI 编排+记忆（$6.27B/2025）</div><div class="bar-track"><div class="bar-fill alt" style="width:93%"></div></div><div class="bar-val">CAGR 35.3%</div></div>
+    <div class="bar-row"><div>AI personalization（宽口径）</div><div class="bar-track"><div class="bar-fill alt" style="width:87%"></div></div><div class="bar-val">CAGR ~34%</div></div>
+    <div class="bar-row"><div>GenAI 客服自动化（$7.82B/2025）</div><div class="bar-track"><div class="bar-fill" style="width:72%"></div></div><div class="bar-val">CAGR 28.2%</div></div>
+    <div class="bar-row"><div>对话式 AI（$17.7B/2026）</div><div class="bar-track"><div class="bar-fill alt" style="width:61%"></div></div><div class="bar-val">CAGR 23.8%</div></div>
+    <div class="bar-row"><div>CCaaS（$8.0B/2026）</div><div class="bar-track"><div class="bar-fill" style="width:57%"></div></div><div class="bar-val">CAGR 22.3%</div></div>
+    <div class="bar-row"><div>CDP（$7.34B/2026）</div><div class="bar-track"><div class="bar-fill warn" style="width:36%"></div></div><div class="bar-val">CAGR 13.8%</div></div>
+  </div>
+  <p class="small">来源（v0.1.5 按外部评审对齐基年）：Grand View Research——CCaaS $6.8B(2025)→$8.0B(2026)→$32.7B(2033) CAGR 22.3%；conversational AI $14.3B(2025)→$17.7B(2026)→$78.9B(2033) CAGR 23.8%；AI voice agents $2.54B(2025)→$3.5B(2026)→$35.2B(2033) CAGR 39%。Mordor——GenAI 客服自动化 $7.82B(2025)→$34.12B(2031)，官方 CAGR 28.18% 为 2026–2031 区间（基数 $9.86B），按 2025 基数起算约 27.8%；Agentic AI Orchestration & Memory Systems $6.27B(2025)→$28.45B(2030) CAGR 35.32%。MarketsandMarkets——CDP 同一报告两个基期：$6.35B(2025)/$7.34B(2026)→$14.04B(2031)，CAGR 13.8–14.1%；AI personalization $5.45B→$41.6B/2032。Fortune BI 旁证。</p>
+
+  <div class="callout warn"><span class="ct">关键判断（v0.1.5 更正）：记忆已有独立市场科目，但 FS 预算仍挂体验结果</span>
+    <p style="margin-bottom:0">此前"agent memory 没有独立市场报告"的断言<b>不成立</b>，已更正：Mordor Intelligence《Agentic AI Orchestration and Memory Systems Market》给出 $6.27B（2025）→ $28.45B（2030）、CAGR 35.32% 的独立条目；Gartner《Innovation Insight for AI Agent Memory Platforms》（文档 8269957，2026-08-17）条目已独立复核（2026-09-26 对齐 gartner.com/en/documents/8269957，标题/编号/发布日一致），<b>全文内容因付费墙未核验</b> <span class="badge b-todo">待核实</span>。但这两个科目计的是<b>横向 agentic 记忆/编排市场</b>（Mem0/Zep 类玩家所在），不等于"FS governed memory 产品层"已有独立采购预算线。对 Talkdesk 滩头客户（银行/保险客服）而言，采购立项仍然挂在体验结果（FCR、AHT、一次解决）而非"memory infra"科目上——<b>GTM 结论不变</b>：卖"agent 自治时不重复问客户问题"，不卖 memory 平台。横向记忆公司融资量级（Mem0 累计 $24M）仍旁证 FS 细分处在教育期。</p>
+  </div>
+
+  <h3>7.2 预算从哪来：记忆价值的量化锚点 <span class="badge b-ana">分析</span></h3>
+  <p>记忆的价值不在"多记得"，在<b>少重复问、少一次接触、少 AHT、少误办</b>。可锚定的 ROI 公式：</p>
+  <div class="callout key"><p style="margin:0;font-family:var(--mono);font-size:13px">
+    年化价值 ≈ 重复信息导致的重复接触减少量 × 单接触 loaded 成本（电话 $12–20 / 邮件 $6–12——行业经验区间、无权威出处 <span class="badge b-todo">待核实</span>，立项前用本行财务口径替换）<br>
+    ＋ AHT 下降分钟数 × 坐席分钟成本 × 年通话量 ＋ 误办/纠错工单减少 × 单工单成本
+  </p></div>
+  <p>旁证锚点（v0.1.6 更正归因）：常被引的 ~25% AHT↓、~10% CSAT↑ 出自 <b>Traeger Grills（烧烤炉零售商）在 AWS Customer Profiles 上的 2020 年 early trials</b>（AWS 产品页 + re:Invent 2020 PDF），<b>不是金融客户口径，不能拿来锚银行 ROI</b>；FS 渠道公开侧暂无同类硬数字，锚点只能来自本行试点基线测算。<b>各厂商宣传的"记忆准确率 85–95%"均为私有测试集口径，无跨厂商公开基准——立项/采购必须要求在本行脱敏数据上复现（LoCoMo/LongMemEval 或自建 eval 集）。</b></p>
+
+  <h3>7.3 定价参照</h3>
+  <div class="table-wrap"><table class="fixed">
+    <colgroup><col style="width:22%"><col style="width:48%"><col style="width:30%"></colgroup>
+    <thead><tr><th>厂商</th><th>记忆定价</th><th>启示</th></tr></thead>
+    <tbody>
+      <tr><td>Twilio Conversation Memory</td><td>$0.0028/1k characters 生成（input+output）＋$0.007/次召回</td><td>按用量、生成与召回分别计价，价格透明可直接做成本建模</td></tr>
+      <tr><td>Mem0</td><td>Hobby 免费；Starter $19/月；Pro $249/月；Enterprise 定制（on-prem/audit/SSO/SLA）</td><td>infra 极便宜，证明"记忆技术"不构成预算门槛</td></tr>
+      <tr><td>Zep</td><td>Free 10K credits/月；Flex $125（50K）；Flex Plus $375（200K + webhooks/自定义抽取）；Enterprise/BYOC 定制</td><td>治理能力（BYOC/ABAC/驻留）全部押在 Enterprise</td></tr>
+      <tr><td>Letta</td><td>$20/月起 ＋ $0.10/active agent/月 ＋ 服务端工具秒费；LLM token 另付</td><td>按 active agent 计费，范式不匹配客服共享记忆</td></tr>
+    </tbody>
+  </table></div>
+</section>
+<!-- ============ 08 GOVERNED MEMORY ============ -->
+<section id="governed">
+  <div class="sec-head"><span class="num">08</span><h2>Governed Memory：合规 × 体验双赢的产品主张（核心章）</h2></div>
+
+  <h3>8.1 一个切分：remember FOR the customer vs remember ABOUT the customer</h3>
+  <div class="ns-grid">
+    <div class="ns for">
+      <h4>remember FOR —— 服务记忆</h4>
+      <div class="nsd">为了把<b>你委托我办的事</b>办完，必须记住的东西。</div>
+      <ul>
+        <li>在办案件、上次说到哪、承诺的回电、语言/渠道偏好、认证状态</li>
+        <li><b>默认开启</b>（合法基础：合同履行），客户可见</li>
+        <li>用途锁死在服务，<b>不流入营销/授信/风控</b></li>
+        <li>体验价值：不重复问、跨渠道续接、一次解决</li>
+      </ul>
+    </div>
+    <div class="ns about">
+      <h4>remember ABOUT —— 营销画像</h4>
+      <div class="nsd">为了<b>向你推销/影响你</b>而推断出来的画像。</div>
+      <ul>
+        <li>消费倾向、流失概率、情绪/脆弱性推断、交叉销售标签</li>
+        <li><b>单独同意、默认关闭、可一键删除</b></li>
+        <li>GDPR Art.21 给了客户对营销画像的<b>绝对反对权</b></li>
+        <li>不做这层，不影响服务连续性；做了必须可关</li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout key"><span class="ct">为什么这是双赢而不是妥协</span>
+    <p style="margin-bottom:0">FOR 解决客户最烦的"为什么又让我重复一遍"（体验），同时落在合同履行合法基础上、不触发 profiling 监管（合规）；ABOUT 是监管和客户共同警惕的部分，默认关 + 一键删反而让银行敢用、客户敢留。<b>三大法域（EU/美国/中国）对这个切分给出的是同一张产品需求单</b>（§09）。</p>
+  </div>
+
+  <h3>8.2 三命名空间物理隔离（N1 服务 / N2 个性化 / N3 营销，不是标签隔离）</h3>
+  <div class="table-wrap"><table class="fixed">
+    <colgroup><col style="width:14%"><col style="width:24%"><col style="width:16%"><col style="width:14%"><col style="width:32%"></colgroup>
+    <thead><tr><th>命名空间</th><th>存什么</th><th>同意基础</th><th>默认</th><th>谁能读</th></tr></thead>
+    <tbody>
+      <tr><td><b>N1 Service-essential</b></td><td>案件、待办、偏好、认证、联系偏好</td><td>合同履行</td><td>开</td><td>服务坐席/服务 AI；<b>pipeline 物理断开营销、授信、风控</b></td></tr>
+      <tr><td><b>N2 Personalization</b></td><td>称呼习惯、沟通风格等纯服务个性化</td><td>服务必要+客户可见</td><td>开但可关</td><td>服务侧；关闭后不影响案件办理</td></tr>
+      <tr><td><b>N3 Marketing profile</b></td><td>营销标签、倾向推断、流失/情绪画像</td><td>明确单独同意</td><td><b>关</b></td><td>营销侧；独立 consent gate；一键删；TCPA 撤回任何渠道即生效</td></tr>
+    </tbody>
+  </table></div>
+  <p class="small">"物理隔离"含义：独立存储/独立访问策略/独立审计日志，而非同库加字段。授信、承保、风控任何模型不得读取 N1/N2/N3 记忆特征（FCRA/ECOA 与中国 NFRA 生成式 AI 高风险清单的共同要求，见 §09）。</p>
+
+  <h3>8.3 十个双赢机制（C.1–C.10：每条同时改善体验与合规）</h3>
+  <div class="table-wrap"><table class="fixed">
+    <colgroup><col style="width:5%"><col style="width:21%"><col style="width:37%"><col style="width:37%"></colgroup>
+    <thead><tr><th>#</th><th>机制</th><th>体验价值</th><th>合规对价</th></tr></thead>
+    <tbody>
+      <tr><td>C.1</td><td><b>客户记忆台账</b>（memory ledger，可看/可纠正/可删/可声明"别记"）</td><td>客户知道银行记得什么、来源是什么，信任感</td><td>GDPR Art.15/16、AI Act Art.50 透明度、PIPL 第 45 条查阅复制权（第 44 条为知情/决定权，v0.1.5 更正）；对标 ChatGPT/Anthropic/Apple</td></tr>
+      <tr><td>C.2</td><td><b>三层同意 + 独立 consent gate</b></td><td>不被偷偷画像；服务不受营销开关影响</td><td>GDPR 目的限定、TCPA（FCC 24-24/§64.1200(a)(10)：任何合理方式撤回即生效；DA-25-312 仅为延期令）、PIPL 第 24 条</td></tr>
+      <tr><td>C.3</td><td><b>TTL + legal hold</b>（每类记忆保留期矩阵，到期自动删；诉讼冻结优先）</td><td>过期信息不再造成尴尬误认</td><td>GDPR Art.5(1)(e) 存储限制、GLBA Safeguards、FINRA records</td></tr>
+      <tr><td>C.4</td><td><b>记事实不记原文</b>（原文进 WORM 审计库，不进向量；identity key 用内部 UUID）</td><td>召回更快更准</td><td>最小化原则；降低 PII 暴露面；email/SSN 不做检索 key</td></tr>
+      <tr><td>C.5</td><td><b>认证匹配后才召回</b>（未认证会话零 PII，未认领事件暂存不并入档案）</td><td>陌生人问不出口你的信息</td><td>防跨用户泄露（MAMA/PrivacyPeek）；GLBA 身份核验义务</td></tr>
+      <tr><td>C.6</td><td><b>pipeline 物理断开</b>营销/授信/风控</td><td>不会因为问过"破产"就被拒贷/差别定价</td><td>FCRA/ECOA、CFPB 黑盒信贷指引（Circular 2022-03）、NFRA AI 指导意见</td></tr>
+      <tr><td>C.7</td><td><b>低置信只参考、不行动</b>（低于阈值显示"未核实"并主动向客户确认）</td><td>AI 不会拿记错的东西硬办业务</td><td>LongMemEval/LoCoMo 能力边界；UDAAP 防误导</td></tr>
+      <tr><td>C.8</td><td><b>"记错了？"软停工作流</b>（客户一键纠错→核实→更正/硬删，全程留痕）</td><td>纠正比投诉容易</td><td>GDPR Art.16 更正权；NYDFS Insurance CL7（反歧视主题下）含错误信息纠正要求</td></tr>
+      <tr><td>C.9</td><td><b>级联删除 + tombstone + 审计</b>（DB/向量/摘要/缓存/下游同步一处请求全部处理）</td><td>说删就真删</td><td>GDPR Art.17、PIPL 第 47 条、CCPA 删除权；RAG-unlearning 工业路线；certified deletion 不做过度承诺</td></tr>
+      <tr><td>C.10</td><td><b>Admin 法域策略台</b>（EU/纽约/中国开箱模板：保留期、同意默认、驻留 region）</td><td>银行开箱即合规，上线快</td><td>GDPR/AI Act、NYDFS Part 500、PIPL；审计可导出</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>8.4 客户记忆台账（产品形态示意 · mock）</h3>
+  <div class="mock">
+    <div class="mbar"><span class="dot"></span>My Memory · 银行记住了我什么（客户在网银/App 内看到的页面）</div>
+    <div class="mbody">
+      <div class="mrow"><div class="mtext"><b>持有白金信用卡，还款日偏好 15 号</b><div class="mmeta">来源：2026-07-02 电话坐席 · 命名空间：N1 服务 · 置信度 高 · 到期：2027-07-02</div></div><div><span class="mconf c-hi">已核实</span> <span class="mact">纠正 · 删除</span></div></div>
+      <div class="mrow"><div class="mtext"><b>8/12 对一笔 $14.99 交易提出争议，案件 #DS-8821 处理中</b><div class="mmeta">来源：2026-08-12 chat（已认证）· N1 服务 · 置信度 高 · legal hold 中</div></div><div><span class="mconf c-hi">在办案件</span> <span class="mact">查看案件</span></div></div>
+      <div class="mrow"><div class="mtext"><b>可能对旅行类信用卡感兴趣</b><div class="mmeta">来源：2026-08 浏览行为推断 · 命名空间：N3 营销 · 置信度 低</div></div><div><span class="mconf c-lo">推断标签</span> <span class="mact">关闭营销记忆</span></div></div>
+      <div class="mrow"><div class="mtext"><b>8/25 有一封未认证邮件询问争议进度</b><div class="mmeta">来源：未认证渠道 · 已暂存，未并入档案（完成身份验证后才关联）</div></div><div><span class="mconf c-mid">待认领</span> <span class="mact">验证是我本人</span></div></div>
+    </div>
+  </div>
+  <div class="mock">
+    <div class="mbar"><span class="dot"></span>Memory Policy Console · Admin（银行合规/IT 配置台 · mock）</div>
+    <div class="mbody">
+      <div class="table-wrap" style="box-shadow:none;border:none;margin:0">
+      <table class="fixed" style="font-size:12px">
+        <colgroup><col style="width:26%"><col style="width:22%"><col style="width:18%"><col style="width:34%"></colgroup>
+        <thead><tr><th>记忆类别</th><th>法域模板：EU / 纽约 / 中国</th><th>默认开关</th><th>保留期 / 特殊规则</th></tr></thead>
+        <tbody>
+          <tr><td>N1 案件与待办</td><td>合同履行 / 合同履行 / 合同履行</td><td>开 / 开 / 开</td><td>案件关闭后 24 个月；legal hold 不删</td></tr>
+          <tr><td>N2 服务个性化</td><td>开可关 / 开可关 / 开可关</td><td>开</td><td>12 个月未互动自动过期</td></tr>
+          <tr><td>N3 营销画像</td><td><b>默认关</b> / 默认关 / 默认关</td><td>关</td><td>单独同意；撤回即级联删除；不向授信/风控输出</td></tr>
+          <tr><td>情绪/脆弱性推断</td><td colspan="2"><b>全局禁用（红线）</b></td><td>AI Act Art.50(3) 告知义务 + 歧视风险</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <h3>8.5 十条红线（产品不做清单）</h3>
+  <div class="table-wrap"><table class="fixed">
+    <colgroup><col style="width:5%"><col style="width:40%"><col style="width:55%"></colgroup>
+    <thead><tr><th>#</th><th>红线</th><th>理由</th></tr></thead>
+    <tbody>
+      <tr><td>R1</td><td>不做情绪状态/脆弱性推断并据此路由或差别对待</td><td>AI Act Art.50(3)、UDAAP、歧视与声誉风险</td></tr>
+      <tr><td>R2</td><td>记忆不驱动沉默降级（如悄悄降额度/改费率）</td><td>FCRA/ECOA、UDAAP、PIPL 第 24 条差别定价禁令</td></tr>
+      <tr><td>R3</td><td>记忆不用于记忆驱动的交叉销售/差别定价</td><td>同上；N3 与服务 pipeline 物理断开</td></tr>
+      <tr><td>R4</td><td>未认证渠道绝不暴露历史记忆</td><td>跨用户泄露 = GLBA 数据泄露事故</td></tr>
+      <tr><td>R5</td><td>记忆不向授信、承保理赔、风控模型输出特征</td><td>FCRA/ECOA adverse action 告知链；NFRA 金发〔2026〕8 号将生成式 AI 五类高风险应用含信贷审批/承保理赔/风险管理三类（§09）</td></tr>
+      <tr><td>R6</td><td>服务记忆未经单独同意不用于营销</td><td>GDPR 目的限定（Art.5）；PIPL 第 24 条</td></tr>
+      <tr><td>R7</td><td>不用客户真实对话训练通用模型（除非单独 opt-in；默认只用脱敏聚合改进本租户）</td><td>NYDFS 2024-10/2025-10 第三方函建议（"should consider"，非新增强制条款）合同写清；GLBA</td></tr>
+      <tr><td>R8</td><td>不无限期记忆；删除后不留向量孤儿/缓存残留</td><td>Art.5(1)(e)、Art.17；MemLeak 多模态残留证据</td></tr>
+      <tr><td>R9</td><td>不用暗黑模式（默认全开、删除入口藏三层、撤回比同意难）</td><td>FTC §5、EU AI Act Art.50、中国算法推荐规定第 17 条</td></tr>
+      <tr><td>R10</td><td>AI 不得仅凭记忆单方否定客户自述（如"系统显示您没说过"）</td><td>举证责任与消费者保护；记忆召回的答题准确度只有全量读历史的 6–8 成（LongMemEval 57.7%/91.8%）</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>8.6 从自有项目 GraphMe 借鉴的体验资产 <span class="badge b-ana">分析</span></h3>
+  <p class="small">GraphMe（作者自有项目：长期记忆管理与可视化平台，已完整 demo 并有 PRD/指标体系）与本报告是同一件产品的两半：<b>本报告回答"该治理什么"（schema/合规），GraphMe 回答"怎么让人看得懂、愿意用"（交互/指标）。</b>§8.4 台账若只当合规勾选项做，会做成"没人看的导出 PDF"；GraphMe 已验证的交互范式正是把合规负担变成信任卖点的现成资产。</p>
+  <div class="table-wrap"><table class="fixed">
+    <colgroup><col style="width:4%"><col style="width:27%"><col style="width:34%"><col style="width:35%"></colgroup>
+    <thead><tr><th>#</th><th>GraphMe 资产（已验证）</th><th>借到 Talkdesk 记忆产品的落点</th><th>填哪个差异点/机制的缺口</th></tr></thead>
+    <tbody>
+      <tr><td>G.1</td><td><b>双层记忆</b>：Raw（事实，不可推翻，只能删）vs Insight（概率推断，版本进化 v1 72%→v3 91%，被新版本替代）</td><td>写入防火墙的分层判据：N1 服务事实走 <b>Raw 层</b>（仅核心系统回写、不可改只能删）；N2/N3 推断走 <b>Insight 层</b>（带 confidence、可被更新、客户可纠）</td><td>差异点④写入侧防火墙——报告只给了"动账类不接受对话抽取"一条规则，缺整套分层语言</td></tr>
+      <tr><td>G.2</td><td><b>溯源链</b>：chat 回答下方 <code>mem_007</code> 可点击跳原始记忆卡</td><td>台账每条记忆来源可点开看原文；AI 生成的每个 claim 可点开看依据</td><td>一套 UX 同时喂饱两份报告：本报告 provenance + Email 报告 claim-level 接地校验 / decision dossier</td></tr>
+      <tr><td>G.3</td><td><b>洞察可进化 + 旧版保留 + 矛盾数据触发更新</b>（confidence 曲线）</td><td>客户改口 → insight 出 v2、旧版留档——bi-temporal 的用户可感知形态</td><td>LongMemEval 最弱的 knowledge updates 能力，从术语变成看得见的交互</td></tr>
+      <tr><td>G.4</td><td><b>按角色直觉维度</b>：同一后端数据，儿童看热力云、家长看时间线、极客看剖面</td><td>同一份台账四个视图：客户=时间线+纠正、坐席=pre-contact brief、主管=质量飞轮、合规=卷宗导出</td><td>四 persona 各看什么——报告现有台账 mock 是单一视图</td></tr>
+      <tr><td>G.5</td><td><b>运营阈值触发动作</b>：洞察纠正率 &gt;30% → 暂停自动生成转人工 review</td><td>客户纠错率超阈值 → 自动降级为只读抽取（降级而非拦停的记忆版）</td><td>§16 指标只有"量"，缺"超阈值怎么办"的闭环</td></tr>
+      <tr><td>G.6</td><td><b>遗忘曲线 = 资产折损可视化</b>（艾宾浩斯 vs 实际调用）</td><td>主管"记忆健康"视图：TTL 到期倒计时、90 天未引用占比、过期率趋势</td><td>TTL 从静态合规字段变成运营视图；对抗"治理=拖慢效率"的采购阻力</td></tr>
+      <tr><td>G.7</td><td><b>飞轮指标</b>（记忆总数/活跃洞察/已确认洞察/平均置信度）</td><td>主管看板采用度叙事："坐席确认得越多，brief 越准"</td><td>Level 2 的 adoption 故事（对应 C.8 纠错流的正向版本）</td></tr>
+      <tr><td>G.8</td><td><b>跨 host 导入 + 按来源过滤</b>（ChatGPT → 统一记忆中枢）</td><td>全渠道记忆来源管道（voice/email/chat/CRM/核心系统）+ provenance 过滤器</td><td>呼应"全渠道编排"底座：别人是 API，我们是收口</td></tr>
+    </tbody>
+  </table></div>
+  <div class="callout note"><span class="ct">用 GraphMe 自己的决策框架砍（高信息增量 × 低交互复杂度）</span>
+    <p style="margin-bottom:6px"><b>不借 3D 记忆星云</b>（GraphMe 第一壁垒）——银行坐席与合规主管要表格和时间线，交互复杂度高、信息增量低，恰落 GraphMe 自己的"砍掉区"逻辑；</p>
+    <p style="margin-bottom:6px"><b>不借记忆盲盒/碰撞对</b>（proactive 推送）——FS 场景主动翻"深埋的记忆"= 惊奇使用（UDAAP 风险），N3 需单独同意；N1 仅可弱化为 brief 里"上次您提到…"；</p>
+    <p style="margin-bottom:0"><b>不借记忆银行金融隐喻</b>（资产/利息/利率）——对合规与监管叙事是玩具感；只保留内核"记忆是资产要维护"用于内部运营话术。</p>
+  </div>
+  <div class="callout key"><p><b>一句话差异化：</b>"Level 2 台账全行业没人做，是因为大家把它当合规导出 PDF；我们把它做成可交互的记忆空间——每条可点开溯源、事实与推断双层区分、客户一键纠正、纠正率超阈自动降级。<b>合规要求我们有台账，体验设计让台账变成信任卖点。</b>"（交互范式已在自有项目 GraphMe 验证）</p></div>
+</section>
+
+<!-- ============ 09 REGULATION ============ -->
+<section id="regulation">
+  <div class="sec-head"><span class="num">09</span><h2>监管全景：三大法域给出同一张需求单</h2></div>
+
+  <h3>9.1 欧盟（GDPR + AI Act）</h3>
+  <div class="table-wrap"><table class="fixed narrow">
+    <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+    <tbody>
+      <tr><td><b>GDPR Art.5</b></td><td>目的限定、数据最小化、准确性、存储限制——直接推出三命名空间、记事实不记原文、TTL</td></tr>
+      <tr><td><b>Art.15/16/17</b></td><td>访问权/更正权/删除权——记忆台账、纠错工作流、级联删除的法律基础</td></tr>
+      <tr><td><b>Art.21</b></td><td><b>绝对反对权</b>：客户可随时反对直接营销画像，反对即停——N3 一键关的依据</td></tr>
+      <tr><td><b>Art.22</b></td><td>不受纯自动化重大决定约束。<b>纯客服记忆不触发；一旦记忆流入授信/定价决策即触发</b>——R5 的法律来源</td></tr>
+      <tr><td><b>AI Act Art.50</b></td><td>透明度义务（含情绪识别系统的告知）<b>已于 2026-08-02 适用</b>；高风险义务被 Digital Omnibus 推迟至 2027-12-02。客户必须知道在与 AI 交互、知道记忆如何影响服务</td></tr>
+      <tr><td><b>EDPB 2025 删除权报告</b></td><td>报告按七个专题检视删除权的落地难点（技术可行性、下游传播与副本、豁免情形、验证流程等，详见原文）——"级联删除要覆盖向量库、训练缓存、第三方同步"是本报告基于其专题方向的<b>产品化推论</b>，非报告逐字要求（v0.1.5 口径修正）</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>9.2 美国（联邦部门法 + 州法拼图）</h3>
+  <div class="table-wrap"><table class="fixed narrow">
+    <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+    <tbody>
+      <tr><td><b>GLBA Safeguards Rule</b></td><td>NPI 保护、访问控制、数据销毁；NYDFS Part 500（纽约银行）要求更细的事件响应与第三方治理</td></tr>
+      <tr><td><b>FCRA / ECOA</b></td><td>记忆特征若用于授信并产生 adverse action，触发征信使用条件与不利决定告知链；<b>CFPB Circular 2022-03（2022-05-26，政策指引，无新立法权）点名"黑盒"信贷模型称现有法已要求可解释</b>。最稳路径：记忆根本不向授信输出（R5）</td></tr>
+      <tr><td><b>FTC Act §5 / UDAAP</b></td><td>"惊奇使用"（surprise use：收集时没说的用途）是 FTC 不公平/欺骗执法的常用理论（不公平性按三要素认定：实质性伤害、消费者难以合理避免、伤害大于收益）；稳妥原则：记忆用途必须在收集时点明示</td></tr>
+      <tr><td><b>TCPA（撤回权：FCC 24-24，2024-02-16；DA-25-312/DA-26-12 为延期令）</b></td><td>消费者用<b>任何合理方式</b>撤回同意即生效（47 CFR §64.1200(a)(10)；含对 AI 语音说"别再打/发短信"——合理方式标准下的推论，FCC 未点名 AI）——联系偏好必须是一等记忆字段 + 独立 consent gate，且跨渠道生效</td></tr>
+      <tr><td><b>州隐私法 profiling opt-out</b></td><td>Colorado CPA Rule 9.04 明确含金融/lending 场景的画像退出；VCDPA/CTDPA 类似；CCPA 精确引注 <span class="badge b-todo">待核实</span>。<b>v0.1.5 警示：</b>CPA §6-1-1304(2)(q) 等条款豁免受 GLBA 监管的金融机构客户数据——对银行租户，州法画像退出权的实际抓手更多在 GLBA Reg P  opt-out 与保险州法，州 CPA 类条款适用面收窄，产品仍按 N3 默认关做统一体验</td></tr>
+      <tr><td><b>Colorado AI Act</b></td><td><b>纠错：原 SB 24-205 已被 SB 26-189（ADMT 法）取代；xAI v. Weiser 案后执法暂停</b>，不得再写"2026-02-01 生效"。ADMT 框架仍保留高风险/consequential decision 治理思路，持续跟踪</td></tr>
+      <tr><td><b>NYDFS 第三方函（2024-10 / 2025-10-21）</b></td><td>2025-10 函原话为<b>不施加新要求</b>、建议（"should consider"）合同写清客户数据能否用于训模型与终止时删除——是监管期待而非硬性条款；Insurance Circular Letter 7（2024-07）主题是反歧视/公平定价（引 III.D/IV.F 子条款），其中<b>含对不准确错误信息的纠正要求</b>——C.8 的监管蓝本（v0.1.5 口径修正）</td></tr>
+      <tr><td><b>CFPB Chatbots 报告（2023-06）+ 联合声明</b></td><td>自动化系统违法不免责（Air Canada 案同理）——AI 记错办错，银行全赔</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>9.3 中国（PIPL + 算法治理，用户特别关心的"取消算法推荐"）</h3>
+  <div class="table-wrap"><table class="fixed narrow">
+    <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+    <tbody>
+      <tr><td><b>PIPL 第 24 条</b></td><td>自动化决策应保证决策透明度和结果公平公正，<b>不得对个人在交易价格等交易条件上实行不合理差别待遇</b>；通过自动化决策方式进行信息推送、商业营销，应同时提供<b>不针对其个人特征的选项，或者便捷的拒绝方式</b>；对个人权益有重大影响的决定有权要求说明并拒绝纯自动化</td></tr>
+      <tr><td><b>PIPL 第 47 条</b></td><td>删除权（处理目的已实现/撤回同意/超期）——级联删除</td></tr>
+      <tr><td><b>《互联网信息服务算法推荐管理规定》第 17 条</b></td><td>应向用户提供便捷的关闭算法推荐服务选项；选择关闭的，应<b>立即停止</b>提供相关服务，并应提供删除用户标签的功能——N3 关闭即停 + 标签删除的直接依据</td></tr>
+      <tr><td><b>NFRA AI 指导意见（金发〔2026〕8 号，2026-06-18）</b></td><td>第十六条将<b>生成式 AI</b> 高风险应用列为五类：资金交易、资产评估、信贷审批、承保理赔、风险管理（+兜底条款）——R5 三条所在类别均在其中；注意限定语是"生成式人工智能"，非泛指一切 AI（v0.1.5 更正）</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="callout key"><span class="ct">辨析：算法推荐 opt-out 管 ABOUT，不管 FOR</span>
+    <p style="margin-bottom:0">用户担心的"中国要求可取消算法推荐"约束的是<b>营销/推荐/画像（N3）</b>；为履行服务合同而记住"你的争议案件办到哪了"（N1），合法基础是合同履行与法定义务，不属于算法推荐。产品上把两者物理切开：N3 默认关、可一键拒绝、关闭后立即停并删标签；N1 照常服务客户。<b>这就是"合规 × 体验双赢"的出路——不是少记，而是把该记的（服务）和不该默认记的（画像）分开。</b></p>
+  </div>
+</section>
+<!-- ============ 10 VERDICT ============ -->
+<section id="verdict">
+  <div class="sec-head"><span class="num">10</span><h2>会不会白做：滩头、入场券与 Build vs Buy</h2></div>
+
+  <h3>10.1 滩头选择（工作假设）</h3>
+  <div class="table-wrap"><table class="fixed narrow">
+    <colgroup><col style="width:18%"><col style="width:82%"></colgroup>
+    <tbody>
+      <tr><td><b>目标客户</b></td><td>美国中型银行 / 信用联社（community bank、credit union）——Talkdesk FS 行业云 + 6 家核心/数字银行平台连接器（core：Fiserv/FIS/Jack Henry；digital：Q2/Candescent/Alkami）的天然客群；大行品牌战是 Sierra/Salesforce 的战场</td></tr>
+      <tr><td><b>采购方式</b></td><td>语音存量客户<b>加购</b>（非新采购、非换 CCaaS），随 AI voice agent/Autopilot 套餐落地</td></tr>
+      <tr><td><b>入口渠道</b></td><td><b>GTM 首入场景是 voice，不是产品只做 voice</b>：① 电话 + IVR 认证最强，"认证后立刻认出你"的高光时刻只在强认证渠道成立（chat/SMS/email 多为弱身份，未认证只能零 PII 通用回复）；② 记忆价值当场可感知、可量化（"我知道您上周的争议"→ 直接压 AHT/提 FCR）；③ AI voice agents 是增速最快的盘（CAGR 39%），且打法是语音存量客户<b>加购</b>，预算路径最短。chat/SMS/email/portal 先作记忆来源与续接展示面，第二、三步再变入口。<b>台账不在通话中看</b>：它是异步自助页，长在手机银行 App / 网银等已认证数字面上，voice 负责触发（通话后经 SMS/email 下发安全链接，IVR 内亦可口头告知并补发链接）。</td></tr>
+      <tr><td><b>差异化钉子</b></td><td>"认证后立刻认出你 + 在办案件 brief + 客户能看能删的记忆台账"——不拼记得多牢，拼<b>记得住且合规、客户管得了</b></td></tr>
+      <tr><td><b>窗口</b></td><td>12–18 个月：Sierra 已在大行跑通长流程+记忆叙事（2026-08 BBVA），Twilio 已明码标价；Level 2 治理层尚未被任何客服产品占据</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>10.2 入场券 vs 差异点（诚实分层）</h3>
+  <div class="table-wrap"><table class="fixed narrow">
+    <colgroup><col style="width:50%"><col style="width:50%"></colgroup>
+    <thead><tr><th>只是入场券（没有不行，有了不稀奇）</th><th>真正的差异点（没人做全）</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>跨会话/跨渠道事实抽取（Mem0 开源、Sierra/Decagon/Twilio 已有）；pre-contact brief；坐席侧历史摘要；向量检索；SOC 2/加密/RBAC</td>
+        <td><b>① 受治理 Level 2 产品层</b>：bi-temporal + provenance + TTL/legal hold + 用途隔离 + 客户台账，开箱给银行</td>
+      </tr>
+      <tr>
+        <td>删除 API、保留期配置（Twilio/Zep 云已有管理员版）</td>
+        <td><b>② FS 领域记忆模型</b>：case/dispute/Reg E 时钟、承诺事项、联系偏好（TCPA）作为原生实体，而非客户自建 schema</td>
+      </tr>
+      <tr>
+        <td>身份解析（Amazon Customer Profiles 做了 5 年）</td>
+        <td><b>③ 认证闸门 + 未认领事件</b>的跨渠道合并范式（未认证零 PII）</td>
+      </tr>
+      <tr>
+        <td>基础注入过滤（Lakera/Galileo）</td>
+        <td><b>④ 写入侧记忆防火墙</b>：投毒/跨用户串扰在"写进长期记忆之前"拦截（GhostWriter 98% 成功率 + OWASP ASI06: Memory &amp; Context Poisoning 与 MITRE ATLAS AML.T0080/AML.M0031 两家独立标准背书；标准已立、参考实现已有、商用产品未占位——v0.1.7）</td>
+      </tr>
+      <tr>
+        <td>记忆准确率仪表盘</td>
+        <td><b>⑤ 记忆质量公开评测口径</b>：在客户数据上跑 LoCoMo/LongMemEval 式 eval，过期率/矛盾率/串扰率可审计（全行业只有私有口径）</td>
+      </tr>
+    </tbody>
+  </table></div>
+
+  <h3>10.3 从 Mem0/Zep 到能上线的产品，中间隔着四堵墙</h3>
+  <p class="small">注意本节论证分两步：下面的表只证明<b>"买 infra ≠ 有产品"</b>（这四层 Mem0/Zep 不给你，总得有人盖）；<b>为什么该由平台商盖、而不是银行自己盖</b>，见表后的三条论据——这也是本节真正的结论。</p>
+  <div class="table-wrap"><table class="fixed">
+    <colgroup><col style="width:20%"><col style="width:44%"><col style="width:36%"></colgroup>
+    <thead><tr><th>墙</th><th>具体问题</th><th>infra 为什么不解决</th></tr></thead>
+    <tbody>
+      <tr><td><b>① 身份合并</b></td><td>未登录 chat、IVR SSN、email、App 账号要拼成一个客户；合并错=把 A 的贷款信息念给 B</td><td>Mem0/Zep 只认 <code>user_id</code> 字符串，身份解析是调用方责任</td></tr>
+      <tr><td><b>② 用途隔离</b></td><td>服务/营销/授信用途隔离、各自同意基础不同</td><td>infra 无用途 taxonomy、无 ABAC 开箱（Zep 有 ABAC 原语但要自建策略）</td></tr>
+      <tr><td><b>③ 删除权级联</b></td><td>向量、图、摘要、缓存、录音、CRM、质检语料、备份、第三方同步一处删净</td><td>只删自己库里的条目；下游级联、tombstone、审计报告全要自建</td></tr>
+      <tr><td><b>④ 业务语义</b></td><td>case/dispute/Reg E 时钟、承诺回电、TCPA 联系偏好</td><td>通用事实库，不懂 contact center 与金融实体</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="callout note"><span class="ct">那银行为什么不自己盖这四层？<span class="badge b-ana">分析</span></span>
+    <p style="margin-bottom:6px"><b>a. 墙①③结构性地跨厂商，单体银行推不动。</b>级联删除要穿透的下游里，录音/质检/排班在 CCaaS 厂商产品内、账户数据在核心银行系统（Fiserv/FIS/Jack Henry）内；identity resolution 要和 IVR 认证与核心系统对账联动。银行能用合同提要求，但让别家厂商为它改 roadmap、做 tombstone 与审计成品，是平台商对平台商的集成活——谁拥有 contact center 栈，谁才盖得动这四层。</p>
+    <p style="margin-bottom:6px"><b>b. 滩头客户没有"自建"这个选项。</b>§10 目标是 community bank / credit union：工程团队做 App 与核心对接，采购模式是存量供应商加购。②④那种持续维护（法域模板更新、用途策略台、Reg E 实体模型）对他们是 5 年平台产品，不是 6 个月项目。旁证：Mem0/Zep 公开材料零银行 logo（§15 待核实），也无银行自建 Level 2 的公开案例。</p>
+    <p style="margin-bottom:0"><b>c. 大行确实自建得动——所以滩头不选大行。</b>Capital One/JPM 级平台工程团队能把四堵墙当成工作量，本节论点对他们不成立；这正是目标客户写"大行品牌战是 Sierra/Salesforce 的战场"的原因。对能自建的客户，卖点退而为责任归属（§14："银行买的是敢上线，不是 API"）与 TCO 对比，而非能力垄断。</p>
+  </div>
+
+
+  <h3>10.4 Build vs Buy 三层结论</h3>
+  <p class="small">读法：这就是记忆系统的技术栈架构图，<b>Build vs Buy 的答案逐层标在每一层上</b>——自下而上：存储【买】、引擎【试】、治理产品层【自研】。<b>读者：Talkdesk 内部产品/立项决策者，非对外销售材料</b>（图里的"自己/防锁定"均指 Talkdesk）；给客户看请用 §05 时间线、§08.4 台账 mock、§11.1 四个体验卡。</p>
+  <div class="fig">
+    <div class="arch">
+      <div class="box b1" style="min-width:560px"><b>【自研 · Build】</b>受治理记忆产品层（领域 schema、三命名空间、认证闸门、台账、策略台、写入防火墙、质量评测、级联删除编排）——差异点与合规责任所在，市上无成品可买（§10.3）</div>
+      <div class="arrow">▲ 封装 / 治理</div>
+      <div class="row"><div class="box b2"><b>【试 · 不押注】</b>记忆引擎 PoC：graphiti（时序图谱）vs mem0（扁平 facts）双跑 A/B，12–18 个月内把核心 schema 握在自己手里，防供应商锁定</div></div>
+      <div class="arrow">▲ 调用</div>
+      <div class="row">
+        <div class="box b4"><b>【买 · 开源】</b>pgvector（首选，继承 Postgres RLS/RBAC/审计）</div>
+        <div class="box b4"><b>【买 · 开源】</b>Qdrant / Milvus（大规模时备选，注意企业版 RBAC）</div>
+        <div class="box b3"><b>【买 · 现成】</b>WORM 审计库（原文/录音，不进向量）</div>
+      </div>
+    </div>
+    <div class="cap">买存储、试引擎、自研治理产品层——与 Talkdesk Data Cloud（语料层）和 FS 连接器对接，不重建 CDP</div>
+  </div>
+</section>
+
+<!-- ============ 11 UX ============ -->
+<section id="ux">
+  <div class="sec-head"><span class="num">11</span><h2>四个核心体验与数据流设计</h2></div>
+
+  <h3>11.1 四个核心体验</h3>
+  <div class="persona-grid">
+    <div class="pcard"><h4>① Pre-contact Brief（坐席/AI 接起前 3 秒）</h4><div class="who">Agent</div>在办案件与法定时钟、上次未决事项、偏好与认证状态；每条带来源水印、时间戳、置信度；低置信标"未核实"并建议口头确认。</div>
+    <div class="pcard"><h4>② Warm Continuation（跨渠道续接）</h4><div class="who">Agent + Customer</div>认证闸门通过后自动续上上次进度（chat 没说完→电话直接接着办）；未认证渠道只给通用回复与安全验证入口。</div>
+    <div class="pcard"><h4>③ 客户记忆台账</h4><div class="who">Customer</div>查看/搜索/纠正/删除/声明"别记"；N3 一键关闭并级联删除；删除请求状态可追踪（见 §8.4 mock）。</div>
+    <div class="pcard"><h4>④ Admin 记忆策略台</h4><div class="who">Admin</div>法域模板、保留期矩阵、命名空间开关、驻留 region、RBAC、consent 默认值、删除/访问审计导出（见 §8.4 mock）。</div>
+  </div>
+
+  <h3>11.2 数据流（写入 → 存储 → 召回 → 删除）</h3>
+  <div class="fig">
+    <div class="arch">
+      <div class="row">
+        <div class="box b4">voice 转写 / chat / SMS / email 原文</div>
+        <div class="box b5">写入侧记忆防火墙（投毒/注入/跨用户串扰拦截）</div>
+      </div>
+      <div class="arrow">▼ 原文只进审计库</div>
+      <div class="row">
+        <div class="box b3">WORM 审计库（原文/录音，法定留存，不进向量）</div>
+        <div class="box b2">事实抽取（事实+时间+来源+置信度+用途标签 N1/N2/N3）</div>
+      </div>
+      <div class="arrow">▼</div>
+      <div class="box b1" style="min-width:600px">结构化受治理记忆层：bi-temporal 事实图谱（graphiti/mem0 PoC）× pgvector；按 customer UUID + 命名空间分区</div>
+      <div class="arrow">▼ 认证匹配 + 用途过滤后召回</div>
+      <div class="row">
+        <div class="box b2">Brief / 续接（服务侧，N1/N2）</div>
+        <div class="box b5">营销侧（N3，独立 consent，物理断开授信/风控）</div>
+        <div class="box b4">客户台账（可见/可纠/可删）</div>
+      </div>
+      <div class="arrow">▼ 删除请求</div>
+      <div class="box b3" style="min-width:600px">级联删除：DB → 向量 → 图谱边 → 摘要 → 缓存 → 下游同步；tombstone + 审计 + 抽样核验；legal hold 优先保留</div>
+      <div class="row" style="margin-top:10px"><div class="box b3" style="min-width:600px"><b>控制面（Admin，不流转客户数据）</b>：策略台设定法域模板 / TTL / 命名空间开关 / legal hold / consent 默认值 → 作为策略<b>注入</b>写入防火墙、召回过滤、删除管线三处；每步落审计日志，可导出</div></div>
+    </div>
+    <div class="cap">原文与记忆分离、写入先审核、召回先认证、删除全级联——四条安全原则落到数据路径</div>
+    <div class="arch-key">
+      <span class="kb1">记忆本体</span>
+      <span class="kb2">加工环节</span>
+      <span class="kb4">渠道原文 / 客户视图</span>
+      <span class="kb3">治理 · 审计 · 控制面</span>
+      <span class="kb5">闸门 · 用途隔离</span>
+      <span class="knote">配色仅本图有效，各图不通用</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 12 RISKS ============ -->
+<section id="risks">
+  <div class="sec-head"><span class="num">12</span><h2>风险地图</h2></div>
+  <div class="table-wrap"><table class="fixed">
+    <colgroup><col style="width:16%"><col style="width:30%"><col style="width:10%"><col style="width:44%"></colgroup>
+    <thead><tr><th>风险</th><th>表现</th><th>等级</th><th>缓解</th></tr></thead>
+    <tbody>
+      <tr><td>跨用户记忆串扰</td><td>A 的信息出现在 B 的 brief/回答里</td><td><span class="s s-n">致命</span></td><td>customer UUID 分区 + 认证闸门（C.5）+ 读写双侧 tenant 校验 + PrivacyPeek 式红队回归</td></tr>
+      <tr><td>记忆投毒</td><td>骗子/客户把假事实写进长期库，日后自动生效（GhostWriter ~98%；OWASP ASI06: Memory &amp; Context Poisoning 单列 + MITRE ATLAS 平行收录 AML.T0080.000/缓解 AML.M0031 且逐字引用 OWASP Agent Memory Guard——两家独立标准背书，v0.1.7）</td><td><span class="s s-n">高</span></td><td>写入侧防火墙：动账类事实只接受核心系统回写、不接受对话抽取；高风险事实双人/系统确认</td></tr>
+      <tr><td>错误记忆导致误办</td><td>记忆召回的准确度仅全量读历史的 6–8 成（LongMemEval），AI 拿过期信息办事</td><td><span class="s s-n">高</span></td><td>低置信只参考（C.7）；权威事实以核心银行系统为准；关键动作 human-in-the-loop</td></tr>
+      <tr><td>删除不干净</td><td>向量孤儿、缓存、训练副本残留（MemLeak ~2%）</td><td><span class="s s-p">高</span></td><td>级联删除 + tombstone + 定期索引重建 + 抽样核验；对外只承诺工程级删除</td></tr>
+      <tr><td>用途蔓延</td><td>服务记忆被营销/授信模型调用</td><td><span class="s s-n">致命</span></td><td>三命名空间物理隔离（C.2/R5/R6）；架构评审 + 数据流审计；合同写明</td></tr>
+      <tr><td>同意/撤回失效</td><td>客户对 AI 说"别发短信"但其他渠道仍发</td><td><span class="s s-p">高</span></td><td>联系偏好作为一等记忆字段，任何渠道撤回跨渠道生效（TCPA 合理方式撤回标准，FCC 24-24）</td></tr>
+      <tr><td>供应商锁定</td><td>记忆 schema 押在 Mem0/Zep 云上，迁移即失忆</td><td><span class="s s-p">中</span></td><td>引擎可替换（双跑 PoC）、核心 schema 自有、存储在自有 Postgres</td></tr>
+      <tr><td>性能/成本</td><td>每次召回 $0.007 + LLM 抽取成本，亿级互动失控</td><td><span class="s s-p">中</span></td><td>只抽事实不存原文、分层 TTL、召回缓存、按命名空间计费可观测</td></tr>
+      <tr><td>监管变动</td><td>Colorado ADMT、EU AI Act 高风险义务、州法拼图变化</td><td><span class="s s-p">中</span></td><td>策略台法域模板热更新；法务季度评审；不把合规写死在代码里</td></tr>
+      <tr><td>客户信任反效果</td><td>客户看到"银行记得这么多"感到被监视</td><td><span class="s s-p">中</span></td><td>台账透明 + N3 默认关 + 措辞强调"为帮你办事而记"；客户研究验证</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- ============ 13 METRICS ============ -->
+<section id="metrics">
+  <div class="sec-head"><span class="num">13</span><h2>成功指标（3 主 + 护栏指标·约束型一票否决）</h2></div>
+  <div class="kpi-strip">
+    <div class="kpi"><div class="v">Repeat-Info Rate ↓</div><div class="l">主指标 1：客户被要求重复已提供信息的比例（按渠道/案件）；对齐 FCR 与重复来电</div></div>
+    <div class="kpi"><div class="v">Memory Quality</div><div class="l">主指标 2：记忆准确率 / 过期率 / 矛盾率（在本行脱敏 eval 集上，按 LoCoMo/LongMemEval 方法）</div></div>
+    <div class="kpi"><div class="v">Continuation Lift</div><div class="l">主指标 3：跨渠道续接成功率与 brief 采纳率；续接接触的 AHT/FCR 对比</div></div>
+    <div class="kpi"><div class="v">护栏指标（约束型）</div><div class="l">不加分、不达标一票否决，方向各异：串扰率（越低越好，目标 0）、删除 SLA 达成率（越高越好，目标 100%）、consent 撤回生效时延（越低越好，分钟级）、记忆相关投诉率。与主指标存在真实拉扯：记忆用得越多→下游副本越多→级联删除越难，故须成对盯防</div></div>
+  </div>
+  <div class="table-wrap"><table class="fixed">
+    <colgroup><col style="width:22%"><col style="width:40%"><col style="width:38%"></colgroup>
+    <thead><tr><th>指标</th><th>定义/口径</th><th>为什么选它</th></tr></thead>
+    <tbody>
+      <tr><td>Repeat-Info Rate ↓</td><td>接触中客户重复陈述已在档案中的事实的次数/接触；语音用转写+LLM 评判，数字渠道用对话分析</td><td>记忆最直接的体验结果，客户与坐席都感知得到；可挂 FCR（First Contact Resolution，一次解决率）/AHT（Average Handle Time，平均处理时长）经济价值</td></tr>
+      <tr><td>记忆准确率（含过期/矛盾率）</td><td>抽样人工核验 + 客户纠错率双口径；分命名空间、分渠道报告</td><td>错误记忆比没有记忆更危险；全行业只有私有口径，公开评测口径本身即差异点</td></tr>
+      <tr><td>跨渠道续接率 / brief 采纳率</td><td>认证后成功加载历史并被坐席/AI 使用的比例；brief 条目点击率/采纳率</td><td>衡量记忆是否真的进入工作流，而不是存了没人用</td></tr>
+      <tr><td>护栏：串扰率 = 0</td><td>跨客户记忆泄露事件数（红队 + 线上监控）</td><td>一次事故即可终结产品</td></tr>
+      <tr><td>护栏：删除 SLA / 撤回时延</td><td>删除请求端到端完成时间；营销撤回跨渠道生效时间（TCPA 要求即时）</td><td>合规可审计</td></tr>
+    </tbody>
+  </table></div>
+  <p class="small">ROI 建模锚点见 §7.2：Repeat-Info 下降 → 重复接触减少 × 单接触成本（电话 $12–20）；AHT 下降 × 坐席分钟成本 × 年通话量；误办纠正工单减少 × 单工单成本。所有银行侧数字在对外材料中必须标注为假设并用客户真实数据替换。</p>
+</section>
+
+<!-- ============ 14 STRATEGY ============ -->
+<section id="strategy">
+  <div class="sec-head"><span class="num">14</span><h2>差异化主张、排序与备选定位</h2></div>
+
+  <h3>14.1 一句话定位（候选）</h3>
+  <div class="callout key"><p style="margin:0;font-size:15px"><b>"The governed memory layer for financial service conversations——记得住你的客户，且你的客户管得住你记得什么。"</b> 不是记忆数据库，是银行敢开、客户敢留的受治理记忆产品：FS 领域实体开箱、认证后跨渠道续接、客户台账、法域策略台。</p></div>
+
+  <h3>14.2 先做什么 / 坚决不做什么（排序）</h3>
+  <div class="table-wrap"><table class="fixed">
+    <colgroup><col style="width:12%"><col style="width:48%"><col style="width:40%"></colgroup>
+    <thead><tr><th>优先级</th><th>做</th><th>理由</th></tr></thead>
+    <tbody>
+      <tr><td><b>P0</b></td><td>N1 服务记忆（案件/待办/偏好/联系偏好）+ 认证闸门 + pre-contact brief（voice 入口）</td><td>价值最直观、合法基础最稳（合同履行）、滩头场景</td></tr>
+      <tr><td><b>P0</b></td><td>治理底座：命名空间隔离、TTL、来源/置信度、审计、级联删除编排</td><td>没有这些银行不会开；也是差异点本体</td></tr>
+      <tr><td><b>P1</b></td><td>客户记忆台账 + 纠错工作流；Admin 法域策略台（先 EU/纽约两模板）</td><td>双赢机制的可见面，demo 与采购评估的关键</td></tr>
+      <tr><td><b>P1</b></td><td>写入侧记忆防火墙 + 记忆质量 eval 流水线</td><td>空位钩子；安全叙事给买方一票否决方</td></tr>
+      <tr><td><b>P2</b></td><td>跨渠道续接扩到 chat/SMS/email；N2 个性化；Manager 质量看板</td><td>扩渠道与运营闭环</td></tr>
+      <tr><td><b>不做</b></td><td>N3 营销画像默认开启、情绪/脆弱性推断、记忆流入授信/风控/定价、Collective 群体记忆、certified deletion 过度承诺、自建 CDP</td><td>红线 R1–R10；法律风险与信任风险远大于收入</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>14.3 相对 CCaaS 厂商的差异化（回答"为什么买 Talkdesk"）</h3>
+  <ul>
+    <li><b>vs Twilio</b>：Twilio 卖的是记忆 API（开发者组装），Talkdesk 卖的是 FS 开箱成品——case/dispute/Reg E 实体、法域模板、客户台账、与全渠道坐席台一体。</li>
+    <li><b>vs Sierra/Decagon</b>：它们的记忆服务于自家 AI agent 的结案率，且无监管用途切分与客户侧台账；Talkdesk 是平台中立的记忆层（人/AI/多 agent 共用），治理与 CCaaS 录音/质检同一套审计。</li>
+    <li><b>vs Salesforce/Amazon</b>：它们从 CRM/CDP 聚合出发（拼已有记录），Talkdesk 从<b>联络中心对话实时抽取</b>出发，且有 6 家核心/数字银行平台连接器的中型客群覆盖。</li>
+    <li><b>vs Mem0/Zep 自建</b>：四堵墙（§10.3）与合规责任由产品承担；银行买的是"敢上线"，不是 API。</li>
+  </ul>
+
+  <h3>14.4 备选定位（若主线被证伪）</h3>
+  <div class="callout note"><p style="margin-bottom:6px"><b>备选：不做记忆本体，做"受监管行业的记忆治理与评测层"</b>——记忆质量评测（跨厂商基准）、写入侧防火墙、删除编排与审计、consent 编排，可架在 Mem0/Zep/厂商自有记忆之上。</p>
+  <p style="margin-bottom:0">触发条件：调研证实 Talkdesk 内部已有记忆 roadmap（§15 第 1 项），或 Twilio/Sierra 在 12 个月内补齐治理层。该方向同样占据空位——v0.1.6 精确化：截至 2026-09 公开渠道，OWASP ASI06 已立标准、参考实现已有，但<b>商用产品层未被占据</b>；市场教育成本更高（要卖"标准合规"而非体验），需依附现有套件销售。</p></div>
+</section>
+
+<!-- ============ 15 OPEN QUESTIONS ============ -->
+<section id="open">
+  <div class="sec-head"><span class="num">15</span><h2>待核实清单（公开渠道查不到，不编造）</h2></div>
+  <ol>
+    <li>Talkdesk 是否已有未公开的客户级记忆产品/roadmap（Data Cloud 之上）；Navigator/Mood Insights 的现行数据政策。</li>
+    <li>Sierra persistent memory 是否真有删除/审计/用途隔离细页，还是营销叙事；ADP 定价。</li>
+    <li>Zep 融资总额（v0.1.9 复核：YC W24 seed 属实，2026-09-26 两轮检索未见 A 轮官宣——<b>保持待核实</b>）；<del>Letta seed $10M/$20M 口径冲突</del> <b>已结案</b>：$10M（Felicis 领投，2024-09-24 PRNewswire 官宣，$70M 投后；$20M 口径查无出处）；<del>Mem0 SOC 2 Type I 是否已升 Type II</del> <b>已结案</b>：仍 Type I（2026-09-26 复核 trust.mem0.ai 仍标 SOC-2 Type-1，第三方转述 Type II in progress）。</li>
+    <li>Mem0/Zep/横向 infra 是否有任何银行公开 logo（本轮未见）。</li>
+    <li>各厂商"记忆准确率"均为私有口径：立项前要求在本行脱敏数据上复现 eval。</li>
+    <li>graphiti/mem0 硬删除是否留向量孤儿记录；Qdrant/Milvus OSS 版 RBAC/审计的确切边界。</li>
+    <li>CCPA/CPRA profiling opt-out 的精确条款引注；Colorado SB 26-189（ADMT）生效日与 xAI v. Weiser 后续。</li>
+    <li>certified deletion 有无任何金融行业落地案例（学术上仍开放）。</li>
+    <li>Crescendo FS 客户、Google Gemini per-customer 记忆的 API 化程度。（v0.1.6：Amazon ~25% AHT↓ 客户名<b>已解决</b>——Traeger Grills，2020 early trials，非 FS，已从本清单划掉；引用规则见 §4.3/§7.2。）</li>
+    <li>银行邮件/语音渠道中"重复信息导致重复接触"的行业基准比例（无权威公开统计，需客户访谈或自有数据）。</li>
+    <li>EU AI Act Art.50 实施指南对"记忆透明度"的具体要求边界（2026-08-02 已适用，执法案例尚未积累）。</li>
+    <li>（v0.1.5 新增）Gartner《Innovation Insight for AI Agent Memory Platforms》（doc 8269957）全文——付费墙内；v0.1.9 已把条目元数据（标题/编号/发布日 2026-08-17）对齐官网复核通过，但<b>结论引用前仍必须购得原文</b>。</li>
+    <li>（v0.1.5 新增）Salesforce Data 360 "Persistent Agent Memory" 的确切发布日（现标 2026-01，为功能列表快照口径，未独立复核；v0.1.9 复查：官方 Data 360 页确认功能在架，仍未检索到独立发布日期信源——<b>保持待核实</b>）。</li>
+    <li>（v0.1.5 新增）NICE Enlighten XM 是否真有 Revolut 或其他银行公开案例（Revolut 语音供应商公开口径为 ElevenLabs）。</li>
+    <li>（v0.1.6 新增 · <b>v0.1.7 已解决</b>）OWASP Agentic AI Top 10 条目、MITRE ATLAS 技术/缓解 ID、Agent Memory Guard 项目页三项<b>均已按原始数据源逐字核对完毕</b>（官方名为 ASI06: Memory &amp; Context Poisoning；ATLAS 为平行体系独立收录 AML.T0080/AML.M0031，非 OWASP"映射进 ATLAS"——措辞修正见 §05；四组来源逐条转 §16 G）。原"抓取 OWASP 首页未定位到"的原因：条目在 genai.owasp.org 子站而非主站首页。</li>
+    <li>（v0.1.8 新增 · <b>v0.1.9 部分结案</b>）Release Notes 出处<b>已找到</b>：KB 文章 10465518079003（Last Updated 2026-09-23、最新条目 2026-09-28），§5 已按原文回填三条时间线；余留 <span class="badge b-todo">待核实</span>：Copilot 产品页"2026-05-18 更新"标注的原始出处——2026-09-26 复抓产品页正文无可见日期，疑为 JSON-LD dateModified，需时间戳截图/缓存存证。</li>
+  </ol>
+</section>
+
+<!-- ============ 16 REFS ============ -->
+<section id="refs">
+  <div class="sec-head"><span class="num">16</span><h2>完整参考资料（URL）</h2></div>
+  <div class="refs">
+  <details><summary>A. CCaaS / CRM / 平台厂商</summary><ul>
+    <li>Twilio Conversation Memory：https://www.twilio.com/en-us/blog/insights/ai-customer-memory ；定价：https://www.twilio.com/en-us/pricing ；与 CDP 分工：https://www.twilio.com/en-us/blog/insights/top-customer-data-platform</li>
+    <li>Salesforce Data 360：https://www.salesforce.com/data/?bc=HB</li>
+    <li>NICE Enlighten XM 新闻稿：https://www.businesswire.com/news/home/20240325076264/en/</li>
+    <li>Google Memory Bank：https://docs.cloud.google.com/agent-builder/agent-engine/memory-bank/overview ；preview：https://cloud.google.com/blog/products/ai-machine-learning/vertex-ai-memory-bank-in-public-preview/</li>
+    <li>Microsoft Copilot Studio Memory：https://learn.microsoft.com/en-ie/microsoft-copilot-studio/agents-experience/memory-overview</li>
+    <li>Amazon Connect Customer Profiles：https://aws.amazon.com/connect/customer-profiles/ ｜ Capital One 官方案例（"100 percent adoption for our direct bank and fraud operations in just five months" 原文出处，v0.1.8 补）：https://aws.amazon.com/solutions/case-studies/capital-one-amazon-connect/</li>
+    <li>Talkdesk CXA/Data Cloud：https://www.talkdesk.com/news-and-press/press-releases/talkdesk-cxa/ ；Copilot：https://www.talkdesk.com/cloud-contact-center/omnichannel-engagement/copilot/ ；Navigator/Mood：https://www.talkdesk.com/it-it/news-and-press/press-releases/navigator-and-mood-insights/ ；FS AI Agents：https://www.talkdesk.com/news-and-press/press-releases/ai-agents-for-financial-services/ ；Copilot Release Notes（KB 原文，v0.1.9 补，Last Updated 2026-09-23）：https://support.talkdesk.com/hc/en-us/articles/10465518079003-Release-Notes-Talkdesk-Copilot</li>
+    <li>Sierra Horizon：https://sierra.ai/uk/product/horizon ；Decagon：https://decagon.ai/proactive-agents ；FS：https://decagon.ai/industry/financial-services ；Intercom 第三方评测（agenticindex.io，观点存证非事实引用）：https://agenticindex.io/vendors/intercom-fin ；Cresta：https://cresta.com/ai-agent</li>
+  </ul></details>
+  <details><summary>B. 横向 memory infra</summary><ul>
+    <li>Mem0：https://mem0.ai/ ；Series A：https://mem0.ai/series-a ；定价：https://mem0.ai/pricing ；trust：https://trust.mem0.ai/ ；删除：https://docs.mem0.ai/core-concepts/memory-operations/delete ；治理：https://mem0.ai/blog/ai-agent-memory-governance-meaning-best-practices-for-secure-memory</li>
+    <li>Zep/Graphiti：https://www.getzep.com/emerging/ ；Enterprise：https://www.getzep.com/enterprise/ ；定价：https://www.getzep.com/pricing/ ；Graphiti 文档：https://help.getzep.com/graphiti/graphiti/overview</li>
+    <li>Letta：https://www.letta.com/ ；Cognee seed：https://www.cognee.ai/blog/cognee-news/cognee-raises-seven-million-five-hundred-thousand-dollars-seed ；LangMem：https://blog.langchain.com/langmem-sdk-launch/</li>
+    <li>OpenAI memory FAQ：https://help.openai.com/zh-hans-cn/articles/8590148 ；ChatGPT Release Notes（OpenAI memory 时间线原始出处，见 2026-05-05 / 06-04 / 06-12 三条）：https://help.openai.com/en/articles/6825453-chat-gpt-release-notes ；Anthropic memory：https://www.anthropic.com/news/memory ；https://support.claude.com/en/articles/11817273</li>
+  </ul></details>
+  <details><summary>C. 学术界（arXiv）</summary><ul>
+    <li>CoALA 2309.02427 ｜ TOIS 记忆综述 2404.13501 ｜ MemGPT 2310.08560 ｜ Generative Agents 2304.03442 ｜ A-Mem 2502.12110 ｜ MemoryBank 2305.10250 ｜ HippoRAG 2405.14831 ｜ Zep/Graphiti 2501.13956</li>
+    <li>LoCoMo 2402.17753 ｜ LongMemEval 2410.10813 ｜ 注入命名 2302.12173 ｜ INJECAGENT 2403.02691 ｜ AgentDojo 2406.13352 ｜ MINJA 2503.03704 ｜ GhostWriter 2607.06595 ｜ Sleeper 2605.15338</li>
+    <li>MAMA 2512.04668 ｜ PrivacyPeek 2606.00152 ｜ MemLeak 2606.29788 ｜ unlearning survey 2405.07406 ｜ RAG-unlearning 2410.15267 ｜ certified deletion 综述 2506.15115 ｜ agent privacy survey 2606.26627</li>
+  </ul></details>
+  <details><summary>D. 开源（GitHub，star 为 2026-09-24 API 实查）</summary><ul>
+    <li>记忆：https://github.com/mem0ai/mem0 ｜ https://github.com/getzep/graphiti ｜ https://github.com/getzep/zep ｜ https://github.com/letta-ai/letta ｜ https://github.com/topoteretes/cognee ｜ https://github.com/langchain-ai/langmem</li>
+    <li>编排/RAG：https://github.com/langchain-ai/langgraph ｜ https://github.com/run-llama/llama_index ｜ https://github.com/deepset-ai/haystack ｜ https://github.com/microsoft/autogen（CC-BY-4.0）</li>
+    <li>存储：https://github.com/pgvector/pgvector ｜ https://github.com/qdrant/qdrant ｜ https://github.com/milvus-io/milvus ｜ https://github.com/weaviate/weaviate</li>
+    <li>参照/排除：https://github.com/chatwoot/chatwoot ｜ https://github.com/open-webui/open-webui（source-available）｜ https://github.com/kingjulio8238/Memary（停更）</li>
+  </ul></details>
+  <details><summary>E. 市场规模</summary><ul>
+    <li>AI voice agents（Grand View）：https://www.grandviewresearch.com/industry-analysis/ai-voice-agents-market-report</li>
+    <li>CDP（MarketsandMarkets 稿）：https://www.prnewswire.com/news-releases/customer-data-platform-market-worth-14-04-billion-by-2031--report-by-marketsandmarkets-302848109.html</li>
+    <li>GenAI 客服自动化（Mordor）：https://www.mordorintelligence.com/industry-reports/generative-ai-in-customer-support-automation-and-conversational-agents-market</li>
+    <li>（v0.1.5 新增）Agentic AI Orchestration &amp; Memory Systems（Mordor，$6.27B/2025→$28.45B/2030）：https://www.mordorintelligence.com/industry-reports/agentic-artificial-intelligence-orchestration-and-memory-systems-market （v0.1.8 更正 URL slug 至官方 canonical；<b>v0.1.9 结案</b>：2026-09-26 搜索引擎索引页与 canonical slug 完全一致，$6.27B/$28.45B/CAGR 35.32% 三组数字复核通过——slug 待核实撤销；站点对直接请求仍 403）</li>
+    <li>（v0.1.5 新增）Gartner Innovation Insight for AI Agent Memory Platforms（doc 8269957，2026-08-17，付费墙）：https://www.gartner.com/en/documents/8269957</li>
+  </ul></details>
+  <details><summary>F. 监管原文</summary><ul>
+    <li>GDPR 合并本：https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02016R0679-20160504 ｜ Art.21：https://gdpr-info.eu/art-21-gdpr/ ｜ EDPB 删除权报告：https://www.edpb.europa.eu/system/files/2026-02/edpb_cef-report_2025_right-to-erasure_en.pdf</li>
+    <li>EU AI Act 时间线：https://ai-act-service-desk.ec.europa.eu/en/ai-act/timeline/timeline-implementation-eu-ai-act ｜ Art.50 FAQ：https://digital-strategy.ec.europa.eu/en/faqs/transparency-obligations-under-article-50-ai-act</li>
+    <li>CFPB 黑盒信贷指引（Circular 2022-03）：https://www.consumerfinance.gov/archive/newsroom/cfpb-acts-to-protect-the-public-from-black-box-credit-models-using-complex-algorithms/ ｜ Chatbots 报告：https://www.consumerfinance.gov/data-research/research-reports/chatbots-in-consumer-finance/chatbots-in-consumer-finance/</li>
+    <li>FCC 24-24（撤回同意实体规则，2024-02-16）：https://docs.fcc.gov/public/attachments/FCC-24-24A1.pdf ｜ DA-25-312（2025-04-07，有限延期令）：https://docs.fcc.gov/public/attachments/DA-25-312A1.pdf ｜ DA-26-12（2026-01-06，跨主题延伸要求再延期至 2027-01-31）：https://docs.fcc.gov/public/attachments/DA-26-12A1.pdf</li>
+    <li>Colorado SB 26-189：https://www.leg.colorado.gov/bills/SB26-189 ｜ 解读：https://www.eckertseamans.com/legal-updates/colorado-repeals-and-replaces-its-landmark-ai-statute-what-businesses-need-to-know</li>
+    <li>NYDFS 第三方函 2025-10：https://www.dfs.ny.gov/industry-guidance/industry-letters/il20251021-guidance-managing-risks-third-party ｜ Insurance CL7：https://www.dfs.ny.gov/industry-guidance/circular-letters/cl2024-07</li>
+    <li>PIPL 第 24 条：http://www.npc.gov.cn/npc/c2/c30834/202108/t20210820_313088.html ｜ 算法推荐规定：https://www.moj.gov.cn/pub/sfbgw/flfggz/flfggzbmgz/202305/t20230509_478388.html ｜ NFRA AI 意见：https://www.nfra.gov.cn/cn/view/pages/ItemDetail.html?docId=1261784</li>
+  </ul></details>
+  <details><summary>G. 安全标准（v0.1.6 新增 · v0.1.7 全部按原始数据源逐字核对）</summary><ul>
+    <li><b>OWASP Top 10 for Agentic Applications 2026</b>（发布 2025-12-09，100+ 专家参与；ASI06: Memory &amp; Context Poisoning 原文在 p.24，含 Description/Common Examples/Example Attack Scenarios）。资源页：https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications ｜ 原文 PDF：https://genai.owasp.org/download/52117 ｜ 发布博文：https://genai.owasp.org/2025-12-09/owasp-top-10-for-agentic-applications-the-benchmark-for-agentic-security-in-the-age-of-autonomous-ai ｜ ASI06 条目主笔博客（Idan Habler, Cisco）：https://genai.owasp.org/2026-05-13/memory-is-a-feature-it-is-also-an-attack-surface/ ｜ 注：本端此前抓取 genai 首页未定位到条目，因内容在子站深层页。</li>
+    <li><b>MITRE ATLAS（平行体系，独立收录）</b>：技术 AML.T0080 "AI Agent Context Poisoning"（子技术 .000 Memory / .001 Thread；战术 Persistence；maturity Realized）+ 缓解 AML.M0031 "Memory Hardening"，其官方描述逐字写明 "Open-source tools that implement memory hardening controls include OWASP Agent Memory Guard and Microsoft Agent Governance Toolkit"。数据源（逐字核对处）：https://github.com/mitre-atlas/atlas-data → dist/v6/ATLAS-2026.09.yaml ｜ 浏览入口：https://atlas.mitre.org/</li>
+    <li><b>OWASP Agent Memory Guard（参考实现）</b>：项目页 https://owasp.org/www-project-agent-memory-guard/ ｜ GitHub：https://github.com/OWASP/www-project-agent-memory-guard（2026-02-16 建仓，170★/40 fork，Apache-2.0，Incubator 级别）｜ 第三方报道：Help Net Security 2026-06-01 专题</li>
+    <li>Microsoft Agent Governance Toolkit（ATLAS AML.M0031 与 Agent Memory Guard 并列点名的另一开源实现）：经 ATLAS 官方条目引用确认，项目页未独立复核。</li>
+  </ul></details>
+  </div>
+</section>
+
+<!-- ============ 17 VERSION ============ -->
+<section id="version">
+  <div class="sec-head"><span class="num">17</span><h2>版本记录</h2></div>
+  <div class="table-wrap"><table class="fixed">
+    <colgroup><col style="width:12%"><col style="width:14%"><col style="width:74%"></colgroup>
+    <thead><tr><th>版本</th><th>日期</th><th>内容</th></tr></thead>
+    <tbody>
+      <tr><td>v0.1.9</td><td>2026-09-26</td><td>六项待核实集中复核：<b>四项结案、两项收窄</b>。①Talkdesk Copilot Release Notes 原始出处找到（KB 文章 10465518079003，Last Updated 2026-09-23、最新条目 2026-09-28；v0.1.8 的 404 系抓错营销路径），§5 回填三条已核实时间线——Copilot Agentic 2026-02-12 preview→<b>09-02 GA</b>、06-25 transcripts 入 Audit Logs、09-25 实时 PII redaction（18 类、明示受监管行业），并注明"实时脱敏≠记忆治理"、缺口判定不变；产品页 2026-05-18 标注仍无出处，保持待核实。②Mordor agentic slug 结案——canonical slug 与索引页一致、三组数字复核通过。③Gartner 8269957 条目元数据（标题/编号/2026-08-17）独立复核一致，全文仍付费墙。④Letta seed 结案=<b>$10M</b>（Felicis 领投 2024-09-24 官宣、$70M 投后，$20M 口径无出处）；Mem0 SOC 2 结案=<b>仍 Type I</b>（复核 trust center，第三方称 Type II in progress）。⑤Zep 融资保持待核实（YC W24 seed 属实、未见 A 轮官宣）。⑥Salesforce Persistent Agent Memory 发布日 2026-01 无独立信源，保持待核实。</td></tr>
+      <tr><td>v0.1.8</td><td>2026-09-25</td><td>按原始数据源逐条复核 v0.1.5–v0.1.7 的新增内容，<b>修正 4 处硬错误、3 处降级为待核实</b>：①TCPA——<b>DA-25-312 日期由 2025-01 改为 2025-04-07</b>（FCC 原文 Adopted/Released April 7, 2025），并改写 DA-26-12 适用范围——它<b>不是"全面废止"</b>，只把 (a)(10) 中"撤回一类消息即对同一主叫方全部无关主题生效"的<b>跨主题延伸要求</b>延到 2027-01-31，其余部分 2025-04-11 已生效，§16 补 DA-26-12 直链；②<b>Capital One "5 个月 100% 上线"由待核实恢复为事实</b>——AWS 官方案例页引 VP Rajiv Sondhi 原话 "100 percent adoption for our direct bank and fraud operations in just five months"，原注"厂商演讲口径、未找到独立报道"不成立，改注为厂商客户案例口径；③OpenAI <b>View Sources 日期由 2026-06-25 改为 2026-05-05</b>（release notes 原文 "memory sources … Tap the Sources icon"；06-12 为 summary 页内编辑），§16 补 release notes 链接；④Talkdesk Copilot 页面 2026-05-18/Release Notes 2026-09-15 <b>降级待核实</b>（复抓页面最晚内容日期 2026-02-09，release-notes 路径 404）；⑤Mordor agentic URL slug 改为官方 canonical 长 slug；⑥LongMemEval 97 题措辞按论文正文校正（抽样在正文、Appendix B 为分析章节）。同时复核<b>通过</b>：LoCoMo 全套计数（50 段/19.3 sessions/304.9 turns/9,209.2 tokens/2,705+1,104+1,547+285+1,871=7,512，逐字对上 arXiv 2402.17753 Table 5 与 Table 1）、LongMemEval（500/97 题/3–6 sessions/0.9184/0.5773/0.7113/0.3299）、NFRA 金发〔2026〕8 号第十六条五类+"生成式"限定、CFPB Circular 2022-03（2022-05-26 政策声明）、Colorado CPA §6-1-1304(2)(q) GLBA 豁免、Mordor 两份市场规模与 CAGR 基年解释、Twilio Conversation Memory GA 2026-05-06、FCC 24-24、Traeger 归因、ASI06 正名与映射方向、HTML 结构（0 错误）。待办见 §15 第 16 项。</td></tr>
+      <tr><td>v0.1.7</td><td>2026-09-25</td><td>安全标准三处措辞按<b>原始数据源逐字核对</b>后修正（§05 硬约束/§11 差异点④/§12 风险行）：①官方名更正为 <b>ASI06: Memory &amp; Context Poisoning</b>（"Memory Poisoning" 系 Agent Memory Guard 项目页简写）；②方向修正——OWASP ASI06 在体系内映射的是自家 Agentic AI Threats（T1/T4/T6/T12）+ LLM01/04/08:2025，<b>MITRE ATLAS 是平行体系独立收录</b>（技术 AML.T0080 "AI Agent Context Poisoning"，子技术 .000 Memory/.001 Thread；缓解 AML.M0031 "Memory Hardening"，逐字点名 OWASP Agent Memory Guard 与 Microsoft Agent Governance Toolkit）——是 ATLAS 引用 OWASP，非"OWASP 映射进 ATLAS"；③§15 末项三项待核<b>全部关闭</b>（此前抓不到的原因：条目在 genai.owasp.org 子站深层页）；§16 G 类由 3 条占位改为 4 条实源（资源页/原文 PDF download/52117 + 发布博文 + 主笔博客；ATLAS 数据源 atlas-data dist/v6/ATLAS-2026.09.yaml；Agent Memory Guard 项目页 + GitHub）。"两家独立标准背书"表述自此可直接对外引用。</td></tr>
+      <tr><td>v0.1.6</td><td>2026-09-25</td><td>两处外部补充核查落档：①<b>Amazon ~25% AHT↓/~10% CSAT↑ 客户名查明为 Traeger Grills</b>（烧烤炉零售商，2020 early trials，AWS 产品页 + re:Invent 2020 PDF）——原排版紧贴 Capital One/Barclays 易被误读为 FS 数据，§4.3/§7.2 已改写引用规则（FS 无公开 AHT 硬数字，对外只用本行试点），§15 该项划掉；②<b>OWASP Agentic AI Top 10 单列 ASI06: Memory Poisoning（映射 MITRE ATLAS，参考实现已有）</b>——"无专门商用厂商"三处（§05 硬约束/§11 差异点④/§14.4 备选）统一精确化为"标准已立、参考实现已有、商用空位未被占据"，§12 风险行加标准背书，§16 新增 G 类来源；窗口叙事由"没人想到"改为"6–12 个月、威胁被第三方背书"。ASI06 原页/ATLAS 条目 ID/参考实现项目页列 §15 待人工复核。</td></tr>
+      <tr><td>v0.1.5</td><td>2026-09-25</td><td>外部评审 34 条修订落档：<b>A 类事实更正</b>——①撤回"agent memory 无独立市场报告"断言（Mordor Agentic AI Orchestration &amp; Memory $6.27B/2025→$28.45B/2030、Gartner doc 8269957 存在但付费墙待核实），GTM 结论不变；②LoCoMo 数据修正（50 段对话/7,512 问，原"10 段/1986 问"有误；83% 为对抗题相对 base 下跌而非落后人类）；③市场数字基年对齐（CCaaS $8.0B/2026 等）；④Navigator/Mood 官宣改 2024-06-04 CCW；⑤PIPL 访问权改第 45 条；⑥NFRA 补金发〔2026〕8 号第十六条生成式五类；⑦EDPB 报告归因收窄为推论；⑧CFPB 正名 Circular 2022-03 政策指引；⑨NICE-Revolut 案例撤下（Revolut 语音供应商为 ElevenLabs）；⑩Copilot 页面日期改 2026-05-18/Release Notes 至 09-15；⑪TCPA 实体规则归位 FCC 24-24，DA-25-312 仅为延期令。<b>B 类口径</b>——"五家核心银行连接器"统一为 6 家核心/数字平台（含 Candescent）共 5 处；LongMemEval 注明 Appendix B 97 题子集口径；OpenAI 记忆时间线细化并澄清删对话≠删记忆；Intercom 第三方批评降为观点存证；Microsoft Copilot Studio 记忆自带 per-user 持久；CPA GLBA 豁免警示；NYDFS 2025-10 函"不施加新要求"与 CL7 主题重述；Claude memory 日期 09-11；Salesforce 2026-01 待核实；FTC 三要素注记。<b>C 类证据标签</b>——§00 发现①②否定性断言事实→分析+"公开材料未见"措辞；一句话结论同步；$12–20/接触标无出处；Amazon"5 个月 100% 上线"标待核实。<b>D 类一致性</b>——版本号统一 v0.1.5；Twilio GA/博客两日期互注；Genesys"DM 案例"标待核实；§15 新增 3 项、§16 新增 Mordor/Gartner/FCC 24-24 来源。</td></tr>
+      <tr><td>v0.1.4</td><td>2026-09-25</td><td>新增 §8.6"从自有项目 GraphMe 借鉴的体验资产"：G.1–G.8 借鉴清单（Raw/Insight 双层→写入防火墙分层、溯源链、洞察版本进化、按角色直觉维度、阈值触发降级、遗忘曲线运营视图、飞轮指标、跨 host 导入），附"三项不借"（3D 星云/盲盒/金融隐喻）与一句话差异化——把台账从合规勾选项升级为体验卖点。</td></tr>
+      <tr><td>v0.1.3</td><td>2026-09-25</td><td>命名空间编号改名根治撞名：三命名空间 L1/L2/L3 → <b>N1/N2/N3</b>（N = namespace，共 31 处），与 §3.2 成熟度 Level 0/1/2 彻底区分；§8.2 标题加图例、术语表新增"三命名空间"条目。</td></tr>
+      <tr><td>v0.1.2</td><td>2026-09-25</td><td>① LongMemEval 数字归属修正（核对 arXiv 2410.10813 原表）：ChatGPT 自带记忆 GPT-4o 为 57.7%、mini 为 71.1%（原稿对调），派生口径"6–7 成"统一为"6–8 成"并共 5 处；② 术语表补充 TCPA。</td></tr>
+      <tr><td>v0.1.1</td><td>2026-09-25</td><td>术语表补充 contact center 运营指标：FCR、AHT、CSAT、重复接触率、IVR、ACW、loaded cost。</td></tr>
+      <tr><td>v0.1</td><td>2026-09-25</td><td>首版：五条线并行实查（CCaaS/CRM 14 家、AI 新贵与横向 memory infra、学术界 22 方向论文地图、GitHub 17 项目实查、市场规模与三法域监管）；白话 primer 与术语表、四层记忆模型与四 persona、品类成熟度三层、FOR/ABOUT 与三命名空间、十个双赢机制与十条红线、滩头建议、Build vs Buy 三层结论、四体验与数据流、风险地图、指标与 ROI 锚点、备选定位、11 项待核实。</td></tr>
+    </tbody>
+  </table></div>
+  <p class="small" style="margin-top:24px;color:var(--faint)">本报告为产品调研工作底稿，所有产品主张均为工作假设。【事实】条目可经第 16 节 URL 溯源；银行规模、接触量、AHT、节省金额等数字在对外材料中必须显式标注为假设并以客户真实数据替换。</p>
+</section>
+</div>
+</div>
+<button id="toTop" type="button" title="回到顶部" aria-label="回到顶部">↑</button>
+<script>
+(function(){
+  var sidebar=document.getElementById('sidebar');
+  var menuBtn=document.getElementById('menuBtn');
+  var printBtn=document.getElementById('printBtn');
+  var toTop=document.getElementById('toTop');
+  menuBtn.addEventListener('click',function(){sidebar.classList.toggle('open');});
+  printBtn.addEventListener('click',function(){window.print();});
+  sidebar.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){sidebar.classList.remove('open');});});
+  window.addEventListener('scroll',function(){if(window.scrollY>600){toTop.style.display='flex';}else{toTop.style.display='none';}},{passive:true});
+  toTop.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+  var links=[].slice.call(sidebar.querySelectorAll('.nav-item'));
+  var map={};links.forEach(function(l){map[l.getAttribute('href').slice(1)]=l;});
+  var sections=links.map(function(l){return document.getElementById(l.getAttribute('href').slice(1));}).filter(Boolean);
+  var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){links.forEach(function(l){l.classList.remove('active');});var act=map[e.target.id];if(act){act.classList.add('active');}}});},{rootMargin:'-15% 0px -70% 0px',threshold:0});
+  sections.forEach(function(s){obs.observe(s);});
+})();
+</script>
+</body>
+</html>

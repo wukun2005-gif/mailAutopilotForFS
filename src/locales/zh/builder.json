@@ -11,7 +11,13 @@
   "promoteNotice": "双签已生效：{{intent}} 已提升至 {{level}}。",
   "matrix": {
     "title": "自主权矩阵 · R × I",
-    "subtitle": "与生产同一个 decideCell() 纯函数 · 点选中行的 L3/L2 格可手动封顶 · R3/R4 格子点击无反应——配置层根本够不到",
+    "subtitle": "与生产同一个判定函数 · 点选中行的 L3/L2 格可手动封顶 · R3/R4 格子点击无反应——配置层根本够不到",
+    "identity": {
+      "I0": "无法确认本人",
+      "I1": "仅发件域名可信",
+      "I2": "档案地址验证通过",
+      "I3": "已完成核验"
+    },
     "risk": {
       "R0": "R0 · 公共信息",
       "R1": "R1 · 读取账户数据",
@@ -33,7 +39,7 @@
     "title": "90 天回测回放 · {{from}} → {{to}}",
     "run": "运行回放",
     "rerun": "重新回放",
-    "note": "{{threads}} 个线程 · {{valid}} 封有效进件 · 仅动画——结果全部是录制 fixture（{{notes}}）",
+    "note": "{{threads}} 个线程 · {{valid}} 封有效进件 · 仅动画——结果全部来自预录的回测数据（{{notes}}）",
     "headers": {
       "intent": "意图",
       "triggers": "触发数",
@@ -41,8 +47,11 @@
       "noedit": "免修改批准率",
       "recall": "受监管召回",
       "misses": "关键漏检",
-      "cost": "单案成本"
-    }
+      "cost": "单案成本",
+      "regretAuto": "自动后被推翻",
+      "regretConservative": "转人后本该自动"
+    },
+    "regretNote": "后悔率单位：每百万件。FR-8.4 双向后悔率——两个方向必须同屏看：只看“自动后被推翻”会显得保守，只看“转人后本该自动”会显得激进；只盯一个方向，转人工率就能被压下去刷高指标。"
   },
   "sampling": {
     "title": "跨三个抽样框的三层抽样",
@@ -53,6 +62,7 @@
     "tierB": "B 层",
     "tierC": "C 层",
     "negativeLabel": "检测器判阴性随机复标：n = {{count}}",
+    "why1200": "为什么单独抽这 1,200 件：n 件零漏检时，95% 置信下漏检率的上界约等于 3/n。抽样框② 的自然样本只有 65 件（40+25），零漏检也只能说明漏检率可能还有约 5%；1,200 件零漏检才能把上界压到约 0.25%，够支撑“召回 ≥99.5%”。",
     "negativePresent": "发现 {{missed}} 件漏检的受监管项 · {{neg}} 件非受监管假阴性回流为案件",
     "notSignable": "召回判据不可签——只看阳性样本量无法约束漏检"
   },
@@ -67,10 +77,11 @@
     "apply": "把毕业结果应用到 runtime",
     "neverR4Headline": "永久属于人：R4 裁决为 L0 人决策 / L1 人签草稿",
     "neverR3Headline": "邮件渠道硬永不：没有注册任何 R3 工具",
+    "neverClockHeadline": "时钟驱动自动执行：按银行规则计算、L2 主管一键批，永不毕业 L3",
     "neverDetail": "该意图在结构上无法毕业。",
     "rareHeadline": "稀有意图：90 天量级永远够不到样本门槛",
     "rareTriggers": "90 天仅 {{count}} 次触发；保持人工处理。",
-    "rareConformal": "Conformal 弃权兜底（P2）把这类案件转给坐席。",
+    "rareConformal": "Conformal 弃权兜底把这类案件转给坐席。",
     "regVolume": "受监管门槛：≥600 触发——实际 {{count}}",
     "regMisses": "0 关键漏检——实际 {{count}}",
     "negativeColumn": "检测器阴性复标列已具备",
@@ -83,7 +94,7 @@
     "graduatedNot": "证据未达到毕业门槛"
   },
   "conformal": {
-    "title": "Conformal 弃权校准 · P2",
+    "title": "Conformal 弃权校准",
     "methodDemo": "方法演示 · 虚构数值",
     "targetAlpha": "目标 α",
     "calibrationN": "校准 n",

@@ -37,6 +37,9 @@ export function BuilderScreen() {
   const selected =
     GRADUATION_TABLE.find((g) => g.intentCode === selectedCode) ?? GRADUATION_TABLE[0];
   const override = graduationOverrides.get(selected.intentCode);
+  // Human-facing notice params: intent name + level code paired with its gloss.
+  const levelTag = (lv: string) =>
+    `${lv} · ${t("customer:trace.levels." + lv, { defaultValue: lv })}`;
 
   return (
     <div className="grid h-full grid-cols-[260px_1fr] gap-2 overflow-hidden p-2">
@@ -61,7 +64,14 @@ export function BuilderScreen() {
                   )}
                 >
                   <div className="flex items-center justify-between gap-1">
-                    <span className="font-mono text-[13px] font-semibold">{g.intentCode}</span>
+                    <span
+                      className={cn(
+                        "text-[13px] font-semibold",
+                        active ? "text-white" : "text-navy",
+                      )}
+                    >
+                      {g.label[lang]}
+                    </span>
                     <span
                       className={cn(
                         "inline-flex items-center gap-0.5 rounded px-1 py-0.5 text-[12px] font-semibold",
@@ -70,9 +80,6 @@ export function BuilderScreen() {
                     >
                       <Icon size={9} /> {meta.label}
                     </span>
-                  </div>
-                  <div className={cn("mt-0.5 text-[12.5px]", active ? "text-white/80" : "text-faint")}>
-                    {g.label[lang]}
                   </div>
                 </button>
               </li>
@@ -86,7 +93,7 @@ export function BuilderScreen() {
         <AutonomyMatrix selected={selected} rev={rev} onDowngrade={(lvl) => graduationOverrides.cap(selected.intentCode, lvl)} />
         {override?.cap && (
           <div className="rounded border border-amber-300 bg-amber-50 px-3 py-1.5 text-[13.5px] text-amber-900" data-id="s4.cap.notice">
-            {t("capNotice", { intent: selected.intentCode, level: override.cap })}
+            {t("capNotice", { intent: selected.label[lang], level: levelTag(override.cap) })}
             <button
               className="ml-2 underline"
               onClick={() => graduationOverrides.clearCap(selected.intentCode)}
@@ -97,7 +104,7 @@ export function BuilderScreen() {
         )}
         {override?.promotedTo && (
           <div className="rounded border border-emerald-300 bg-emerald-50 px-3 py-1.5 text-[13.5px] text-emerald-900" data-id="s4.promote.notice">
-            {t("promoteNotice", { intent: selected.intentCode, level: override.promotedTo })}
+            {t("promoteNotice", { intent: selected.label[lang], level: levelTag(override.promotedTo) })}
           </div>
         )}
         <BacktestRunner selectedIntent={selected.intentCode} />

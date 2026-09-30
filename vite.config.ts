@@ -16,7 +16,21 @@ export default defineConfig({
       "@shared": fileURLToPath(new URL("./shared", import.meta.url)),
     },
   },
-  server: { port: 5173, strictPort: false },
+  server: {
+    port: 5173,
+    strictPort: false,
+    watch: {
+      // The PRD / research-report HTML files live in the project root but are
+      // not part of the app. Vite treats any root .html as a page entry and
+      // full-reloads the browser on change, wiping demo run state. Watch only
+      // index.html (the real entry); everything else .html is documentation.
+      ignored: [
+        "**/_backup/**",
+        "**/_shots/**",
+        (p: string) => /[\\/]index\.html$/.test(p) === false && p.endsWith(".html"),
+      ],
+    },
+  },
   preview: { port: 4173 },
   test: {
     // Runtime/domain tests are pure node; DOM tests opt in per file with

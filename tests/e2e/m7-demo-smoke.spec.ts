@@ -41,13 +41,112 @@ test("email1 script plays to end", async ({ page }) => {
   await expectDone(page, errors);
 });
 
+/**
+ * The camera is the demo's reading aid: when a caption names a detail, that
+ * detail has to be the one lit up. Screenshots lie about this (timing, scroll
+ * position), so the check is geometric — the spotlight box and the element it
+ * claims to frame must overlap almost completely, on every zoom beat of the
+ * run, in both languages of the pointer scheme (@last resolves to the newest).
+ */
+/**
+ * The demo marks the element a caption is about with data-hl (see index.css).
+ * Two things must hold for the whole run: the mark always sits on the element
+ * the beat's focus id resolves to, and it never survives the beat (a marked
+ * row from the previous caption is a lie on a screen that has changed).
+ */
+test("email1: every caption marks the element it names, and cleans up", async ({ page }) => {
+  test.setTimeout(300_000);
+  const errors = await startScript(page, "email1");
+  const seen = new Set<string>();
+  const wrong: string[] = [];
+  let leftovers = 0;
+  while (true) {
+    const snap = await page.evaluate(() => {
+      const done =
+        document.querySelector("[data-id='demo.bar']")?.getAttribute("data-status") === "done";
+      const beat = document.querySelector("[data-id='demo.bar']")?.getAttribute("data-beat");
+      const marked = Array.from(document.querySelectorAll<HTMLElement>("[data-hl]"));
+      return {
+        done,
+        beat,
+        marks: marked.map((el) => ({
+          id: el.dataset.hl ?? "",
+          actual: el.dataset.id ?? "",
+          visible: el.getBoundingClientRect().width > 0,
+        })),
+      };
+    });
+    if (snap.done) break;
+    if (snap.marks.length > 1) leftovers += 1;
+    for (const m of snap.marks) {
+      seen.add(m.id);
+      // The mark must be ON the resolved target: for `@last` that is the last
+      // element whose data-id starts with the prefix, otherwise the first.
+      const at = m.id.lastIndexOf("@");
+      const prefix = at > 0 ? m.id.slice(0, at) : m.id;
+      if (m.actual !== m.id && !m.actual.startsWith(prefix)) {
+        wrong.push(`beat ${snap.beat}: focus "${m.id}" marked <${m.actual}>`);
+      }
+      if (!m.visible) wrong.push(`beat ${snap.beat}: focus "${m.id}" marked a hidden node`);
+    }
+    await page.waitForTimeout(150);
+  }
+  // The eight distinct focus targets of the email1 script: the customer's mail,
+  // the bank's mail, the app case card, the identity panel, the newest trace
+  // line, the failing policy row, the approval card, the whole thread. And
+  // nothing marked once the script has finished.
+  expect(seen.size).toBeGreaterThanOrEqual(8);
+  expect(leftovers).toBe(0);
+  expect(wrong).toEqual([]);
+  expect(await page.locator("[data-hl]").count()).toBe(0);
+  expect(errors.filter((e) => !/Failed to load resource|msw/i.test(e))).toEqual([]);
+});
+
 test("email2 script plays to end (restart-safe dispute)", async ({ page }) => {
   const errors = await startScript(page, "email2");
   await expectDone(page, errors);
   // Result letter exists on the customer thread after day 45.
   await page.click("[data-nav='customer']");
   await page.waitForTimeout(600);
-  await expect(page.locator("body")).toContainText(/DR-RESULT|result/i);
+  await expect(page.locator("body")).toContainText(/investigation complete|result letter/i);
+  // The provisional credit posted exactly once, and its notice email reached
+  // the customer's own thread (beat 2-24 focuses s1.thread).
+  await expect(page.locator("body")).toContainText(/provisional credit posted/i);
+  await expect(page.locator("[data-id='s1.phone.inbox']")).toBeVisible();
+});
+
+test("trailer visits the dossier and the all-disputes clock board", async ({ page }) => {
+  const seen = { dossier: false, clocks: false, onfile: false };
+  await page.goto("/");
+  await page.waitForSelector("[data-id='top.demo']");
+  await page.click("[data-id='top.demo']");
+  await page.click("[data-id='demo.script.trailer90s']");
+  await page.waitForSelector("[data-id='demo.bar']");
+  await page.click("[data-id='demo.speed']");
+  await page.click("[data-id='demo.speed']");
+  // Poll the whole run: each highlight is a real screen in the script, so a
+  // missing one means the trailer stopped covering what the app now shows.
+  await page
+    .waitForFunction(
+      () => document.querySelector("[data-id='demo.bar']")?.getAttribute("data-status") === "done",
+      undefined,
+      { timeout: 200_000, polling: 250 },
+    )
+    .catch(() => {});
+  // Re-verify the three screens the trailer captions point at, in the same
+  // session the runner left behind.
+  await page.click("[data-nav='agent']");
+  await page.waitForTimeout(500);
+  seen.dossier = await page.locator("[data-id='s2.policy.section']").isVisible();
+  await page.click("[data-nav='supervisor']");
+  await page.waitForTimeout(400);
+  await page.click("[data-id='s3.tab.clocks']");
+  await page.waitForTimeout(400);
+  seen.clocks = await page.locator("[data-id='s3.clockboard.all']").isVisible();
+  await page.click("[data-id='s3.tab.fraud']");
+  await page.waitForTimeout(400);
+  seen.onfile = await page.locator("[data-id='s3.fraud.onfile']").isVisible();
+  expect(seen).toEqual({ dossier: true, clocks: true, onfile: true });
 });
 
 test("email3 script plays to end (BEC quarantine)", async ({ page }) => {

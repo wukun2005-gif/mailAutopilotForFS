@@ -26,7 +26,7 @@ test.describe("M5 supervisor cockpit smoke", () => {
     // Supervisor approves provisional credit (single-item, never batch).
     await page.goto("/#/supervisor");
     await idle(page, 500);
-    await expect(page.locator("[data-id='s3.queue']")).toContainText("AP-PCREDIT");
+    await expect(page.locator("[data-id='s3.queue']")).toContainText("Post provisional credit");
     await page.click("[data-id='s3.approve']");
     await idle(page);
     await expect(page.locator("[data-id='s3.queue']")).toContainText("queue is clear");
@@ -34,11 +34,11 @@ test.describe("M5 supervisor cockpit smoke", () => {
     // Day 40 merchant evidence → R4 human adjudication.
     await page.click("[data-id='dev.clock.day40']");
     await idle(page);
-    await expect(page.locator("[data-id='s3.queue']")).toContainText("AP-ADJUDICATION");
+    await expect(page.locator("[data-id='s3.queue']")).toContainText("Human adjudication");
     await page.click("[data-id='s3.approve']"); // uphold error outcome default
     await idle(page);
     // Chains into L1 result-letter sign-off in the same run.
-    await expect(page.locator("[data-id='s3.queue']")).toContainText("AP-RESULTSIGN");
+    await expect(page.locator("[data-id='s3.queue']")).toContainText("Sign and send investigation result letter");
     await page.click("[data-id='s3.approve']");
     await idle(page);
     await expect(page.locator("[data-id='s3.queue']")).toContainText("queue is clear");
@@ -50,7 +50,7 @@ test.describe("M5 supervisor cockpit smoke", () => {
     await idle(page);
     const trace = page.locator("[data-id='s1.tracerail']");
     await page.click("[data-id='s1.viewtoggle'] >> text=audit view");
-    await expect(trace).toContainText("DR-RESULT-ERROR");
+    await expect(trace).toContainText("Investigation result (error found)");
   });
 
   test("email 3: fraud quarantine confirm → on-file SMS + SAR locked template", async ({ page }) => {

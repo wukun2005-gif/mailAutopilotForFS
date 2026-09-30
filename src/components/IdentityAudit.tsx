@@ -35,7 +35,7 @@ export function IdentityAudit({ identity }: { identity?: IdentityVerdict | null 
               <X size={11} className="shrink-0 text-red-600" />
             )}
             <span className={cn(s.passed ? "text-gray-700" : "font-semibold text-red-700")}>
-              {t(`identity.signals.${s.code}`, { defaultValue: s.code })}
+              {t(`identity.signals.${s.code}`, { defaultValue: t("trace.signalFallback") })}
             </span>
           </li>
         ))}
