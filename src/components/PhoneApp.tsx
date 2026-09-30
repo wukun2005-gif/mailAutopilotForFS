@@ -140,7 +140,7 @@ export function PhoneApp() {
         )}
 
         {/* secure-message inbox: approved/sent letters */}
-        <div className="rounded-xl border border-line bg-white">
+        <div className="rounded-xl border border-line bg-white" data-id="s1.phone.inbox">
           <div className="flex items-center gap-1.5 border-b border-line px-2.5 py-1.5 text-[13.5px] font-semibold text-navy">
             <MessageSquareText size={12} /> {t("phone.inboxTitle")}
           </div>

@@ -47,6 +47,9 @@ export function CustomerScreen() {
           {VIEW_TABS.map(({ v, label, Icon }) => (
             <button
               key={label}
+              // Per-tab hook: the toggle's own id is on the wrapper, and a
+              // click there hits no handler.
+              data-id={v ? "s1.view.audit" : "s1.view.customer"}
               onClick={() => setAuditView(v)}
               className={cn(
                 "flex items-center gap-1 rounded-full px-3 py-1 text-[14px]",

@@ -21,6 +21,8 @@ export interface GraduationEntry {
   criticalMisses: number;
   noEditApproval: number | null; // 0..1, null for never/rare
   graduatedL: "L3" | "L2" | null;
+  /** Clock-driven deterministic obligation, not an AI decision (FR-4.2). */
+  clockDriven?: boolean;
   status: GraduationStatus;
   dualSigned: boolean;
   signedBy?: Array<{ role: BiText; at: string }>;
@@ -60,6 +62,30 @@ export const GRADUATION_TABLE: GraduationEntry[] = [
     ],
   },
   {
+    intentCode: "transaction_lookup",
+    label: { zh: "交易查询（余额/在途交易/扣费解释）", en: "Transaction lookup (balance / activity / charge explanation)" },
+    risk: "R1",
+    regulated: false,
+    triggers90d: 980,
+    criticalMisses: 0,
+    noEditApproval: 0.968, // 0.2pp short of the 97% bar — stays shadow until it clears
+    graduatedL: "L2",
+    status: "shadow",
+    dualSigned: false,
+  },
+  {
+    intentCode: "transaction_detail",
+    label: { zh: "交易明细查询（单笔扣费明细）", en: "Transaction detail (single charge detail)" },
+    risk: "R1",
+    regulated: false,
+    triggers90d: 745,
+    criticalMisses: 0,
+    noEditApproval: 0.975,
+    graduatedL: "L2",
+    status: "shadow",
+    dualSigned: false,
+  },
+  {
     intentCode: "od_fee_refund",
     label: { zh: "阈值内透支费退还", en: "Within-threshold overdraft fee refund" },
     risk: "R2",
@@ -76,6 +102,22 @@ export const GRADUATION_TABLE: GraduationEntry[] = [
     ],
   },
   {
+    intentCode: "card_lock",
+    label: { zh: "借记卡锁卡（低影响写，已核验后自动）", en: "Debit card lock (low-impact write, auto once verified)" },
+    risk: "R2",
+    regulated: false,
+    triggers90d: 254,
+    criticalMisses: 0,
+    noEditApproval: 0.981,
+    graduatedL: "L3",
+    status: "graduated",
+    dualSigned: true,
+    signedBy: [
+      { role: { zh: "合规", en: "Compliance" }, at: "2026-09-10" },
+      { role: { zh: "业务负责人", en: "Business owner" }, at: "2026-09-11" },
+    ],
+  },
+  {
     intentCode: "reg_e_intake",
     label: { zh: "Reg E 争议受理 / 起钟 / 回执", en: "Reg E intake / clocks / acknowledgment" },
     risk: "R2",
@@ -85,6 +127,19 @@ export const GRADUATION_TABLE: GraduationEntry[] = [
     noEditApproval: 0.961,
     graduatedL: "L2", // clock-driven intake; provisional credit stays L2
     status: "shadow",
+    dualSigned: false,
+  },
+  {
+    intentCode: "reg_e_provisional_credit",
+    label: { zh: "临时贷记（时钟驱动）", en: "Provisional credit (clock-driven)" },
+    risk: "R2",
+    regulated: true,
+    clockDriven: true,
+    triggers90d: 618,
+    criticalMisses: 0,
+    noEditApproval: null,
+    graduatedL: null, // computed by bank rules; never graduates to L3 (PRD §5 Disputes)
+    status: "never",
     dualSigned: false,
   },
   {

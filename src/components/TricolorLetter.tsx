@@ -61,8 +61,8 @@ export function TricolorLetter({
           )}
           {s.textEn}
           {audit && (
-            <span className="mt-0.5 block font-mono text-[12.5px] opacity-55">
-              {s.kind} · {s.source}
+            <span className="mt-0.5 block text-[12.5px] opacity-55">
+              {t("legend." + s.kind, { defaultValue: s.kind })}
             </span>
           )}
         </p>

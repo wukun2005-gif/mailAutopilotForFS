@@ -1,6 +1,7 @@
 // TraceRail — audit-view timeline of CaseEvents (Dev Plan §7.1). Renders the
 // decision dossier: nodes, gate verdicts (L/R/I), tool calls, policy version,
 // clock events, HALTED/RESUMED. This is the "X-ray" of the same email.
+import { useEffect, useRef } from "react";
 import { format } from "date-fns";
 import type { CaseEvent } from "@/runtime/state.ts";
 import { cn } from "@/lib/utils";
@@ -25,6 +26,17 @@ function summarize(e: CaseEvent, t: (k: string, o?: Record<string, unknown>) => 
   const d = e.data ?? {};
   const map = (ns: string, code: string): string =>
     t(`trace.${ns}.${code}`, { defaultValue: code }) as string;
+  // Reason codes (DRAFT_CHANNEL_CLOSED …) never reach the audience raw:
+  // every code resolves to a plain-language phrase, unknown ones fall back to
+  // a generic sentence rather than the code itself.
+  const humanReason = (code: string): string =>
+    code ? (t(`identity.reasons.${code}`, { defaultValue: t("trace.reasonFallback") }) as string) : "";
+  const humanCell = (cell: { kind?: string; level?: string; reasonCode?: string } | undefined): string => {
+    if (!cell) return "";
+    return cell.kind === "L"
+      ? (map("levels", cell.level ?? "") as string)
+      : humanReason(cell.reasonCode ?? "");
+  };
   switch (e.type) {
     case "gate": {
       // Identity gate emits {level, signals, failed}; autonomy emits
@@ -32,7 +44,7 @@ function summarize(e: CaseEvent, t: (k: string, o?: Record<string, unknown>) => 
       if (typeof d.level === "string") {
         const failed = (d.failed as string[] | undefined) ?? [];
         const failedTxt = failed
-          .map((c) => t(`identity.signals.${c}`, { defaultValue: c }) as string)
+          .map((c) => t(`identity.signals.${c}`, { defaultValue: t("trace.signalFallback") }) as string)
           .join("、");
         return failed.length > 0
           ? `${t("trace.gateLevel", { level: d.level })}；${t("trace.gateFailed", { values: failedTxt })}`
@@ -41,20 +53,26 @@ function summarize(e: CaseEvent, t: (k: string, o?: Record<string, unknown>) => 
       if (d.lowConfidence) return t("trace.lowConfidence") as string;
       const cells = (d.cells as Array<{ intent: string; cell: unknown }> | undefined) ?? [];
       if (cells.length > 0) {
-        return cells
+        // Step 5 on screen: each intent's matrix cell plus the plain-language
+        // reasons behind it (policy result, graduation state, exact R×I rule).
+        const lines = cells
           .map((c) => {
             const cell = c.cell as { kind?: string; level?: string; reasonCode?: string } | undefined;
-            const verdict =
-              cell?.kind === "L"
-                ? map("levels", cell.level ?? "")
-                : (t(`identity.reasons.${cell?.reasonCode ?? ""}`, {
-                    defaultValue: cell?.reasonCode ?? "",
-                  }) as string);
-            return `${map("intents", c.intent)} → ${verdict}`;
+            return `${map("intents", c.intent)} → ${humanCell(cell)}`;
           })
           .join("；");
+        const rc = ((e.reasonCodes as string[] | undefined) ?? [])
+          .map(humanReason)
+          .filter(Boolean)
+          .join("，");
+        return rc ? `${lines} · ${rc}` : lines;
       }
-      return `${d.gate ?? ""} ${d.verdict ?? JSON.stringify(d.cell ?? "")} ${(d.reasonCodes as string[] | undefined)?.join(",") ?? ""}`.trim();
+      const fallbackCell = humanCell(d.cell as { kind?: string; level?: string; reasonCode?: string } | undefined);
+      const fallbackReasons = ((e.reasonCodes ?? d.reasonCodes) as string[] | undefined) ?? []
+        .map(humanReason)
+        .filter(Boolean)
+        .join("，");
+      return [fallbackCell, fallbackReasons].filter(Boolean).join(" · ") || (t("trace.gateGeneric") as string);
     }
     case "tool_call":
       return map("actions", (d.actionType as string | undefined) ?? "");
@@ -77,12 +95,17 @@ function summarize(e: CaseEvent, t: (k: string, o?: Record<string, unknown>) => 
         approval: map("approvals", (d.approvalId as string | undefined) ?? ""),
         decision: map("decisions", (d.decision as string | undefined) ?? ""),
       }) as string;
-    case "email_inbound":
-      return t("trace.mailReceived") as string;
+    case "email_inbound": {
+      // Step 1 on screen: arrival stamp plus the thread-merge evidence, in
+      // plain words (thread id stays in the data layer, off the stage).
+      const parts = [t("trace.mailReceived") as string];
+      if (typeof d.threadSize === "number")
+        parts.push(t("trace.threadMerge", { n: d.threadSize }) as string);
+      return parts.join(" · ");
+    }
     case "email_outbound":
       return t("trace.replySent", {
         draft: map("drafts", (d.draft as string | undefined) ?? ""),
-        code: (d.draft as string | undefined) ?? "",
       }) as string;
     case "idempotent_replay":
       return t("trace.idempotent", {
@@ -90,6 +113,8 @@ function summarize(e: CaseEvent, t: (k: string, o?: Record<string, unknown>) => 
       }) as string;
     case "system": {
       if (d.restarted) return t("trace.restarted") as string;
+      if (typeof d.duplicateSuppressed === "string")
+        return t("trace.duplicateSuppressed") as string;
       if (typeof d.handedToAgent === "string")
         return t("trace.handedToAgent", {
           approval: map("approvals", d.handedToAgent),
@@ -98,10 +123,22 @@ function summarize(e: CaseEvent, t: (k: string, o?: Record<string, unknown>) => 
         return t("trace.draftEdited", {
           draft: map("drafts", d.draftEdited),
         }) as string;
-      if (Array.isArray(d.intents))
-        return t("trace.triageFound", {
+      if (Array.isArray(d.intents)) {
+        // Step 2 on screen: intent hits plus the parallel language /
+        // vulnerability screening (negatives included).
+        const base = t("trace.triageFound", {
           values: (d.intents as string[]).map((c) => map("intents", c)).join("、"),
         }) as string;
+        const extra = [
+          typeof d.lang === "string"
+            ? (t(`trace.langValues.${d.lang}`, { defaultValue: t("trace.langValues.other") }) as string)
+            : "",
+          typeof d.vulnerable === "string"
+            ? (t(`trace.vulnValues.${d.vulnerable}`, { defaultValue: t("trace.vulnValues.other") }) as string)
+            : "",
+        ].filter(Boolean).join(" · ");
+        return extra ? `${base} · ${extra}` : base;
+      }
       if (Array.isArray(d.cards))
         return (d.cards as Array<{ policyId?: string; version?: string; overall?: string }>)
           .map((c) =>
@@ -113,6 +150,10 @@ function summarize(e: CaseEvent, t: (k: string, o?: Record<string, unknown>) => 
           )
           .join("；") as string;
       if (d.quarantined) return t("trace.quarantinedLine") as string;
+      if (typeof d.fr52Check === "string")
+        return t("trace.fr52Pass", { draft: map("drafts", d.fr52Check) }) as string;
+      if (typeof d.blocked === "string" && d.blockedReason === "FR52_DISCLOSURE_MISSING")
+        return t("trace.fr52Blocked", { draft: map("drafts", d.blocked) }) as string;
       if (typeof d.blocked === "string")
         return t("trace.blockedDraft", { draft: map("drafts", d.blocked) }) as string;
       if (d.closed) return t("trace.caseClosed") as string;
@@ -124,21 +165,41 @@ function summarize(e: CaseEvent, t: (k: string, o?: Record<string, unknown>) => 
   }
 }
 
-export function TraceRail({ events }: { events: CaseEvent[] }) {
+/** `dataId` lets each host screen expose its own demo hook (s1 = customer
+ *  audit view, s2 = agent dossier) instead of sharing one ambiguous id. */
+export function TraceRail({
+  events,
+  dataId = "s1.tracerail",
+}: {
+  events: CaseEvent[];
+  dataId?: string;
+}) {
   const { t } = useTranslation("customer");
+  const listRef = useRef<HTMLDivElement>(null);
+  const lastSeq = events.length > 0 ? events[events.length - 1]!.seq : null;
+  // Tail-follow, the way a log viewer behaves: keep the newest line in view
+  // while the operator is already at the bottom, but never yank the rail back
+  // if they scrolled up to re-read something. A demo caption that says "one
+  // more line just appeared" is useless if that line is below the fold.
+  useEffect(() => {
+    const el = listRef.current;
+    if (!el || lastSeq == null) return;
+    const atBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 90;
+    if (atBottom) el.scrollTop = el.scrollHeight;
+  }, [lastSeq]);
   return (
-    <div className="flex h-full flex-col" data-id="s1.tracerail">
+    <div className="flex h-full flex-col" data-id={dataId}>
       <div className="shrink-0 border-b border-line px-3 py-2">
         <div className="text-[15px] font-semibold text-navy">{t("trace.title")}</div>
         <div className="text-[13px] text-faint">{t("trace.subtitle")}</div>
       </div>
-      <div className="min-h-0 flex-1 overflow-y-auto px-3 py-2">
+      <div ref={listRef} className="min-h-0 flex-1 overflow-y-auto px-3 py-2">
         {events.length === 0 && (
           <div className="mt-8 text-center text-[14px] text-faint">{t("trace.empty")}</div>
         )}
         <ol className="relative space-y-1.5 border-l-2 border-line pl-3">
           {events.map((e) => (
-            <li key={e.seq} className="relative">
+            <li key={e.seq} className="relative" data-id={`s1.trace.entry.${e.seq}`}>
               <span className="absolute -left-[17px] top-1.5 h-2 w-2 rounded-full bg-navy-light" />
               <div className="rounded border border-line bg-white px-2 py-1">
                 <div className="flex items-center justify-between gap-2">

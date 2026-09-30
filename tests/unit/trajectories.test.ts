@@ -49,6 +49,10 @@ describe("email 1 — overdraft fee: deny → step-up → auto refund → verifi
     expect(refund).toHaveLength(1);
     expect(snap.state.outbound.some((o) => o.draftId === "DR-OD1-REFUND")).toBe(true);
     expect(snap.state.status).toBe("pending_verify");
+    // FR-10.2 / FR-10.3 footer rides every autonomous email.
+    const refundDraft = snap.state.drafts.find((d) => d.id === "DR-OD1-REFUND");
+    expect(refundDraft && draftText(refundDraft)).toContain("AI assistant");
+    expect(refundDraft && draftText(refundDraft)).toContain("HUMAN");
 
     // +14 calendar days, no repeat contact → verified resolution.
     snap = await r.advance("verify14d");
@@ -64,6 +68,9 @@ describe("email 1 — overdraft fee: deny → step-up → auto refund → verifi
 
     const snap = await r.injectEmail("EM-1-IN-2");
     expect(snap.interrupted).toBe(true);
+    // Thread merge: beat 2 continues the same thread, beat-1 mail is retained.
+    expect(snap.state.emails.some((e) => e.id === "EM-1-IN-1")).toBe(true);
+    expect(snap.state.emails.some((e) => e.id === "EM-1-IN-2")).toBe(true);
     const approval = snap.state.approvals.find((a) => a.id === "AP-OD2-EXPLAIN");
     expect(approval?.lLevel).toBe("L2");
     // Holding reply is auto-sent on arrival; final explanation waits.
@@ -121,6 +128,9 @@ describe("email 2 — Reg E dispute: intake, clocks, restart-safe provisional cr
     ).toBe(true);
     expect(snap.state.outbound.some((o) => o.draftId === "DR-REGE-RECEIPT")).toBe(true);
     expect(snap.state.outbound.some((o) => o.draftId === "DR-CARD-STATUS")).toBe(true);
+    const receipt = snap.state.drafts.find((d) => d.id === "DR-REGE-RECEIPT");
+    expect(receipt && draftText(receipt)).toContain("AI assistant");
+    expect(receipt && draftText(receipt)).toContain("HUMAN");
   });
 
   it("denies transaction detail below I3, releases it after same-thread step-up", async () => {
@@ -208,6 +218,8 @@ describe("email 3 — BEC/ATO: quarantine, no R3 tools, on-file SMS only, zero r
     await r.reset();
     const snap0 = await r.injectEmail("EM-3-IN-1");
     expect(snap0.state.fraud.quarantined).toBe(true);
+    // Lookalike sender rates I0 (never an on-file match).
+    expect(snap0.state.identity?.level).toBe("I0");
     expect(snap0.state.status).toBe("quarantined");
     expect(snap0.interrupted).toBe(true);
     // R3 contact-change tool is not registered and therefore never called.
@@ -223,5 +235,7 @@ describe("email 3 — BEC/ATO: quarantine, no R3 tools, on-file SMS only, zero r
     // The locked SAR template is recorded but blocked from transmission.
     const locked = done.state.outbound.find((o) => o.draftId === "DR-FRAUD-LOCKED");
     expect(locked?.blockedReason).toBe("ZERO_REPLY_TO_FORGED_ADDRESS");
+    // Step 9: on-file warning sent → dossier sealed, case closed.
+    expect(done.state.status).toBe("closed");
   });
 });

@@ -128,6 +128,23 @@ export function recordedTriage(emailId: string): IntentHit[] {
   }));
 }
 
+// Recorded parallel signals (PRD §6.1 step 2): language, vulnerability and
+// fraud screening run alongside intent on every inbound email — including the
+// negative results. All three fixtures are English with no vulnerability
+// signals; fraud only fires on email 3 (see FRAUD_SIGNALS).
+const RECORDED_PARALLEL: Record<string, { lang: string; vulnerable: string }> = {
+  "EM-1-IN-1": { lang: "en", vulnerable: "negative" },
+  "EM-1-IN-2": { lang: "en", vulnerable: "negative" },
+  "EM-2-IN-1": { lang: "en", vulnerable: "negative" },
+  "EM-2-IN-1B": { lang: "en", vulnerable: "negative" },
+  "EM-2-IN-2": { lang: "en", vulnerable: "negative" },
+  "EM-3-IN-1": { lang: "en", vulnerable: "negative" },
+};
+
+export function parallelSignals(emailId: string): { lang: string; vulnerable: string } {
+  return RECORDED_PARALLEL[emailId] ?? { lang: "en", vulnerable: "negative" };
+}
+
 export function intentSpec(code: string): IntentSpec {
   const spec = INTENT_SPECS[code];
   if (!spec) throw new Error(`UNREGISTERED_INTENT:${code}`);

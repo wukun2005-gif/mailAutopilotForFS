@@ -5,3 +5,4 @@ server-data/
 *.log
 tests/e2e/test-results/
 eval-results/
+tts/.venv/

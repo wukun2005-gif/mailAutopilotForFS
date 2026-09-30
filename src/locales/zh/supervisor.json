@@ -13,7 +13,7 @@
   "approval": {
     "overdue": "已逾期",
     "hoursLeft": "剩 {{count}} 小时",
-    "r4Outcome": "R4 裁决结果：",
+    "r4Outcome": "裁决结果：",
     "upholdError": "维持有错误",
     "noError": "未发现错误",
     "confirmReject": "确认驳回",
@@ -21,6 +21,13 @@
     "approve": "一键批准",
     "handToAgent": "转坐席处理",
     "reject": "驳回",
+    "rejectReasons": {
+      "INSUFFIFICIENT_EVIDENCE": "证据不足",
+      "POLICY_NOT_MET": "不符合政策",
+      "CUSTOMER_NOT_VERIFIED": "客户未通过核验",
+      "REFER_TO_INVESTIGATIONS": "转交调查",
+      "OTHER": "其他"
+    },
     "batchInfo": "{{count}} 条同模板/同意图项可批量批准（每条仍可展开复核）。",
     "queueEmpty": "没有待审批项——队列已清空",
     "batchFootnote": "时钟驱动、案件专属的义务（如临时贷记）永远单件处理——绝不进入批量列表。"
@@ -36,7 +43,23 @@
     "overdue": "已逾期",
     "hours": "{{count}} 小时",
     "due": "{{date}} 到期",
-    "openCase": "打开案件"
+    "openCase": "打开案件",
+    "allTitle": "全部在办争议（{{count}} 件）",
+    "allNote": "看板是全量的——所有在办 Reg E 争议都列在这里，不只是手上打开的这一案",
+    "case": "案件",
+    "subject": "争议事由",
+    "arrived": "到达",
+    "pcState": "适用期限 · 临时贷记",
+    "investigation": "调查截止",
+    "remaining": "剩余",
+    "stage": "阶段",
+    "branch90": "POS 借记 90 天",
+    "branch45": "账户错误 45 天",
+    "pcPosted": "贷记已入账",
+    "pcPending": "贷记待批",
+    "pcNone": "无需贷记",
+    "current": "本案",
+    "days": "{{count}} 天"
   },
   "fraud": {
     "empty": "本案没有隔离邮件——从原型控制面板加载 BEC/ATO 案件",
@@ -49,6 +72,7 @@
       "reply to sender": "回复发件人"
     },
     "unreachable": "邮件渠道不存在任何联系方式变更工具——这些动作在结构上不可达",
+    "identityLevel": "身份保障定档 {{level}} · 无法关联到账户",
     "confirm": "确认欺诈 · 仅通过档案内号码警示客户",
     "release": "误报 · 解除隔离",
     "smsSent": "警示短信仅发送至档案内号码 {{phone}}",

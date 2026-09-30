@@ -11,7 +11,13 @@
   "promoteNotice": "dual sign-off applied: {{intent}} promoted to {{level}}.",
   "matrix": {
     "title": "Autonomy matrix · R × I",
-    "subtitle": "same decideCell() as production · click an active L3/L2 cell to cap it · R3/R4 cells do not respond — the config layer cannot reach them",
+    "subtitle": "same decision function as production · click an active L3/L2 cell to cap it · R3/R4 cells do not respond — the config layer cannot reach them",
+    "identity": {
+      "I0": "identity unconfirmed",
+      "I1": "sender domain only",
+      "I2": "on-file address verified",
+      "I3": "verified in app"
+    },
     "risk": {
       "R0": "R0 · public info",
       "R1": "R1 · read account data",
@@ -33,7 +39,7 @@
     "title": "90-day backtest replay · {{from}} → {{to}}",
     "run": "run replay",
     "rerun": "re-run replay",
-    "note": "{{threads}} threads · {{valid}} valid inbound · animation only — results are recorded fixtures ({{notes}})",
+    "note": "{{threads}} threads · {{valid}} valid inbound · animation only — results come from pre-recorded backtest data ({{notes}})",
     "headers": {
       "intent": "intent",
       "triggers": "triggers",
@@ -41,8 +47,11 @@
       "noedit": "no-edit approve",
       "recall": "regulated recall",
       "misses": "critical misses",
-      "cost": "unit cost"
-    }
+      "cost": "unit cost",
+      "regretAuto": "overturned after auto",
+      "regretConservative": "handed to human, should have automated"
+    },
+    "regretNote": "Regret rates are per million items. FR-8.4 two-way regret: both directions have to sit on the same screen — watching only “overturned after auto” flatters a conservative posture, watching only “should have automated” flatters an aggressive one; watch one direction alone and the human hand-off rate can be squeezed down to flatter the numbers."
   },
   "sampling": {
     "title": "Three-tier sampling across three frames",
@@ -53,6 +62,7 @@
     "tierB": "tier B",
     "tierC": "tier C",
     "negativeLabel": "detector-NEGATIVE random re-label: n = {{count}}",
+    "why1200": "Why a separate 1,200: with n items and zero misses, the 95% upper bound on the miss rate is about 3/n. Frame ② has only 65 natural samples (40+25) — zero misses there still allows a miss rate around 5%; 1,200 miss-free items pull the bound down to ~0.25%, which is what supports \"recall ≥99.5%\".",
     "negativePresent": "{{missed}} missed regulated items · {{neg}} non-regulated false negatives fed back as cases",
     "notSignable": "recall criterion NOT SIGNABLE — positive-only volume cannot bound misses"
   },
@@ -67,10 +77,11 @@
     "apply": "apply graduation to runtime",
     "neverR4Headline": "Permanent human: R4 adjudication is L0 decide / L1 human-signed draft",
     "neverR3Headline": "Hard never in the email channel: no R3 tool is registered",
+    "neverClockHeadline": "Clock-driven automation: computed by bank rules, L2 one-tap approval — never graduates to L3",
     "neverDetail": "Graduation is structurally unreachable for this intent.",
     "rareHeadline": "Rare intent: 90-day volume can never reach the sample bar",
     "rareTriggers": "Only {{count}} triggers in 90 days; held at human handling.",
-    "rareConformal": "Conformal abstain fallback (P2) routes these to an agent.",
+    "rareConformal": "Conformal abstain fallback routes these to an agent.",
     "regVolume": "regulated bar: ≥600 triggers — {{count}}",
     "regMisses": "0 critical misses — {{count}}",
     "negativeColumn": "detector-negative re-label column present",
@@ -83,7 +94,7 @@
     "graduatedNot": "Evidence does not meet the graduation bar"
   },
   "conformal": {
-    "title": "Conformal abstention calibration · P2",
+    "title": "Conformal abstention calibration",
     "methodDemo": "method demo · fictional values",
     "targetAlpha": "target α",
     "calibrationN": "calibration n",

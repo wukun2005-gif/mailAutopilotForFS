@@ -15,6 +15,7 @@
     "test:watch": "vitest",
     "e2e": "playwright test",
     "eval": "promptfoo eval -c promptfoo.config.ts",
+    "tts": "bash tts/generate.sh",
     "i18n:audit": "i18next-parser --config i18next-parser.config.ts",
     "audit:prd": "tsx scripts/audit-prd.ts"
   },

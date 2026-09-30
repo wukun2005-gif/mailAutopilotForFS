@@ -23,60 +23,65 @@ export function SamplingPanel({
   const total = SAMPLE_TIERS.reduce((acc, t) => acc + t.size, 0);
 
   return (
-    <div className="rounded-lg border border-line bg-white p-3" data-id="s4.sampling">
-      <h3 className="text-[15px] font-semibold text-navy">{t("sampling.title")}</h3>
+    <>
+      <div className="rounded-lg border border-line bg-white p-3" data-id="s4.sampling">
+        <h3 className="text-[15px] font-semibold text-navy">{t("sampling.title")}</h3>
 
-      <div className="mt-2 grid gap-2 md:grid-cols-3">
-        {SAMPLE_TIERS.map((tier) => (
-          <div
-            key={tier.tier}
-            className={cn(
-              "rounded border p-2 text-[13.5px]",
-              tier.tier === "C" ? "border-red-300 bg-red-50/50" : "border-line",
-            )}
-          >
-            <div className="font-semibold text-navy">{tier.label[lang]}</div>
-            <div className="mt-0.5 text-[12.5px] text-faint">{tier.method[lang]}</div>
-            <div className="mt-1 font-mono text-[14px]">n = {tier.size}</div>
-            {tier.tier === "C" && (
-              <label className="mt-1 flex items-center gap-1 text-[12.5px] text-red-800">
-                <input type="checkbox" checked={showC} onChange={(e) => setShowC(e.target.checked)} />
-                {t("sampling.reportSeparately")}
-              </label>
-            )}
-          </div>
-        ))}
-      </div>
-      <p className="mt-1 text-[12.5px] text-faint">{t("sampling.total", { count: total })}</p>
-
-      <table className="mt-2 w-full text-[13px]">
-        <thead>
-          <tr className="border-b border-line text-faint">
-            <th className="py-1 text-left font-normal">{t("sampling.frame")}</th>
-            <th className="font-normal">{t("sampling.tierA")}</th>
-            <th className="font-normal">{t("sampling.tierB")}</th>
-            <th className="font-normal">{t("sampling.tierC")}</th>
-          </tr>
-        </thead>
-        <tbody className="font-mono">
-          {SAMPLING_FRAMES.map((f) => (
-            <tr key={f.code} className="border-b border-line/60">
-              <td className="py-0.5 text-left font-sans">{f.label[lang]}</td>
-              <td className="text-center">{f.tierA}</td>
-              <td className="text-center">{f.tierB}</td>
-              <td className={cn("text-center", !showC && "text-gray-300")}>
-                {showC ? f.tierC : "—"}
-              </td>
-            </tr>
+        <div className="mt-2 grid gap-2 md:grid-cols-3" data-id="s4.sampling.tiers">
+          {SAMPLE_TIERS.map((tier) => (
+            <div
+              key={tier.tier}
+              className={cn(
+                "rounded border p-2 text-[13.5px]",
+                tier.tier === "C" ? "border-red-300 bg-red-50/50" : "border-line",
+              )}
+            >
+              <div className="font-semibold text-navy">{tier.label[lang]}</div>
+              <div className="mt-0.5 text-[12.5px] text-faint">{tier.method[lang]}</div>
+              <div className="mt-1 font-mono text-[14px]">n = {tier.size}</div>
+              {tier.tier === "C" && (
+                <label className="mt-1 flex items-center gap-1 text-[12.5px] text-red-800">
+                  <input type="checkbox" checked={showC} onChange={(e) => setShowC(e.target.checked)} />
+                  {t("sampling.reportSeparately")}
+                </label>
+              )}
+            </div>
           ))}
-        </tbody>
-      </table>
+        </div>
+        <p className="mt-1 text-[12.5px] text-faint">{t("sampling.total", { count: total })}</p>
 
+        <table className="mt-2 w-full text-[13px]">
+          <thead>
+            <tr className="border-b border-line text-faint">
+              <th className="py-1 text-left font-normal">{t("sampling.frame")}</th>
+              <th className="font-normal">{t("sampling.tierA")}</th>
+              <th className="font-normal">{t("sampling.tierB")}</th>
+              <th className="font-normal">{t("sampling.tierC")}</th>
+            </tr>
+          </thead>
+          <tbody className="font-mono">
+            {SAMPLING_FRAMES.map((f) => (
+              <tr key={f.code} className="border-b border-line/60">
+                <td className="py-0.5 text-left font-sans">{f.label[lang]}</td>
+                <td className="text-center">{f.tierA}</td>
+                <td className="text-center">{f.tierB}</td>
+                <td className={cn("text-center", !showC && "text-gray-300")}>
+                  {showC ? f.tierC : "—"}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Deliberately its OWN card, outside the sampling group: the 1,200-item
+          negative re-label is a separate batch, not part of the 350 samples. */}
       <div
         className={cn(
-          "mt-2 rounded border p-2 text-[13.5px]",
+          "rounded-lg border p-3",
           negativeColumnPresent ? "border-teal/40 bg-teal-soft" : "border-red-300 bg-red-50",
         )}
+        data-id="s4.negative"
       >
         <label className="flex items-center gap-2">
           <input
@@ -89,6 +94,9 @@ export function SamplingPanel({
             {t("sampling.negativeLabel", { count: NEGATIVE_RELABEL.sampleSize.toLocaleString() })}
           </span>
         </label>
+        <p className="mt-1 text-[12.5px] text-faint" data-id="s4.negative.why">
+          {t("sampling.why1200")}
+        </p>
         {negativeColumnPresent ? (
           <p className="mt-1 text-[12.5px]">
             {t("sampling.negativePresent", {
@@ -103,6 +111,6 @@ export function SamplingPanel({
         )}
         <p className="mt-1 text-[12px] text-faint">{NEGATIVE_RELABEL.note[lang]}</p>
       </div>
-    </div>
+    </>
   );
 }

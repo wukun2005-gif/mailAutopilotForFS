@@ -23,6 +23,22 @@
     "closed": "已办结",
     "quarantined": "风险隔离中"
   },
+  "approvalKind": {
+    "money_action": "动钱操作",
+    "draft_signoff": "函件签发",
+    "adjudication": "人工裁决",
+    "fraud_confirm": "欺诈隔离确认"
+  },
+  "approvalStatus": {
+    "pending": "待审批",
+    "approved": "已批准",
+    "rejected": "已驳回",
+    "edited": "改后通过"
+  },
+  "draftChannel": {
+    "email": "邮件",
+    "secure_message": "App 安全消息"
+  },
   "language": "English",
   "demo": {
     "start": "一键演示",

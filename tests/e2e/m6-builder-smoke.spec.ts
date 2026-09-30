@@ -17,8 +17,9 @@ test.describe("M6 builder smoke", () => {
     // Run the replay.
     await page.click("[data-id='s4.backtest.run']");
     await page.waitForSelector("text=90-day backtest replay", { state: "visible" });
-    await page.waitForTimeout(2600);
-    await expect(page.locator("[data-id='s4.backtest']")).toContainText("reg_e_intake");
+    // The replay is a timed animation — wait for the table itself, not a guess.
+    await page.waitForSelector("[data-id='s4.backtest'] tbody tr", { timeout: 20000 });
+    await expect(page.locator("[data-id='s4.backtest']")).toContainText("Dispute intake");
 
     // Missing negative re-label column → recall not signable, buttons disabled.
     await page.uncheck("[data-id='s4.negative.toggle']");
@@ -70,6 +71,6 @@ test.describe("M6 builder smoke", () => {
 
     await page.goto("/#/supervisor");
     await idle(page, 600);
-    await expect(page.locator("[data-id='s3.queue']")).toContainText("AP-OD2-EXPLAIN");
+    await expect(page.locator("[data-id='s3.queue']")).toContainText("Approve second-waiver explanation");
   });
 });

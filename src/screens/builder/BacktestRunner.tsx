@@ -13,10 +13,18 @@ function pct(x: number): string {
   return `${(x * 100).toFixed(1)}%`;
 }
 
+/** Wall-clock length of the replay animation (a theatre prop, no computation). */
+const REPLAY_MS = 1600;
+
 function MetricRow({ m, dim }: { m: IntentMetric; dim?: boolean }) {
+  const { t } = useTranslation("builder");
+  // Regret rates are per million; 0 means the direction never fired for that intent.
+  const ppm = (x: number) => (x > 0 ? x.toLocaleString() : "—");
   return (
     <tr className={dim ? "text-faint" : ""}>
-      <td className="whitespace-nowrap py-0.5 pr-2 text-left font-mono text-[13px]">{m.intentCode}</td>
+      <td className="whitespace-nowrap py-0.5 pr-2 text-left text-[13px]">
+        {t("customer:trace.intents." + m.intentCode, { defaultValue: m.intentCode })}
+      </td>
       <td className="px-2 font-mono text-[13px]">{m.triggers.toLocaleString()}</td>
       <td className="px-2 font-mono text-[13px]">{pct(m.aiVsHumanAgreement)}</td>
       <td className="px-2 font-mono text-[13px]">
@@ -31,6 +39,12 @@ function MetricRow({ m, dim }: { m: IntentMetric; dim?: boolean }) {
       <td className="px-2 font-mono text-[13px]">
         {m.unitCostUsd > 0 ? `$${m.unitCostUsd.toFixed(2)}` : "—"}
       </td>
+      <td className={`px-2 font-mono text-[13px] ${m.regretPpm > 500 ? "font-bold text-red-700" : ""}`}>
+        {ppm(m.regretPpm)}
+      </td>
+      <td className={`px-2 font-mono text-[13px] ${m.conservativePpm > 500 ? "font-bold text-amber-700" : ""}`}>
+        {ppm(m.conservativePpm)}
+      </td>
     </tr>
   );
 }
@@ -41,6 +55,7 @@ export function BacktestRunner({ selectedIntent }: { selectedIntent: string }) {
   const [progress, setProgress] = useState(0);
   const [running, setRunning] = useState(false);
   const timer = useRef<number | null>(null);
+  const startedAt = useRef(0);
 
   useEffect(() => () => { if (timer.current) window.clearInterval(timer.current); }, []);
 
@@ -48,17 +63,19 @@ export function BacktestRunner({ selectedIntent }: { selectedIntent: string }) {
     if (timer.current) window.clearInterval(timer.current);
     setRunning(true);
     setProgress(0);
+    // Progress is wall-clock based, not a random walk: a throttled/background
+    // tab still lands on 100 instead of stalling the table forever.
+    startedAt.current = Date.now();
     timer.current = window.setInterval(() => {
-      setProgress((p) => {
-        const next = p + 4 + Math.random() * 7;
+      setProgress(() => {
+        const next = Math.min(100, Math.round(((Date.now() - startedAt.current) / REPLAY_MS) * 100));
         if (next >= 100) {
           if (timer.current) window.clearInterval(timer.current);
           setRunning(false);
-          return 100;
         }
         return next;
       });
-    }, 120);
+    }, 100);
   };
 
   const done = progress >= 100;
@@ -105,6 +122,8 @@ export function BacktestRunner({ selectedIntent }: { selectedIntent: string }) {
                 <th>{t("backtest.headers.recall")}</th>
                 <th>{t("backtest.headers.misses")}</th>
                 <th>{t("backtest.headers.cost")}</th>
+                <th>{t("backtest.headers.regretAuto")}</th>
+                <th>{t("backtest.headers.regretConservative")}</th>
               </tr>
             </thead>
             <tbody>
@@ -113,6 +132,9 @@ export function BacktestRunner({ selectedIntent }: { selectedIntent: string }) {
               ))}
             </tbody>
           </table>
+          <p className="mt-1 text-[12.5px] text-faint" data-id="s4.backtest.regret">
+            {t("backtest.regretNote")}
+          </p>
         </div>
       )}
     </div>

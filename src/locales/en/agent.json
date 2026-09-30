@@ -16,7 +16,7 @@
   "intent": {
     "title": "Intent evidence · triage",
     "subtitle": "recorded detector output · confidence < 0.90 routes to human",
-    "materialsOnly": "{{id}}: materials only, no new intent",
+    "materialsOnly": "{{subject}}: materials only, no new intent",
     "regulated": " · regulated",
     "conf": "conf {{value}}"
   },
@@ -24,7 +24,19 @@
     "title": "Policy evaluation",
     "subtitle": "deterministic policy pack · conditions evaluated from system data, not model mood",
     "empty": "no policy evaluated for this case",
-    "degraded": "version degraded"
+    "degraded": "version degraded",
+    "version": "version {{v}}",
+    "effects": {
+      "refund_fee": "Effect: refund the overdraft fee",
+      "deny_refund": "Effect: deny the refund",
+      "open_dispute_start_clocks": "Effect: open dispute and start statutory clocks",
+      "human_review": "Effect: refer to human review"
+    },
+    "verdict": {
+      "PASS": "Pass",
+      "FAIL": "Fail",
+      "UNKNOWN": "Unknown"
+    }
   },
   "materials": {
     "title": "Requested materials",
@@ -46,7 +58,7 @@
     "empty": "no drafts yet",
     "lockedTemplate": "locked template",
     "sent": "sent",
-    "signoff": "{{status}} · {{level}} signoff",
+    "signoff": "Approval: {{status}}",
     "edit": "edit",
     "cancel": "cancel",
     "saveEdit": "record edit in dossier"

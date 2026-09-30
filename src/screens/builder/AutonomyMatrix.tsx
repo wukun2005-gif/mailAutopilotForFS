@@ -49,7 +49,7 @@ function CellView({
   t: (k: string, o?: Record<string, unknown>) => string;
 }) {
   const base =
-    "relative flex h-14 flex-col items-center justify-center rounded text-[13px] leading-tight";
+    "relative flex h-14 flex-col items-center justify-center overflow-hidden rounded text-[13px] leading-tight";
   if (cell.kind === "never") {
     return (
       <div
@@ -86,9 +86,14 @@ function CellView({
         clickable && "cursor-pointer hover:ring-2 hover:ring-navy",
       )}
     >
-      <span className="font-mono text-[15px] font-bold">
-        {cell.level}
-        {shadow && <Lock size={9} className="ml-0.5 inline" />}
+      <span className="flex items-baseline gap-1 whitespace-nowrap">
+        <span className="font-mono text-[15px] font-bold">
+          {cell.level}
+          {shadow && <Lock size={9} className="ml-0.5 inline" />}
+        </span>
+        <span className="text-[11.5px] font-normal opacity-85">
+          {t("customer:trace.levels." + cell.level, { defaultValue: cell.level })}
+        </span>
       </span>
       {shadow && <span>{t("matrix.shadowUnlock")}</span>}
       {capped && <span className="text-[12px]">{t("matrix.manualCap")}</span>}
@@ -108,7 +113,8 @@ export function AutonomyMatrix({
   onDowngrade: (level: LLevel) => void;
   rev: number;
 }) {
-  const { t } = useTranslation("builder");
+  const { t, i18n } = useTranslation("builder");
+  const lang = i18n.language?.startsWith("zh") ? "zh" : "en";
   void rev; // re-render trigger from override subscriptions
   const displayLevel = (intentCode: string, row: GraduationEntry | undefined): LLevel | null => {
     if (row && row.status === "shadow" && !graduationOverrides.get(intentCode)?.promotedTo) {
@@ -129,8 +135,9 @@ export function AutonomyMatrix({
             <tr>
               <th className="w-44" />
               {IDENTITIES.map((i) => (
-                <th key={i} className="pb-1 font-mono text-[13px] text-faint">
-                  {i}
+                <th key={i} className="pb-1 text-[13px] font-normal text-faint">
+                  <span className="font-mono font-semibold">{i}</span>
+                  <span className="block text-[11.5px]">{t(`matrix.identity.${i}`)}</span>
                 </th>
               ))}
             </tr>
@@ -146,7 +153,11 @@ export function AutonomyMatrix({
                 <tr key={r} className={cn(!active && "text-faint")}>
                   <td className="pr-2 text-right text-[12.5px] font-medium text-gray-600">
                     {t(`matrix.risk.${r}`)}
-                    {active && <div className="font-mono text-[12px] text-teal">{intentCode}</div>}
+                    {active && (
+                      <div className="text-[12px] text-teal">
+                        {row?.label[lang] ?? intentCode}
+                      </div>
+                    )}
                   </td>
                   {IDENTITIES.map((i) => {
                     const decision = decideCell({
@@ -169,7 +180,9 @@ export function AutonomyMatrix({
                               onDowngrade(decision.cell.level === "L3" ? "L2" : "L1");
                             }
                           }}
-                          title={decision.reasonCodes.join(" · ")}
+                          title={decision.reasonCodes
+                            .map((c) => t("customer:identity.reasons." + c, { defaultValue: t("customer:trace.reasonFallback") }))
+                            .join(" · ")}
                         />
                       </td>
                     );

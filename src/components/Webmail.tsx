@@ -129,7 +129,7 @@ export function Webmail({ scenarioId }: { scenarioId: ScenarioId }) {
           })}
         </div>
         {/* open thread */}
-        <div className="min-w-0 flex-1 overflow-y-auto p-3">
+        <div className="min-w-0 flex-1 overflow-y-auto p-3" data-id="s1.thread">
           <div className="mb-2 rounded bg-amber-50 px-2 py-1.5 text-[13px] text-amber-800">
             {t("webmail.banner")}
           </div>
@@ -140,7 +140,13 @@ export function Webmail({ scenarioId }: { scenarioId: ScenarioId }) {
           )}
           {items.map((item) =>
             item.kind === "in" ? (
-              <article key={item.key} className="mb-3 border-b border-line pb-3">
+              <article
+                key={item.key}
+                className="mb-3 border-b border-line pb-3"
+                // Newest first, so the first match is the customer's latest
+                // message: the demo points at a thread item by direction.
+                data-id="s1.thread.in"
+              >
                 <div className="text-[15px] font-semibold text-ink">{item.e.subject.en}</div>
                 <div className="mt-0.5 text-[13px] text-faint">
                   {item.e.from} → {item.e.to} · Day {item.e.atDayN} {item.e.atTime}
@@ -167,7 +173,11 @@ export function Webmail({ scenarioId }: { scenarioId: ScenarioId }) {
                 </div>
               </article>
             ) : (
-              <article key={item.key} className="mb-3 rounded-lg border border-teal/30 bg-teal-soft/40 p-2.5">
+              <article
+                key={item.key}
+                className="mb-3 rounded-lg border border-teal/30 bg-teal-soft/40 p-2.5"
+                data-id="s1.thread.out"
+              >
                 <div className="flex items-center gap-1.5">
                   <span className="rounded bg-teal px-1.5 py-px text-[12px] font-medium text-white">
                     {t("webmail.bankReply")}

@@ -24,6 +24,7 @@ npm test           # vitest 单元测试（runtime / 闸门 / 检测器 / i18n �
 npm run e2e        # Playwright（需系统 Chrome；首次 npx playwright install chrome）
 npm run eval       # promptfoo 六集安全/闸门评测（离线可跑，51 断言）
 npm run audit:prd  # PRD 口径断言（15 项）
+npm run tts        # 重新生成演示语音（edge-tts，中/英各 41 条 → public/tts/）
 ```
 
 ## 2. 四张屏
@@ -45,7 +46,7 @@ npm run audit:prd  # PRD 口径断言（15 项）
 | 脚本 | 时长（1×） | 内容 |
 |---|---|---|
 | `trailer90s` | ~90s | 三封邮件精华串烧，适合开场 |
-| `email1` | ~2 min | 透支费两拍：未认证不放权 → App 案件卡 step-up（**OTP 固定码 `111111`**）→ 自动退费；21 天后第二次豁免降 L2 进主管队列 |
+| `email1` | ~3 min | 透支费两拍，全程以**客户邮件界面**为主舞台：未认证不放权（锁定模板）→ App 案件卡 step-up（**OTP 固定码 `111111`**）→ 核验通过当场开审计视图讲身份 I1→I3 的依据 → 自动退费 + 回信按来源分色 → 14 天后审计轨上多一行"verified"；Day 21 第二次请求回到客户线程看信件 → 只切一次坐席交接屏，指到政策卡上"近 12 个月退免记录 ≤ 1 次 = 2"这条 FAIL → 主管一键批准 → 回客户线程看解释函发出 → 审计轨显示结案 |
 | `email2` | ~3 min | Reg E 争议全周期：立案起钟、Day 6 OCR 自动归件、**bd10 前刷新页面"重启进程"——checkpoint 恢复、临时贷记只发一次**、Day40 人工裁决、结果函 L1 签发 |
 | `email3` | ~1 min | BEC/ATO：形近仿冒域名 + 附件注入 → 隔离；改手机号/寄卡动作在邮件渠道**结构上不可达**；只向档案内号码发短信；SAR 锁定模板 |
 | `builder` | ~1.5 min | 矩阵手动 cap、回测回放、阴性复标栏（取消勾选演示"不可签"）、双签毕业即时生效 |
@@ -56,6 +57,9 @@ npm run audit:prd  # PRD 口径断言（15 项）
 - 速度按钮循环 **1× → 2× → 4×**（现场建议 2×/4×）
 - 脚本中的审批点击是**真实点击**（require click），点不到会出现红色 blocker 并暂停，按 `→` 单步或重开脚本
 - 中/英切换（顶栏 `中文/EN` 按钮）不打断播放
+- tooltip 拍带**语音解说**（edge-tts 生成，中文 `zh-CN-XiaoxiaoNeural` / 英文 `en-US-AriaNeural`）：caption 显示时长 = 语音时长，暂停/继续/倍速/Esc 与画面同步；断网或音频缺失时自动退回纯字幕。文案见 `tts/transcript.zh.md` / `tts/transcript.en.md`
+- tooltip 拍的 `focus` 就是讲解指向的那个 data-id：假鼠标移过去，同时给这个元素本身加 `data-hl` 高亮圈（样式在 `src/index.css`），画面不缩放、不压暗、其余部分保持原样。字幕点到细节（某条政策条件、审计轨新行、身份面板）时把 `focus` 指到那一行即可，成本 = 一个 data-id；`<prefix>@last` 表示“最后一个”（如审计轨最新一行）
+- **改字幕后必须重跑 `npm run tts -- --force`**：`public/tts/manifest.json` 记录每条语音是按哪版字幕生成的；字幕改了而语音没重生成时，播放端跳过那条语音、只放字幕，不会念旧文案
 
 ## 4. 断网预案
 

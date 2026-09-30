@@ -5,16 +5,20 @@ import type { CaseStateType } from "@/runtime/caseState.ts";
 import { INBOUND_EMAILS } from "@/mocks/fixtures/index.ts";
 import { useTranslation } from "react-i18next";
 
-function CellBadge({ cell, t }: { cell: CaseStateType["decisions"][number]["cell"]; t: (k: string) => string }) {
+function CellBadge({ cell, t }: { cell: CaseStateType["decisions"][number]["cell"]; t: (k: string, o?: Record<string, unknown>) => string }) {
   if (cell.kind === "L")
-    return <span className="rounded bg-emerald-50 px-1.5 py-0.5 font-mono text-[13px] text-emerald-700">{cell.level}</span>;
+    return (
+      <span className="rounded bg-emerald-50 px-1.5 py-0.5 text-[13px] text-emerald-700">
+        {t("customer:trace.levels." + cell.level, { defaultValue: cell.level })}
+      </span>
+    );
   if (cell.kind === "deny")
-    return <span className="rounded bg-amber-50 px-1.5 py-0.5 font-mono text-[13px] text-amber-800">{t("cell.deny")}</span>;
-  return <span className="rounded bg-red-50 px-1.5 py-0.5 font-mono text-[13px] text-red-700">{t("cell.never")}</span>;
+    return <span className="rounded bg-amber-50 px-1.5 py-0.5 text-[13px] text-amber-800">{t("cell.deny")}</span>;
+  return <span className="rounded bg-red-50 px-1.5 py-0.5 text-[13px] text-red-700">{t("cell.never")}</span>;
 }
 
 export function IntentEvidenceCard({ state }: { state: CaseStateType }) {
-  const { t } = useTranslation("agent");
+  const { t, i18n } = useTranslation("agent");
   const emails = INBOUND_EMAILS.filter((e) => e.scenarioId === state.scenarioId);
   return (
     <section className="rounded-lg border border-line bg-white p-3" data-id="s2.intent">
@@ -26,7 +30,9 @@ export function IntentEvidenceCard({ state }: { state: CaseStateType }) {
           if (hits.length === 0)
             return [
               <div key={email.id} className="rounded bg-gray-50 px-2 py-1 text-[13.5px] text-faint">
-                {t("intent.materialsOnly", { id: email.id })}
+                {t("intent.materialsOnly", {
+                  subject: i18n.language?.startsWith("zh") ? email.subject.zh : email.subject.en,
+                })}
               </div>,
             ];
           return hits.map((hit) => {
@@ -37,9 +43,12 @@ export function IntentEvidenceCard({ state }: { state: CaseStateType }) {
             return (
               <div key={`${email.id}:${hit.intentCode}`} className="rounded border border-line p-2">
                 <div className="flex flex-wrap items-center gap-1.5">
-                  <span className="font-mono text-[14px] font-semibold text-navy">{hit.intentCode}</span>
-                  <span className="rounded bg-gray-100 px-1 py-0.5 font-mono text-[12.5px] text-gray-600">
-                    {spec?.risk}{spec?.regulated ? t("intent.regulated") : ""}
+                  <span className="text-[14px] font-semibold text-navy">
+                    {t("customer:trace.intents." + hit.intentCode, { defaultValue: hit.intentCode })}
+                  </span>
+                  <span className="rounded bg-gray-100 px-1 py-0.5 text-[12.5px] text-gray-600">
+                    {t("builder:matrix.risk." + (spec?.risk ?? ""), { defaultValue: spec?.risk ?? "" })}
+                    {spec?.regulated ? t("intent.regulated") : ""}
                   </span>
                   <span className="font-mono text-[13px] text-faint">{t("intent.conf", { value: hit.confidence.toFixed(2) })}</span>
                   {decision && <CellBadge cell={decision.cell} t={t} />}
@@ -53,8 +62,14 @@ export function IntentEvidenceCard({ state }: { state: CaseStateType }) {
                   </blockquote>
                 ))}
                 {(decision?.reasonCodes?.length ?? 0) > 0 && (
-                  <div className="mt-1 font-mono text-[12.5px] text-faint">
-                    {decision!.reasonCodes!.join(" · ")}
+                  <div className="mt-1 text-[12.5px] text-faint">
+                    {decision!.reasonCodes!
+                      .map((c) =>
+                        t("customer:identity.reasons." + c, {
+                          defaultValue: t("customer:trace.reasonFallback"),
+                        }),
+                      )
+                      .join(" · ")}
                   </div>
                 )}
               </div>

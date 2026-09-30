@@ -1,0 +1,28 @@
+{
+ "_note": "key -> FNV-1a hash of the caption the clip was generated from. Entries that do not match the current caption make the app skip the clip (caption-only). Regenerate with: npm run tts -- --force",
+ "_stale": "email1 was re-scripted on 2026-09-30 (customer-first flow, in-place highlight, identity beat) and its captions rewritten. The clips listed below still hold the old wording, so they are parked: the app plays those captions silently until the next regeneration. email1.identityUp, email1.secondRequest, email1.holding and email1.explanationSent have no clip at all, which already falls back to caption-only.",
+ "zh": {
+  "email1.caseCard": "stale",
+  "email1.i3refund": "stale",
+  "email1.l2queue": "stale",
+  "email1.lockedCell": "stale",
+  "email1.outro": "stale",
+  "email1.provenance": "stale",
+  "email1.publicMailbox": "stale",
+  "email1.secondClosed": "stale",
+  "email1.secondWaiver": "stale",
+  "email1.verified": "stale"
+ },
+ "en": {
+  "email1.caseCard": "stale",
+  "email1.i3refund": "stale",
+  "email1.l2queue": "stale",
+  "email1.lockedCell": "stale",
+  "email1.outro": "stale",
+  "email1.provenance": "stale",
+  "email1.publicMailbox": "stale",
+  "email1.secondClosed": "stale",
+  "email1.secondWaiver": "stale",
+  "email1.verified": "stale"
+ }
+}

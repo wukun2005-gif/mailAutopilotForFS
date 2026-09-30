@@ -63,19 +63,24 @@ export interface IntentMetric {
   noEditApproval: number;
   recallRegulated: number | null;
   criticalMisses: number;
-  regretPpm: number; // false-autonomy per million
+  /** 冒进方向：AI 自动办了、事后被推翻（每百万件，FR-8.4）。 */
+  regretPpm: number;
+  /** 保守方向：转给了人、事后坐席认为"本该自动"（每百万件，FR-8.4）。 */
+  conservativePpm: number;
   unitCostUsd: number;
 }
 
 export const INTENT_METRICS: IntentMetric[] = [
-  { intentCode: "general_inquiry", triggers: 1842, aiVsHumanAgreement: 0.991, noEditApproval: 0.984, recallRegulated: null, criticalMisses: 0, regretPpm: 0, unitCostUsd: 0.04 },
-  { intentCode: "card_delivery_status", triggers: 612, aiVsHumanAgreement: 0.985, noEditApproval: 0.978, recallRegulated: null, criticalMisses: 0, regretPpm: 0, unitCostUsd: 0.07 },
-  { intentCode: "transaction_lookup", triggers: 980, aiVsHumanAgreement: 0.976, noEditApproval: 0.968, recallRegulated: null, criticalMisses: 0, regretPpm: 120, unitCostUsd: 0.09 },
-  { intentCode: "od_fee_refund", triggers: 488, aiVsHumanAgreement: 0.974, noEditApproval: 0.972, recallRegulated: null, criticalMisses: 0, regretPpm: 0, unitCostUsd: 0.11 },
-  { intentCode: "reg_e_intake", triggers: 640, aiVsHumanAgreement: 0.992, noEditApproval: 0.961, recallRegulated: 0.997, criticalMisses: 0, regretPpm: 0, unitCostUsd: 0.18 },
-  { intentCode: "reg_e_adjudication", triggers: 214, aiVsHumanAgreement: 0.881, noEditApproval: 0.72, recallRegulated: 0.982, criticalMisses: 2, regretPpm: 1400, unitCostUsd: 0.34 },
-  { intentCode: "contact_detail_change", triggers: 176, aiVsHumanAgreement: 0.91, noEditApproval: 0.0, recallRegulated: null, criticalMisses: 0, regretPpm: 0, unitCostUsd: 0.0 },
-  { intentCode: "wire_recall_request", triggers: 11, aiVsHumanAgreement: 0.0, noEditApproval: 0.0, recallRegulated: null, criticalMisses: 0, regretPpm: 0, unitCostUsd: 0.0 },
+  { intentCode: "general_inquiry", triggers: 1842, aiVsHumanAgreement: 0.991, noEditApproval: 0.984, recallRegulated: null, criticalMisses: 0, regretPpm: 0, conservativePpm: 0, unitCostUsd: 0.04 },
+  { intentCode: "card_delivery_status", triggers: 612, aiVsHumanAgreement: 0.985, noEditApproval: 0.978, recallRegulated: null, criticalMisses: 0, regretPpm: 0, conservativePpm: 40, unitCostUsd: 0.07 },
+  { intentCode: "transaction_lookup", triggers: 980, aiVsHumanAgreement: 0.976, noEditApproval: 0.968, recallRegulated: null, criticalMisses: 0, regretPpm: 120, conservativePpm: 310, unitCostUsd: 0.09 },
+  { intentCode: "transaction_detail", triggers: 745, aiVsHumanAgreement: 0.972, noEditApproval: 0.975, recallRegulated: null, criticalMisses: 0, regretPpm: 60, conservativePpm: 90, unitCostUsd: 0.06 },
+  { intentCode: "card_lock", triggers: 254, aiVsHumanAgreement: 0.979, noEditApproval: 0.981, recallRegulated: null, criticalMisses: 0, regretPpm: 0, conservativePpm: 0, unitCostUsd: 0.05 },
+  { intentCode: "od_fee_refund", triggers: 488, aiVsHumanAgreement: 0.974, noEditApproval: 0.972, recallRegulated: null, criticalMisses: 0, regretPpm: 0, conservativePpm: 25, unitCostUsd: 0.11 },
+  { intentCode: "reg_e_intake", triggers: 640, aiVsHumanAgreement: 0.992, noEditApproval: 0.961, recallRegulated: 0.997, criticalMisses: 0, regretPpm: 0, conservativePpm: 20, unitCostUsd: 0.18 },
+  { intentCode: "reg_e_adjudication", triggers: 214, aiVsHumanAgreement: 0.881, noEditApproval: 0.72, recallRegulated: 0.982, criticalMisses: 2, regretPpm: 1400, conservativePpm: 0, unitCostUsd: 0.34 },
+  { intentCode: "contact_detail_change", triggers: 176, aiVsHumanAgreement: 0.91, noEditApproval: 0.0, recallRegulated: null, criticalMisses: 0, regretPpm: 0, conservativePpm: 0, unitCostUsd: 0.0 },
+  { intentCode: "wire_recall_request", triggers: 11, aiVsHumanAgreement: 0.0, noEditApproval: 0.0, recallRegulated: null, criticalMisses: 0, regretPpm: 0, conservativePpm: 0, unitCostUsd: 0.0 },
 ];
 
 export const CONFORMAL_CARD = {
@@ -106,37 +111,55 @@ export const READINESS_CHECKS = [
     code: "REG_RECALL",
     label: { zh: "受监管召回点估计 ≥ 99.5% 且 0 漏检", en: "Regulated recall ≥ 99.5% point estimate, 0 misses" },
     pass: true,
-    detail: "reg_e_intake 召回 99.7%（638/640），阴性复标 0 漏检",
+    detail: {
+      zh: "争议受理召回 99.7%（638/640），阴性复标 0 漏检",
+      en: "Dispute intake recall 99.7% (638/640), 0 misses in negative re-label",
+    },
   },
   {
     code: "CLOCKS",
     label: { zh: "Reg E/Z 时钟达成率 100%", en: "Reg E/Z clock attainment 100%" },
     pass: true,
-    detail: "回测样本 640 件，bd10/day90/RegZ30 全部按时",
+    detail: {
+      zh: "回测样本 640 件，临时贷记期限 / 90 天上限 / Reg Z 30 天全部按时",
+      en: "640 backtest cases: provisional-credit deadline / 90-day cap / Reg Z 30-day all on time",
+    },
   },
   {
     code: "DOSSIER",
     label: { zh: "卷宗完整率 100%", en: "Dossier completeness 100%" },
     pass: true,
-    detail: "A/B/C 三层 350 件独立标注全部完整",
+    detail: {
+      zh: "A/B/C 三层 350 件独立标注全部完整",
+      en: "All 350 independent labels complete across tiers A/B/C",
+    },
   },
   {
     code: "NOEDIT",
     label: { zh: "非受监管免修改批准率 ≥ 97%", en: "Non-regulated no-edit approval ≥ 97%" },
     pass: true,
-    detail: "general_inquiry 98.4% / card_delivery 97.8% / od_fee 97.2%",
+    detail: {
+      zh: "公共信息咨询 98.4% / 卡片寄送 97.8% / 透支费退费 97.2%",
+      en: "General inquiry 98.4% / card delivery 97.8% / overdraft refund 97.2%",
+    },
   },
   {
     code: "COST",
     label: { zh: "单案推理成本 ≤ $0.30", en: "Per-case inference cost ≤ $0.30" },
     pass: true,
-    detail: "毕业意图最高 $0.18（reg_e_intake）",
+    detail: {
+      zh: "毕业意图最高 $0.18（争议受理）",
+      en: "Highest among graduated intents $0.18 (dispute intake)",
+    },
   },
   {
     code: "ADJUDICATION",
     label: { zh: "争议裁决保持人工（永不自动）", en: "Adjudication stays human (never-auto)" },
     pass: true,
-    detail: "reg_e_adjudication 0.72 免修改率，2 次关键错误，保持 R4",
+    detail: {
+      zh: "争议裁决 0.72 免修改率，2 次关键错误，保持人工",
+      en: "Dispute adjudication 0.72 no-edit rate, 2 critical misses — stays human",
+    },
   },
 ];
 

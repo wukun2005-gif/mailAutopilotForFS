@@ -20,15 +20,23 @@ function DraftRow({ draft, state, t }: { draft: Draft; state: CaseStateType; t: 
   return (
     <div className={cn("rounded border border-line p-2", draft.id === "DR-FRAUD-LOCKED" && "bg-red-50/50")}>
       <div className="flex items-center gap-2 text-[13px]">
-        <span className="font-mono font-semibold text-navy">{draft.id}</span>
-        <span className="rounded bg-gray-100 px-1 py-0.5 font-mono text-gray-600">{draft.channel}</span>
+        <span className="font-semibold text-navy">
+          {t("customer:trace.drafts." + draft.id, { defaultValue: draft.id })}
+        </span>
+        <span className="rounded bg-gray-100 px-1 py-0.5 text-gray-600">
+          {t("common:draftChannel." + draft.channel, { defaultValue: draft.channel })}
+        </span>
         {draft.lockedTemplate && (
           <span className="rounded bg-blue-50 px-1 py-0.5 text-blue-700">{t("drafts.lockedTemplate")}</span>
         )}
         {sent && <span className="rounded bg-emerald-50 px-1 py-0.5 text-emerald-700">{t("drafts.sent")}</span>}
         {linkedApproval && (
           <span className="rounded bg-amber-50 px-1 py-0.5 text-amber-800">
-            {t("drafts.signoff", { status: linkedApproval.status, level: linkedApproval.lLevel })}
+            {t("drafts.signoff", {
+              status: t("common:approvalStatus." + linkedApproval.status, {
+                defaultValue: linkedApproval.status,
+              }),
+            })}
           </span>
         )}
         <span className="ml-auto inline-flex gap-1">

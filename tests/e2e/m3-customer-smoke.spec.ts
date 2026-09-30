@@ -31,7 +31,7 @@ test.describe("M3 customer screen smoke", () => {
 
     // Audit trace exists and shows the refund outbound after I3 resume.
     await page.click("[data-id='s1.viewtoggle'] >> text=audit view");
-    await expect(page.locator("[data-id='s1.tracerail']")).toContainText("DR-OD1-REFUND");
+    await expect(page.locator("[data-id='s1.tracerail']")).toContainText("Refund confirmation letter");
 
     // +14 days → verified resolution closes the case.
     await page.click("[data-id='s1.viewtoggle'] >> text=customer view");

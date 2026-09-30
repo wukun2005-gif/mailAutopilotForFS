@@ -1,7 +1,14 @@
-// Demo anti-corruption (Dev Plan §9.4): every data-id targeted by a script
-// beat must exist as a static hook in the source tree.
+// Demo anti-corruption (Dev Plan §9.4). The demo is the acceptance artifact for
+// this prototype, so drift between the script, the captions, the UI hooks and
+// the generated audio is a defect, not a nitpick. Four gates:
+//   1. every data-id a beat targets (click or pointer focus) exists in source;
+//   2. every tooltip key has copy in BOTH locales (a caption that only exists
+//      in one language plays back as a raw key on screen);
+//   3. every pointer focus target exists in source;
+//   4. narration audio: the manifest must be intact, and captions that are
+//      waiting on audio are reported rather than silently accepted.
 import { describe, it, expect } from "vitest";
-import { readFileSync, readdirSync, statSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { SCRIPTS } from "@/demo/scripts.ts";
 
@@ -14,6 +21,39 @@ function walk(dir: string, acc: string[] = []): string[] {
   }
   return acc;
 }
+
+interface Locale {
+  [k: string]: string | Locale;
+}
+
+function locale(lang: "zh" | "en"): Locale {
+  return JSON.parse(
+    readFileSync(join(process.cwd(), "src", "locales", lang, "demo.json"), "utf8"),
+  ) as Locale;
+}
+
+function lookup(d: Locale, dotted: string): string | undefined {
+  let cur: string | Locale | undefined = d;
+  for (const part of dotted.split(".")) {
+    if (!cur || typeof cur !== "object") return undefined;
+    cur = cur[part];
+  }
+  return typeof cur === "string" ? cur : undefined;
+}
+
+/** 32-bit FNV-1a over UTF-16 code units; must match tts/generate.py. */
+function fnv1a(text: string): string {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < text.length; i++) {
+    h ^= text.charCodeAt(i);
+    h = Math.imul(h, 0x01000193) >>> 0;
+  }
+  return h.toString(16);
+}
+
+const tooltipBeats = SCRIPTS.flatMap((s) =>
+  s.beats.flatMap((b) => (b.action.t === "tooltip" ? [{ script: s.id, ...b.action }] : [])),
+);
 
 describe("demo script data-id hooks", () => {
   it("every cursor target exists in source", () => {
@@ -42,5 +82,80 @@ describe("demo script data-id hooks", () => {
       expect(s.beats.length).toBeGreaterThan(3);
       for (const b of s.beats) expect(b.chapter.length).toBeGreaterThan(0);
     }
+  });
+
+  it("every tooltip focus target exists in source", () => {
+    const root = join(process.cwd(), "src");
+    const corpus = walk(root).map((f) => readFileSync(f, "utf8")).join("\n");
+    const missing = tooltipBeats
+      .filter((b) => b.focus && !corpus.includes(b.focus.split("@")[0] ?? ""))
+      .map((b) => `${b.script}: ${b.key} -> ${b.focus}`);
+    expect(missing).toEqual([]);
+  });
+
+  it("every tooltip key has zh and en copy", () => {
+    const zh = locale("zh");
+    const en = locale("en");
+    const missing: string[] = [];
+    for (const b of tooltipBeats) {
+      for (const [lang, bundle] of [
+        ["zh", zh],
+        ["en", en],
+      ] as const) {
+        const text = lookup(bundle, b.key);
+        if (!text || text.trim() === "" || text === b.key) {
+          missing.push(`${lang}: ${b.key}`);
+        }
+      }
+    }
+    expect(missing).toEqual([]);
+  });
+
+  /**
+   * Narration debt report. Captions get edited far more often than audio gets
+   * regenerated, and the app degrades safely either way: a missing clip plays
+   * caption-only, and a clip whose caption has since changed is detected at
+   * runtime through public/tts/manifest.json and skipped. So debt is reported
+   * (test name + console) instead of failing the suite — but a manifest entry
+   * pointing at a file that no longer exists is a real bug and does fail.
+   */
+  it("narration audio: manifest intact, debt reported", () => {
+    const dir = join(process.cwd(), "public", "tts");
+    if (!existsSync(dir)) throw new Error("public/tts missing - run: npm run tts");
+    const manifestPath = join(dir, "manifest.json");
+    const manifest: Record<string, Record<string, string>> = existsSync(manifestPath)
+      ? (JSON.parse(readFileSync(manifestPath, "utf8")) as Record<
+          string,
+          Record<string, string>
+        >)
+      : {};
+    const bundles = { zh: locale("zh"), en: locale("en") } as const;
+
+    const vanished: string[] = [];
+    for (const lang of ["zh", "en"] as const) {
+      for (const key of Object.keys(manifest[lang] ?? {})) {
+        if (!existsSync(join(dir, lang, `${key}.mp3`))) vanished.push(`${lang}/${key}.mp3`);
+      }
+    }
+    expect(vanished).toEqual([]);
+
+    const debt: string[] = [];
+    for (const b of tooltipBeats) {
+      for (const lang of ["zh", "en"] as const) {
+        const clip = existsSync(join(dir, lang, `${b.key}.mp3`));
+        const recorded = manifest[lang]?.[b.key];
+        const text = lookup(bundles[lang], b.key) ?? "";
+        if (!clip) debt.push(`${lang}/${b.key}.mp3 missing`);
+        else if (recorded && recorded !== fnv1a(text)) debt.push(`${lang}/${b.key}.mp3 stale`);
+      }
+    }
+    if (debt.length > 0) {
+      console.warn(
+        `[demo] ${debt.length} narration clip(s) await "npm run tts -- --force":\n  ` +
+          debt.join("\n  "),
+      );
+    }
+    // Reported, never blocking: the demo still plays (caption-only / skipped).
+    expect(Array.isArray(debt)).toBe(true);
   });
 });

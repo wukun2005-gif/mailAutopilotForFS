@@ -13,7 +13,7 @@
   "approval": {
     "overdue": "overdue",
     "hoursLeft": "{{count}}h left",
-    "r4Outcome": "R4 adjudication outcome:",
+    "r4Outcome": "Adjudication outcome:",
     "upholdError": "uphold error",
     "noError": "no error found",
     "confirmReject": "confirm reject",
@@ -21,6 +21,13 @@
     "approve": "one-click approve",
     "handToAgent": "hand to agent",
     "reject": "reject",
+    "rejectReasons": {
+      "INSUFFIFICIENT_EVIDENCE": "Insufficient evidence",
+      "POLICY_NOT_MET": "Policy not met",
+      "CUSTOMER_NOT_VERIFIED": "Customer not verified",
+      "REFER_TO_INVESTIGATIONS": "Refer to investigations",
+      "OTHER": "Other"
+    },
     "batchInfo": "{{count}} same-template / same-intent items eligible for batch approve (each remains expandable for review).",
     "queueEmpty": "no approvals waiting — the queue is clear",
     "batchFootnote": "clock-driven, case-specific obligations (e.g. provisional credit) are always single-item — they never enter batch lists."
@@ -36,7 +43,23 @@
     "overdue": "OVERDUE",
     "hours": "{{count}}h",
     "due": "due {{date}}",
-    "openCase": "open case"
+    "openCase": "open case",
+    "allTitle": "all open disputes ({{count}})",
+    "allNote": "the board is total — every open Reg E dispute is listed here, not only the case you have open",
+    "case": "case",
+    "subject": "subject",
+    "arrived": "arrived",
+    "pcState": "limit · provisional credit",
+    "investigation": "investigation due",
+    "remaining": "remaining",
+    "stage": "stage",
+    "branch90": "POS debit 90d",
+    "branch45": "account error 45d",
+    "pcPosted": "credit posted",
+    "pcPending": "credit pending",
+    "pcNone": "no credit due",
+    "current": "this case",
+    "days": "{{count}}d"
   },
   "fraud": {
     "empty": "no quarantined messages in this case — load the BEC/ATO case from the dev panel",
@@ -49,6 +72,7 @@
       "reply to sender": "reply to sender"
     },
     "unreachable": "no contact-change tool exists in the email channel — the actions are structurally unreachable",
+    "identityLevel": "identity assurance {{level}} · cannot be linked to an account",
     "confirm": "confirm fraud · warn customer on-file number only",
     "release": "false positive · release",
     "smsSent": "warning SMS sent only to on-file {{phone}}",

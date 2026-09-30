@@ -6,6 +6,7 @@ import { describe, it, expect } from "vitest";
 import { detectDispute } from "@/runtime/keywordDetector.ts";
 import { scanDlp } from "@/mocks/handlers/dlp.ts";
 import { localPartLookalike, domainLookalike } from "@/runtime/identitySignals.ts";
+import { parallelSignals } from "@/runtime/intentRegistry.ts";
 
 describe("dispute keyword detector (high recall)", () => {
   const mustDetect = [
@@ -42,6 +43,21 @@ describe("injection DLP scanner", () => {
     expect(scanDlp("Please update my mobile number today.").hits.map((h) => h.type)).toContain(
       "CONTACT_CHANGE",
     );
+  });
+});
+
+describe("parallel triage signals (language / vulnerability)", () => {
+  it.each([
+    "EM-1-IN-1",
+    "EM-1-IN-2",
+    "EM-2-IN-1",
+    "EM-2-IN-1B",
+    "EM-2-IN-2",
+    "EM-3-IN-1",
+  ])("records an explicit screening verdict for %s", (emailId) => {
+    const sig = parallelSignals(emailId);
+    expect(sig.lang).toBe("en");
+    expect(sig.vulnerable).toBe("negative");
   });
 });
 

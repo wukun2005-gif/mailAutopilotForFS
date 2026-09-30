@@ -23,6 +23,22 @@
     "closed": "Closed",
     "quarantined": "Quarantined for review"
   },
+  "approvalKind": {
+    "money_action": "Moves money",
+    "draft_signoff": "Letter sign-off",
+    "adjudication": "Human adjudication",
+    "fraud_confirm": "Fraud quarantine confirmation"
+  },
+  "approvalStatus": {
+    "pending": "Pending approval",
+    "approved": "Approved",
+    "rejected": "Rejected",
+    "edited": "Approved with edits"
+  },
+  "draftChannel": {
+    "email": "Email",
+    "secure_message": "App secure message"
+  },
   "language": "中文",
   "demo": {
     "start": "Run demo",

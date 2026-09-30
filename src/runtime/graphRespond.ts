@@ -65,6 +65,31 @@ export function makeRespond(deps: NodeDeps): NodeFn {
         });
         continue;
       }
+      // FR-5.2 quality gate (presence leg): every autonomous email must carry
+      // the FR-10.2 disclosure and the FR-10.3 handoff. Agent-edited L1/L2 text
+      // is human-owned and bypasses this leg; DLP above still applies to it.
+      if (draft.channel === "email" && !draft.editedText) {
+        const hasDisclosure = draft.sections.some(
+          (s) => s.source === "TPL_AI_DISCLOSURE_V1",
+        );
+        const hasHandoff = draft.sections.some((s) => s.source === "TPL_HANDOFF_V1");
+        if (!hasDisclosure || !hasHandoff) {
+          await emitOutbound(state, "respond", "system", {
+            blocked: draft.id,
+            blockedReason: "FR52_DISCLOSURE_MISSING",
+            missing: [
+              ...(!hasDisclosure ? ["FR-10.2 disclosure"] : []),
+              ...(!hasHandoff ? ["FR-10.3 handoff"] : []),
+            ],
+          });
+          continue;
+        }
+        // Pass leg leaves a visible trace too: the audience must see the gate
+        // checking, not only the rejections.
+        await emitOutbound(state, "respond", "system", {
+          fr52Check: draft.id,
+        });
+      }
       // Non-sensitive replies go back into the original mail thread so the
       // customer keeps a single conversation history (report §3.2 case model).
       if (draft.channel === "email") {

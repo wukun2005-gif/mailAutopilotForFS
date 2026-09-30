@@ -12,7 +12,7 @@ const CANONICAL = [
   { code: "ATT-SIGNED", labelKey: "materials.signed" },
 ] as const;
 
-function Row({ code, label, m, t }: { code: string; label: string; m?: MaterialState; t: (k: string, o?: Record<string, unknown>) => string }) {
+function Row({ label, m, t }: { label: string; m?: MaterialState; t: (k: string, o?: Record<string, unknown>) => string }) {
   const status = m?.status ?? "not_submitted";
   return (
     <div className="flex items-center gap-2 rounded border border-line px-2 py-1 text-[14px]">
@@ -24,7 +24,6 @@ function Row({ code, label, m, t }: { code: string; label: string; m?: MaterialS
         <CircleDashed size={13} className="text-gray-400" />
       )}
       <span className="flex-1 text-gray-700">{label}</span>
-      <span className="font-mono text-[12.5px] text-faint">{code}</span>
       <span
         className={
           status === "received"
@@ -55,7 +54,7 @@ export function MissingMaterialsCard({ state }: { state: CaseStateType }) {
       </p>
       <div className="mt-2 space-y-1">
         {CANONICAL.map((c) => (
-          <Row key={c.code} code={c.code} label={t(c.labelKey)} m={state.materials.find((x) => x.code === c.code)} t={t} />
+          <Row key={c.code} label={t(c.labelKey)} m={state.materials.find((x) => x.code === c.code)} t={t} />
         ))}
       </div>
     </section>
