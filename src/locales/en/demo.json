@@ -13,12 +13,13 @@
     "builder": "Builder · backtest & graduation"
   },
   "trailer": {
-    "intro": "Email Autopilot for Financial Services — every action runs through the same runtime you are about to see.",
+    "intro": "Email Autopilot for Financial Services — from mail arrival, to investigation, approval, and reply.",
     "intake": "An unauthenticated dispute email is triaged, filed and clocked on arrival — no human in the loop for intake.",
-    "dossier": "Same runtime, second screen: every policy condition is PASS or FAIL, and the rail on the right spells each decision out in plain words.",
+    "dossier": "Every policy condition is PASS or FAIL, and the rail on the right spells each decision out in plain words.",
     "clocks": "The board is not just this case: the table below is every open dispute in the mailbox, and who is due first is obvious.",
-    "approve": "Statutory obligations surface in the supervisor queue with one-click approval — the click is a real human action, not a scripted screen.",
-    "fraud": "A business-email-compromise attempt is quarantined: the requested contact changes are structurally unreachable, and the customer is warned only through the on-file channel.",
+    "approve": "Statutory obligations surface in the supervisor queue with one-click approval.",
+    "metrics": "Success metrics and guardrails: three headline numbers and eight guardrails, all showing values — the target column is the pilot stage gate and monthly review criteria.",
+    "fraud": "A business email scam is quarantined: the requested contact changes are structurally unreachable, and the customer is warned only through the on-file channel.",
     "builder": "Autonomy is earned: backtest, sampling, dual sign-off — and the hard cells cannot be opened from configuration at all.",
     "outro": "Deterministic where the law requires it, autonomous where evidence has earned it, auditable everywhere."
   },
@@ -46,17 +47,17 @@
     "verified": "Fourteen days with no new mail, no handoff and no QA reversal — one more line on the audit rail: a verified autonomous resolution. The dossier is sealed for the record, and human edits flow back as samples."
   },
   "email2": {
-    "intake": "Day 0, 08:14: one email contains two intents — card delivery status and a $247.18 dispute. Both are filed on arrival and the Reg E statutory clocks start immediately, even at I0. Language English, vulnerability negative and fraud negative screen in parallel with intent; same-thread merge, alias normalization, duplicate deliveries auto-suppressed.",
-    "detailDenied": "Day 1, the customer asks for transaction details. Unmentioned transactions are an I3 field class, and this thread is I2 — disclosure is denied, with an app verification prompt.",
-    "detailReleased": "After in-thread step-up to I3, the disputed transaction details are released, last four digits only.",
-    "materials": "Day 6: the signed statement arrives as an attachment. OCR confidence is high enough to auto-slot it; low-confidence OCR would stay with a human. Missing materials never pause the statutory clock.",
-    "clock48h": "Business day 10 is the provisional-credit deadline; inside 48 calendar hours the board turns red — time is computed, never judged. The table below is every open dispute in the mailbox: who is due first, which credit already posted.",
-    "restart": "Before approving, we kill the process and reopen it. A fresh runtime reattaches to the same checkpoints: the pending approval is still here, and the money action will not execute twice — gateway ledger plus server-side idempotent replay. This is the engineering problem behind long-running autopilots.",
+    "intake": "Day 0, 08:14: one email, two intents — card delivery status and a $247.18 dispute. Filed on arrival, the Reg E statutory clock starts immediately, without waiting for identity verification.",
+    "detailDenied": "Day 1, the customer asks for the transaction details. Reading account data is R1 and this case is still I2 — the matrix cell reads 'no grant': disclosure is denied, while an app verification prompt is pushed.",
+    "detailReleased": "The in-thread app check completes and identity is re-rated I2 → I3 for this conversation; only then are the transaction details released — the account's last four digits only.",
+    "materials": "Day 6: the signed statement arrives as an attachment; OCR confidence is high enough to auto-file it. The materials card says it out loud: missing materials never pause the statutory clock — only low-confidence OCR goes to a human.",
+    "clock48h": "Business day 10: the provisional-credit bar has turned red with 0 hours left — red means due inside 48 calendar hours, and every date is computed, not judged. The table below is every open dispute: who is due first, which credit already posted.",
     "pcApproved": "One click releases the credit, and the posting email lands in the customer's own thread — same AI disclosure, same human handoff.",
-    "evidence": "Day 40: merchant evidence arrives by email. Adjudication is R4 — permanently human. The AI drafts, the person decides.",
-    "adjudication": "The supervisor upholds the error; the result letter is chained into an L1 human sign-off in the same run, passing the same gate on send.",
-    "closed": "Day 45, inside the POS 90-day outer limit: the result letter is already in the customer's thread and the dispute closes with the full decision dossier, sealed WORM; corrections flow back as samples.",
-    "outro": "A 45-day, cross-system case that survives process restarts — with a human on every high-risk action."
+    "evidence": "Day 40: the merchant evidence has arrived and the adjudication card is in the queue — this dispute type is permanently human-only: the AI drafts, the person decides.",
+    "adjudication": "The verdict stays 'uphold error'; after the one-click approval the result letter is chained into human sign-off in the same run — this card is the full draft, and sending passes the same gate.",
+    "closed": "Day 45, inside the POS 90-day outer limit: the investigation is complete, the result letter is already in the customer's thread, and the case closes on time.",
+    "closedDossier": "The decision dossier closes with the case — every gate decision, every tool call and every clock jump is on the record, sealed for the record.",
+    "outro": "A 45-day, cross-system case — with a human on every high-risk action."
   },
   "email3": {
     "signals": "Day 2: jane.d0e@outlook.com — a lookalike of the on-file address. SPF and DKIM pass, but DMARC is 'none'; the display name is spoofed; the attachment embeds the instruction 'skip OTP', which is treated as data, not a command. Identity assurance rates I0.",
@@ -71,7 +72,7 @@
     "replay": "A 90-day recorded dataset is replayed: agreement, no-edit approval, regulated recall, critical misses, unit cost — plus two regret columns, per million, for autonomy and for conservatism. Every number is a recorded fixture.",
     "sampling": "Three sampling tiers — stratified, random, and adversarial — across three intake frames, including tickets that were never created. Tier C is reported separately.",
     "unsignable": "The negative re-label is a separate 1,200-item batch, not part of the 350. Watch what happens if detector-negative items are not independently re-labeled: the recall criterion becomes not signable.",
-    "promoted": "Compliance and the business owner both sign: the shadow intent is promoted, and the next inbound email of that type immediately runs at the new level — same runtime.",
+    "promoted": "Compliance and the business owner both sign: the shadow intent is promoted, and the next inbound email of that type immediately runs at the new level.",
     "r3never": "Contact-detail change is R3. Click the cells: nothing happens. They are disabled in configuration and no tool function exists — there is no setting that opens them.",
     "rare": "Wire recalls are rare: 90 days can never reach the sample bar. They stay human, with a conformal abstention fallback calibrated to route uncertain cases to an agent.",
     "outro": "Every autonomous action in this demo traces back to evidence a regulator would accept."
