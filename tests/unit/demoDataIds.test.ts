@@ -88,7 +88,14 @@ describe("demo script data-id hooks", () => {
     const root = join(process.cwd(), "src");
     const corpus = walk(root).map((f) => readFileSync(f, "utf8")).join("\n");
     const missing = tooltipBeats
-      .filter((b) => b.focus && !corpus.includes(b.focus.split("@")[0] ?? ""))
+      .filter((b) => {
+        const id = b.focus?.split("@")[0] ?? "";
+        if (!id) return false;
+        if (corpus.includes(id)) return false;
+        // Dynamic hooks rendered from a template literal, e.g. the audit rail's
+        // `s1.trace.entry.${seq}` — same rule the cursor-target gate applies.
+        return !corpus.includes("`" + id.slice(0, id.lastIndexOf(".")) + ".${");
+      })
       .map((b) => `${b.script}: ${b.key} -> ${b.focus}`);
     expect(missing).toEqual([]);
   });

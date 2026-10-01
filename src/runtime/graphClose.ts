@@ -83,7 +83,11 @@ export function makeClose(): NodeFn {
       }
       return { fraud: { ...state.fraud, confirmed }, status: "quarantined" as const };
     }
-    const pendingApprovals = state.approvals.filter((a) => a.status === "pending");
+    // Blocking approvals pause for a human; FR-1.5 reviewer tasks
+    // (blocking === false) sit in the queue but never hold the case.
+    const pendingApprovals = state.approvals.filter(
+      (a) => a.status === "pending" && a.blocking !== false,
+    );
     if (pendingApprovals.length > 0) return { status: "awaiting_human" as const };
     if (state.status === "awaiting_customer") return {};
 

@@ -235,7 +235,7 @@ table.rvlog td:first-child{white-space:nowrap;font-weight:700;color:#5b21b6}
     <div class="m"><div class="k">版本 / 日期</div><div class="v">v0.2 审阅版 · 2026-09-28 <span class="rv" title="在 v0.1 草案（2026-09-27）基础上审阅修订">v0.2 修订</span></div></div>
     <div class="m"><div class="k">文档状态</div><div class="v">需求草案 · 待评审</div></div>
     <div class="m"><div class="k">产品形态</div><div class="v">CXA 之上的 FS 邮件垂直层</div></div>
-    <div class="m"><div class="k">关联文档</div><div class="v">产品定位调研 v0.4.3</div></div>
+    <div class="m"><div class="k">关联文档</div><div class="v">产品定位调研 v0.4.4</div></div>
   </div>
 </header>
 
@@ -262,7 +262,7 @@ table.rvlog td:first-child{white-space:nowrap;font-weight:700;color:#5b21b6}
 <div class="callout c-note"><span class="ct">标注约定</span>
 <span class="badge b-fact">事实</span> 外部来源可溯源　<span class="badge b-ana">分析</span> 基于事实的推理　<span class="badge b-assume">假设</span> 未经市场验证、试点前须用客户数据校准　<span class="badge b-todo">待核实</span> 公开渠道查不到、需与平台团队或客户对齐。需求优先级：<span class="prio p0">P0</span> 第 1 波试点必需　<span class="prio p1">P1</span> 第 2 波　<span class="prio p2">P2</span> 前瞻/储备。平台映射：<span class="tag t-plat">平台已有</span> 直接复用　<span class="tag t-ext">扩展</span> 在平台能力上做 FS 配置/扩展　<span class="tag t-new">新建</span> 本产品新增。<br>审阅标记：<span class="rv">v0.2 修订</span> 该处在 v0.2 被纠正或改写　<span class="rv add">v0.2 新增</span> v0.2 新增内容　<span class="rvt">紫色底纹</span> 被改写的原文位置；鼠标悬停标记可看改动理由，完整清单见本节末「v0.2 审阅变更一览」。</div>
 <h3>v0.2 审阅变更一览 <span class="rv add" title="本表为审阅新增">v0.2 新增</span></h3>
-<p>共 21 项：纠错·法规 5 项、纠错·逻辑 2 项、纠错·口径 1 项、一致性 3 项、补强新增 9 项、核实·补注 1 项。点“位置”可跳转；正文中对应段落都带紫色标记，悬停可看单处改动理由。</p>
+<p>共 22 项：纠错·法规 5 项、纠错·逻辑 2 项、纠错·口径 1 项、一致性 3 项、补强新增 10 项、核实·补注 1 项。点“位置”可跳转；正文中对应段落都带紫色标记，悬停可看单处改动理由。</p>
 <div class="table-wrap"><table class="fixed rvlog">
 <colgroup><col style="width:5%"><col style="width:11%"><col style="width:13%"><col style="width:45%"><col style="width:26%"></colgroup>
 <thead><tr><th>#</th><th>类型</th><th>位置</th><th>改动</th><th>理由 / 依据</th></tr></thead><tbody>
@@ -287,6 +287,7 @@ table.rvlog td:first-child{white-space:nowrap;font-weight:700;color:#5b21b6}
 <tr><td>19</td><td>核实·补注</td><td><a href="#risks">§12.1</a><br><a href="#release">§11.2</a><br><a href="#risks">§12.3</a><br><a href="#model">§6.2 I2</a><br><a href="#fr-2-1">FR-2.1</a><br><a href="#fr-2-2">FR-2.2</a></td><td>2026-09-28 逐项外部核实结果写入正文：1) NCUA 信用联社家数 4,250 → 4,214（2026Q2 季报），合计 8,481 → 8,445；2) 同资产段（$5B–150B）信用联社家数注明 NCUA 自 2025Q4 季报停发资产分段家数，记下最后可用分段（$1B–$10B 433 家、2025Q2；&gt;$10B 20 家、2024 数据）与实查路径（NCUA Custom Data Query）；3) §12.3 的 20 个工作日 / 90 天延长分支条件对照 eCFR 12 CFR 1005.11(c)(3) 原文逐款核实一致，待决的只剩“行内是否启用”；4) 30 天联系方式变更窗口补公开参照 16 CFR 681.2(c)（地址变更验证窗），OTP 10 分钟补 NIST SP 800-63B 参照（非邮寄确认码最长 10 分钟），两项仍标假设；5) 48 小时一次性链接、每线程 24 小时 ≤ 3 封、单件成本 ≤ $0.30、标注约 60 小时四项经外部检索无行业标准或公开基准可依，维持假设</td><td>本轮为“核实 PRD 内未核实信息”，不是文档自检；依据 eCFR 1005.11、eCFR 681.2、NCUA 2025Q2/2025Q4/2026Q1/2026Q2 季报、NIST SP 800-63B、Arnold Ventures 2025 报告</td></tr>
 <tr><td>20</td><td>补强新增</td><td><a href="#model">§6.1b</a><br><a href="#model">§6.3</a></td><td>§6.1 九步流程后新增“6.1b 六个要点在这 9 步上的落点”：表 A 按 9 步列每步谁在干活、哪条要点落在这一格；表 B 按 D1–D6 列主战场、步骤链、AI 参与度与 PRD 落点（章节 / FR）。D1–D5 为差异点，D6（案件运行时）标为共同底座、非差异点，落在平台既有 Automation Flows。§6.3 开头补“毕业（graduation）”的定义</td><td>让“每一步谁在干活、每条要点落在哪一步”可直接查；正文反复使用“毕业”但从未定义过这个词</td></tr>
 <tr><td>21</td><td>补强新增</td><td><a href="#model">§6.2 图例</a></td><td>重写矩阵格值图例：说明 L0–L3 量的是“把多少裁量权交给 AI、人卡在哪一步”而非“是否自动”；写明“不放权”类格子（R1×I0/I1、R2×I0/I1）系统全自动、但无裁量权交给 AI 故不套 L 阶梯，若标 L3 会违反单调性（R1×I0 风险高于 R1×I2/I3 反拿高级别）与毕业语义（硬约束、毕业不改变）；补图例类名与格内措辞的对应（“不放权”=“不披露”/“通用回执”/“锁定模板回执”）；点明 R1×I0 格内“欺诈复核（L0）”是该类来件去向、不是格值</td><td>审阅反馈：只声明“有两类非 L 取值”不解释原因，任何读者都会追问“系统全自动的格子为什么不给自治级别、矩阵是否无法自圆其说”</td></tr>
+<tr class="rvrow"><td>22</td><td>补强新增</td><td><a href="#vision">§2.1</a><br><a href="#metrics">§4.1</a><br><a href="#metrics">§4.3</a><br><a href="#model">§6.1b 表 B D2</a><br><a href="#fr-1-5">FR-1.5</a></td><td>新增 FR-1.5「对客承诺的自动登记与兑现追踪」：AI/模板对客户说出的时限承诺在信件<b>实际发出瞬间</b>登记为承诺时钟（到期 = 发出 + N 个工作日，纯算术），兑现信发出即销账；到期前 48 自然小时预警、逾期自动升级并记风险记录；承诺达成率并入 Trust（§4.1 ③ 与 §4.3 阶段目标，与法定时钟达成并列）。§2.1 定位框补卖点句、§6.1b 表 B D2 行落点同步</td><td>D2（受监管识别/起钟）<b>向对客文案侧的延伸</b>，不进 D6 底座：竞品治理 AI 说什么，我们还保证它说出口的时间一定被追到兑现（与 §2.1 既有定位句同源）。对外承诺不兑现属 UDAAP 欺骗性表述风险（Moffatt v. Air Canada, 2024 BCCRT 149；CFPB 2023-06 Chatbots Issue Spotlight）</td></tr>
 </tbody></table></div>
 </section>
 
@@ -329,7 +330,7 @@ table.rvlog td:first-child{white-space:nowrap;font-weight:700;color:#5b21b6}
 <h3>2.1 愿景与定位</h3>
 <p><b>愿景（Vision）</b>：让每一封金融客服邮件从到达那一刻起，就被当作一个有法定时钟、有身份分级、有完整卷宗的案件来办——AI 承担全部可确定性的劳动，银行政策通过可配置规则划清边界，人只在有后果的判断点上介入。</p>
 <p><b>定位（Positioning）</b>：长在 CXA 平台里的 <b>FS 邮件垂直层</b>。对客是"能把事办完的数字案件员"（case worker, not chatbot）；对内是"像受监管员工一样被治理的 AI 员工"（governed like a regulated employee）；对平台是"一次构建、语音与邮件共用"的 FS agent 资产（build once, serve voice + email）。</p>
-<div class="rvbox"><span class="ct">v0.2 新增：与两类对手的一句话区分</span>对 <b>Glia</b>（滩头 FS 专科，700+ 银行/信用联社；2026-03 把“零幻觉、注入零影响”写进合同，2026-07-21 推出按 topic 配置的 Strict / Rephrase / Compose 三档回答模式，担保原文写明覆盖 Strict）：<i>They govern what the AI says, topic by topic. We govern what it says, does, and to whom — inside every email.</i> 对 <b>Salesforce + Fin</b>（$3.6B 收购，2026-09-10 交割，横向邮件 resolution 进入最大的 CRM <span class="badge b-fact">事实</span> 对手信息）：<span class="badge b-ana">分析</span> 区分方式 —— 不拼通用结案率，拼受监管义务（时钟、披露、身份）与核心银行执行深度，外加与语音、质检、录音同一套治理。“build once”的需求承接见 FR-9.6。</div>
+<div class="rvbox"><span class="ct">v0.2 新增：与两类对手的一句话区分</span>对 <b>Glia</b>（滩头 FS 专科，700+ 银行/信用联社；2026-03 把“零幻觉、注入零影响”写进合同，2026-07-21 推出按 topic 配置的 Strict / Rephrase / Compose 三档回答模式，担保原文写明覆盖 Strict）：<i>They govern what the AI says, topic by topic. We govern what it says, does, and to whom — inside every email.</i> 对 <b>Salesforce + Fin</b>（$3.6B 收购，2026-09-10 交割，横向邮件 resolution 进入最大的 CRM <span class="badge b-fact">事实</span> 对手信息）：<span class="badge b-ana">分析</span> 区分方式 —— 不拼通用结案率，拼受监管义务（时钟、披露、身份）与核心银行执行深度，外加与语音、质检、录音同一套治理。<span class="rvt">承诺也追到账：竞品治理 AI 说什么；我们还保证它<b>说出口的时间一定被追到兑现</b>（FR-1.5 对客承诺的自动登记与兑现追踪）——与本框定位句同源，不另立叙事。</span><span class="rv add" title="差异点延伸并入定位句：D2 向对客文案侧的延伸，接进 Trust 指标，风险论据用既有 UDAAP / Air Canada 引用">v0.2 新增</span> “build once”的需求承接见 FR-9.6。</div>
 
 <div class="arch">
   <div class="box b1">客户邮件 / 网银 secure message → 工单 · 统一队列（到达时间戳即法定时钟起点）</div>
@@ -446,7 +447,7 @@ table.rvlog td:first-child{white-space:nowrap;font-weight:700;color:#5b21b6}
   <div class="kpi">
     <div class="nm">③ TRUST</div>
     <div class="vl">Trust &amp; Compliance Index<br>信任与合规指数（一票否决）</div>
-    <div class="ds">关键错误（错动钱/错披露账户/错过法定时钟/向欺诈案件说话）= <b>0 件/千自主件</b>；Reg E/Z 时钟达成率 100%；受监管意图召回率 ≥ 99.5%（宁可误报）；decision dossier 完整率 100%。任一不达标，VARR 数字无效，自动收回放权。</div>
+    <div class="ds">关键错误（错动钱/错披露账户/错过法定时钟/向欺诈案件说话）= <b>0 件/千自主件</b>；Reg E/Z 时钟达成率 100%；<span class="rvt">对客承诺达成率 100%（FR-1.5 承诺时钟：说出口的时间被追到兑现）</span><span class="rv add" title="差异点延伸并入 Trust：法定时钟达成之上加承诺达成，同一票否决口径">v0.2 新增</span>；受监管意图召回率 ≥ 99.5%（宁可误报）；decision dossier 完整率 100%。任一不达标，VARR 数字无效，自动收回放权。</div>
   </div>
 </div>
 
@@ -470,8 +471,8 @@ table.rvlog td:first-child{white-space:nowrap;font-weight:700;color:#5b21b6}
 <tr><th>时点</th><th>VARR（全进件分母）</th><th>TTR</th><th>Trust</th></tr>
 <tr class="rvrow"><td>试点第 4 周（shadow 结束）<span class="rv" title="shadow 在 W3–W4（§11.3），第 2 周仍是回测">v0.2 修订</span></td><td>不对外发布，只测分流建议准确率</td><td>不改现状</td><td>回测（W2 末）受监管召回 ≥ 99.5% 才进入 shadow；shadow 期 0 漏检才允许进入 L1/L2</td></tr>
 <tr><td>试点第 6 周（L1/L2 审批）</td><td>10–20% 观测区间 <span class="badge b-assume">假设</span>（草稿被一键批比例另计；<span class="rvt">此阶段只有已毕业的 R0 件能计入 VARR</span>）</td><td>不对外承诺，仅观测</td><td>关键错误 0；卷宗完整率 100%</td></tr>
-<tr><td>试点结束（第 45 天）</td><td>首次按正式口径实测 VARR，不预设数值</td><td>建立 TTR 基线（虚构画像基线 3.2 天 <span class="badge b-assume">假设</span>）</td><td>时钟达成 100%；至少 2 个意图满足毕业门槛进入 L3</td></tr>
-<tr><td>GA 后 6 个月</td><td><b>25–35%</b> <span class="badge b-assume">假设</span></td><td>整体 &lt; 1 个工作日；自主件 &lt; 15 分钟</td><td>持续 0 关键错误；时钟达成 100%</td></tr>
+<tr><td>试点结束（第 45 天）</td><td>首次按正式口径实测 VARR，不预设数值</td><td>建立 TTR 基线（虚构画像基线 3.2 天 <span class="badge b-assume">假设</span>）</td><td>时钟达成 100%；<span class="rvt">对客承诺达成 100%（FR-1.5）</span>；至少 2 个意图满足毕业门槛进入 L3</td></tr>
+<tr><td>GA 后 6 个月</td><td><b>25–35%</b> <span class="badge b-assume">假设</span></td><td>整体 &lt; 1 个工作日；自主件 &lt; 15 分钟</td><td>持续 0 关键错误；时钟达成 100%；<span class="rvt">对客承诺达成 100%</span><span class="rv add" title="承诺达成与法定时钟达成并列进阶段目标（FR-1.5）">v0.2 新增</span></td></tr>
 <tr><td>GA 后 6–9 个月</td><td>ROI 三档：VARR 20%/35%/50% → 净节省 39%/56%/66%（见 11.4）<span class="badge b-assume">假设</span></td><td>自主件 &lt; 15 分钟为主</td><td>后悔率稳定低于人工 QA 错误率</td></tr>
 </table></div>
 <p class="small">毕业门槛（rule of three：n 件零错误时 95% 置信错误率上界约 3/n——n=300 约 1%、n=600 约 0.5% <span class="badge b-fact">事实</span>）：某意图申请 L3 前关键错误须为 0；<b>受监管意图</b>须积累受监管触发 ≥ 600 件且 0 漏检（才签得上召回 ≥ 99.5%），<b>非受监管意图</b>须 ≥ 300 件且免修改批准率 ≥ 97%（n=300 的 95% 区间约 ±2 个百分点，若按置信下界签字需实测约 ≥ 98.5%）；<b>稀有意图</b>（90 天攒不够对应样本量）不进 L3，转 FR-3.5 conformal 自主权证书或长期停留 L2。具体阈值为试点校准项 <span class="badge b-assume">假设</span>，统计口径见调研报告 §3.2 与 §7.1。</p>
@@ -548,7 +549,7 @@ table.rvlog td:first-child{white-space:nowrap;font-weight:700;color:#5b21b6}
 <colgroup><col style="width:6%"><col style="width:18%"><col style="width:16%"><col style="width:24%"><col style="width:16%"><col style="width:20%"></colgroup>
 <thead><tr><th></th><th>条目</th><th>主战场（本 PRD §6.1）</th><th>关联步骤链</th><th>AI 参与度</th><th>PRD 落点（章节 / FR）</th></tr></thead><tbody>
 <tr><td><b>D1</b></td><td>三维放权矩阵</td><td><b>第 5 步</b></td><td>1·2·3（读入时间、意图、身份三轴）→ <b>5 查表</b> → 7·8（按 L 档分流输出）</td><td><b>低</b>：只有第 2 步读意图是 AI</td><td>§6.2 · FR-3.1 三维放权矩阵执行器 · FR-3.2 策略闸门与四分支路由 · FR-9.3 矩阵逐格配置</td></tr>
-<tr><td><b>D2</b></td><td>受监管意图进件即识别、即起钟</td><td><b>第 2 + 6 步</b></td><td>1（时间戳）→ <b>2 识别</b> → <b>6 起钟</b></td><td><b>半</b>：识别是 AI，起钟 0%</td><td>FR-1.2 到达时间戳与时钟起点 · FR-1.3 多意图拆分 · FR-1.4 高召回检测 · FR-4.2 法定时钟与原生等待 · §8.2 AC2</td></tr>
+<tr><td><b>D2</b></td><td>受监管意图进件即识别、即起钟</td><td><b>第 2 + 6 步</b></td><td>1（时间戳）→ <b>2 识别</b> → <b>6 起钟</b></td><td><b>半</b>：识别是 AI，起钟 0%</td><td>FR-1.2 到达时间戳与时钟起点 · FR-1.3 多意图拆分 · FR-1.4 高召回检测 · FR-4.2 法定时钟与原生等待 · §8.2 AC2<span class="rv add" title="差异点延伸：D2 向对客文案侧的延伸——对客承诺的自动登记与兑现追踪，承诺时钟从说出口起算，接进同一套预警与 Trust 指标"> · FR-1.5 对客承诺的自动登记与兑现追踪（D2 向对客文案侧的延伸）</span></td></tr>
 <tr><td><b>D3</b></td><td>放权证据包 / 毕业流程</td><td><b>旁路，不占这 9 步</b>；流程在 <a href="#model">§6.3</a></td><td>shadow 期“只建议不执行”跑 1–8、指标吃第 9 步；<b>毕业签字结果回写第 5 步的矩阵取值</b></td><td><b>0</b>：AI 是<b>被测对象</b></td><td>§6.3 · FR-3.3 毕业流程 · FR-3.4 自动降级与重新校准 · FR-9.4 回测与 Readiness Report · §4.1 VARR</td></tr>
 <tr><td><b>D4</b></td><td>邮件攻击面纵深防御</td><td><b>第 6 步白名单 + 第 8 步质量闸门</b></td><td>1（协议）· 2（附件）· <b>6 白名单</b> · <b>8 闸门</b></td><td><b>低</b>：注入检测只作纵深一层</td><td>§5.2 Never 清单 · FR-2.1 身份评级 · FR-2.2 同线程 step-up · FR-5.2 发送前质量闸门 · FR-6.1～FR-6.3 隔离区 / 白名单 / ATO 检测</td></tr>
 <tr><td><b>D5</b></td><td>片段级受控生成</td><td><b>第 8 步</b></td><td>6（槽位落库）→ <b>8 三段拼装</b> → 8 发送前比对收口</td><td><b>仅“措辞”一段过模型</b></td><td>FR-5.1 三段拼装的对客回复 · FR-2.3 字段级披露控制 · FR-9.5 披露模板与字段分级配置</td></tr>
@@ -677,6 +678,19 @@ table.rvlog td:first-child{white-space:nowrap;font-weight:700;color:#5b21b6}
 <li>AC4：每月用新增真实漏检/误报样本回归测试，版本更新走与策略相同的回测签字流程。</li>
 </ul>
 <div class="fr-m">依赖：FR-1.2、FR-4.2、标注与回测能力（FR-9.4）。</div>
+</div></div>
+
+<div class="fr" id="fr-1-5">
+<div class="fr-h"><span class="fid">FR-1.5</span><b>对客承诺的自动登记与兑现追踪</b><span class="prio p0">P0</span><span class="tag t-new">新建</span><span class="rv add" title="差异点延伸：D2（受监管识别/起钟）向对客文案侧的延伸，不进 D6 底座；接进既有 Trust 指标">v0.2 新增</span></div>
+<div class="fr-b">
+<p class="fd">AI 或受控模板对客户说出的时限承诺（“X 个工作日内回复/处理”）在信件<b>实际发出的瞬间</b>自动登记为<b>承诺时钟</b>：到期时刻 = 发出时间 + N 个工作日（纯算术，不是模型判断）；承诺兑现的那封信发出即销账。这是 D2（受监管意图识别、进件即起钟）向对客文案侧的延伸——法定时钟从“进件”起算，承诺时钟从“说出口”起算，两者进同一套预警与看板。风险论据：对外承诺不兑现属 UDAAP 欺骗性表述风险<span class="rvt">（Moffatt v. Air Canada, 2024 BCCRT 149：聊天机器人的错误承诺可构成机构责任；CFPB 2023-06 Chatbots Issue Spotlight 亦点名对客陈述风险）</span>。</p>
+<ul class="ac">
+<li>AC1：含承诺的信件<b>实际发出即登记起钟</b>（草稿未发出不登记）；承诺原文、到期时刻、兑现信关联写入 dossier，审计视图可逐条核对。</li>
+<li>AC2：到期前 <b>48 自然小时</b>进入主管台预警区，与法定时钟同板展示、同阈值变色（红 &lt; 48h、琥珀 &lt; 5 天）。</li>
+<li>AC3：到期未兑现 → 主管台置顶升级 + 记入风险记录；兑现信发出 → 销账并留兑现时间。</li>
+<li>AC4：承诺达成率进 Trust 指标（§4.1 ③、§4.3），与法定时钟达成并列，未达即触发一票否决复盘。</li>
+</ul>
+<div class="fr-m">依赖：FR-4.2 时钟引擎（同一套工作日算术）、FR-5.2 发送前质量闸门（承诺句来源：受控模板内置时限语句；AI 起草文本中的时限句经闸门标注后才可发出）、FR-8.2 时钟看板。</div>
 </div></div>
 
 <div class="mod-h"><span class="mid">M2</span><b>身份保障（Identity Assurance）</b><span class="mgoal">未认证渠道也能安全办事</span></div>
@@ -1485,7 +1499,7 @@ table.rvlog td:first-child{white-space:nowrap;font-weight:700;color:#5b21b6}
 </section>
 
 <footer>
-<p>Email Autopilot for Financial Services · PRD v0.2 审阅版 · 2026-09-28（在 v0.1 草案 · 2026-09-27 基础上审阅修订，改动清单见 §00「v0.2 审阅变更一览」）。本文档基于产品定位调研 v0.4.3 的结论撰写；标注 <span class="badge b-assume">假设</span> 的数字须在试点首周以客户真实数据校准，<span class="badge b-todo">待核实</span> 项以平台团队/法务正式口径为准。虚构机构 Larkspur Bank 仅用于流程演示。</p>
+<p>Email Autopilot for Financial Services · PRD v0.2 审阅版 · 2026-09-28（在 v0.1 草案 · 2026-09-27 基础上审阅修订，改动清单见 §00「v0.2 审阅变更一览」）。本文档基于产品定位调研 v0.4.4 的结论撰写；标注 <span class="badge b-assume">假设</span> 的数字须在试点首周以客户真实数据校准，<span class="badge b-todo">待核实</span> 项以平台团队/法务正式口径为准。虚构机构 Larkspur Bank 仅用于流程演示。</p>
 </footer>
 
 </div>

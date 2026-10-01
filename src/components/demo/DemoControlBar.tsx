@@ -10,6 +10,10 @@ import { cn } from "@/lib/utils";
 
 const SPEEDS = [1, 2, 4];
 
+/** Beat jump is a rehearsal/iteration aid, not part of the show: the control
+ *  bar only grows the field when the page was opened with `?dbg`. */
+const dbg = typeof window !== "undefined" && /[?&]dbg/.test(window.location.search);
+
 export function DemoControlBar() {
   const { t } = useTranslation("demo");
   const status = useDemoStore((s) => s.status);
@@ -78,6 +82,23 @@ export function DemoControlBar() {
         >
           <StepForward size={15} />
         </button>
+        {dbg && scriptId && (
+          <input
+            data-id="demo.beatjump"
+            type="number"
+            min={0}
+            max={Math.max(totalBeats - 1, 0)}
+            defaultValue={beatIndex}
+            key={beatIndex}
+            onKeyDown={(e) => {
+              if (e.key !== "Enter") return;
+              const v = Number((e.target as HTMLInputElement).value);
+              if (Number.isFinite(v)) void demoRunner.seek(scriptId, v);
+            }}
+            className="w-[54px] rounded px-1 py-0.5 font-mono text-[13px] text-navy ring-1 ring-line"
+            title={t("jump")}
+          />
+        )}
         <button
           data-id="demo.speed"
           onClick={cycleSpeed}

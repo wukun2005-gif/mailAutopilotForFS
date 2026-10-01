@@ -68,6 +68,7 @@
     "AP-ADJUDICATION": "人工裁决——商户凭证已到达（Day 40）",
     "AP-RESULTSIGN": "签发并发送调查结果函",
     "AP-OD2-EXPLAIN": "批准第二次豁免的解释函",
-    "AP-FRAUD-CONFIRM": "确认 BEC/ATO 隔离"
+    "AP-FRAUD-CONFIRM": "确认 BEC/ATO 隔离",
+    "AP-OCR-REVIEW": "人工复核低置信附件（OCR）"
   }
 }

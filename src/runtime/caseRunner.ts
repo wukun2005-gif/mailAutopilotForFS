@@ -128,7 +128,9 @@ export class CaseRunner {
   async approveDue(extra: Partial<ResumePayload> = {}): Promise<RunnerSnapshot> {
     const snap = await this.snapshot();
     const state = snap.state;
-    const dueApproval = state.approvals.find((a) => a.status === "pending" && this.isDue(a));
+    const dueApproval = state.approvals.find(
+      (a) => a.status === "pending" && a.blocking !== false && this.isDue(a),
+    );
     if (!dueApproval) return snap;
     return this.approve({
       approvalId: dueApproval.id,
@@ -155,8 +157,9 @@ export class CaseRunner {
       next: string[];
     };
     const values = state.values;
+    // FR-1.5 reviewer tasks are pending work but never a mid-flow interrupt.
     const dueApproval = (values?.approvals ?? []).some(
-      (a) => a.status === "pending" && this.isDue(a),
+      (a) => a.status === "pending" && a.blocking !== false && this.isDue(a),
     );
     // Only due human approvals count as a mid-flow interrupt; customer
     // step-up pauses end the run naturally and report interrupted=false.

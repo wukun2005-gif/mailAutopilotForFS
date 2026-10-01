@@ -20,6 +20,19 @@ async function startScript(page: Page, id: string) {
   return errors;
 }
 
+/** One status poll, tolerant of the transient context swap of a hash route. */
+async function poll(page: Page): Promise<Awaited<ReturnType<typeof snap>> | null> {
+  for (let i = 0; i < 8; i++) {
+    try {
+      return await snap(page);
+    } catch (err) {
+      if (!/Execution context was destroyed|navigation/i.test(String(err))) throw err;
+      await page.waitForTimeout(120);
+    }
+  }
+  return null;
+}
+
 async function expectDone(page: Page, errors: string[]) {
   await page.waitForFunction(
     () => document.querySelector("[data-id='demo.bar']")?.getAttribute("data-status") === "done",
@@ -54,6 +67,24 @@ test("email1 script plays to end", async ({ page }) => {
  * the beat's focus id resolves to, and it never survives the beat (a marked
  * row from the previous caption is a lie on a screen that has changed).
  */
+async function snap(page: Page) {
+  return page.evaluate(() => {
+    const done =
+      document.querySelector("[data-id='demo.bar']")?.getAttribute("data-status") === "done";
+    const beat = document.querySelector("[data-id='demo.bar']")?.getAttribute("data-beat");
+    const marked = Array.from(document.querySelectorAll<HTMLElement>("[data-hl]"));
+    return {
+      done,
+      beat,
+      marks: marked.map((el) => ({
+        id: el.dataset.hl ?? "",
+        actual: el.dataset.id ?? "",
+        visible: el.getBoundingClientRect().width > 0,
+      })),
+    };
+  });
+}
+
 test("email1: every caption marks the element it names, and cleans up", async ({ page }) => {
   test.setTimeout(300_000);
   const errors = await startScript(page, "email1");
@@ -61,21 +92,12 @@ test("email1: every caption marks the element it names, and cleans up", async ({
   const wrong: string[] = [];
   let leftovers = 0;
   while (true) {
-    const snap = await page.evaluate(() => {
-      const done =
-        document.querySelector("[data-id='demo.bar']")?.getAttribute("data-status") === "done";
-      const beat = document.querySelector("[data-id='demo.bar']")?.getAttribute("data-beat");
-      const marked = Array.from(document.querySelectorAll<HTMLElement>("[data-hl]"));
-      return {
-        done,
-        beat,
-        marks: marked.map((el) => ({
-          id: el.dataset.hl ?? "",
-          actual: el.dataset.id ?? "",
-          visible: el.getBoundingClientRect().width > 0,
-        })),
-      };
-    });
+    // The app's hash router (#/agent, #/supervisor) swaps the page's execution
+    // context as the script switches screens; an evaluate that lands on that
+    // instant throws instead of returning. Retry rather than fail the run —
+    // the assertions still see every poll that does land.
+    const snap = await poll(page);
+    if (!snap) throw new Error("page.evaluate kept failing — the demo never settled");
     if (snap.done) break;
     if (snap.marks.length > 1) leftovers += 1;
     for (const m of snap.marks) {

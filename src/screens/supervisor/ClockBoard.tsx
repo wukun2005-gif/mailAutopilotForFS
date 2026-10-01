@@ -20,7 +20,8 @@ const HOUR = 3_600_000;
 interface Row {
   name: string;
   nameKey: string;
-  due: number;
+  /** undefined = a promise with no deadline (shown in the table, not the bar chart). */
+  due?: number;
   remainingH: number;
   totalH: number;
   color: string;
@@ -37,37 +38,73 @@ function tone(remainingH: number, done: boolean): string {
 }
 
 function rowsFor(state: CaseStateType, t: (k: string, o?: Record<string, unknown>) => string): Row[] {
-  if (state.scenarioId !== "email2") return [];
-  const c = regEClocks(DAY0_EPOCH);
+  const rows: Row[] = [];
   const now = simClock.now();
-  const pcDone = (state.actions ?? []).some(
-    (a) => a.actionType === "reg_e_provisional_credit" && a.status === "done",
-  );
-  const resultSent = (state.outbound ?? []).some((o) => o.draftId?.startsWith("DR-RESULT"));
-  const mk = (
-    name: string,
-    nameKey: string,
-    due: number,
-    start: number,
-    done: boolean,
-  ): Row => {
-    const remainingH = Math.round((due - now) / HOUR);
-    return {
-      name,
-      nameKey,
-      due,
-      remainingH: done ? 0 : Math.max(remainingH, 0),
-      totalH: Math.round((due - start) / HOUR),
-      color: tone(remainingH, done),
-      label: done ? t("clockboard.done") : remainingH < 0 ? t("clockboard.overdue") : t("clockboard.hours", { count: remainingH }),
-      done,
+  if (state.scenarioId === "email2") {
+    const c = regEClocks(DAY0_EPOCH);
+    const pcDone = (state.actions ?? []).some(
+      (a) => a.actionType === "reg_e_provisional_credit" && a.status === "done",
+    );
+    const resultSent = (state.outbound ?? []).some((o) => o.draftId?.startsWith("DR-RESULT"));
+    const mk = (
+      name: string,
+      nameKey: string,
+      due: number,
+      start: number,
+      done: boolean,
+    ): Row => {
+      const remainingH = Math.round((due - now) / HOUR);
+      return {
+        name,
+        nameKey,
+        due,
+        remainingH: done ? 0 : Math.max(remainingH, 0),
+        totalH: Math.round((due - start) / HOUR),
+        color: tone(remainingH, done),
+        label: done ? t("clockboard.done") : remainingH < 0 ? t("clockboard.overdue") : t("clockboard.hours", { count: remainingH }),
+        done,
+      };
     };
-  };
-  return [
-    mk("provisional credit (deadline)", "clockboard.pc", c.provisionalCreditDue, DAY0_EPOCH, pcDone),
-    mk("investigation day45 (POS cases use day90)", "clockboard.day45", c.day45, DAY0_EPOCH, resultSent),
-    mk("outer limit day90 for POS debit", "clockboard.day90", c.day90, DAY0_EPOCH, resultSent),
-  ];
+    rows.push(
+      mk("provisional credit (deadline)", "clockboard.pc", c.provisionalCreditDue, DAY0_EPOCH, pcDone),
+      mk("investigation day45 (POS cases use day90)", "clockboard.day45", c.day45, DAY0_EPOCH, resultSent),
+      mk("outer limit day90 for POS debit", "clockboard.day90", c.day90, DAY0_EPOCH, resultSent),
+    );
+  }
+  // FR-1.5 对客承诺时钟（任何场景）：兑现绿色、逾期红、临期琥珀——与法定
+  // 时钟同一套阈值、同一块板；labelKey 即承诺的展示名（i18n key）。
+  // 无到期日的承诺（如"转人工复核"）只进表格：没有倒计时就没有条形。
+  for (const p of state.promiseClocks ?? []) {
+    const done = !!p.fulfilledAt;
+    if (p.dueAt == null) {
+      rows.push({
+        name: p.labelKey,
+        nameKey: p.labelKey,
+        remainingH: 0,
+        totalH: 0,
+        color: done ? "#10b981" : "#d97706",
+        label: done ? t("clockboard.done") : t("clockboard.noDue"),
+        done,
+      });
+      continue;
+    }
+    const remainingH = Math.round((p.dueAt - now) / HOUR);
+    rows.push({
+      name: p.labelKey,
+      nameKey: p.labelKey,
+      due: p.dueAt,
+      remainingH: done ? 0 : Math.max(remainingH, 0),
+      totalH: Math.max(remainingH, 0),
+      color: tone(remainingH, done),
+      label: done
+        ? t("clockboard.done")
+        : remainingH < 0
+          ? t("clockboard.overdue")
+          : t("clockboard.hours", { count: remainingH }),
+      done,
+    });
+  }
+  return rows;
 }
 
 export function ClockBoard({ state }: { state: CaseStateType }) {
@@ -77,6 +114,8 @@ export function ClockBoard({ state }: { state: CaseStateType }) {
   // loadScenario resets the case, wiping progress and leaving an empty state.
   const setScreen = useUIStore((s) => s.setScreen);
   const rows = rowsFor(state, t);
+  // Bars need a due date; deadline-less promises show up in the table only.
+  const chartRows = rows.filter((r) => r.due != null);
   const now = simClock.now();
 
   return (
@@ -92,7 +131,7 @@ export function ClockBoard({ state }: { state: CaseStateType }) {
         <>
           <div className="mt-2 h-56">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={rows} layout="vertical" margin={{ left: 40, right: 48 }}>
+              <BarChart data={chartRows} layout="vertical" margin={{ left: 40, right: 48 }}>
                 <XAxis type="number" hide domain={[0, "dataMax"]} />
                 <YAxis
                   type="category"
@@ -122,7 +161,9 @@ export function ClockBoard({ state }: { state: CaseStateType }) {
                 <tr key={r.name} className="border-t border-line">
                   <td className="py-1 text-gray-700">{t(r.nameKey)}</td>
                   <td className="py-1 font-mono text-faint">
-                    {t("clockboard.due", { date: format(new Date(r.due), "MM/dd") })}
+                    {r.due != null
+                      ? t("clockboard.due", { date: format(new Date(r.due), "MM/dd") })
+                      : t("clockboard.noDue")}
                   </td>
                   <td className="py-1 text-right">
                     <button

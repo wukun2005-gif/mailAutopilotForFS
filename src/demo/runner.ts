@@ -66,6 +66,17 @@ class DemoRunner {
   private script: DemoScript | null = null;
   /** The async run loop is alive (possibly gated on pause). */
   private loopAlive = false;
+  /**
+   * Fast-forward mode (seek): every wait is clamped and captions are put up
+   * without their narration window, so reaching beat 12 costs seconds instead
+   * of replaying 12 caption windows. The beats themselves still run — the
+   * clicks, the injections, the clock are the real ones, because the point of
+   * jumping to a beat is seeing the state that beat actually produces.
+   */
+  private fast = false;
+  /** Incremented by begin(): an older loop that was mid-beat sees a changed
+   *  id and stops instead of racing the new one over the same world. */
+  private runId = 0;
 
   private gate(): Promise<void> {
     if (useDemoStore.getState().status !== "paused") return Promise.resolve();
@@ -75,6 +86,10 @@ class DemoRunner {
   }
 
   private async wait(ms: number): Promise<void> {
+    if (this.fast) {
+      await new Promise((r) => setTimeout(r, Math.min(ms, 120)));
+      return;
+    }
     const speed = useDemoStore.getState().speed || 1;
     const scaled = Math.max(120, ms / speed);
     const steps = Math.ceil(scaled / 100);
@@ -86,10 +101,29 @@ class DemoRunner {
   }
 
   async start(scriptId: string): Promise<void> {
-    const script = SCRIPT_BY_ID[scriptId];
+    const script = await this.begin(scriptId);
     if (!script) return;
+    await this.runFrom(0);
+  }
+
+  /** Retire whatever loop is running: cancel it, release its pause, and give
+   *  its current wait slice (≤120ms) time to notice before a new run starts. */
+  private async quiesce(): Promise<void> {
+    this.cancelled = true;
+    this.pauseResolver?.();
+    this.pauseResolver = null;
+    await new Promise((r) => setTimeout(r, 160));
+  }
+
+  /** Reset the world and arm the bar for `scriptId`, at beat 0. */
+  private async begin(scriptId: string): Promise<DemoScript | null> {
+    const script = SCRIPT_BY_ID[scriptId];
+    if (!script) return null;
+    await this.quiesce();
     this.stopVisual();
     this.cancelled = false;
+    this.runId++;
+    this.fast = false;
     this.script = script;
     const d = useDemoStore.getState();
     d.set({
@@ -114,14 +148,63 @@ class DemoRunner {
     await useCaseStore.getState().reset();
     bgmPlayer.start();
     this.loopAlive = true;
-    await this.runFrom(0);
+    return script;
+  }
+
+  /**
+   * Jump straight to a beat: replay everything before it with waits clamped
+   * (fast mode), run that beat normally, then stay paused on it with the
+   * caption up. Always restarts from beat 0 so the landing state is exactly
+   * what a real run would have produced — a seek that skipped a click would
+   * put a beat on screen with the world behind it half-built.
+   */
+  async seek(scriptId: string, index: number): Promise<void> {
+    const script = await this.begin(scriptId);
+    if (!script) return;
+    const n = Math.max(0, Math.min(Math.trunc(index), script.beats.length - 1));
+    const runId = this.runId;
+    this.fast = true;
+    try {
+      for (let i = 0; i < n; i++) {
+        if (this.cancelled || runId !== this.runId) return;
+        const beat = script.beats[i];
+        useDemoStore.getState().set({ beatIndex: i, chapter: beat.chapter });
+        try {
+          await this.exec(beat);
+        } catch (err) {
+          if ((err as Error).message === "__CANCELLED__") return;
+          useDemoStore.getState().set({
+            failures: [
+              ...useDemoStore.getState().failures,
+              { beatId: beat.id, reason: String((err as Error).message) },
+            ],
+          });
+          console.warn(`[demo] seek: beat ${beat.id} failed:`, err);
+        }
+      }
+    } finally {
+      if (runId === this.runId) this.fast = false;
+    }
+    if (this.cancelled || runId !== this.runId) return;
+    // Give the beats that just ran (inject, clock, restart) their async tail
+    // before framing the target, so the target is shot on settled state.
+    useDemoStore.getState().set({ beatIndex: n, chapter: script.beats[n].chapter });
+    await this.wait(700);
+    try {
+      await this.exec(script.beats[n]);
+    } catch (err) {
+      if ((err as Error).message !== "__CANCELLED__") console.warn("[demo] seek target failed:", err);
+    }
+    this.loopAlive = false;
+    useDemoStore.getState().set({ status: "paused" });
   }
 
   private async runFrom(index: number): Promise<void> {
     if (!this.script) return;
+    const runId = this.runId;
     this.loopAlive = true;
     for (let i = index; i < this.script.beats.length; i++) {
-      if (this.cancelled) return;
+      if (this.cancelled || runId !== this.runId) return;
       useDemoStore.getState().set({ beatIndex: i, chapter: this.script.beats[i].chapter });
       const beat = this.script.beats[i];
       try {
@@ -269,6 +352,12 @@ class DemoRunner {
         if (a.focus) await this.frameFor(a.focus);
         const text = i18n.t(a.key, { ns: "demo", defaultValue: a.key });
         useDemoStore.getState().set({ tooltip: text });
+        // Seeking puts the caption up without waiting it out (or starting a
+        // clip): the caller is looking at the frame, not listening to it.
+        if (this.fast) {
+          await this.wait(300);
+          break;
+        }
         // Narration drives the beat window: the caption stays up exactly until
         // the voice stops (wait() slices and playbackRate both scale with
         // speed, so caption, voice and script stay in lockstep at 1×/2×/4×).
@@ -457,3 +546,10 @@ class DemoRunner {
 }
 
 export const demoRunner = new DemoRunner();
+
+// Debug affordance: `__demoSeek("email1", 12)` in the console (or from the
+// playwright shots spec) jumps to beat 12 instead of replaying the script.
+if (typeof window !== "undefined") {
+  (window as unknown as { __demoSeek?: (id: string, i: number) => Promise<void> }).__demoSeek =
+    (id, i) => demoRunner.seek(id, i);
+}

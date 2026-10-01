@@ -14,6 +14,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "e2e": "playwright test",
+    "e2e:demo": "playwright test tests/e2e/m7-demo-smoke.spec.ts",
+    "e2e:shots": "playwright test tests/e2e/shots.spec.ts",
     "eval": "promptfoo eval -c promptfoo.config.ts",
     "tts": "bash tts/generate.sh",
     "i18n:audit": "i18next-parser --config i18next-parser.config.ts",

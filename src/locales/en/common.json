@@ -27,7 +27,8 @@
     "money_action": "Moves money",
     "draft_signoff": "Letter sign-off",
     "adjudication": "Human adjudication",
-    "fraud_confirm": "Fraud quarantine confirmation"
+    "fraud_confirm": "Fraud quarantine confirmation",
+    "manual_review": "Manual review"
   },
   "approvalStatus": {
     "pending": "Pending approval",
@@ -79,7 +80,8 @@
       "spoofSignal": "AC3 spoof signal",
       "newThread": "new thread (no I3 inherit)",
       "noDigital": "no digital banking (link fallback)",
-      "otpLockout": "OTP lockout"
+      "otpLockout": "OTP lockout",
+      "ocrLow": "OCR low confidence (next read)"
     }
   }
 }

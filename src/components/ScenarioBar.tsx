@@ -28,6 +28,7 @@ const FAULTS: { flag: FaultFlag }[] = [
   { flag: "newThread" },
   { flag: "noDigital" },
   { flag: "otpLockout" },
+  { flag: "ocrLow" },
 ];
 
 export function ScenarioBar() {

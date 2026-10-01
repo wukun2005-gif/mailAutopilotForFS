@@ -43,6 +43,12 @@ export function SupervisorScreen() {
     );
     if (!pcDone && c.provisionalCreditDue - simClock.now() <= 5 * 86_400_000) dueClocks += 1;
   }
+  // FR-1.5 对客承诺时钟：未兑现、有到期日且 5 天内到期的承诺计入同一 KPI
+  // （任何场景）；无到期日的承诺不进倒计时 KPI，只留在看板与队列里。
+  for (const p of caseState.promiseClocks ?? []) {
+    if (!p.fulfilledAt && p.dueAt != null && p.dueAt - simClock.now() <= 5 * 86_400_000)
+      dueClocks += 1;
+  }
 
   return (
     <div className="flex h-full flex-col gap-2 p-2">

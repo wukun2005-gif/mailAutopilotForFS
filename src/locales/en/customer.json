@@ -136,7 +136,8 @@
       "NOT_GRADUATED_FAIL_CLOSED_L0": "Intent not graduated, fail closed to human",
       "POLICY_VERSION_FALLBACK_CAP_L2": "Policy version degraded, capped at L2",
       "UNKNOWN_RISK_FAIL_CLOSED": "Risk level unknown, fail closed to human"
-    }
+    },
+    "rerated": "Re-rated inside this thread: {{from}} → {{to}} (the new test now passes)"
   },
   "clock": {
     "badge": "Reg E · Day {{day}} · PC {{state}}",
@@ -283,5 +284,23 @@
     "gateGeneric": "gate evaluation complete",
     "fr52Pass": "Outbound check: {{draft}} carries AI disclosure and human handoff → released",
     "fr52Blocked": "{{draft}} blocked: AI disclosure or human handoff missing"
+  },
+  "matrix": {
+    "stripTitle": "Autonomy matrix",
+    "stripSub": "risk × identity → level",
+    "thisCase": "this case",
+    "denySub": "locked wording",
+    "neverSub": "no such tool",
+    "capLabel": "L axis · graduation cap",
+    "capNone": "not graduated · max L0",
+    "capSome": "graduated · max {{level}}"
+  },
+  "cell": {
+    "deny": "no grant",
+    "denySub": "no auto action",
+    "never": "never auto",
+    "neverSub": "no such tool",
+    "stripTitle": "Autonomy matrix · this row",
+    "stripSub": "risk × identity → level"
   }
 }
