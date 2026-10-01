@@ -29,6 +29,8 @@ const trailer: DemoScript = {
     { id: "t15", chapter: "approve", action: { t: "cursor", target: "s3.tab.queue", click: true, wait: 800 } },
     { id: "t16", chapter: "approve", action: { t: "tooltip", key: "trailer.approve", ms: 3000, focus: "s3.queue" } },
     { id: "t17", chapter: "approve", action: { t: "cursor", target: "s3.approve", click: true, require: true, wait: 1500 } },
+    { id: "t17a", chapter: "metrics", action: { t: "cursor", target: "s3.tab.metrics", click: true, wait: 900 } },
+    { id: "t17b", chapter: "metrics", action: { t: "tooltip", key: "trailer.metrics", ms: 4000, focus: "s3.metrics" } },
     { id: "t18", chapter: "fraud", action: { t: "load", scenario: "email3" } },
     { id: "t19", chapter: "fraud", action: { t: "inject", emailId: "EM-3-IN-1" } },
     { id: "t20", chapter: "fraud", action: { t: "cursor", target: "s3.tab.fraud", click: true, wait: 900 } },
@@ -129,7 +131,11 @@ const email1: DemoScript = {
   ],
 };
 
-// ── Email 2 (~4min): Reg E dispute across 45 days, restart-safe ───────────
+// ── Email 2 (~4min): Reg E dispute across 45 days ──────────────────────────
+// The camera rule, same as email1: whatever the line names must be on screen
+// and lit. The matrix verdicts and the I2 → I3 rerating live in the audit
+// view, so that view opens BEFORE the line that claims them and closes again
+// once the identity story is told — the customer screen otherwise stays sparse.
 const email2: DemoScript = {
   id: "email2",
   nameKey: "scripts.email2",
@@ -137,36 +143,55 @@ const email2: DemoScript = {
     { id: "2-0", chapter: "day0", action: { t: "goto", screen: "customer" } },
     { id: "2-1", chapter: "day0", action: { t: "load", scenario: "email2" } },
     { id: "2-2", chapter: "day0", action: { t: "inject", emailId: "EM-2-IN-1" } },
-    { id: "2-3", chapter: "day0", action: { t: "tooltip", key: "email2.intake", ms: 7000, focus: "s1.thread" } },
+    // D2: arrival files the case and the clock starts — lit on the strip.
+    { id: "2-3", chapter: "day0", action: { t: "tooltip", key: "email2.intake", ms: 7500, focus: "s2.clockstrip" } },
     { id: "2-4", chapter: "day1", action: { t: "inject", emailId: "EM-2-IN-1B" } },
-    { id: "2-5", chapter: "day1", action: { t: "tooltip", key: "email2.detailDenied", ms: 6000, focus: "s1.phone.push" } },
-    { id: "2-6", chapter: "day1", action: { t: "cursor", target: "s1.phone.push", click: true, wait: 900 } },
-    { id: "2-7", chapter: "day1", action: { t: "cursor", target: "s1.phone.otp", type: "111111", wait: 500 } },
-    { id: "2-8", chapter: "day1", action: { t: "cursor", target: "s1.phone.verify", click: true, wait: 1500 } },
-    { id: "2-9", chapter: "day1", action: { t: "tooltip", key: "email2.detailReleased", ms: 5000, focus: "s1.thread" } },
-    { id: "2-10", chapter: "day6", action: { t: "inject", emailId: "EM-2-IN-2" } },
-    { id: "2-11", chapter: "day6", action: { t: "tooltip", key: "email2.materials", ms: 5000, focus: "s1.thread" } },
-    { id: "2-12", chapter: "bd10", action: { t: "clock", to: "bd10" } },
-    { id: "2-13", chapter: "bd10", action: { t: "goto", screen: "supervisor" } },
-    { id: "2-14", chapter: "bd10", action: { t: "cursor", target: "s3.tab.clocks", click: true, wait: 900 } },
-    { id: "2-15", chapter: "bd10", action: { t: "tooltip", key: "email2.clock48h", ms: 5000, focus: "s3.clockboard.all" } },
-    { id: "2-16", chapter: "restart", action: { t: "cursor", target: "dev.restart", click: true, wait: 1500 } },
-    { id: "2-17", chapter: "restart", action: { t: "goto", screen: "agent" } },
-    { id: "2-18", chapter: "restart", action: { t: "tooltip", key: "email2.restart", ms: 7000, focus: "s2.resumebanner" } },
-    { id: "2-19", chapter: "bd10", action: { t: "goto", screen: "supervisor" } },
+    { id: "2-5", chapter: "day1", action: { t: "cursor", target: "s1.view.audit", click: true, wait: 1200 } },
+    // D1: the deny verdict is the cell's text, so the cell is what gets lit.
+    { id: "2-6", chapter: "day1", action: { t: "tooltip", key: "email2.detailDenied", ms: 7000, focus: "s1.autonomy.cell.I2" } },
+    { id: "2-7", chapter: "day1", action: { t: "cursor", target: "s1.phone.push", click: true, wait: 900 } },
+    { id: "2-8", chapter: "day1", action: { t: "cursor", target: "s1.phone.otp", type: "111111", wait: 500 } },
+    { id: "2-9", chapter: "day1", action: { t: "cursor", target: "s1.phone.verify", click: true, wait: 1500 } },
+    // The rerating line names the banner's exact words: I2 → I3, this conversation.
+    // Frame the whole identity card, not the banner span alone: the audit column
+    // is scrolled by earlier beats, so the span's own box can sit above the fold
+    // while the caption is already up — the card keeps banner and checklist in view.
+    { id: "2-10", chapter: "day1", action: { t: "tooltip", key: "email2.detailReleased", ms: 6000, focus: "s1.identity" } },
+    // Identity story told; fold the audit view away again.
+    { id: "2-11", chapter: "day1", action: { t: "cursor", target: "s1.view.customer", click: true, wait: 1000 } },
+    { id: "2-12", chapter: "day6", action: { t: "inject", emailId: "EM-2-IN-2" } },
+    // OCR confidence and "never pauses the clock" are card text — go to the card.
+    { id: "2-13", chapter: "day6", action: { t: "goto", screen: "agent" } },
+    { id: "2-14", chapter: "day6", action: { t: "tooltip", key: "email2.materials", ms: 7000, focus: "s2.materials" } },
+    { id: "2-15", chapter: "bd10", action: { t: "clock", to: "bd10" } },
+    { id: "2-16", chapter: "bd10", action: { t: "goto", screen: "supervisor" } },
+    { id: "2-17", chapter: "bd10", action: { t: "cursor", target: "s3.tab.clocks", click: true, wait: 900 } },
+    // The board jumps to the deadline itself: name the red bar and its 0 hours.
+    // Focus the CHART, not the table under it — framing the tall table scrolls
+    // the red bar off the top of the screen, which is the one thing said here.
+    { id: "2-18", chapter: "bd10", action: { t: "tooltip", key: "email2.clock48h", ms: 8000, focus: "s3.clockboard" } },
+    { id: "2-19", chapter: "bd10", action: { t: "cursor", target: "s3.tab.queue", click: true, wait: 900 } },
     { id: "2-20", chapter: "bd10", action: { t: "cursor", target: "s3.approve", click: true, require: true, wait: 1500 } },
     { id: "2-21", chapter: "bd10", action: { t: "goto", screen: "customer" } },
-    { id: "2-22", chapter: "bd10", action: { t: "tooltip", key: "email2.pcApproved", ms: 5000, focus: "s1.thread" } },
+    // D5: the posting email carries the AI disclosure and the HUMAN line.
+    { id: "2-22", chapter: "bd10", action: { t: "tooltip", key: "email2.pcApproved", ms: 6000, focus: "s1.thread.out" } },
     { id: "2-23", chapter: "day40", action: { t: "clock", to: "day40" } },
-    { id: "2-24", chapter: "day40", action: { t: "tooltip", key: "email2.evidence", ms: 5000, focus: "s1.thread" } },
-    { id: "2-25", chapter: "day40", action: { t: "goto", screen: "supervisor" } },
+    // Day 40 brings no customer email — the merchant evidence arrives on the
+    // adjudication card, so that card, not the thread, is where this line lands.
+    { id: "2-24", chapter: "day40", action: { t: "goto", screen: "supervisor" } },
+    { id: "2-25", chapter: "day40", action: { t: "tooltip", key: "email2.evidence", ms: 6500, focus: "s3.approvalcard" } },
     { id: "2-26", chapter: "day40", action: { t: "cursor", target: "s3.approve", click: true, require: true, wait: 1500 } },
-    { id: "2-27", chapter: "day40", action: { t: "tooltip", key: "email2.adjudication", ms: 5000, focus: "s3.approvalcard" } },
+    // Chained sign-off: the letter on this card is the "error occurred" finding.
+    { id: "2-27", chapter: "day40", action: { t: "tooltip", key: "email2.adjudication", ms: 6500, focus: "s3.approvalcard" } },
     { id: "2-28", chapter: "day40", action: { t: "cursor", target: "s3.approve", click: true, require: true, wait: 1500 } },
     { id: "2-29", chapter: "day45", action: { t: "goto", screen: "customer" } },
     { id: "2-30", chapter: "day45", action: { t: "clock", to: "day45" } },
-    { id: "2-31", chapter: "day45", action: { t: "tooltip", key: "email2.closed", ms: 6000, focus: "s1.thread" } },
-    { id: "2-32", chapter: "outro", action: { t: "tooltip", key: "email2.outro", ms: 6000 } },
+    { id: "2-31", chapter: "day45", action: { t: "tooltip", key: "email2.closed", ms: 6000, focus: "s1.thread.out" } },
+    // The dossier close-out claim needs the dossier: open the audit view and
+    // light its newest (closing) line, the way email1 signs off.
+    { id: "2-32", chapter: "day45", action: { t: "cursor", target: "s1.view.audit", click: true, wait: 1200 } },
+    { id: "2-33", chapter: "day45", action: { t: "tooltip", key: "email2.closedDossier", ms: 6000, focus: "s1.trace.entry@last" } },
+    { id: "2-34", chapter: "outro", action: { t: "tooltip", key: "email2.outro", ms: 6000, focus: "s1.thread" } },
   ],
 };
 

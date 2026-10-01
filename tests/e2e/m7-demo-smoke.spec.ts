@@ -124,7 +124,7 @@ test("email1: every caption marks the element it names, and cleans up", async ({
   expect(errors.filter((e) => !/Failed to load resource|msw/i.test(e))).toEqual([]);
 });
 
-test("email2 script plays to end (restart-safe dispute)", async ({ page }) => {
+test("email2 script plays to end (45-day Reg E dispute)", async ({ page }) => {
   const errors = await startScript(page, "email2");
   await expectDone(page, errors);
   // Result letter exists on the customer thread after day 45.
@@ -132,7 +132,7 @@ test("email2 script plays to end (restart-safe dispute)", async ({ page }) => {
   await page.waitForTimeout(600);
   await expect(page.locator("body")).toContainText(/investigation complete|result letter/i);
   // The provisional credit posted exactly once, and its notice email reached
-  // the customer's own thread (beat 2-24 focuses s1.thread).
+  // the customer's own thread (beat 2-22 focuses s1.thread.out).
   await expect(page.locator("body")).toContainText(/provisional credit posted/i);
   await expect(page.locator("[data-id='s1.phone.inbox']")).toBeVisible();
 });
