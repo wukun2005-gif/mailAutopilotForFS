@@ -42,55 +42,83 @@
 
 Day 0：一封邮件从不在档案里的公共 Gmail 地址进来。发件地址没在客户档案中，只能判到 I1——系统还不知道这封信是谁写的。
 
-### 1-4 · stepup · caption 5000 ms · audio 12.2s · email1.lockedCell · pointer s1.thread.out
+### 1-4 · day0 · caption 6000 ms · audio ? · email1.lockedTemplate · pointer s1.thread.out
 
-透支费退还 × I1 这一格是锁死的：这一封不自动退钱，也不自动写正文。客户收到的是一封固定模板，只告诉她去手机 App 里核验——邮件本身一个链接都没有。
+身份没确认之前，这封回信里没有任何链接、不带账户信息，只让客户到 App 里完成核验——退费这件事一个动作都没做。凡是能碰账户的操作，都收在核验之后的 App 里。
 
-### 1-6 · stepup · caption 5000 ms · audio 7.3s · email1.caseCard · pointer s1.phone.casecard
+### 1-6 · day0 · caption 6000 ms · audio 12.2s · email1.lockedCell · pointer s1.autonomy.cell.I1
+
+先看放权矩阵的这一行：动作风险是 R2——阈值内退费，属于可逆的低影响写。横轴是身份保障四档，本案例现在站在 I1 这一列。I1 只剩发件域名可信，关联不到具体账户，所以这一列不授予任何放权：这一封不自动退钱、不自动写正文，只发一封固定模板引导去手机核验。
+
+### 1-7 · day0 · caption 6000 ms · audio ? · email1.traceBefore · pointer s1.trace.entry.2
+
+同一段判定的第一次结果也进了决策卷宗：这一行写着「身份等级 I1」，紧跟其后的是当时缺的三条判据。改判之前的样子，就存档在这一行。
+
+### 1-10 · stepup · caption 5000 ms · audio 7.3s · email1.caseCard · pointer s1.phone.casecard
 
 核验在同一封邮件线程里完成：App 推一条通知，验证码发到档案内手机号，六位码填进去，案件继续自动往下走。
 
-### 1-10 · stepup · caption 6000 ms · audio ? · email1.identityUp · pointer s1.identity
+### 1-14 · stepup · caption 6000 ms · audio ? · email1.identityUp · pointer s1.identity.rise
 
-核验通过了，同一封线程里身份从 I1 升到 I3。看右边这一栏依据：发件地址仍然对不上客户档案，但“本次对话已完成核验”“已登录的安全消息会话”两条都过了，面板底部写着核验有效、保持 I3。
+核验在同一个对话里完成，身份就地重新定档：面板右上角 I1 划掉、变成 I3。判据没有全绿——发件地址仍然不在客户档案里，红叉还在——但'本次对话已完成核验'和'已登录的安全消息会话'这两条过了。
 
-### 1-12 · refund · caption 6000 ms · audio 23.6s · email1.i3refund · pointer s1.thread.out
+### 1-15 · stepup · caption 6000 ms · audio ? · email1.i3cell · pointer s1.autonomy.cell.I3
+
+同一行、同一条规则，标记挪到了 I3 这一列，格值从'不放权'变成 L3 自动执行——因为身份这条轴变了，别的什么都没变。这一格只在白名单意图、金额次数在阈值内、并且该意图已毕业时才可能到 L3。
+
+### 1-16 · stepup · caption 6000 ms · audio ? · email1.graduationCap · pointer s1.autonomy.cap
+
+矩阵还有第三根轴：毕业封顶。这条意图（透支费退费）已经毕业到 L3，才可能给到 L3 自动执行；从没毕业的意图，天花板就是 L0，身份再可信也只能转人工。
+
+### 1-17 · stepup · caption 6000 ms · audio ? · email1.traceAfter · pointer s1.trace.entry.7
+
+核验做完，同一段代码再跑一次，卷宗里多了这一行：「身份等级 I3」，缺的判据只剩一条（发件地址仍不在档案里）。更上面那行是第一次判的 I1——两行合起来，就是这次改判的机器记录。
+
+### 1-19 · refund · caption 6000 ms · audio 23.6s · email1.i3refund · pointer s1.thread.out
 
 同一套规则用新的身份重新算一次：这一格现在允许自动放行，35 美元透支费退到客户账上，回信还是三段拼装——固定模板、系统槽位、生成语句。发出去之前每封信都要过一遍合规检查，带 AI 身份披露和转人工入口。
 
-### 1-13 · refund · caption 6000 ms · audio 10.5s · email1.provenance · pointer s1.thread.out
+### 1-20 · refund · caption 6000 ms · audio 10.5s · email1.provenance · pointer s1.thread.out
 
 同一封信按来源上色：蓝色是固定模板，绿色是系统槽位（姓名、金额、日期、案件号），紫色是生成语句。
 
-### 1-16 · verified · caption 5000 ms · audio 11.8s · email1.verified · pointer s1.trace.entry@last
+### 1-22 · refund · caption 6000 ms · audio ? · email1.outboundGate · pointer s1.trace.entry.11
+
+信发出去之前还要过最后一道外发检查：缺 AI 披露、缺转人工入口就直接拦下。这一行说明这封退费确认信两条都齐，放行；真被拦下的信，卷宗里也会留下自己那一行。
+
+### 1-24 · verified · caption 5000 ms · audio 11.8s · email1.verified · pointer s1.trace.entry@last
 
 14 天没有新邮件、没有转人工、质检也没有推翻——审计轨上多出一行：计一次 verified 自主结案。卷宗封存留痕，人工改过的都回流成样本。
 
-### 1-19 · day21 · caption 6000 ms · audio ? · email1.secondRequest · pointer s1.thread.in
+### 1-27 · day21 · caption 6000 ms · audio ? · email1.secondRequest · pointer s1.thread.in
 
 Day 21，同一封线程里又来一封：客户第二次要求退还透支费。系统把它并进同一个案子，不新建；身份还是 I3，没有降。
 
-### 1-20 · day21 · caption 5000 ms · audio ? · email1.holding · pointer s1.thread.out
+### 1-28 · day21 · caption 5000 ms · audio ? · email1.holding · pointer s1.thread.out
 
 同一天银行回了第二封：先告诉客户已经收到，主管一个工作日内答复，并且明确写了可以要求人工复议。这一封不承诺结果。
 
-### 1-22 · day21 · caption 7000 ms · audio 16.2s · email1.secondWaiver · pointer s2.policy.row.OD-1.FAIL
+### 1-30 · day21 · caption 6000 ms · audio ? · email1.cellDowngrade · pointer s1.autonomy.cell.I3
+
+21 天后同一行再看一次：身份还是 I3，标记没动，但这一格的格值掉到 L2 一键审批。这次变的不是身份，是政策求值结果——放权级别取几个维度的最小值，任何一个维度收紧就降一级。
+
+### 1-33 · day21 · caption 7000 ms · audio 16.2s · email1.secondWaiver · pointer s2.policy.row.OD-1.FAIL
 
 为什么不自动退：透支费退还规则第一条要求“近 12 个月退免记录 ≤ 1 次”，现在这一栏是 2，所以这条判不通过，格子从自动放行降到一键审批。边界在政策求值结果，不在模型心情。
 
-### 1-24 · day21 · caption 5000 ms · audio 9.7s · email1.l2queue · pointer s3.approvalcard
+### 1-35 · day21 · caption 5000 ms · audio 9.7s · email1.l2queue · pointer s3.approvalcard
 
 解释草稿进主管队列——客户始终保留人工复议的入口。发出去同样要过合规检查，带披露和转人工入口。
 
-### 1-27 · day21 · caption 6000 ms · audio ? · email1.explanationSent · pointer s1.thread.out
+### 1-38 · day21 · caption 6000 ms · audio ? · email1.explanationSent · pointer s1.thread.out
 
 主管一点批准，解释函当场发回客户这一封线程：写清了为什么这次不能自动退、依据是哪一条、以及仍然可以要求复议。
 
-### 1-30 · day21 · caption 6000 ms · audio 11.4s · email1.secondClosed · pointer s1.trace.entry@last
+### 1-41 · day21 · caption 6000 ms · audio 11.4s · email1.secondClosed · pointer s1.trace.entry@last
 
 解释函发出 14 天没有新来件，审计轨上再多一行：第二拍关闭，按人工办结计入报表，纠正和修改回流样本，卷宗封存留痕。
 
-### 1-31 · outro · caption 6000 ms · audio 7.3s · email1.outro · pointer s1.thread
+### 1-42 · outro · caption 6000 ms · audio 7.3s · email1.outro · pointer s1.thread
 
 同一意图、同一客户，两种结局——因为那一格的值变了，而每次变化都说得清。
 

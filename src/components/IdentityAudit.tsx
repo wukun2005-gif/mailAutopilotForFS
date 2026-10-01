@@ -1,12 +1,21 @@
 // IdentityAudit — audit-view panel listing every I-level signal (PRD §6.2),
 // so the presenter can point at the screen instead of explaining verbally:
 // email 2's four I2 requirements, email 1's I3 basis and downgrade triggers.
+// `previousLevel` adds the before/after: when the level was re-rated inside this
+// thread (I1 → I3 after a step-up) the panel says so, which is the part an
+// audience cannot infer from a badge that only shows "now".
 import type { IdentityVerdict } from "@/runtime/identity.ts";
-import { Check, X } from "lucide-react";
+import { Check, X, ArrowRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 
-export function IdentityAudit({ identity }: { identity?: IdentityVerdict | null }) {
+export function IdentityAudit({
+  identity,
+  previousLevel,
+}: {
+  identity?: IdentityVerdict | null;
+  previousLevel?: string | null;
+}) {
   const { t } = useTranslation("customer");
   if (!identity) {
     return (
@@ -15,14 +24,32 @@ export function IdentityAudit({ identity }: { identity?: IdentityVerdict | null 
       </div>
     );
   }
+  const moved = previousLevel && previousLevel !== identity.level;
   return (
     <div className="rounded-lg border border-line bg-white p-3" data-id="s1.identity">
       <div className="flex items-center justify-between">
         <span className="text-[14px] font-semibold text-navy">{t("identity.title")}</span>
-        <span className="rounded bg-navy px-2 py-0.5 text-[15px] font-bold text-white">
-          {identity.level}
-        </span>
+        {moved ? (
+          <span className="inline-flex items-center gap-1" data-id="s1.identity.rise">
+            <span className="rounded bg-gray-200 px-1.5 py-0.5 font-mono text-[13px] font-bold text-gray-600 line-through">
+              {previousLevel}
+            </span>
+            <ArrowRight size={13} className="text-teal" />
+            <span className="rounded bg-teal px-2 py-0.5 text-[15px] font-bold text-white">
+              {identity.level}
+            </span>
+          </span>
+        ) : (
+          <span className="rounded bg-navy px-2 py-0.5 text-[15px] font-bold text-white">
+            {identity.level}
+          </span>
+        )}
       </div>
+      {moved && (
+        <div className="mt-1 rounded bg-teal-soft px-2 py-1 text-[13px] font-medium text-teal-dark">
+          {t("identity.rerated", { from: previousLevel, to: identity.level })}
+        </div>
+      )}
       <div className="mt-0.5 text-[13px] text-faint">
         {t(`identity.levels.${identity.level}`, { defaultValue: identity.level })}
       </div>

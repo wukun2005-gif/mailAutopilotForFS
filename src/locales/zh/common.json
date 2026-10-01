@@ -27,7 +27,8 @@
     "money_action": "动钱操作",
     "draft_signoff": "函件签发",
     "adjudication": "人工裁决",
-    "fraud_confirm": "欺诈隔离确认"
+    "fraud_confirm": "欺诈隔离确认",
+    "manual_review": "人工复核"
   },
   "approvalStatus": {
     "pending": "待审批",
@@ -79,7 +80,8 @@
       "spoofSignal": "AC3 仿冒信号",
       "newThread": "新线程（不继承 I3）",
       "noDigital": "未开通网银（链接兜底）",
-      "otpLockout": "OTP 锁定"
+      "otpLockout": "OTP 锁定",
+      "ocrLow": "OCR 低置信（下一次）"
     }
   }
 }

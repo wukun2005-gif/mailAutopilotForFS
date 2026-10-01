@@ -43,6 +43,7 @@
     "overdue": "OVERDUE",
     "hours": "{{count}}h",
     "due": "due {{date}}",
+    "noDue": "no deadline",
     "openCase": "open case",
     "allTitle": "all open disputes ({{count}})",
     "allNote": "the board is total — every open Reg E dispute is listed here, not only the case you have open",
@@ -60,6 +61,12 @@
     "pcNone": "no credit due",
     "current": "this case",
     "days": "{{count}}d"
+  },
+  "promise": {
+    "od2Reply": "customer promise · second-waiver reply (1 business day)",
+    "refund1bd": "customer promise · refund visible in 1 business day",
+    "card10bd": "customer promise · card arrival 10-business-day checkpoint",
+    "manualReview": "customer promise · low-confidence attachment to human review"
   },
   "fraud": {
     "empty": "no quarantined messages in this case — load the BEC/ATO case from the dev panel",

@@ -13,7 +13,7 @@ import type { ActionLedgerEntry } from "./state.ts";
 import type { NodeDeps, NodeFn } from "./graphNodes.ts";
 import { emailById, unwrap as unwrapEnvelope } from "./graphNodes.ts";
 import { appendEvent } from "./eventStore.ts";
-import { simClock } from "./simClock.ts";
+import { addBusinessDays, simClock } from "./simClock.ts";
 import { CUSTOMER_JANE, DISPUTE_EMAIL2 } from "@/mocks/fixtures/index.ts";
 import {
   cardDeliveryLetter,
@@ -50,6 +50,10 @@ export interface ResumePayload {
 }
 
 const OD2_APPROVAL = "AP-OD2-EXPLAIN";
+// FR-1.5: reviewer task for a low-confidence attachment — queued in the
+// supervisor desk, non-blocking (the customer letter promises a review, not a
+// deadline, and the dispute clock never waits on materials).
+const OCR_REVIEW_APPROVAL = "AP-OCR-REVIEW";
 
 async function emit(
   state: CaseStateType,
@@ -62,6 +66,7 @@ async function emit(
 
 function due(a: ApprovalItem): boolean {
   if (a.status !== "pending") return false;
+  if (a.blocking === false) return false; // FR-1.5 reviewer task: never pauses
   if (!a.clockDueAt) return true;
   return simClock.now() >= a.clockDueAt - 48 * 3600 * 1000;
 }
@@ -145,6 +150,19 @@ export function makeAct(deps: NodeDeps): NodeFn {
         if (existing >= 0) materials[existing] = row;
         else materials.push(row);
         if (r.gateDecision === "auto_slot") addDraft(materialsAckLetter(state.customerId));
+        else {
+          // FR-1.5: the letter promises a human review ("an agent will review
+          // it manually") — so a task actually has to exist for someone to
+          // pick up. Non-blocking: the same letter tells the customer the
+          // dispute timeline does not wait on it.
+          addDraft(materialsAckLetter(state.customerId, true));
+          addApproval({
+            id: OCR_REVIEW_APPROVAL, kind: "manual_review", intentCode: "reg_e_intake",
+            risk: "R1", lLevel: "L1",
+            title: "Manually review low-confidence attachment (OCR)",
+            status: "pending", blocking: false,
+          });
+        }
         await emit(state, "act", "tool_result", { ocr: att.id, gateDecision: r.gateDecision, flags: r.flags });
       }
       updates.materials = materials;
@@ -204,7 +222,10 @@ export function makeAct(deps: NodeDeps): NodeFn {
           updates.status = "pending_verify";
         } else if (cell.kind === "L" && cell.level === "L2") {
           // Holding reply goes out immediately (no approval linked); the
-          // final explanation waits for the supervisor.
+          // final explanation waits for the supervisor. FR-1.5: the holding
+          // letter promised a reply within one business day — the approval
+          // carries the same deadline as a countdown, and sending the
+          // explanation fulfills the promise clock.
           addDraft(secondWaiverHoldingLetter(state.customerId));
           const explanation = secondWaiverExplanationDraft(state.customerId);
           addDraft(explanation);
@@ -212,6 +233,7 @@ export function makeAct(deps: NodeDeps): NodeFn {
             id: OD2_APPROVAL, kind: "money_action", intentCode: "od_fee_refund",
             risk: "R2", lLevel: "L2", title: "Approve second-waiver explanation",
             draft: explanation, status: "pending",
+            clockDueAt: addBusinessDays(simClock.now(), 1),
           });
         }
       }

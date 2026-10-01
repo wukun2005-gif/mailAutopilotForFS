@@ -14,7 +14,7 @@ import {
   OD_FEES,
   REGE_RECEIPT_TEMPLATE,
 } from "@/mocks/fixtures/index.ts";
-import { simClock, utcYmd } from "./simClock.ts";
+import { addCalendarDays, DAY0_EPOCH, simClock, utcYmd } from "./simClock.ts";
 
 function tpl(text: string, source: string): DraftSection {
   return { kind: "template", textEn: text, source };
@@ -57,7 +57,7 @@ function base(
   channel: Draft["channel"],
   to: string,
   sections: DraftSection[],
-  opts: { subject?: string; lockedTemplate?: boolean } = {},
+  opts: { subject?: string; lockedTemplate?: boolean; promise?: Draft["promise"] } = {},
 ): Draft {
   return {
     id,
@@ -68,6 +68,7 @@ function base(
     sections,
     lockedTemplate: opts.lockedTemplate ?? false,
     dlpClean: true,
+    promise: opts.promise,
   };
 }
 
@@ -131,13 +132,24 @@ export function refundConfirmationLetter(to: string): Draft {
       "TPL_REFUND_CONFIRM_V2",
     ),
     ...disclosureFooter(),
-  ]);
+  ], {
+    // FR-1.5: "within one business day" is a dated promise. The refund write
+    // already executed before this letter went out, so the ledger fulfils it
+    // the moment it registers (in production the posting is what gets tracked).
+    promise: {
+      labelKey: "promise.refund1bd",
+      dueInBusinessDays: 1,
+      fulfillByActionType: "refund_od_fee",
+    },
+  });
 }
 
 // ── Email 1, beat 2: L2 explanation draft (second waiver in 12 months) ──
 
 // Holding reply: auto-sent the moment the second request arrives. It promises
-// the supervisor review; it is NOT the review outcome.
+// the supervisor review; it is NOT the review outcome. FR-1.5: the "within one
+// business day" sentence is a customer-facing promise — registered as a
+// promise clock the moment this letter goes out, fulfilled by DR-OD2-EXPLAIN.
 export function secondWaiverHoldingLetter(to: string): Draft {
   return base("DR-OD2-HOLDING", "od_fee_refund", "email", to, [
     ai(
@@ -148,7 +160,14 @@ export function secondWaiverHoldingLetter(to: string): Draft {
         "you can also ask us to reconsider if you believe there is a special circumstance.",
     ),
     ...disclosureFooter(),
-  ], { subject: "About your recent overdraft fee" });
+  ], {
+    subject: "About your recent overdraft fee",
+    promise: {
+      labelKey: "promise.od2Reply",
+      dueInBusinessDays: 1,
+      fulfillByDraftId: "DR-OD2-EXPLAIN",
+    },
+  });
 }
 
 // Final letter: sent only after the supervisor approves. Past tense — the
@@ -188,7 +207,17 @@ export function cardDeliveryLetter(to: string): Draft {
       "TPL_CARD_STATUS_V1",
     ),
     ...disclosureFooter(),
-  ], { subject: "Your replacement card is on its way" });
+  ], {
+    subject: "Your replacement card is on its way",
+    // FR-1.5: the letter dates the promise twice — arrive by ETA (Day 8,
+    // fixture-carried) and a 10-business-day reissue checkpoint. The clock
+    // runs to the checkpoint; the fixture's ETA is what fulfils it.
+    promise: {
+      labelKey: "promise.card10bd",
+      dueInBusinessDays: 10,
+      fulfillByEpoch: new Date(addCalendarDays(DAY0_EPOCH, r.etaDayN)).toISOString(),
+    },
+  });
 }
 
 // ── Email 2: Reg E acknowledgment receipt ──
@@ -259,7 +288,20 @@ export function materialsAckLetter(to: string, ocrLow = false): Draft {
       "TPL_MATERIALS_ACK_V1",
     ),
     ...disclosureFooter(),
-  ], { subject: "We received your statement" });
+  ], {
+    subject: "We received your statement",
+    // FR-1.5 without a deadline: "an agent will review it manually" is a
+    // promise of action, not of time — registered open, no due date, and
+    // fulfilled when the reviewer clears the queued task.
+    ...(ocrLow
+      ? {
+          promise: {
+            labelKey: "promise.manualReview",
+            fulfillByApprovalId: "AP-OCR-REVIEW",
+          },
+        }
+      : {}),
+  });
 }
 
 // ── Email 2 Day 45: result letters (L1 human sign-off) ──

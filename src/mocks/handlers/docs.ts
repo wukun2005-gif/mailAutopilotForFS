@@ -2,6 +2,7 @@
 // Low confidence becomes a "missing material", never an auto-filled slot.
 import { http } from "msw";
 import { envelope, jsonOk, mockLatency } from "./util.ts";
+import { faultController } from "@/tools/faultController.ts";
 
 interface OcrRecord {
   attachmentId: string;
@@ -39,6 +40,9 @@ export const docsHandlers = [
     const body = (await request.json().catch(() => ({}))) as Record<string, unknown>;
     const attachmentId = String(body.attachmentId ?? "");
     await mockLatency(500);
+    // One-shot demo fault: force THIS read low so the FR-1.5 manual-review
+    // path (promise letter + non-blocking reviewer task) can be shown live.
+    const forcedLow = faultController.consume("ocrLow");
     const rec = OCR_RESULTS[attachmentId];
     if (!rec) {
       return jsonOk(
@@ -51,10 +55,16 @@ export const docsHandlers = [
         }),
       );
     }
+    const low = forcedLow || rec.confidence < 0.9;
     return jsonOk(
       envelope({
         ...rec,
-        gateDecision: rec.confidence >= 0.9 ? "auto_slot" : "missing_material",
+        confidence: forcedLow ? 0.47 : rec.confidence,
+        flags:
+          forcedLow && !rec.flags.includes("LOW_CONFIDENCE")
+            ? [...rec.flags, "LOW_CONFIDENCE"]
+            : rec.flags,
+        gateDecision: low ? "missing_material" : "auto_slot",
       }),
     );
   }),

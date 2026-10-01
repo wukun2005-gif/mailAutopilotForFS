@@ -68,6 +68,7 @@
     "AP-ADJUDICATION": "Human adjudication — merchant evidence arrived (Day 40)",
     "AP-RESULTSIGN": "Sign and send investigation result letter",
     "AP-OD2-EXPLAIN": "Approve second-waiver explanation",
-    "AP-FRAUD-CONFIRM": "Confirm BEC/ATO quarantine"
+    "AP-FRAUD-CONFIRM": "Confirm BEC/ATO quarantine",
+    "AP-OCR-REVIEW": "Manually review low-confidence attachment (OCR)"
   }
 }

@@ -43,14 +43,21 @@ const trailer: DemoScript = {
 // ── Email 1 (~3min): unauthenticated public mailbox → step-up → L3 refund;
 //    second waiver in the same thread stays human.
 //
-//    Flow rules for this script:
-//      · the customer view is the default stage; the supervisor screen is
-//        where a human decides, so that is where the human beats live;
-//      · the agent dossier is visited only for the one beat whose whole point
-//        is a machine verdict (the failing policy condition);
-//      · whenever identity changes, the audit view is opened AT THAT MOMENT,
-//        because the level badge and its signals are the evidence for the
-//        decision the caption is about to describe.
+//    What this script has to carry (PRD §6.1b differentiators, not the whole
+//    PRD — D2/D3/D6 live in the other scripts):
+//      · D1 三维放权矩阵 — twice, and shown rather than said: once with the
+//        case sitting in the locked I1 column, once with the same row re-read
+//        at I3 and the verdict flipped to auto-execute. The row itself is the
+//        audit view's matrix strip, and the marker moves because the identity
+//        was re-rated, not because the script drew anything.
+//      · D5 片段级受控生成 — the refund letter, coloured by source, on the
+//        customer's own screen.
+//      · D4 (the slice that belongs here) — the locked template carries no
+//        link, and every letter passes the outbound check with AI disclosure
+//        and a human handoff.
+//    The audit view is opened only for the two moments where the difference is
+//    the point (the matrix before/after) and closed again immediately, so the
+//    customer view never carries two panels the audience has to read.
 // ─────────────────────────────────────────────────────────────────────────
 const email1: DemoScript = {
   id: "email1",
@@ -60,38 +67,65 @@ const email1: DemoScript = {
     { id: "1-1", chapter: "day0", action: { t: "load", scenario: "email1" } },
     { id: "1-2", chapter: "day0", action: { t: "inject", emailId: "EM-1-IN-1" } },
     { id: "1-3", chapter: "day0", action: { t: "tooltip", key: "email1.publicMailbox", ms: 6000, focus: "s1.thread.in" } },
-    { id: "1-4", chapter: "stepup", action: { t: "tooltip", key: "email1.lockedCell", ms: 5000, focus: "s1.thread.out" } },
-    { id: "1-5", chapter: "stepup", action: { t: "cursor", target: "s1.phone.push", click: true, wait: 900 } },
-    { id: "1-6", chapter: "stepup", action: { t: "tooltip", key: "email1.caseCard", ms: 5000, focus: "s1.phone.casecard" } },
-    { id: "1-7", chapter: "stepup", action: { t: "cursor", target: "s1.phone.otp", type: "111111", wait: 500 } },
-    { id: "1-8", chapter: "stepup", action: { t: "cursor", target: "s1.phone.verify", click: true, wait: 1600 } },
-    // Identity moved I1 -> I3 one click ago. Open the audit view NOW: the level
-    // badge and the signal list are the evidence for everything said next.
-    { id: "1-9", chapter: "stepup", action: { t: "cursor", target: "s1.view.audit", click: true, wait: 1200 } },
-    { id: "1-10", chapter: "stepup", action: { t: "tooltip", key: "email1.identityUp", ms: 6000, focus: "s1.identity" } },
-    { id: "1-11", chapter: "refund", action: { t: "cursor", target: "s1.view.customer", click: true, wait: 1000 } },
-    { id: "1-12", chapter: "refund", action: { t: "tooltip", key: "email1.i3refund", ms: 6000, focus: "s1.thread.out" } },
-    { id: "1-13", chapter: "refund", action: { t: "tooltip", key: "email1.provenance", ms: 6000, focus: "s1.thread.out" } },
-    { id: "1-14", chapter: "verified", action: { t: "cursor", target: "s1.view.audit", click: true, wait: 1200 } },
-    { id: "1-15", chapter: "verified", action: { t: "clock", to: "verify14d" } },
-    { id: "1-16", chapter: "verified", action: { t: "tooltip", key: "email1.verified", ms: 5000, focus: "s1.trace.entry@last" } },
-    { id: "1-17", chapter: "day21", action: { t: "cursor", target: "s1.view.customer", click: true, wait: 1000 } },
-    { id: "1-18", chapter: "day21", action: { t: "inject", emailId: "EM-1-IN-2" } },
-    { id: "1-19", chapter: "day21", action: { t: "tooltip", key: "email1.secondRequest", ms: 6000, focus: "s1.thread.in" } },
-    { id: "1-20", chapter: "day21", action: { t: "tooltip", key: "email1.holding", ms: 5000, focus: "s1.thread.out" } },
-    // The only agent-screen beat: the reason this second request stops is a
-    // policy condition, and the condition is only readable here.
-    { id: "1-21", chapter: "day21", action: { t: "goto", screen: "agent" } },
-    { id: "1-22", chapter: "day21", action: { t: "tooltip", key: "email1.secondWaiver", ms: 7000, focus: "s2.policy.row.OD-1.FAIL" } },
-    { id: "1-23", chapter: "day21", action: { t: "goto", screen: "supervisor" } },
-    { id: "1-24", chapter: "day21", action: { t: "tooltip", key: "email1.l2queue", ms: 5000, focus: "s3.approvalcard" } },
-    { id: "1-25", chapter: "day21", action: { t: "cursor", target: "s3.approve", click: true, require: true, wait: 1600 } },
-    { id: "1-26", chapter: "day21", action: { t: "goto", screen: "customer" } },
-    { id: "1-27", chapter: "day21", action: { t: "tooltip", key: "email1.explanationSent", ms: 6000, focus: "s1.thread.out" } },
-    { id: "1-28", chapter: "day21", action: { t: "clock", to: "verify14d" } },
+    // D4 (the slice that belongs to this story): the unverified reply is a
+    // written-in-advance template with no link in it — said while pointing at
+    // that very letter in the customer's own thread.
+    { id: "1-4", chapter: "day0", action: { t: "tooltip", key: "email1.lockedTemplate", ms: 6000, focus: "s1.thread.out" } },
+    // D1 before: the case is in the R2 row, identity I1, and that column
+    // grants nothing. Show the row, point at the column it is standing in.
+    { id: "1-5", chapter: "day0", action: { t: "cursor", target: "s1.view.audit", click: true, wait: 1200 } },
+    { id: "1-6", chapter: "day0", action: { t: "tooltip", key: "email1.lockedCell", ms: 6000, focus: "s1.autonomy.cell.I1" } },
+    // The dossier side of the same "before": the machine's own filed verdict
+    // (seq 2 = the day-0 identity check) says I1. seq ids are stable because
+    // the trajectory is deterministic — verified by the screenshots pass.
+    { id: "1-7", chapter: "day0", action: { t: "tooltip", key: "email1.traceBefore", ms: 6000, focus: "s1.trace.entry.2" } },
+    { id: "1-8", chapter: "stepup", action: { t: "cursor", target: "s1.view.customer", click: true, wait: 1000 } },
+    { id: "1-9", chapter: "stepup", action: { t: "cursor", target: "s1.phone.push", click: true, wait: 900 } },
+    { id: "1-10", chapter: "stepup", action: { t: "tooltip", key: "email1.caseCard", ms: 5000, focus: "s1.phone.casecard" } },
+    { id: "1-11", chapter: "stepup", action: { t: "cursor", target: "s1.phone.otp", type: "111111", wait: 500 } },
+    { id: "1-12", chapter: "stepup", action: { t: "cursor", target: "s1.phone.verify", click: true, wait: 1600 } },
+    // D1 after: identity was re-rated one click ago, so the same row is read
+    // again. Same screen, same row, different column, different verdict.
+    { id: "1-13", chapter: "stepup", action: { t: "cursor", target: "s1.view.audit", click: true, wait: 1200 } },
+    { id: "1-14", chapter: "stepup", action: { t: "tooltip", key: "email1.identityUp", ms: 6000, focus: "s1.identity.rise" } },
+    { id: "1-15", chapter: "stepup", action: { t: "tooltip", key: "email1.i3cell", ms: 6000, focus: "s1.autonomy.cell.I3" } },
+    // D1's third axis (R, I, and the graduation ceiling) — visible next to the
+    // cell it is capping instead of living only in the caption.
+    { id: "1-16", chapter: "stepup", action: { t: "tooltip", key: "email1.graduationCap", ms: 6000, focus: "s1.autonomy.cap" } },
+    // …and the dossier side of the "after": seq 7 is the second identity
+    // check, I3, filed right below the day-0 one.
+    { id: "1-17", chapter: "stepup", action: { t: "tooltip", key: "email1.traceAfter", ms: 6000, focus: "s1.trace.entry.7" } },
+    { id: "1-18", chapter: "refund", action: { t: "cursor", target: "s1.view.customer", click: true, wait: 1000 } },
+    { id: "1-19", chapter: "refund", action: { t: "tooltip", key: "email1.i3refund", ms: 6000, focus: "s1.thread.out" } },
+    { id: "1-20", chapter: "refund", action: { t: "tooltip", key: "email1.provenance", ms: 6000, focus: "s1.thread.out" } },
+    // D4's outbound gate: the check the caption just claimed, shown as the
+    // line the system itself wrote (seq 11 = the refund letter's check).
+    { id: "1-21", chapter: "refund", action: { t: "cursor", target: "s1.view.audit", click: true, wait: 1200 } },
+    { id: "1-22", chapter: "refund", action: { t: "tooltip", key: "email1.outboundGate", ms: 6000, focus: "s1.trace.entry.11" } },
+    { id: "1-23", chapter: "verified", action: { t: "clock", to: "verify14d" } },
+    { id: "1-24", chapter: "verified", action: { t: "tooltip", key: "email1.verified", ms: 5000, focus: "s1.trace.entry@last" } },
+    { id: "1-25", chapter: "day21", action: { t: "cursor", target: "s1.view.customer", click: true, wait: 1000 } },
+    { id: "1-26", chapter: "day21", action: { t: "inject", emailId: "EM-1-IN-2" } },
+    { id: "1-27", chapter: "day21", action: { t: "tooltip", key: "email1.secondRequest", ms: 6000, focus: "s1.thread.in" } },
+    { id: "1-28", chapter: "day21", action: { t: "tooltip", key: "email1.holding", ms: 5000, focus: "s1.thread.out" } },
+    // D1 third read, same strip: identity is still I3, but the policy condition
+    // now fails, so the same cell lands on one-click approval instead of auto.
     { id: "1-29", chapter: "day21", action: { t: "cursor", target: "s1.view.audit", click: true, wait: 1200 } },
-    { id: "1-30", chapter: "day21", action: { t: "tooltip", key: "email1.secondClosed", ms: 6000, focus: "s1.trace.entry@last" } },
-    { id: "1-31", chapter: "outro", action: { t: "tooltip", key: "email1.outro", ms: 6000, focus: "s1.thread" } },
+    { id: "1-30", chapter: "day21", action: { t: "tooltip", key: "email1.cellDowngrade", ms: 6000, focus: "s1.autonomy.cell.I3" } },
+    { id: "1-31", chapter: "day21", action: { t: "cursor", target: "s1.view.customer", click: true, wait: 1000 } },
+    // The only agent-screen beat: which policy condition failed, and by how
+    // much. The reason is only readable there.
+    { id: "1-32", chapter: "day21", action: { t: "goto", screen: "agent" } },
+    { id: "1-33", chapter: "day21", action: { t: "tooltip", key: "email1.secondWaiver", ms: 7000, focus: "s2.policy.row.OD-1.FAIL" } },
+    { id: "1-34", chapter: "day21", action: { t: "goto", screen: "supervisor" } },
+    { id: "1-35", chapter: "day21", action: { t: "tooltip", key: "email1.l2queue", ms: 5000, focus: "s3.approvalcard" } },
+    { id: "1-36", chapter: "day21", action: { t: "cursor", target: "s3.approve", click: true, require: true, wait: 1600 } },
+    { id: "1-37", chapter: "day21", action: { t: "goto", screen: "customer" } },
+    { id: "1-38", chapter: "day21", action: { t: "tooltip", key: "email1.explanationSent", ms: 6000, focus: "s1.thread.out" } },
+    { id: "1-39", chapter: "day21", action: { t: "clock", to: "verify14d" } },
+    { id: "1-40", chapter: "day21", action: { t: "cursor", target: "s1.view.audit", click: true, wait: 1200 } },
+    { id: "1-41", chapter: "day21", action: { t: "tooltip", key: "email1.secondClosed", ms: 6000, focus: "s1.trace.entry@last" } },
+    { id: "1-42", chapter: "outro", action: { t: "tooltip", key: "email1.outro", ms: 6000, focus: "s1.thread" } },
   ],
 };
 

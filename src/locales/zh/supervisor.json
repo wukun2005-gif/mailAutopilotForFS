@@ -43,6 +43,7 @@
     "overdue": "已逾期",
     "hours": "{{count}} 小时",
     "due": "{{date}} 到期",
+    "noDue": "无到期日",
     "openCase": "打开案件",
     "allTitle": "全部在办争议（{{count}} 件）",
     "allNote": "看板是全量的——所有在办 Reg E 争议都列在这里，不只是手上打开的这一案",
@@ -60,6 +61,12 @@
     "pcNone": "无需贷记",
     "current": "本案",
     "days": "{{count}} 天"
+  },
+  "promise": {
+    "od2Reply": "对客承诺 · 二次退费回复（1 个工作日）",
+    "refund1bd": "对客承诺 · 退款 1 个工作日到账",
+    "card10bd": "对客承诺 · 新卡 10 个工作日检查点",
+    "manualReview": "对客承诺 · 低置信附件转人工复核"
   },
   "fraud": {
     "empty": "本案没有隔离邮件——从原型控制面板加载 BEC/ATO 案件",

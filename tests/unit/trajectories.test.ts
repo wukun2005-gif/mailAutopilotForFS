@@ -7,6 +7,7 @@ import { handlers } from "@/mocks/handlers.ts";
 import { setGatewayBase } from "@/runtime/gateway.ts";
 import { CaseRunner } from "@/runtime/caseRunner.ts";
 import { draftText } from "@/runtime/graphRespond.ts";
+import { simClock } from "@/runtime/simClock.ts";
 import { faultController } from "@/tools/faultController.ts";
 
 const server = setupServer(...handlers);
@@ -53,6 +54,13 @@ describe("email 1 — overdraft fee: deny → step-up → auto refund → verifi
     const refundDraft = snap.state.drafts.find((d) => d.id === "DR-OD1-REFUND");
     expect(refundDraft && draftText(refundDraft)).toContain("AI assistant");
     expect(refundDraft && draftText(refundDraft)).toContain("HUMAN");
+    // FR-1.5: the refund letter's "within one business day" promise registers
+    // on send and is fulfilled from the ledger — the refund write already
+    // landed before the letter went out, so no fulfilment letter is needed.
+    const pcRefund = snap.state.promiseClocks.find((p) => p.id === "PC:DR-OD1-REFUND");
+    expect(pcRefund?.dueAt).toBeGreaterThan(simClock.now());
+    expect(pcRefund?.fulfillByActionType).toBe("refund_od_fee");
+    expect(pcRefund?.fulfilledAt).toBeGreaterThan(0);
 
     // +14 calendar days, no repeat contact → verified resolution.
     snap = await r.advance("verify14d");
@@ -77,9 +85,22 @@ describe("email 1 — overdraft fee: deny → step-up → auto refund → verifi
     expect(snap.state.outbound.some((o) => o.draftId === "DR-OD2-HOLDING")).toBe(true);
     // No explanation sent before supervisor approval.
     expect(snap.state.outbound.some((o) => o.draftId === "DR-OD2-EXPLAIN")).toBe(false);
+    // FR-1.5: the promise ("reply within one business day") is registered the
+    // moment the holding letter goes out — due = send + 1 business day — and
+    // is NOT yet fulfilled. Approval carries the same deadline as countdown.
+    const pc0 = snap.state.promiseClocks.find((p) => p.id === "PC:DR-OD2-HOLDING");
+    expect(pc0?.sourceDraftId).toBe("DR-OD2-HOLDING");
+    expect(pc0?.fulfillByDraftId).toBe("DR-OD2-EXPLAIN");
+    expect(pc0?.dueAt).toBeGreaterThan(simClock.now());
+    expect(pc0?.fulfilledAt).toBeUndefined();
+    expect(approval?.clockDueAt).toBe(pc0?.dueAt);
 
     const done = await r.approve({ approvalId: "AP-OD2-EXPLAIN", decision: "approve" });
     expect(done.state.outbound.some((o) => o.draftId === "DR-OD2-EXPLAIN")).toBe(true);
+    // FR-1.5: the explanation going out fulfills the promise clock.
+    const pc1 = done.state.promiseClocks.find((p) => p.id === "PC:DR-OD2-HOLDING");
+    expect(pc1?.fulfilledAt).toBeGreaterThan(0);
+    expect(pc1?.dueAt).toBe(pc0?.dueAt);
     // Refund ledger still shows exactly one refund (second waiver never auto-paid).
     expect(
       done.state.actions.filter((a) => a.actionType === "refund_od_fee" && a.status === "done"),
@@ -131,6 +152,12 @@ describe("email 2 — Reg E dispute: intake, clocks, restart-safe provisional cr
     const receipt = snap.state.drafts.find((d) => d.id === "DR-REGE-RECEIPT");
     expect(receipt && draftText(receipt)).toContain("AI assistant");
     expect(receipt && draftText(receipt)).toContain("HUMAN");
+    // FR-1.5: the card letter's 10-business-day promise registers on send and
+    // stays open until the fixture ETA (Day 8) is reached.
+    const pcCard = snap.state.promiseClocks.find((p) => p.id === "PC:DR-CARD-STATUS");
+    expect(pcCard?.dueAt).toBeGreaterThan(simClock.now());
+    expect(pcCard?.fulfillByEpoch).toBeTruthy();
+    expect(pcCard?.fulfilledAt).toBeUndefined();
   });
 
   it("denies transaction detail below I3, releases it after same-thread step-up", async () => {
@@ -157,6 +184,52 @@ describe("email 2 — Reg E dispute: intake, clocks, restart-safe provisional cr
     expect(snap.state.outbound.some((o) => o.draftId === "DR-MATERIALS-ACK")).toBe(true);
   });
 
+  it("FR-1.5: low-confidence OCR promises a human review, queues a non-blocking task, never pauses", async () => {
+    const r = new CaseRunner("email2");
+    await r.reset();
+    await r.injectEmail("EM-2-IN-1");
+    // One-shot fault: the Day-6 statement reads low-confidence.
+    faultController.set("ocrLow", true);
+    const snap = await r.injectEmail("EM-2-IN-2");
+    expect(faultController.isOn("ocrLow")).toBe(false); // consumed by the OCR read
+
+    // Material stays with the human; the letter promises a manual review.
+    const mat = snap.state.materials.find((m) => m.code === "ATT-SIGNED");
+    expect(mat?.status).toBe("ocr_low_confidence");
+    expect(snap.state.outbound.some((o) => o.draftId === "DR-MATERIALS-ACK")).toBe(true);
+    const ack = snap.state.drafts.find((d) => d.id === "DR-MATERIALS-ACK");
+    expect(ack && draftText(ack)).toContain("review it manually");
+
+    // The promise has a task behind it — and the task must not pause the case.
+    const task = snap.state.approvals.find((a) => a.id === "AP-OCR-REVIEW");
+    expect(task?.status).toBe("pending");
+    expect(task?.blocking).toBe(false);
+    expect(snap.interrupted).toBe(false);
+    expect(snap.state.status).not.toBe("awaiting_human");
+
+    // Registered open: the letter promises an action, not a time.
+    const pc = snap.state.promiseClocks.find((p) => p.id === "PC:DR-MATERIALS-ACK");
+    expect(pc?.dueAt).toBeUndefined();
+    expect(pc?.fulfillByApprovalId).toBe("AP-OCR-REVIEW");
+    expect(pc?.fulfilledAt).toBeUndefined();
+
+    // The case keeps running: at bd10 the PAUSE is the PC approval only.
+    const atBd10 = await r.advance("bd10");
+    expect(atBd10.interrupted).toBe(true);
+    expect(
+      atBd10.state.approvals.filter((a) => a.status === "pending").map((a) => a.id).sort(),
+    ).toEqual(["AP-OCR-REVIEW", "AP-PCREDIT"]);
+
+    // Clearing the reviewer task fulfils the promise; the PC approval still holds.
+    const done = await r.approve({ approvalId: "AP-OCR-REVIEW", decision: "approve" });
+    const pc2 = done.state.promiseClocks.find((p) => p.id === "PC:DR-MATERIALS-ACK");
+    expect(pc2?.fulfilledAt).toBeGreaterThan(0);
+    expect(
+      done.state.approvals.filter((a) => a.status === "pending").map((a) => a.id),
+    ).toEqual(["AP-PCREDIT"]);
+    expect(done.interrupted).toBe(true);
+  });
+
   it("posts provisional credit exactly once across a restart (bd10 deadline)", async () => {
     const r = new CaseRunner("email2");
     await r.reset();
@@ -164,6 +237,10 @@ describe("email 2 — Reg E dispute: intake, clocks, restart-safe provisional cr
     let snap = await r.advance("bd10");
     expect(snap.interrupted).toBe(true);
     expect(snap.next).toContain("n_human_checkpoint");
+    // FR-1.5: the card-arrival promise (ETA Day 8) is fulfilled now that the
+    // case clock has passed it — on a turn that sent no new letter.
+    const pcCard = snap.state.promiseClocks.find((p) => p.id === "PC:DR-CARD-STATUS");
+    expect(pcCard?.fulfilledAt).toBeGreaterThan(0);
 
     // Simulate process restart: brand-new graph instance, same IDB checkpointer.
     const r2 = new CaseRunner("email2");

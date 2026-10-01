@@ -136,7 +136,8 @@
       "NOT_GRADUATED_FAIL_CLOSED_L0": "意图未毕业，先关闸转人工",
       "POLICY_VERSION_FALLBACK_CAP_L2": "政策版本降级，上限压到 L2",
       "UNKNOWN_RISK_FAIL_CLOSED": "风险档未知，先关闸转人工"
-    }
+    },
+    "rerated": "本对话内重新定档：{{from}} → {{to}}（新判据已成立）"
   },
   "clock": {
     "badge": "Reg E · 第 {{day}} 天 · 临时贷记 {{state}}",
@@ -283,5 +284,23 @@
     "gateGeneric": "闸门已完成判定",
     "fr52Pass": "外发检查：{{draft}} 含 AI 披露与转人工入口 → 放行",
     "fr52Blocked": "{{draft}} 拦截：缺少 AI 披露或转人工入口"
+  },
+  "matrix": {
+    "stripTitle": "放权矩阵 · 本案例",
+    "stripSub": "动作风险 × 身份保障 → 放权级别",
+    "thisCase": "本案例",
+    "denySub": "只给固定话术",
+    "neverSub": "工具层无此能力",
+    "capLabel": "L 轴 · 毕业封顶",
+    "capNone": "未毕业 · 最高 L0",
+    "capSome": "已毕业 · 最高 {{level}}"
+  },
+  "cell": {
+    "deny": "不放权",
+    "denySub": "无自动动作",
+    "never": "永不自动",
+    "neverSub": "工具层无此能力",
+    "stripTitle": "放权矩阵 · 本案这一行",
+    "stripSub": "动作风险 × 身份保障 → 放权级别"
   }
 }

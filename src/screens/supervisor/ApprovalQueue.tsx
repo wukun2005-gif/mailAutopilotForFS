@@ -166,7 +166,10 @@ function ApprovalCard({ a }: { a: ApprovalItem }) {
 
 export function ApprovalQueue({ state }: { state: CaseStateType }) {
   const { t } = useTranslation("supervisor");
-  const pending = (state.approvals ?? []).filter((a) => a.status === "pending");
+  const pending = (state.approvals ?? []).filter((a) => a.status === "pending")
+    // Blocking approvals first: scripted demo clicks target the first card,
+    // and the pause-causing decision must be that card, not a reviewer task.
+    .sort((a, b) => Number(a.blocking !== false) - Number(b.blocking !== false));
   // Batch eligibility: same intent + same locked template, L1/L2 drafts,
   // never clock-driven case-specific actions (e.g. provisional credit).
   const batchGroups = new Map<string, ApprovalItem[]>();

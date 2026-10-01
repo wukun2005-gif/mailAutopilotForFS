@@ -14,7 +14,8 @@ import {
   type EmailMessage,
   type FraudSignals,
 } from "@/mocks/fixtures/index.ts";
-import { recordedTriage, graduatedLevel, intentSpec, parallelSignals } from "./intentRegistry.ts";
+import { recordedTriage, intentSpec, parallelSignals } from "./intentRegistry.ts";
+import { autonomyInput } from "./autonomyView.ts";
 import { evaluateIdentity } from "./identitySignals.ts";
 import { evaluatePack } from "./policyEngine.ts";
 import { decideCell } from "./gates.ts";
@@ -250,27 +251,15 @@ export function makeAutonomy(): NodeFn {
     const emailId = state.currentEmailId;
     if (!emailId) return {};
     const level = state.identity?.level ?? "I0";
-    const priorRefunds = state.actions.filter(
-      (a) => a.actionType === "refund_od_fee" && a.status === "done",
-    ).length;
 
     const decisions = state.intents
       .filter((i) => i.sourceEmailId === emailId)
       .map((hit) => {
         const spec = intentSpec(hit.intentCode);
-        const card = state.policyCards.find(
-          (p) => p.sourceEmailId === emailId && p.intentCode === hit.intentCode,
-        );
-        const cell = decideCell({
-          intentCode: hit.intentCode,
-          risk: spec.risk,
-          identity: level,
-          policyOverall: card?.overall ?? (spec.policyPackId ? "NOT_RUN" : "NOT_RUN"),
-          graduatedL: graduatedLevel(hit.intentCode),
-          secondWaiverWithin12m:
-            hit.intentCode === "od_fee_refund" && priorRefunds >= 1,
-          fraudSuspected: state.fraud.quarantined,
-        });
+        // Same input builder the audit-view matrix strip calls (autonomyView.ts):
+        // one source of truth for what the matrix is asked, so the row the
+        // presenter sees can never disagree with the applied verdict.
+        const cell = decideCell(autonomyInput(state, hit.intentCode, spec.risk, emailId));
         return {
           intentCode: hit.intentCode,
           sourceEmailId: emailId,

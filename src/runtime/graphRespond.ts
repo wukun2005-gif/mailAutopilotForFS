@@ -1,12 +1,12 @@
 // Node 8 — respond: DLP final scan, three-segment letter assembly, send only
 // drafts that are either autonomous or explicitly approved. The fraud locked
 // template is recorded for SAR but never transmitted to the forged address.
-import type { CaseStateType, Draft, OutboundRecord } from "./caseState.ts";
+import type { CaseStateType, Draft, OutboundRecord, PromiseClock } from "./caseState.ts";
 import type { ActionLedgerEntry as ALE } from "./state.ts";
 import type { NodeDeps, NodeFn } from "./graphNodes.ts";
 import { unwrap as unwrapEnvelope } from "./graphNodes.ts";
 import { appendEvent } from "./eventStore.ts";
-import { simClock } from "./simClock.ts";
+import { addBusinessDays, simClock } from "./simClock.ts";
 
 export function draftText(d: Draft): string {
   if (d.editedText) return d.editedText;
@@ -41,6 +41,51 @@ export function makeRespond(deps: NodeDeps): NodeFn {
   return async (state) => {
     const outbound: OutboundRecord[] = [];
     const actionEntries: ALE[] = [];
+    // FR-1.5 promise clocks: register when the promising letter actually goes
+    // out; fulfill from the declared condition — the fulfilment letter going
+    // out, a ledger action landing, an approval clearing, or a fixture ETA
+    // being reached. All plain arithmetic on state — no model judgment.
+    const promiseUpdates = new Map<string, PromiseClock>();
+    const registerPromise = (d: Draft) => {
+      if (!d.promise) return;
+      const id = `PC:${d.id}`;
+      if (state.promiseClocks.some((p) => p.id === id) || promiseUpdates.has(id)) return;
+      promiseUpdates.set(id, {
+        id,
+        sourceDraftId: d.id,
+        labelKey: d.promise.labelKey,
+        dueAt:
+          d.promise.dueInBusinessDays != null
+            ? addBusinessDays(simClock.now(), d.promise.dueInBusinessDays)
+            : undefined,
+        fulfillByDraftId: d.promise.fulfillByDraftId,
+        fulfillByActionType: d.promise.fulfillByActionType,
+        fulfillByApprovalId: d.promise.fulfillByApprovalId,
+        fulfillByEpoch: d.promise.fulfillByEpoch,
+      });
+    };
+    // One pass over every open promise; any satisfied condition stamps
+    // fulfilledAt. Called with the just-sent draft id on each send, and once
+    // after the loop so clock turns (no new outbound) still close promises.
+    const evalFulfill = (sentDraftId?: string) => {
+      for (const p of [...(state.promiseClocks ?? []), ...promiseUpdates.values()]) {
+        if (p.fulfilledAt) continue;
+        const hit =
+          (!!sentDraftId && p.fulfillByDraftId === sentDraftId) ||
+          (!!p.fulfillByActionType &&
+            state.actions.some(
+              (a) => a.actionType === p.fulfillByActionType && a.status === "done",
+            )) ||
+          (!!p.fulfillByApprovalId &&
+            (state.approvals ?? []).some(
+              (a) =>
+                a.id === p.fulfillByApprovalId &&
+                (a.status === "approved" || a.status === "edited"),
+            )) ||
+          (!!p.fulfillByEpoch && simClock.now() >= Date.parse(p.fulfillByEpoch));
+        if (hit) promiseUpdates.set(p.id, { ...p, fulfilledAt: simClock.now() });
+      }
+    };
     for (const draft of state.drafts) {
       if (state.outbound.some((o) => o.id === `OB:${draft.id}`)) continue;
       const linked = state.approvals.find((a) => a.draft?.id === draft.id);
@@ -100,6 +145,8 @@ export function makeRespond(deps: NodeDeps): NodeFn {
           intentCode: draft.intentCode, draftId: draft.id, lockedTemplate: draft.lockedTemplate,
           atSimTime: simClock.now(), threadId: inThread?.threadId,
         });
+        registerPromise(draft);
+        evalFulfill(draft.id);
         await emitOutbound(state, "respond", "email_outbound", {
           draft: draft.id,
           replayed: state.outbound.some((o) => o.id === `OB:${draft.id}`),
@@ -114,12 +161,19 @@ export function makeRespond(deps: NodeDeps): NodeFn {
           intentCode: draft.intentCode, draftId: draft.id, lockedTemplate: draft.lockedTemplate,
           atSimTime: simClock.now(),
         });
+        registerPromise(draft);
+        evalFulfill(draft.id);
         await emitOutbound(state, "respond", "email_outbound", {
           draft: draft.id,
           replayed: r.replayed,
         });
       }
     }
-    return { outbound, actions: actionEntries };
+    // Ledger/approval/ETA fulfilment can land on turns that send nothing
+    // (clock jumps, approval resumes) — evaluate once more before returning.
+    evalFulfill();
+    const update: Partial<CaseStateType> = { outbound, actions: actionEntries };
+    if (promiseUpdates.size > 0) update.promiseClocks = [...promiseUpdates.values()];
+    return update;
   };
 }

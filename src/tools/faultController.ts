@@ -13,7 +13,8 @@ export type FaultFlag =
   | "threadClosed" // identity downgrade ② Day-14 close really closed thread
   | "spoofSignal" // identity downgrade ③ lookalike signal (FR-2.1 AC3)
   | "newThread" // 2nd email lands in a NEW thread (FR-2.1 AC2)
-  | "noDigital"; // customer not enrolled in digital banking (FR-2.2 fallback)
+  | "noDigital" // customer not enrolled in digital banking (FR-2.2 fallback)
+  | "ocrLow"; // next OCR read reports low confidence → material stays with a human (FR-1.5)
 
 export type ClockJump =
   | "+1h"
@@ -35,6 +36,7 @@ export interface FaultState {
   spoofSignal: boolean;
   newThread: boolean;
   noDigital: boolean;
+  ocrLow: boolean;
 }
 
 const INITIAL: FaultState = {
@@ -48,10 +50,11 @@ const INITIAL: FaultState = {
   spoofSignal: false,
   newThread: false,
   noDigital: false,
+  ocrLow: false,
 };
 
 /** Flags that auto-reset after one consumption. */
-const ONE_SHOT: FaultFlag[] = ["bankingTimeout", "duplicateFiling", "dlpBlock"];
+const ONE_SHOT: FaultFlag[] = ["bankingTimeout", "duplicateFiling", "dlpBlock", "ocrLow"];
 
 type Listener = (s: FaultState) => void;
 

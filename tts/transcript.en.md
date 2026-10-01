@@ -42,55 +42,83 @@ Deterministic where the law requires it, autonomous where evidence has earned it
 
 Day 0: a mail arrives from a public Gmail address that is not on file. The sender is not in the customer's file, so identity assurance only reaches I1 — the system does not know who wrote it.
 
-### 1-4 · stepup · caption 5000 ms · audio 13.6s · email1.lockedCell · pointer s1.thread.out
+### 1-4 · day0 · caption 6000 ms · audio ? · email1.lockedTemplate · pointer s1.thread.out
 
-Overdraft refund × I1 is a locked cell: this email gets no automatic refund and no AI-written body. The customer receives a fixed template that only tells her to verify in the mobile app — the email itself contains no link at all.
+While identity is unconfirmed this reply contains no link at all and no account details — it only points the customer at the app to finish verification, and not one action has been taken on the refund. Anything that can touch the account lives in the app, after verification.
 
-### 1-6 · stepup · caption 5000 ms · audio 7.7s · email1.caseCard · pointer s1.phone.casecard
+### 1-6 · day0 · caption 6000 ms · audio 13.6s · email1.lockedCell · pointer s1.autonomy.cell.I1
+
+Start with this row of the autonomy matrix: the action risk is R2 — a within-threshold refund, a reversible low-impact write. The columns are the four identity levels, and this case is standing in the I1 column. I1 means only the sending domain is trustworthy, which is not enough to tie the email to an account, so that column grants nothing: no automatic refund, no AI-written body, just a fixed template pointing at the mobile verification.
+
+### 1-7 · day0 · caption 6000 ms · audio ? · email1.traceBefore · pointer s1.trace.entry.2
+
+The first result of that same check is filed in the decision dossier as well: this line reads 'identity level I1', with the three tests it was missing right below it. What the case looked like before the re-rating is archived on this line.
+
+### 1-10 · stepup · caption 5000 ms · audio 7.7s · email1.caseCard · pointer s1.phone.casecard
 
 Verification happens inside the same mail thread: the app pushes a notice, the one-time code goes to the phone number on file, six digits go in, and the case keeps going on its own.
 
-### 1-10 · stepup · caption 6000 ms · audio ? · email1.identityUp · pointer s1.identity
+### 1-14 · stepup · caption 6000 ms · audio ? · email1.identityUp · pointer s1.identity.rise
 
-Verification passed, and identity in this same thread rises from I1 to I3. The panel on the right is the evidence: the sender address still does not match the customer file, but 'step-up completed in this thread' and 'logged-in secure-message session' both pass, and the footer reads verification valid, held at I3.
+Verification happened inside this same thread, so identity is re-rated in place: I1 is struck through at the top right and becomes I3. Not every signal is green — the sender address is still not on file and its red cross is still there — but 'step-up completed in this thread' and 'logged-in secure-message session' now pass.
 
-### 1-12 · refund · caption 6000 ms · audio 26.4s · email1.i3refund · pointer s1.thread.out
+### 1-15 · stepup · caption 6000 ms · audio ? · email1.i3cell · pointer s1.autonomy.cell.I3
+
+Same row, same rule, and the marker has moved to the I3 column: the verdict flips from 'no grant' to L3, auto-execute. Only the identity axis changed; nothing else did. A cell can only reach L3 when the intent is whitelisted, the amount and count are inside the thresholds, and the intent has graduated.
+
+### 1-16 · stepup · caption 6000 ms · audio ? · email1.graduationCap · pointer s1.autonomy.cap
+
+The matrix has a third axis: the graduation cap. This intent — overdraft fee refund — has graduated to L3, which is what makes L3 auto-execute possible at all; an intent that has never graduated is capped at L0, and no identity level lifts it above handing the case to a human.
+
+### 1-17 · stepup · caption 6000 ms · audio ? · email1.traceAfter · pointer s1.trace.entry.7
+
+Verification done, the same code runs a second time, and the dossier gains this line: 'identity level I3', with a single test still unmet — the sender address is still not on file. Further up sits the first verdict, I1; the two lines together are the machine's record of the re-rating.
+
+### 1-19 · refund · caption 6000 ms · audio 26.4s · email1.i3refund · pointer s1.thread.out
 
 The same rule is evaluated again with the new identity: this cell now allows it, the $35 overdraft fee goes back to the customer's account, and the reply is still three sources stitched together — locked template, system slot, generated sentence. Every letter passes a compliance check before it leaves, carrying AI disclosure and a human handoff.
 
-### 1-13 · refund · caption 6000 ms · audio 9.8s · email1.provenance · pointer s1.thread.out
+### 1-20 · refund · caption 6000 ms · audio 9.8s · email1.provenance · pointer s1.thread.out
 
 One letter, colored by source: blue is the locked template, green is the system slot (name, amount, date, case id), purple is the generated sentence.
 
-### 1-16 · verified · caption 5000 ms · audio 13.2s · email1.verified · pointer s1.trace.entry@last
+### 1-22 · refund · caption 6000 ms · audio ? · email1.outboundGate · pointer s1.trace.entry.11
+
+One last outbound check before the letter leaves: missing AI disclosure or a missing human-handoff entry blocks it outright. This line says the refund confirmation carried both and was released — a letter that had been blocked would leave its own line in the dossier too.
+
+### 1-24 · verified · caption 5000 ms · audio 13.2s · email1.verified · pointer s1.trace.entry@last
 
 Fourteen days with no new mail, no handoff and no QA reversal — one more line on the audit rail: a verified autonomous resolution. The dossier is sealed for the record, and human edits flow back as samples.
 
-### 1-19 · day21 · caption 6000 ms · audio ? · email1.secondRequest · pointer s1.thread.in
+### 1-27 · day21 · caption 6000 ms · audio ? · email1.secondRequest · pointer s1.thread.in
 
 Day 21, a second mail in the same thread: the customer asks again for the overdraft fee back. It is merged into the same case, not a new one; identity is still I3, nothing was downgraded.
 
-### 1-20 · day21 · caption 5000 ms · audio ? · email1.holding · pointer s1.thread.out
+### 1-28 · day21 · caption 5000 ms · audio ? · email1.holding · pointer s1.thread.out
 
 The bank answers the same day with a second letter: it confirms receipt, says a supervisor will reply within one business day, and states plainly that she can still ask for a human review. This letter promises no outcome.
 
-### 1-22 · day21 · caption 7000 ms · audio 18.8s · email1.secondWaiver · pointer s2.policy.row.OD-1.FAIL
+### 1-30 · day21 · caption 6000 ms · audio ? · email1.cellDowngrade · pointer s1.autonomy.cell.I3
+
+Twenty-one days later, the same row read once more: identity is still I3 and the marker has not moved, but the verdict has dropped to L2, one-click approval. Identity is not what changed this time — the policy evaluation is. The level is the smallest of the axes, so any axis tightening drops it a level.
+
+### 1-33 · day21 · caption 7000 ms · audio 18.8s · email1.secondWaiver · pointer s2.policy.row.OD-1.FAIL
 
 Why it is not automatic: the first overdraft-waiver rule requires no more than 1 waiver in the past 12 months, and that field now reads 2 — so the condition fails and the cell drops from auto-execute to one-click approval. The boundary is the policy result, not the model's mood.
 
-### 1-24 · day21 · caption 5000 ms · audio 11.4s · email1.l2queue · pointer s3.approvalcard
+### 1-35 · day21 · caption 5000 ms · audio 11.4s · email1.l2queue · pointer s3.approvalcard
 
 The explanation draft goes into the supervisor queue — the customer always keeps a human reconsideration path. Sending passes the same compliance check, with disclosure and a handoff.
 
-### 1-27 · day21 · caption 6000 ms · audio ? · email1.explanationSent · pointer s1.thread.out
+### 1-38 · day21 · caption 6000 ms · audio ? · email1.explanationSent · pointer s1.thread.out
 
 One supervisor click and the explanation letter goes straight back into the customer's own thread: why this one could not be automatic, which rule was applied, and that she can still ask for a review.
 
-### 1-30 · day21 · caption 6000 ms · audio 11.0s · email1.secondClosed · pointer s1.trace.entry@last
+### 1-41 · day21 · caption 6000 ms · audio 11.0s · email1.secondClosed · pointer s1.trace.entry@last
 
 Fourteen days after the explanation letter with no new contact, one more line on the audit rail: beat two closes as a human-resolved case for the books, corrections flow back as samples, the dossier is sealed for the record.
 
-### 1-31 · outro · caption 6000 ms · audio 7.8s · email1.outro · pointer s1.thread
+### 1-42 · outro · caption 6000 ms · audio 7.8s · email1.outro · pointer s1.thread
 
 Same intent, same customer, two different outcomes — because the value in that cell changed, and every change can be explained.
 
