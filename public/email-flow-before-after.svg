@@ -1,0 +1,160 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/>
+    </marker>
+    <marker id="arrT" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#0f766e"/>
+    </marker>
+  </defs>
+
+  <rect x="8" y="8" width="1184" height="684" rx="12" fill="#fffdf8" stroke="#e2e5e9"/>
+
+  <text x="40" y="48" font-size="20" font-weight="700" fill="#16324f">Email case flow: before vs after</text>
+  <text x="40" y="70" font-size="13" fill="#4b5563">Condensed from PRD §6.1 (nine steps). D1–D5 mark where each differentiator acts. D6 durable runtime underlies all steps.</text>
+
+  <!-- BEFORE -->
+  <text x="40" y="108" font-size="14" font-weight="700" fill="#9f1239">BEFORE — the public mailbox today</text>
+  <rect x="24" y="120" width="1152" height="150" rx="10" fill="#fdf0d7" stroke="#f0d9ad"/>
+
+  <g font-size="11.5" fill="#4b5563">
+    <g>
+      <rect x="64" y="140" width="200" height="110" rx="8" fill="#ffffff" stroke="#e2e5e9"/>
+      <text x="78" y="166" font-size="13.5" font-weight="700" fill="#16324f">1. Arrive</text>
+      <text x="78" y="188">lands in the public</text>
+      <text x="78" y="206">inbox; sits unseen</text>
+      <text x="78" y="224">in Monday backlog</text>
+    </g>
+    <g>
+      <rect x="280" y="140" width="200" height="110" rx="8" fill="#ffffff" stroke="#9f1239" stroke-width="1.5"/>
+      <text x="294" y="166" font-size="13.5" font-weight="700" fill="#9f1239">2. Wait, clock ticking</text>
+      <text x="294" y="188">Reg E clock runs from</text>
+      <text x="294" y="206">arrival — nobody knows,</text>
+      <text x="294" y="224">nothing is filed</text>
+    </g>
+    <g>
+      <rect x="496" y="140" width="200" height="110" rx="8" fill="#ffffff" stroke="#e2e5e9"/>
+      <text x="510" y="166" font-size="13.5" font-weight="700" fill="#16324f">3. “Please call us”</text>
+      <text x="510" y="188">address not on file,</text>
+      <text x="510" y="206">so the reply resolves</text>
+      <text x="510" y="224">nothing (median 27 h)</text>
+    </g>
+    <g>
+      <rect x="712" y="140" width="200" height="110" rx="8" fill="#ffffff" stroke="#e2e5e9"/>
+      <text x="726" y="166" font-size="13.5" font-weight="700" fill="#16324f">4. Call + rework</text>
+      <text x="726" y="188">customer re-tells the story</text>
+      <text x="726" y="206">on the phone; agent re-types</text>
+      <text x="726" y="224">it into 5+ systems</text>
+    </g>
+    <g>
+      <rect x="928" y="140" width="200" height="110" rx="8" fill="#ffffff" stroke="#e2e5e9"/>
+      <text x="942" y="166" font-size="13.5" font-weight="700" fill="#16324f">5. Reply in days</text>
+      <text x="942" y="188">one contact becomes two;</text>
+      <text x="942" y="206">22% of replies end</text>
+      <text x="942" y="224">in another “call us”</text>
+    </g>
+  </g>
+  <g stroke="#6b7280" stroke-width="1.5">
+    <line x1="268" y1="195" x2="276" y2="195" marker-end="url(#arr)"/>
+    <line x1="484" y1="195" x2="492" y2="195" marker-end="url(#arr)"/>
+    <line x1="700" y1="195" x2="708" y2="195" marker-end="url(#arr)"/>
+    <line x1="916" y1="195" x2="924" y2="195" marker-end="url(#arr)"/>
+  </g>
+
+  <!-- AFTER -->
+  <text x="40" y="300" font-size="14" font-weight="700" fill="#0f766e">AFTER — with Email Autopilot (thread = case)</text>
+  <rect x="24" y="312" width="1152" height="170" rx="10" fill="#e6f3f1" stroke="#9fd4d8"/>
+
+  <g font-size="10.5" fill="#4b5563">
+    <g>
+      <rect x="48" y="332" width="146" height="128" rx="8" fill="#ffffff" stroke="#e2e5e9"/>
+      <rect x="58" y="340" width="30" height="16" rx="8" fill="#0e7490"/><text x="64" y="352" font-size="10" font-weight="700" fill="#ffffff">D2</text>
+      <text x="58" y="374" font-size="12.5" font-weight="700" fill="#16324f">1. Arrive</text>
+      <text x="58" y="392">server timestamp;</text>
+      <text x="58" y="408">statutory clock</text>
+      <text x="58" y="424">starts at intake</text>
+    </g>
+    <g>
+      <rect x="207" y="332" width="146" height="128" rx="8" fill="#ffffff" stroke="#e2e5e9"/>
+      <rect x="217" y="340" width="30" height="16" rx="8" fill="#0e7490"/><text x="223" y="352" font-size="10" font-weight="700" fill="#ffffff">D2</text>
+      <text x="217" y="374" font-size="12.5" font-weight="700" fill="#16324f">2. Recognize</text>
+      <text x="217" y="392">regulated-intent detect</text>
+      <text x="217" y="408">(high recall); split</text>
+      <text x="217" y="424">multi-intent mail</text>
+    </g>
+    <g>
+      <rect x="366" y="332" width="146" height="128" rx="8" fill="#ffffff" stroke="#e2e5e9"/>
+      <rect x="376" y="340" width="30" height="16" rx="8" fill="#0f766e"/><text x="382" y="352" font-size="10" font-weight="700" fill="#ffffff">D1</text>
+      <text x="376" y="374" font-size="12.5" font-weight="700" fill="#16324f">3. Verify</text>
+      <text x="376" y="392">identity I0–I3;</text>
+      <text x="376" y="408">in-thread step-up,</text>
+      <text x="376" y="424">re-rated in place</text>
+    </g>
+    <g>
+      <rect x="525" y="332" width="146" height="128" rx="8" fill="#ffffff" stroke="#0f766e" stroke-width="1.5"/>
+      <rect x="535" y="340" width="30" height="16" rx="8" fill="#0f766e"/><text x="541" y="352" font-size="10" font-weight="700" fill="#ffffff">D1</text>
+      <text x="535" y="374" font-size="12.5" font-weight="700" fill="#16324f">4. Route</text>
+      <text x="535" y="392">policy rules evaluate;</text>
+      <text x="535" y="408">R×I→L matrix cell</text>
+      <text x="535" y="424">decides the path</text>
+    </g>
+    <g>
+      <rect x="684" y="332" width="146" height="128" rx="8" fill="#ffffff" stroke="#e2e5e9"/>
+      <rect x="694" y="340" width="30" height="16" rx="8" fill="#b45309"/><text x="700" y="352" font-size="10" font-weight="700" fill="#ffffff">D4</text>
+      <text x="694" y="374" font-size="12.5" font-weight="700" fill="#16324f">5. Execute</text>
+      <text x="694" y="392">read core systems;</text>
+      <text x="694" y="408">idempotent tools;</text>
+      <text x="694" y="424">R3 tools absent</text>
+    </g>
+    <g>
+      <rect x="843" y="332" width="146" height="128" rx="8" fill="#ffffff" stroke="#e2e5e9"/>
+      <text x="853" y="368" font-size="12.5" font-weight="700" fill="#16324f">6. Human</text>
+      <text x="853" y="384" font-size="12.5" font-weight="700" fill="#16324f">if needed</text>
+      <text x="853" y="402">L1 edit · L2 approve</text>
+      <text x="853" y="418">L0 adjudicate;</text>
+      <text x="853" y="434">then auto-resume</text>
+    </g>
+    <g>
+      <rect x="1002" y="332" width="146" height="128" rx="8" fill="#ffffff" stroke="#e2e5e9"/>
+      <rect x="1012" y="340" width="30" height="16" rx="8" fill="#0f766e"/><text x="1018" y="352" font-size="10" font-weight="700" fill="#ffffff">D5</text>
+      <rect x="1046" y="340" width="30" height="16" rx="8" fill="#0e7490"/><text x="1052" y="352" font-size="10" font-weight="700" fill="#ffffff">D2</text>
+      <text x="1012" y="374" font-size="12.5" font-weight="700" fill="#16324f">7. Reply</text>
+      <text x="1012" y="392">3-part assembly +</text>
+      <text x="1012" y="408">send gates; promise</text>
+      <text x="1012" y="424">clock tracked</text>
+    </g>
+  </g>
+  <g stroke="#6b7280" stroke-width="1.5">
+    <line x1="198" y1="396" x2="203" y2="396" marker-end="url(#arr)"/>
+    <line x1="357" y1="396" x2="362" y2="396" marker-end="url(#arr)"/>
+    <line x1="516" y1="396" x2="521" y2="396" marker-end="url(#arr)"/>
+    <line x1="675" y1="396" x2="680" y2="396" marker-end="url(#arr)"/>
+    <line x1="834" y1="396" x2="839" y2="396" marker-end="url(#arr)"/>
+    <line x1="993" y1="396" x2="998" y2="396" marker-end="url(#arr)"/>
+  </g>
+
+  <!-- D3 loop -->
+  <rect x="300" y="502" width="600" height="76" rx="10" fill="#ffffff" stroke="#0f766e" stroke-width="1.5" stroke-dasharray="7 4"/>
+  <rect x="314" y="512" width="30" height="16" rx="8" fill="#0f766e"/><text x="320" y="524" font-size="10" font-weight="700" fill="#ffffff">D3</text>
+  <text x="350" y="524" font-size="12.5" font-weight="700" fill="#16324f">Evidence loop (offline — earns autonomy, never blocks a case)</text>
+  <text x="314" y="546" font-size="11.5" fill="#4b5563">shadow → 90-day backtest + 3-tier sampling + negative relabel → dual sign-off → graduation cap written back to box 4</text>
+  <text x="314" y="564" font-size="11.5" fill="#4b5563">verified closures + human edits flow back as samples; drift auto-degrades the cap</text>
+  <line x1="598" y1="502" x2="598" y2="464" stroke="#0f766e" stroke-width="1.5" marker-end="url(#arrT)"/>
+  <text x="606" y="486" font-size="11" fill="#0f766e">cap</text>
+  <polyline points="1075,460 1075,540 904,540" fill="none" stroke="#0f766e" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrT)"/>
+  <text x="1010" y="532" font-size="11" fill="#0f766e">samples</text>
+
+  <!-- Legend -->
+  <g font-size="11.5" fill="#4b5563">
+    <rect x="40" y="596" width="30" height="16" rx="8" fill="#0f766e"/><text x="46" y="608" font-size="10" font-weight="700" fill="#ffffff">D1</text>
+    <text x="76" y="608">Autonomy matrix R×I→L — delegation read cell by cell, boundary in rules not model</text>
+    <rect x="640" y="596" width="30" height="16" rx="8" fill="#0e7490"/><text x="646" y="608" font-size="10" font-weight="700" fill="#ffffff">D2</text>
+    <text x="676" y="608">Recognize + clock on arrival — even half a sentence; promises tracked to fulfillment</text>
+    <rect x="40" y="624" width="30" height="16" rx="8" fill="#0f766e"/><text x="46" y="636" font-size="10" font-weight="700" fill="#ffffff">D3</text>
+    <text x="76" y="636">Earned autonomy — shadow, backtest, dual sign-off; drift degrades automatically</text>
+    <rect x="640" y="624" width="30" height="16" rx="8" fill="#b45309"/><text x="646" y="636" font-size="10" font-weight="700" fill="#ffffff">D4</text>
+    <text x="676" y="636">Closed attack surface — injection as data, R3 tools unregistered, on-file notice only</text>
+    <rect x="40" y="652" width="30" height="16" rx="8" fill="#0f766e"/><text x="46" y="664" font-size="10" font-weight="700" fill="#ffffff">D5</text>
+    <text x="76" y="664">Controlled generation — locked template + system slots + generated sentences, gated</text>
+  </g>
+</svg>
