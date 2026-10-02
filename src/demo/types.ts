@@ -14,8 +14,18 @@ export type BeatAction =
    * is findable without moving or resizing the page. A target of the form
    * `<prefix>@last` resolves to the LAST element whose data-id starts with
    * `<prefix>` — that is how the newest trace line is addressed.
+   * `point` moves the pointer to that corner of the focus box (the tip
+   * touching the corner from OUTSIDE) instead of the default top-centre pose —
+   * top-centre sits on a cell's own header (the I0–I3 label the caption is
+   * about), so those beats point from the top-right instead.
    */
-  | { t: "tooltip"; key: string; ms?: number; focus?: string }
+  | {
+      t: "tooltip";
+      key: string;
+      ms?: number;
+      focus?: string;
+      point?: "tl" | "tr" | "bl" | "br";
+    }
   | { t: "cursor"; target: string; click?: boolean; type?: string; wait?: number; require?: boolean }
   | { t: "load"; scenario: ScenarioId }
   | { t: "inject"; emailId: string }

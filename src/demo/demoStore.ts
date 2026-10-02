@@ -28,6 +28,13 @@ export interface Highlight {
 interface DemoState {
   status: DemoStatus;
   scriptId: string | null;
+  /** Script whose agenda row is lit, i.e. the one about to run (see
+   *  src/demo/agenda.ts). Non-null only while the opening card is up. */
+  agendaScriptId: string | null;
+  /** Progress of a chained run: which chapter is on screen out of how many,
+   *  or null when a single script is playing on its own. The bar renders this
+   *  as "第 2/5 章" so the audience knows there is more to come. */
+  queued: { index: number; total: number } | null;
   beatIndex: number;
   totalBeats: number;
   chapter: string;
@@ -46,6 +53,8 @@ interface DemoState {
 const INITIAL = {
   status: "idle" as DemoStatus,
   scriptId: null as string | null,
+  agendaScriptId: null as string | null,
+  queued: null as { index: number; total: number } | null,
   beatIndex: 0,
   totalBeats: 0,
   chapter: "",

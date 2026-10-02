@@ -174,13 +174,105 @@ test("trailer visits the dossier and the all-disputes clock board", async ({ pag
 test("email3 script plays to end (BEC quarantine)", async ({ page }) => {
   const errors = await startScript(page, "email3");
   await expectDone(page, errors);
+  // The script ends on the customer's own mail and phone — the audit view is
+  // folded away before the outro, so the closing frame is two panels, not four.
+  await expect(page.locator("[data-id='s1.phone.sms']")).toBeVisible();
+  // The audit column itself is unmounted (the toggle button stays — it is how
+  // the demo gets back in), so the matrix strip and the trace rail are gone.
+  await expect(page.locator("[data-id='s1.autonomy']")).toHaveCount(0);
+  await expect(page.locator("[data-id='s1.tracerail']")).toHaveCount(0);
+});
+
+test("email3 dossier beat keeps the SAR record and the sealed case visible", async ({
+  page,
+}) => {
+  const errors = await startScript(page, "email3");
+  // Beat 21 is the SAR card, beat 26 the closing dossier line: both claims the
+  // script makes need something on screen behind them.
+  await page.evaluate(() =>
+    (window as unknown as { __demoSeek: (a: string, b: number) => Promise<void> }).__demoSeek(
+      "email3",
+      21,
+    ),
+  );
   await expect(page.locator("[data-id='s3.sar']")).toBeVisible();
+  await expect(page.locator("[data-id='s3.fraud.closed']")).toBeVisible();
+  expect(errors.filter((e) => !/Failed to load resource|msw/i.test(e))).toEqual([]);
 });
 
 test("builder script plays to end (graduation)", async ({ page }) => {
   const errors = await startScript(page, "builder");
   await expectDone(page, errors);
   // The script ends with wire-recall selected; re-open the promoted intent.
-  await page.click("[data-id='s4.intent.reg_e_intake']");
+  await page.click("[data-id='s4.intent.reg_e_intake_demo']");
   await expect(page.locator("[data-id='s4.promote.notice']")).toBeVisible();
+});
+
+/**
+ * The pointer must never sit on the words the caption is reading: on the
+ * autonomy-strip cells the default top-centre pose landed exactly on the
+ * I0–I3 label, so the audience could not tell which column was marked
+ * (2026-10-02 recording). These beats pose from the top-right corner instead;
+ * this walks every one of them and fails if ANY text inside the focus box
+ * intersects the pointer's arrow.
+ */
+test("pointer never covers the label of the element it points at", async ({ page }) => {
+  test.setTimeout(180_000);
+  const cases: [script: string, beat: number, focus: string][] = [
+    ["email1", 6, "s1.autonomy.cell.I1"],
+    ["email1", 15, "s1.autonomy.cell.I3"],
+    ["email1", 30, "s1.autonomy.cell.I3"],
+    ["email2", 6, "s1.autonomy.cell.I2"],
+    ["builder", 20, "s4.matrix.row.R3"],
+  ];
+  await page.goto("/");
+  await page.waitForSelector("[data-id='top.demo']");
+  await page.click("[data-id='top.demo']");
+  await page.click("[data-id='demo.script.email1']");
+  await page.waitForSelector("[data-id='demo.bar']");
+  for (const [script, beat, focus] of cases) {
+    await page.evaluate(
+      ([id, i]) =>
+        (window as unknown as { __demoSeek: (a: string, b: number) => Promise<void> }).__demoSeek(
+          id as string,
+          i as number,
+        ),
+      [script, beat] as [string, number],
+    );
+    await expect(page.locator("[data-id='demo.bar']")).toHaveAttribute("data-beat", String(beat));
+    await page.waitForTimeout(900); // pointer glide is 550 ms
+    const hit = await page.evaluate((focusId) => {
+      const el = document.querySelector<HTMLElement>(`[data-id="${focusId}"]`);
+      const arrow = document.querySelector<HTMLElement>("div[class*='9999'] svg");
+      if (!el || !arrow) return { missing: !el ? "focus" : "pointer" };
+      const a = arrow.getBoundingClientRect();
+      const overlap = (r: DOMRect): number =>
+        Math.max(0, Math.min(a.right, r.right) - Math.max(a.left, r.left)) *
+        Math.max(0, Math.min(a.bottom, r.bottom) - Math.max(a.top, r.top));
+      const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+      const covered: string[] = [];
+      let node = walker.nextNode();
+      while (node) {
+        if (node.textContent?.trim()) {
+          const range = document.createRange();
+          range.selectNodeContents(node);
+          for (const r of range.getClientRects()) {
+            if (r.width > 0 && r.height > 0 && overlap(r) > 1) covered.push(node.textContent);
+          }
+        }
+        node = walker.nextNode();
+      }
+      return { covered };
+    }, focus);
+    if ("missing" in hit) {
+      throw new Error(`${script} beat ${beat}: ${hit.missing} not found in the page`);
+    }
+    expect(
+      hit.covered,
+      `${script} beat ${beat}: pointer covers text inside ${focus}`,
+    ).toEqual([]);
+    if (beat === 6 && script === "email1") {
+      await page.screenshot({ path: "_shots/pointer-pose-I1.png" });
+    }
+  }
 });

@@ -26,6 +26,8 @@ export interface DecideCellArgs {
   graduatedL: LLevel | null;
   /** Rule-pack version fetch failed → previous version reused, L3 forbidden. */
   policyVersionDegraded?: boolean;
+  /** Drift detection (PSI / tool failure rate / new intent cluster) exceeded threshold → auto-degrade. */
+  driftDegraded?: boolean;
   /** R2×I3 second OD-fee waiver within 12 months → forced human (PRD §8.1). */
   secondWaiverWithin12m?: boolean;
   fraudSuspected?: boolean;
@@ -168,6 +170,10 @@ function graduatedLadder(args: DecideCellArgs, reasons: string[]): CellDecision 
   if (args.policyVersionDegraded && L_RANK[level] > L_RANK.L2) {
     level = "L2";
     finalReasons.push("POLICY_VERSION_FALLBACK_CAP_L2");
+  }
+  if (args.driftDegraded && L_RANK[level] > L_RANK.L2) {
+    level = "L2";
+    finalReasons.push("DRIFT_AUTO_DEGRADE_CAP_L2");
   }
   return { cell: l(level), reasonCodes: finalReasons, queueable: level !== "L3" };
 }

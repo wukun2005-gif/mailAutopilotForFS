@@ -114,8 +114,18 @@ export function ClockBoard({ state }: { state: CaseStateType }) {
   // loadScenario resets the case, wiping progress and leaving an empty state.
   const setScreen = useUIStore((s) => s.setScreen);
   const rows = rowsFor(state, t);
-  // Bars need a due date; deadline-less promises show up in the table only.
-  const chartRows = rows.filter((r) => r.due != null);
+  // 兑现/逾期/无到期日的行剩余时间为 0 —— 长度 0 的条形画不出来，历史上
+  // 这些行在图上是"隐身"的。给它们一个短色块（长度不是数据，靠标签读含义）：
+  // 兑现绿"已完成"、逾期红"已逾期"、无到期日琥珀"无到期日"，行行可见。
+  const maxOpen = Math.max(
+    ...rows.filter((r) => r.remainingH > 0).map((r) => r.remainingH),
+    0,
+  );
+  const stub = maxOpen > 0 ? Math.max(Math.round(maxOpen * 0.06), 6) : 1;
+  const chartRows = rows.map((r) => ({
+    ...r,
+    barH: r.remainingH > 0 ? r.remainingH : stub,
+  }));
   const now = simClock.now();
 
   return (
@@ -142,7 +152,7 @@ export function ClockBoard({ state }: { state: CaseStateType }) {
                     t(rows.find((r) => r.name === v)?.nameKey ?? "", { defaultValue: v })
                   }
                 />
-                <Bar dataKey="remainingH" radius={[3, 3, 3, 3]} barSize={18}>
+                <Bar dataKey="barH" radius={[3, 3, 3, 3]} barSize={18}>
                   {rows.map((r) => (
                     <Cell key={r.name} fill={r.color} />
                   ))}
@@ -160,10 +170,20 @@ export function ClockBoard({ state }: { state: CaseStateType }) {
               {rows.map((r) => (
                 <tr key={r.name} className="border-t border-line">
                   <td className="py-1 text-gray-700">{t(r.nameKey)}</td>
-                  <td className="py-1 font-mono text-faint">
-                    {r.due != null
+                  <td
+                    className={cn(
+                      "py-1 font-mono",
+                      r.done ? "font-semibold text-emerald-600" : "text-faint",
+                    )}
+                  >
+                    {r.done ? `✓ ${t("clockboard.done")}` : null}
+                    {r.done && r.due != null
+                      ? ` · ${t("clockboard.due", { date: format(new Date(r.due), "MM/dd") })}`
+                      : null}
+                    {!r.done && r.due != null
                       ? t("clockboard.due", { date: format(new Date(r.due), "MM/dd") })
-                      : t("clockboard.noDue")}
+                      : null}
+                    {!r.done && r.due == null ? t("clockboard.noDue") : null}
                   </td>
                   <td className="py-1 text-right">
                     <button

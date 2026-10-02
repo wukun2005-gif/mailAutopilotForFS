@@ -1,5 +1,5 @@
 // Debug-only screenshot harness — NOT part of the suite (skips without SHOTS,
-// so `npx playwright test` still runs exactly 14 tests).
+// so `npx playwright test` still runs exactly 15 tests).
 //
 //   SHOTS="email1:5,12,13" npx playwright test tests/e2e/shots.spec.ts   (few frames)
 //   SWEEP=email1              npx playwright test tests/e2e/shots.spec.ts (most frames)

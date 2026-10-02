@@ -1,6 +1,6 @@
 // Screen 4 — Builder: backtest & graduation (Dev Plan §7.4).
 // Left: intent list with graduation status. Right: matrix, replay, sampling,
-// readiness report, conformal card. Sign-off and manual caps write through to
+// readiness report. Sign-off and manual caps write through to
 // graduationOverrides, so the SAME runtime used by the other three screens
 // changes level for the next inbound email immediately.
 import { useEffect, useReducer, useState } from "react";
@@ -12,7 +12,6 @@ import { AutonomyMatrix } from "./builder/AutonomyMatrix";
 import { BacktestRunner } from "./builder/BacktestRunner";
 import { SamplingPanel } from "./builder/SamplingPanel";
 import { ReadinessReport } from "./builder/ReadinessReport";
-import { ConformalCard } from "./builder/ConformalCard";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
 
@@ -28,7 +27,8 @@ export function BuilderScreen() {
     rare_hold: { label: t("status.rare_hold"), cls: "bg-amber-100 text-amber-900", icon: PauseCircle },
     never: { label: t("status.never"), cls: "bg-gray-200 text-gray-600", icon: Lock },
   };
-  const [selectedCode, setSelectedCode] = useState("reg_e_intake");
+  // 默认选中"演示用影子态"：讲解影子→双签→提升的过程从这一行开始。
+  const [selectedCode, setSelectedCode] = useState("reg_e_intake_demo");
   const [negativeColumn, setNegativeColumn] = useState(true);
   const [rev, bump] = useReducer((x: number) => x + 1, 0);
 
@@ -50,7 +50,8 @@ export function BuilderScreen() {
         </h2>
         <ul className="mt-1 space-y-1">
           {GRADUATION_TABLE.map((g) => {
-            const meta = STATUS_META[g.status];
+            const ov = graduationOverrides.get(g.intentCode);
+            const meta = ov?.promotedTo ? STATUS_META.graduated : STATUS_META[g.status];
             const Icon = meta.icon;
             const active = g.intentCode === selectedCode;
             return (
@@ -88,8 +89,11 @@ export function BuilderScreen() {
         </ul>
       </div>
 
-      {/* Right: report stack */}
-      <div className="min-h-0 space-y-2 overflow-y-auto pr-1">
+      {/* Right: report stack. pb-16 = scroll room under the last panel: the
+          sign-off buttons are the end of the column, and without the room the
+          demo's floating playback bar covers them at the moment they are
+          clicked. */}
+      <div className="min-h-0 space-y-2 overflow-y-auto pr-1 pb-16">
         <AutonomyMatrix selected={selected} rev={rev} onDowngrade={(lvl) => graduationOverrides.cap(selected.intentCode, lvl)} />
         {override?.cap && (
           <div className="rounded border border-amber-300 bg-amber-50 px-3 py-1.5 text-[13.5px] text-amber-900" data-id="s4.cap.notice">
@@ -108,16 +112,17 @@ export function BuilderScreen() {
           </div>
         )}
         <BacktestRunner selectedIntent={selected.intentCode} />
+        <div className="h-4" /> {/* Extra spacing to prevent progress bar visual overlap with sign buttons below */}
         <SamplingPanel
           negativeColumnPresent={negativeColumn}
           onToggleNegative={setNegativeColumn}
         />
         <ReadinessReport
+          key={selected.intentCode}
           entry={selected}
           negativeColumnPresent={negativeColumn}
           onPromote={() => graduationOverrides.promote(selected.intentCode, "L3")}
         />
-        {selected.status === "rare_hold" && <ConformalCard />}
       </div>
     </div>
   );

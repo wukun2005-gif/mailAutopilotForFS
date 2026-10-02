@@ -2,7 +2,7 @@
 // Cells are computed by the SAME decideCell() pure function the runtime uses;
 // the Builder cannot open a cell the config layer cannot reach: R3 is a hard
 // never with no registered tool, R4 is permanently L0/L1 human.
-import { Lock, Ban, MousePointerClick } from "lucide-react";
+import { Lock, Ban, MousePointerClick, AlertTriangle, BadgeCheck, Clock } from "lucide-react";
 import { decideCell } from "@/runtime/gates.ts";
 import { graduatedLevel } from "@/runtime/intentRegistry.ts";
 import { graduationOverrides } from "@/runtime/graduationOverrides.ts";
@@ -39,6 +39,8 @@ function CellView({
   onClick,
   title,
   t,
+  row,
+  col,
 }: {
   cell: CellValue;
   active: boolean;
@@ -47,13 +49,17 @@ function CellView({
   onClick?: () => void;
   title?: string;
   t: (k: string, o?: Record<string, unknown>) => string;
+  /** R-level of this row — the data-id carries it so a caption about the R4
+   *  row can never point at the visually identical R3 cell above it. */
+  row: RLevel;
+  col: ILevel;
 }) {
   const base =
     "relative flex h-14 flex-col items-center justify-center overflow-hidden rounded text-[13px] leading-tight";
   if (cell.kind === "never") {
     return (
       <div
-        data-id="s4.matrix.never"
+        data-id={`s4.matrix.never.${row}.${col}`}
         className={cn(base, "cursor-not-allowed bg-gray-100 text-gray-400 line-through")}
         title={t("matrix.neverTitle")}
       >
@@ -65,6 +71,7 @@ function CellView({
   if (cell.kind === "deny") {
     return (
       <div
+        data-id={`s4.matrix.locked.${row}.${col}`}
         className={cn(base, "bg-red-50 text-red-700 ring-1 ring-red-200")}
         title={t("matrix.lockedTitle")}
       >
@@ -76,7 +83,7 @@ function CellView({
   const clickable = active && (cell.level === "L3" || cell.level === "L2");
   return (
     <button
-      data-id="s4.matrix.cell"
+      data-id={`s4.matrix.cell.${row}.${col}`}
       onClick={clickable ? onClick : undefined}
       title={title}
       className={cn(
@@ -95,7 +102,7 @@ function CellView({
           {t("customer:trace.levels." + cell.level, { defaultValue: cell.level })}
         </span>
       </span>
-      {shadow && <span>{t("matrix.shadowUnlock")}</span>}
+      {shadow && <span className="text-[10px] bg-amber-100 text-amber-800 px-1 rounded">{t("matrix.shadowBadge")}</span>}
       {capped && <span className="text-[12px]">{t("matrix.manualCap")}</span>}
       {clickable && !shadow && (
         <MousePointerClick size={9} className="absolute right-1 top-1 opacity-60" />
@@ -129,6 +136,21 @@ export function AutonomyMatrix({
       <p className="text-[13px] text-faint">
         {t("matrix.subtitle")}
       </p>
+      {(() => {
+        const ov = graduationOverrides.get(selected.intentCode);
+        if (ov?.driftDegraded) {
+          return (
+            <div key="drift" className="mt-2 rounded border border-amber-300 bg-amber-50 px-3 py-2 text-[13px] text-amber-900" data-id="s4.matrix.drift">
+              <div className="flex items-center gap-1.5">
+                <AlertTriangle size={13} />
+                <span>{t("matrix.driftNotice", { intent: selected.label[lang] })}</span>
+              </div>
+              <div className="mt-1 text-[12.5px] text-amber-800">{t("matrix.driftDetail")}</div>
+            </div>
+          );
+        }
+        return null;
+      })()}
       <div className="mt-2 overflow-x-auto">
         <table className="w-full border-collapse text-center">
           <thead>
@@ -150,30 +172,54 @@ export function AutonomyMatrix({
               const level = displayLevel(intentCode, row);
               const override = graduationOverrides.get(intentCode);
               return (
-                <tr key={r} className={cn(!active && "text-faint")}>
+                <tr key={r} data-id={`s4.matrix.row.${r}`} className={cn(!active && "text-faint")}>
                   <td className="pr-2 text-right text-[12.5px] font-medium text-gray-600">
                     {t(`matrix.risk.${r}`)}
                     {active && (
-                      <div className="text-[12px] text-teal">
-                        {row?.label[lang] ?? intentCode}
+                      <div className="flex items-center gap-1.5 mt-1">
+                        <span className="text-[12px] text-teal">
+                          {row?.label[lang] ?? intentCode}
+                        </span>
+                        {row && (
+                          <span className={cn(
+                            "inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[11px] font-semibold",
+                            row.status === "graduated"
+                              ? "bg-teal-soft text-teal"
+                              : row.status === "shadow"
+                              ? "bg-sky-100 text-sky-900"
+                              : row.status === "rare_hold"
+                              ? "bg-amber-100 text-amber-900"
+                              : "bg-gray-200 text-gray-600"
+                          )}>
+                            {row.status === "graduated" && <BadgeCheck size={9} />}
+                            {row.status === "shadow" && <Clock size={9} />}
+                            {row.status === "rare_hold" && <AlertTriangle size={9} />}
+                            {row.status === "never" && <Lock size={9} />}
+                            {t(`status.${row.status}`)}
+                          </span>
+                        )}
                       </div>
                     )}
                   </td>
                   {IDENTITIES.map((i) => {
+                    const ov = graduationOverrides.get(intentCode);
                     const decision = decideCell({
                       intentCode,
                       risk: r,
                       identity: i,
                       policyOverall: "PASS",
                       graduatedL: level,
+                      driftDegraded: !!override?.driftDegraded,
                     });
                     return (
                       <td key={i} className="p-0.5">
                         <CellView
                           t={t}
                           cell={decision.cell}
+                          row={r}
+                          col={i}
                           active={active}
-                          shadow={!!(active && row?.status === "shadow" && !override?.promotedTo)}
+                          shadow={!!(active && row?.status === "shadow" && !ov?.promotedTo)}
                           capped={!!override?.cap}
                           onClick={() => {
                             if (decision.cell.kind === "L") {

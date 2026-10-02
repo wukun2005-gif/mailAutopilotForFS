@@ -53,6 +53,21 @@ test.describe("M5 supervisor cockpit smoke", () => {
     await expect(trace).toContainText("Investigation result (error found)");
   });
 
+  test("screen 3: PRD §04 metrics render as numbers", async ({ page }) => {
+    await page.goto("/#/supervisor");
+    await page.waitForSelector("[data-id='s3.metrics.summary']");
+    // Headline numbers are visible without opening a tab (case doc: the
+    // supervisor owns KPIs), and the guardrail tab carries the full table.
+    await expect(page.locator("[data-id='s3.metrics.summary.varr']")).toContainText("14.2%");
+    await expect(page.locator("[data-id='s3.metrics.summary.ttr']")).toContainText("12");
+    await expect(page.locator("[data-id='s3.metrics.summary.trust']")).toContainText("0");
+    await page.click("[data-id='s3.tab.metrics']");
+    await expect(page.locator("[data-id='s3.metrics']")).toBeVisible();
+    await expect(page.locator("[data-id='s3.metrics.varr']")).toContainText("14.2%");
+    await expect(page.locator("[data-id='s3.metrics.guardrails']")).toContainText("PSI");
+    await expect(page.locator("[data-id='s3.metrics.guardrails'] tbody tr")).toHaveCount(8);
+  });
+
   test("email 3: fraud quarantine confirm → on-file SMS + SAR locked template", async ({ page }) => {
     await page.goto("/#/supervisor");
     await page.waitForSelector("[data-id='dev.load.email3']");

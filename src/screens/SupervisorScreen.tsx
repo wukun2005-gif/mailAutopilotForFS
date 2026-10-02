@@ -2,16 +2,17 @@
 // statutory clock, keep fraud isolated. All three tabs read the same runtime
 // state as the customer and agent views; approvals resume the real graph.
 import { useEffect, useState } from "react";
-import { Inbox, Clock, ShieldAlert } from "lucide-react";
+import { Inbox, Clock, ShieldAlert, BarChart3 } from "lucide-react";
 import { useCaseStore } from "@/store/caseStore";
 import { ApprovalQueue } from "./supervisor/ApprovalQueue";
 import { ClockBoard } from "./supervisor/ClockBoard";
 import { FraudQuarantine } from "./supervisor/FraudQuarantine";
+import { MetricsPanel } from "./supervisor/MetricsPanel";
 import { regEClocks, DAY0_EPOCH, simClock } from "@/runtime/simClock.ts";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
 
-type Tab = "queue" | "clocks" | "fraud";
+type Tab = "queue" | "clocks" | "fraud" | "metrics";
 
 export function SupervisorScreen() {
   const { t } = useTranslation("supervisor");
@@ -19,6 +20,7 @@ export function SupervisorScreen() {
     { id: "queue", label: t("tabs.queue"), icon: Inbox },
     { id: "clocks", label: t("tabs.clocks"), icon: Clock },
     { id: "fraud", label: t("tabs.fraud"), icon: ShieldAlert },
+    { id: "metrics", label: t("tabs.metrics"), icon: BarChart3 },
   ];
   const scenarioId = useCaseStore((s) => s.scenarioId);
   const loadScenario = useCaseStore((s) => s.loadScenario);
@@ -58,6 +60,15 @@ export function SupervisorScreen() {
         <Kpi label={t("kpi.quarantined")} value={quarantined ? 1 : 0} hot={quarantined} />
       </div>
 
+      {/* PRD §04 success metrics — case doc puts KPIs on the supervisor, so the
+          three headline numbers are on screen without opening a tab; the full
+          guardrail table lives in the metrics tab. */}
+      <div className="grid grid-cols-3 gap-2" data-id="s3.metrics.summary">
+        <MetricKpi id="varr" />
+        <MetricKpi id="ttr" />
+        <MetricKpi id="trust" />
+      </div>
+
       <div className="flex gap-1 border-b border-line">
         {TABS.map(({ id, label, icon: Icon }) => (
           <button
@@ -80,6 +91,7 @@ export function SupervisorScreen() {
         {tab === "queue" && <ApprovalQueue state={caseState} />}
         {tab === "clocks" && <ClockBoard state={caseState} />}
         {tab === "fraud" && <FraudQuarantine state={caseState} />}
+        {tab === "metrics" && <MetricsPanel />}
       </div>
     </div>
   );
@@ -97,6 +109,26 @@ function Kpi({ label, value, hot }: { label: string; value: number; hot: boolean
         {value}
       </div>
       <div className="mt-1 text-[13px] uppercase tracking-wide text-faint">{label}</div>
+    </div>
+  );
+}
+
+type MetricId = "varr" | "ttr" | "trust";
+
+/** Compact §04 headline number: value + one-line label (label carries the unit). */
+function MetricKpi({ id }: { id: MetricId }) {
+  const { t } = useTranslation("supervisor");
+  return (
+    <div
+      className="rounded-lg border border-emerald-200 bg-emerald-50/40 px-3 py-2"
+      data-id={`s3.metrics.summary.${id}`}
+    >
+      <div className="text-[23px] font-bold leading-none text-emerald-700">
+        {t(`metrics.main.${id}.value`)}
+      </div>
+      <div className="mt-1 text-[13px] uppercase tracking-wide text-faint">
+        {t(`metrics.main.${id}.tile`)}
+      </div>
     </div>
   );
 }

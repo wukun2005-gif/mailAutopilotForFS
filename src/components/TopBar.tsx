@@ -113,7 +113,23 @@ export function TopBar() {
               <ChevronDown size={12} />
             </button>
             {menuOpen && (
-              <div className="absolute right-0 top-full z-50 mt-1 w-64 overflow-hidden rounded-lg border border-line bg-white py-1 text-navy shadow-xl">
+              <div className="absolute right-0 top-full z-50 mt-1 w-72 overflow-hidden rounded-lg border border-line bg-white py-1 text-navy shadow-xl">
+                {/* One click, the whole show: every script in order, each one
+                    opening on its own agenda card. This is the entry a live
+                    demo actually uses; the five below it stay for rehearsing a
+                    single section. */}
+                <button
+                  data-id="demo.script.all"
+                  onMouseDown={() => {
+                    setMenuOpen(false);
+                    void demoRunner.startAll();
+                  }}
+                  className="flex w-full items-center gap-2 bg-teal/10 px-3 py-2 text-left text-[14.5px] font-semibold text-teal hover:bg-teal/20"
+                >
+                  <Play size={13} className="shrink-0" />
+                  {t("demo:playAll")}
+                </button>
+                <div className="my-1 border-t border-line" />
                 {SCRIPTS.map((s) => (
                   <button
                     key={s.id}

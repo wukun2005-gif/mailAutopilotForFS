@@ -128,8 +128,11 @@ export function Webmail({ scenarioId }: { scenarioId: ScenarioId }) {
             );
           })}
         </div>
-        {/* open thread */}
-        <div className="min-w-0 flex-1 overflow-y-auto p-3" data-id="s1.thread">
+        {/* open thread. The bottom padding is scroll room, not layout: the last
+            line of a message is its intake-identity line, and the demo
+            playback bar floats over the bottom of the pane — without the room
+            the demo cannot scroll that line clear of the bar. */}
+        <div className="min-w-0 flex-1 overflow-y-auto p-3 pb-16" data-id="s1.thread">
           <div className="mb-2 rounded bg-amber-50 px-2 py-1.5 text-[13px] text-amber-800">
             {t("webmail.banner")}
           </div>
@@ -162,7 +165,12 @@ export function Webmail({ scenarioId }: { scenarioId: ScenarioId }) {
                     <Paperclip size={11} /> {a.name}
                   </div>
                 ))}
-                <div className="mt-1 text-[12.5px] text-faint">
+                <div
+                  className="mt-1 text-[12.5px] text-faint"
+                  // The identity the arrival was filed at, printed under the
+                  // message: the same verdict the audit view opens on.
+                  data-id="s1.thread.in.identity"
+                >
                   {t("webmail.identityAtIntake", {
                     level: caseState?.identity?.level
                       ? t(`identity.levels.${caseState.identity.level}`, {

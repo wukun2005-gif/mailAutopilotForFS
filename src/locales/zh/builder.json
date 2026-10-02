@@ -30,10 +30,13 @@
     "locked": "锁定",
     "lockedTitle": "AI 既不生成也不执行内容；只有锁定的 step-up 模板",
     "shadowUnlock": "影子 · 签署后解锁",
+    "shadowBadge": "影子运行",
     "manualCap": "手动封顶",
     "legendLocked": "锁定模板 / 影子",
     "legendNever": "硬永不：配置禁用 + 无工具",
-    "legendR4": "R4 永久属于人：L0 人决策 / L1 AI 起草、人签发"
+    "legendR4": "R4 永久属于人：L0 人决策 / L1 AI 起草、人签发",
+    "driftNotice": "漂移自动降级生效：{{intent}} 被降回 L2",
+    "driftDetail": "PSI/工具失败率/新意图簇超阈 → 自动执行（fail-closed，无需人工审批）。重新回测达标后可双签放回。"
   },
   "backtest": {
     "title": "90 天回测回放 · {{from}} → {{to}}",
@@ -51,7 +54,11 @@
       "regretAuto": "自动后被推翻",
       "regretConservative": "转人后本该自动"
     },
-    "regretNote": "后悔率单位：每百万件。FR-8.4 双向后悔率——两个方向必须同屏看：只看“自动后被推翻”会显得保守，只看“转人后本该自动”会显得激进；只盯一个方向，转人工率就能被压下去刷高指标。"
+    "regretNote": "后悔率单位：每百万件。双向后悔率——两个方向必须同屏看：只看“自动后被推翻”会显得保守，只看“转人后本该自动”会显得激进；只盯一个方向，转人工率就能被压下去刷高指标。",
+    "driftTrigger": "模拟漂移触发",
+    "driftTooltip": "模拟 PSI/工具失败率/新意图簇超阈，触发自动降级（fail-closed，无需人工审批）",
+    "driftActive": "漂移已触发：{{intent}} 已自动降回 L2",
+    "driftClear": "清除漂移标记"
   },
   "sampling": {
     "title": "跨三个抽样框的三层抽样",
@@ -81,7 +88,7 @@
     "neverDetail": "该意图在结构上无法毕业。",
     "rareHeadline": "稀有意图：90 天量级永远够不到样本门槛",
     "rareTriggers": "90 天仅 {{count}} 次触发；保持人工处理。",
-    "rareConformal": "Conformal 弃权兜底把这类案件转给坐席。",
+    "rareFallback": "弃权兜底把这类案件转给坐席。",
     "regVolume": "受监管门槛：≥600 触发——实际 {{count}}",
     "regMisses": "0 关键漏检——实际 {{count}}",
     "negativeColumn": "检测器阴性复标列已具备",
@@ -92,15 +99,5 @@
     "shadowNot": "影子期：证据尚未达到毕业门槛",
     "graduatedSignable": "已毕业并按签署级别在生产运行",
     "graduatedNot": "证据未达到毕业门槛"
-  },
-  "conformal": {
-    "title": "Conformal 弃权校准",
-    "methodDemo": "方法演示 · 虚构数值",
-    "targetAlpha": "目标 α",
-    "calibrationN": "校准 n",
-    "observedCoverage": "实测覆盖率",
-    "abstainRate": "弃权率",
-    "coveragePct": "覆盖率 %",
-    "avgSetSize": "平均集合大小"
   }
 }
