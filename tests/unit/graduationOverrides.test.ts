@@ -10,9 +10,9 @@ describe("graduation overrides", () => {
   });
 
   it("returns null for shadow intents until promoted", () => {
-    expect(graduatedLevel("reg_e_intake")).toBeNull();
-    graduationOverrides.promote("reg_e_intake", "L3");
-    expect(graduatedLevel("reg_e_intake")).toBe("L3");
+    expect(graduatedLevel("reg_e_intake_demo")).toBeNull();
+    graduationOverrides.promote("reg_e_intake_demo", "L3");
+    expect(graduatedLevel("reg_e_intake_demo")).toBe("L3");
   });
 
   it("manual cap lowers an L3 intent immediately and can be cleared", () => {

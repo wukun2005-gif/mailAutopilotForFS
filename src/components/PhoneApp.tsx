@@ -5,7 +5,7 @@
 // the on-file fraud SMS (email 3).
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Bell, ShieldCheck, MessageSquareText, CheckCircle2 } from "lucide-react";
+import { Bell, ShieldCheck, MessageSquareText } from "lucide-react";
 import { useCaseStore } from "@/store/caseStore";
 import { TricolorLetter } from "./TricolorLetter";
 import type { Draft } from "@/runtime/caseState.ts";
@@ -37,7 +37,6 @@ export function PhoneApp() {
   const [showCard, setShowCard] = useState(false);
 
   const needsVerify = caseState?.status === "awaiting_customer";
-  const i3 = caseState?.identity?.level === "I3";
 
   const submitOtp = () => {
     if (otp === FIXED_OTP) {
@@ -120,14 +119,7 @@ export function PhoneApp() {
           </div>
         )}
 
-        {i3 && (
-          <div className="flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 p-2.5">
-            <CheckCircle2 size={16} className="text-emerald-600" />
-            <div className="text-[13.5px] text-emerald-800">
-              Verified — identity level <b>I3</b>. {t("phone.verifiedTail")}
-            </div>
-          </div>
-        )}
+        
 
         {/* fraud SMS goes to the ON-FILE number only */}
         {fraudSms && (

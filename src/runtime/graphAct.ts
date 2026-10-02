@@ -129,7 +129,6 @@ export function makeAct(deps: NodeDeps): NodeFn {
     if (!["email", "step_up"].includes(state.turn.kind)) return {};
     const emailId = state.currentEmailId;
     if (!emailId) return {};
-    const level = state.identity?.level ?? "I0";
     const decisions = state.decisions.filter((d) => d.sourceEmailId === emailId);
     const email = emailById(emailId);
 
@@ -180,9 +179,17 @@ export function makeAct(deps: NodeDeps): NodeFn {
         if (cell.kind === "deny") {
           await caseCard(emailId);
           updates.status = "awaiting_customer";
-        } else if (cell.kind === "L" && level === "I3") {
+        } else if (cell.kind === "L" && cell.level === "L3") {
           addDraft(transactionDetailLetter(state.customerId));
           updates.status = "pending_verify";
+        } else if (cell.kind === "L" && cell.level === "L2") {
+          const detailLetter = transactionDetailLetter(state.customerId);
+          addDraft(detailLetter);
+          addApproval({
+            id: "AP-TX-DETAIL", kind: "money_action", intentCode: "transaction_detail",
+            risk: "R1", lLevel: "L2", title: "Approve transaction detail disclosure",
+            draft: detailLetter, status: "pending",
+          });
         }
       }
 
@@ -196,8 +203,19 @@ export function makeAct(deps: NodeDeps): NodeFn {
           updates.clocksFiled = true;
           await emit(state, "act", "clock", { filed: true, case: DISPUTE_EMAIL2.disputeId });
         }
-        if (level === "I0" || level === "I1") await caseCard(emailId);
-        else addDraft(regEReceiptLetter(state.customerId));
+        if (cell.kind === "deny") {
+          await caseCard(emailId);
+        } else if (cell.kind === "L" && cell.level === "L3") {
+          addDraft(regEReceiptLetter(state.customerId));
+        } else if (cell.kind === "L" && cell.level === "L2") {
+          const receipt = regEReceiptLetter(state.customerId);
+          addDraft(receipt);
+          addApproval({
+            id: "AP-REGE-RECEIPT", kind: "money_action", intentCode: "reg_e_intake",
+            risk: "R2", lLevel: "L2", title: "Approve Reg E intake receipt",
+            draft: receipt, status: "pending",
+          });
+        }
       }
 
       if (d.intentCode === "od_fee_refund") {

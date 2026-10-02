@@ -47,6 +47,13 @@ export const INTENT_SPECS: Record<string, IntentSpec> = {
     intakeAutoAtAnyIdentity: true,
     policyPackId: "REGE_INTAKE_V3",
   },
+  reg_e_intake_demo: {
+    intentCode: "reg_e_intake_demo",
+    risk: "R2",
+    regulated: true,
+    intakeAutoAtAnyIdentity: true,
+    policyPackId: "REGE_INTAKE_V3",
+  },
   reg_e_provisional_credit: {
     intentCode: "reg_e_provisional_credit",
     risk: "R2",

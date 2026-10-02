@@ -262,7 +262,7 @@ table.rvlog td:first-child{white-space:nowrap;font-weight:700;color:#5b21b6}
 <div class="callout c-note"><span class="ct">标注约定</span>
 <span class="badge b-fact">事实</span> 外部来源可溯源　<span class="badge b-ana">分析</span> 基于事实的推理　<span class="badge b-assume">假设</span> 未经市场验证、试点前须用客户数据校准　<span class="badge b-todo">待核实</span> 公开渠道查不到、需与平台团队或客户对齐。需求优先级：<span class="prio p0">P0</span> 第 1 波试点必需　<span class="prio p1">P1</span> 第 2 波　<span class="prio p2">P2</span> 前瞻/储备。平台映射：<span class="tag t-plat">平台已有</span> 直接复用　<span class="tag t-ext">扩展</span> 在平台能力上做 FS 配置/扩展　<span class="tag t-new">新建</span> 本产品新增。<br>审阅标记：<span class="rv">v0.2 修订</span> 该处在 v0.2 被纠正或改写　<span class="rv add">v0.2 新增</span> v0.2 新增内容　<span class="rvt">紫色底纹</span> 被改写的原文位置；鼠标悬停标记可看改动理由，完整清单见本节末「v0.2 审阅变更一览」。</div>
 <h3>v0.2 审阅变更一览 <span class="rv add" title="本表为审阅新增">v0.2 新增</span></h3>
-<p>共 22 项：纠错·法规 5 项、纠错·逻辑 2 项、纠错·口径 1 项、一致性 3 项、补强新增 10 项、核实·补注 1 项。点“位置”可跳转；正文中对应段落都带紫色标记，悬停可看单处改动理由。</p>
+<p>共 23 项：纠错·法规 5 项、纠错·逻辑 2 项、纠错·口径 1 项、一致性 3 项、补强新增 11 项、核实·补注 1 项。点“位置”可跳转；正文中对应段落都带紫色标记，悬停可看单处改动理由。</p>
 <div class="table-wrap"><table class="fixed rvlog">
 <colgroup><col style="width:5%"><col style="width:11%"><col style="width:13%"><col style="width:45%"><col style="width:26%"></colgroup>
 <thead><tr><th>#</th><th>类型</th><th>位置</th><th>改动</th><th>理由 / 依据</th></tr></thead><tbody>
@@ -288,6 +288,7 @@ table.rvlog td:first-child{white-space:nowrap;font-weight:700;color:#5b21b6}
 <tr><td>20</td><td>补强新增</td><td><a href="#model">§6.1b</a><br><a href="#model">§6.3</a></td><td>§6.1 九步流程后新增“6.1b 六个要点在这 9 步上的落点”：表 A 按 9 步列每步谁在干活、哪条要点落在这一格；表 B 按 D1–D6 列主战场、步骤链、AI 参与度与 PRD 落点（章节 / FR）。D1–D5 为差异点，D6（案件运行时）标为共同底座、非差异点，落在平台既有 Automation Flows。§6.3 开头补“毕业（graduation）”的定义</td><td>让“每一步谁在干活、每条要点落在哪一步”可直接查；正文反复使用“毕业”但从未定义过这个词</td></tr>
 <tr><td>21</td><td>补强新增</td><td><a href="#model">§6.2 图例</a></td><td>重写矩阵格值图例：说明 L0–L3 量的是“把多少裁量权交给 AI、人卡在哪一步”而非“是否自动”；写明“不放权”类格子（R1×I0/I1、R2×I0/I1）系统全自动、但无裁量权交给 AI 故不套 L 阶梯，若标 L3 会违反单调性（R1×I0 风险高于 R1×I2/I3 反拿高级别）与毕业语义（硬约束、毕业不改变）；补图例类名与格内措辞的对应（“不放权”=“不披露”/“通用回执”/“锁定模板回执”）；点明 R1×I0 格内“欺诈复核（L0）”是该类来件去向、不是格值</td><td>审阅反馈：只声明“有两类非 L 取值”不解释原因，任何读者都会追问“系统全自动的格子为什么不给自治级别、矩阵是否无法自圆其说”</td></tr>
 <tr class="rvrow"><td>22</td><td>补强新增</td><td><a href="#vision">§2.1</a><br><a href="#metrics">§4.1</a><br><a href="#metrics">§4.3</a><br><a href="#model">§6.1b 表 B D2</a><br><a href="#fr-1-5">FR-1.5</a></td><td>新增 FR-1.5「对客承诺的自动登记与兑现追踪」：AI/模板对客户说出的时限承诺在信件<b>实际发出瞬间</b>登记为承诺时钟（到期 = 发出 + N 个工作日，纯算术），兑现信发出即销账；到期前 48 自然小时预警、逾期自动升级并记风险记录；承诺达成率并入 Trust（§4.1 ③ 与 §4.3 阶段目标，与法定时钟达成并列）。§2.1 定位框补卖点句、§6.1b 表 B D2 行落点同步</td><td>D2（受监管识别/起钟）<b>向对客文案侧的延伸</b>，不进 D6 底座：竞品治理 AI 说什么，我们还保证它说出口的时间一定被追到兑现（与 §2.1 既有定位句同源）。对外承诺不兑现属 UDAAP 欺骗性表述风险（Moffatt v. Air Canada, 2024 BCCRT 149；CFPB 2023-06 Chatbots Issue Spotlight）</td></tr>
+<tr class="rvrow"><td>23</td><td>补强新增</td><td><a href="#personas">§3.1 ③</a><br><a href="#metrics">§4.4</a></td><td>§3.1 主管卡触点补「成功指标面板（VARR / TTR / Trust 与八条护栏数值）」；新增 §4.4「原型呈现口径」：原型主管台把三个主指标与八条护栏<b>全部以数值呈现</b>，数值为虚构画像与试点第 6 周观测的 fixture，目标列 = §4.3 阶段门槛、阈值列 = §4.2 口径，VARR 观测期数值不构成对外承诺</td><td>case doc 给 supervisor 的定义是“day-to-day operations, KPIs, and performance”，只把主管台做成审批/兜底队列会与该定位错位；同时回答“§04 为什么看不到数字”——不是不呈现，而是以 fixture 呈现并注明阶段口径（原型时间线 Day 0 → Day 21 满足不了 VARR 的 14 天回溯窗口）</td></tr>
 </tbody></table></div>
 </section>
 
@@ -390,7 +391,7 @@ table.rvlog td:first-child{white-space:nowrap;font-weight:700;color:#5b21b6}
     <h4>③ 主管 Supervisor / Manager</h4>
     <div class="who">团队负责人，对 SLA、法定时钟、团队负载与质量负责</div>
     <p class="small">JTBD：知道哪些案件要超时、哪些 AI 决定要我批、哪些可能是欺诈；放权范围可按团队调节。</p>
-    <div class="ui">触点：审批队列、法定时钟看板、欺诈标红确认、放权毕业与后悔率监控</div>
+    <div class="ui">触点：审批队列、法定时钟看板、欺诈标红确认、放权毕业与后悔率监控、<b>成功指标面板（VARR / TTR / Trust 与八条护栏数值）</b><span class="rv add" title="case doc 给 supervisor 的定义含 KPIs and performance；原型把 §04 的数字放进主管台，避免主管只剩审批兜底">v0.2 新增</span></div>
   </div>
   <div class="pcard">
     <h4>④ 管理员 Admin / Builder</h4>
@@ -476,6 +477,10 @@ table.rvlog td:first-child{white-space:nowrap;font-weight:700;color:#5b21b6}
 <tr><td>GA 后 6–9 个月</td><td>ROI 三档：VARR 20%/35%/50% → 净节省 39%/56%/66%（见 11.4）<span class="badge b-assume">假设</span></td><td>自主件 &lt; 15 分钟为主</td><td>后悔率稳定低于人工 QA 错误率</td></tr>
 </table></div>
 <p class="small">毕业门槛（rule of three：n 件零错误时 95% 置信错误率上界约 3/n——n=300 约 1%、n=600 约 0.5% <span class="badge b-fact">事实</span>）：某意图申请 L3 前关键错误须为 0；<b>受监管意图</b>须积累受监管触发 ≥ 600 件且 0 漏检（才签得上召回 ≥ 99.5%），<b>非受监管意图</b>须 ≥ 300 件且免修改批准率 ≥ 97%（n=300 的 95% 区间约 ±2 个百分点，若按置信下界签字需实测约 ≥ 98.5%）；<b>稀有意图</b>（90 天攒不够对应样本量）不进 L3，转 FR-3.5 conformal 自主权证书或长期停留 L2。具体阈值为试点校准项 <span class="badge b-assume">假设</span>，统计口径见调研报告 §3.2 与 §7.1。</p>
+
+<h3>4.4 原型呈现口径 <span class="rv add" title="回答“§04 为什么在原型里看不到数字”：改为全部以数值呈现，见 §00 第 23 项">v0.2 新增</span></h3>
+<p>§04 的数字在<b>产品原型的主管台</b>（屏③）里全部呈现为数值：顶部 KPI 条下方固定显示三个主指标（VARR / MEDIAN TTR / TRUST）的当前值，「成功指标」页签内再展开三张主指标卡（当前值 + 目标 + 口径）与八条护栏的「当前值 / 阈值与动作」全表。依据：case doc 对 Manager/Supervisor 的定义是“day-to-day operations, KPIs, and performance”，KPI 与 performance 不呈现等于把主管降级成审批兜底<span class="badge b-ana">分析</span>。<b>界面不出现内部文档引用</b>：章节号（§04）、FR 编号、文档版本号与 fixture 说明都不入界面，只留在本文档与开发计划里。</p>
+<p><b>数值口径</b>：原型里所有指标数值均为 <b>fixture</b>——来自 §1.2 虚构客户画像与试点第 6 周观测窗口（对应 §4.3「试点第 6 周（L1/L2 审批）」行：VARR 10–20% 观测区间、Trust 关键错误 0 与卷宗完整率 100%），不使用“观测中/不发布”的占位形态。<b>目标列 = §4.3 阶段门槛，阈值列 = §4.2 护栏口径</b>，两列逐条对齐，改动必须同步（原型 <code>tests/unit/metricsFixture.test.ts</code> 会因本文档丢失任一被引用的门槛而失败）。不按真实口径实时计算的原因：VARR 要求 14 天内无重复来件、无人工触碰，原型时间线为 Day 0 → Day 21，算不出满足口径的分子；生产环境由真实进件统计同一组数字。<b>观测期数值不构成对外承诺</b>，正式发布时点与口径仍以 §4.3 为准。</p>
 </section>
 
 
@@ -581,7 +586,7 @@ table.rvlog td:first-child{white-space:nowrap;font-weight:700;color:#5b21b6}
 <colgroup><col style="width:11%"><col style="width:25%"><col style="width:16%"><col style="width:16%"><col style="width:16%"><col style="width:16%"></colgroup>
 <tr><th>动作风险</th><th>定义</th><th>I0 无法关联</th><th>I1 仅域名匹配</th><th>I2 信号匹配</th><th>I3 已 step-up</th></tr>
 <tr class="rvrow"><td><b>R0</b> 无影响</td><td><span class="rvt">归档、噪声分类、不涉及任何账户数据的公共信息（费率表、网点、流程说明）</span></td><td>L3</td><td>L3</td><td>L3</td><td>L3</td></tr>
-<tr class="rvrow"><td><b>R1</b> 只读</td><td>读取并对外披露账户信息（余额、交易、案件/配送状态），按字段敏感度分级（FR-2.3）</td><td><b>不披露</b>账户信息：通用回复 + 引导 step-up；疑似欺诈件进欺诈复核（L0）</td><td><b>不披露</b>账户信息：通用回复 + 引导 step-up</td><td>L2 → 毕业 L3，<b>仅低敏字段</b>（如案件状态、配送状态）</td><td>L2 → 毕业 L3</td></tr>
+<tr class="rvrow"><td><b>R1</b> 只读</td><td>读取并对外披露账户信息（余额、交易、案件/配送状态），按字段敏感度分级（FR-2.3）</td><td><b>不披露</b>账户信息：通用回复 + 引导 step-up；疑似欺诈件进欺诈复核（L0）</td><td><b>不披露</b>账户信息：通用回复 + 引导 step-up</td><td>L2 → 毕业 L3</td><td>L2 → 毕业 L3</td></tr>
 <tr class="rvrow"><td><b>R2</b> 可逆低影响写</td><td>阈值内退费、锁卡、程序性受理、起钟回执</td><td>内部自动建案 + 起钟（不因身份存疑推迟）；对外只发不含账户信息的锁定模板回执；疑似欺诈进欺诈复核（L0）</td><td>自动受理 + 起钟 + 通用回执；退费/锁卡等写操作不做，引导 step-up</td><td>L2 → 毕业 L3</td><td>L2 → 毕业 L3（同客户 12 个月内第二次退费强制转人）</td></tr>
 <tr><td><b>R3</b> 高影响写</td><td>改地址/联系方式、补卡寄新地址、改收款账户、向第三方付款</td><td colspan="4" style="text-align:center;font-weight:700;color:var(--red)">邮件渠道永不自动：引导 step-up 到已认证渠道自助，或转人工；工具层不提供函数</td></tr>
 <tr><td><b>R4</b> 不可逆/受监管</td><td><span class="rvt">争议裁决（认定有无差错）</span>、授信拒赔、SAR 相关、法律意见</td><td colspan="4" style="text-align:center;font-weight:700;color:var(--red)">永久 L0/L1：AI 备卷宗与草稿，人裁决、人签发</td></tr>
@@ -774,7 +779,7 @@ table.rvlog td:first-child{white-space:nowrap;font-weight:700;color:#5b21b6}
 <div class="fr" id="fr-3-3">
 <div class="fr-h"><span class="fid">FR-3.3</span><b>毕业流程：回测 / shadow / 签字</b><span class="prio p0">P0</span><span class="tag t-new">新建</span></div>
 <div class="fr-b">
-<p class="fd">为每个"意图 × 动作"单元提供毕业流水线：历史回测（三层抽样框）→ shadow 影子运行 → L1/L2 审批运行 → 双签毕业 L3。受监管意图的受理动作可毕业到 L2（自动受理/起钟/回执），裁决动作永不毕业。</p>
+<p class="fd">为每个"意图 × 动作"单元提供毕业流水线：历史回测（三层抽样框）→ shadow 影子运行 → L1/L2 审批运行 → 双签毕业 L3。受监管意图的受理动作可毕业到 L3（自动受理/起钟/回执），裁决动作永不毕业。</p>
 <ul class="ac">
 <li>AC1：<span class="rvt">回测抽样框覆盖信箱全量三类来源——框① 有工单有人处置 / 框② 未建工单（被回"请致电"）/ 框③ 积压未处理</span>，只取工单表等于让人工当时的漏检决定考卷范围；<span class="rvt">在此之上按 §6.3 分 A 常规随机 / B 受监管定向 / C 对抗构造三层抽样</span>。受监管触发由合规独立重标。指标分层：<span class="rvt">触发召回率在框①②③的 A、B 层自然样本上算（C 层构造样本单独报告，不混入召回）</span>、与人工一致率只在框① 上算、免修改批准率只在 shadow/L2 算。<span class="rv" title="v0.1 这里的 A/B/C 指“来源框”，§6.3 的 A/B/C 指“抽样层”，同名不同义；且构造样本混入召回会让召回数字失去统计含义">v0.2 修订</span></li>
 <li><span class="rvt">AC5：召回估计必须包含对“检测器判阴性”样本的随机复标（否则只量得到检出件的精确率，漏检永远不可见）；合规标注预算按 B 层约 600 件 + 阴性抽检约 1,200 件、每件约 2 分钟估算 ≈ 60 小时（6–8 人日）<span class="badge b-assume">假设</span>，须在 Phase 0 排入合规团队日程。</span><span class="rv add" title="召回的分母是“真实受监管件”，只能通过复标阴性样本估计；标注工作量是试点最容易被低估的排期风险">v0.2 新增</span></li>
