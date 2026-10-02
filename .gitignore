@@ -6,3 +6,13 @@ server-data/
 tests/e2e/test-results/
 eval-results/
 tts/.venv/
+
+# 只保留在本地、不进仓库：文档备份、截图产物、外部话题源稿（2026-10-02 清理）
+test-results/
+_backup/
+_shots/
+ai-memory-sections/
+v0.2-sections/
+ai-memory-research-report.html
+email-autopilot-prototype-dev-plan-v0.1.html
+report-*-text-export.txt
