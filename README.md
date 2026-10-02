@@ -6,7 +6,7 @@ Full demo video: https://youtu.be/3JK_lSlJqjk
 
 All banks, customers, accounts, amounts, and backtest numbers in this repo are **fictional**. The prototype runs fully offline on recorded fixtures.
 
-Product spec: [PRD v0.2 (Chinese)](https://wukun2005-gif.github.io/mailAutopilotForFS/email-autopilot-fs-prd.html) · [PRD v0.2 (English)](https://wukun2005-gif.github.io/mailAutopilotForFS/email-autopilot-fs-prd_en.html)
+Product spec: [PRD v0.2](https://wukun2005-gif.github.io/mailAutopilotForFS/email-autopilot-fs-prd_en.html)
 
 ## Problem
 
