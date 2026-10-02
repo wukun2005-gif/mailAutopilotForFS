@@ -10,7 +10,7 @@ test.describe("M6 builder smoke", () => {
     await page.waitForSelector("[data-id='s4.matrix']");
     await idle(page);
 
-    // reg_e_intake is selected by default — R2 row shows shadow-locked L2.
+    // reg_e_intake_demo (shadow) is selected by default — R2 row shows its shadow badge.
     const r2 = page.locator("tr", { hasText: "R2 · reversible writes" });
     await expect(r2).toContainText("shadow");
 
@@ -34,15 +34,15 @@ test.describe("M6 builder smoke", () => {
     await expect(page.locator("[data-id='s4.promote.notice']")).toContainText("L3");
 
     // R3 never cells do not respond.
-    const neverBefore = await page.locator("[data-id='s4.matrix.never']").count();
-    await page.locator("[data-id='s4.matrix.never']").first().click({ force: true });
+    const neverBefore = await page.locator("[data-id^='s4.matrix.never']").count();
+    await page.locator("[data-id^='s4.matrix.never']").first().click({ force: true });
     await idle(page, 300);
-    expect(await page.locator("[data-id='s4.matrix.never']").count()).toBe(neverBefore);
+    expect(await page.locator("[data-id^='s4.matrix.never']").count()).toBe(neverBefore);
     await expect(page.locator("[data-id='s4.cap.notice']")).toHaveCount(0);
 
-    // Rare intent surfaces the conformal abstention card.
+    // Rare intent: readiness says it never clears the bar — no sign-off at all.
     await page.click("[data-id='s4.intent.wire_recall_request']");
-    await expect(page.locator("[data-id='s4.conformal']")).toBeVisible();
+    await expect(page.locator("[data-id='s4.sign.compliance']")).toHaveCount(0);
     await expect(page.locator("[data-id='s4.readiness']")).toContainText("Rare intent");
   });
 
@@ -53,7 +53,7 @@ test.describe("M6 builder smoke", () => {
     await idle(page);
     // Cap the active R2×I3 L3 cell.
     const r2 = page.locator("tr", { hasText: "R2 · reversible writes" });
-    await r2.locator("[data-id='s4.matrix.cell']").last().click();
+    await r2.locator("[data-id^='s4.matrix.cell']").last().click();
     await expect(page.locator("[data-id='s4.cap.notice']")).toContainText("L2");
 
     // New email 1: I1 deny → app case-card step-up, then capped L2 queues approval
@@ -72,5 +72,36 @@ test.describe("M6 builder smoke", () => {
     await page.goto("/#/supervisor");
     await idle(page, 600);
     await expect(page.locator("[data-id='s3.queue']")).toContainText("Approve second-waiver explanation");
+  });
+
+  test("PSI drift auto-degrade drops intent to L2 and shows drift notice", async ({ page }) => {
+    await page.goto("/#/builder");
+    await page.waitForSelector("[data-id='s4.intent.od_fee_refund']");
+    await page.click("[data-id='s4.intent.od_fee_refund']");
+    await idle(page);
+
+    // Run backtest replay to enable the drift trigger.
+    await page.click("[data-id='s4.backtest.run']");
+    await page.waitForSelector("[data-id='s4.backtest'] tbody tr", { timeout: 20000 });
+
+    // Before drift: od_fee_refund is graduated L3 (R2×I3 shows L3).
+    const r2 = page.locator("tr", { hasText: "R2 · reversible writes" });
+    await expect(r2.locator("[data-id^='s4.matrix.cell']").last()).toContainText("L3");
+
+    // Click the drift simulation button.
+    await page.click("[data-id='s4.backtest.drift']");
+    await idle(page);
+
+    // Drift notice appears.
+    await expect(page.locator("[data-id='s4.matrix.drift']")).toContainText("Drift auto-degrade");
+
+    // The R2×I3 cell now shows L2 (capped by drift).
+    await expect(r2.locator("[data-id^='s4.matrix.cell']").last()).toContainText("L2");
+
+    // Clear drift and verify it restores.
+    await page.click("[data-id='s4.backtest'] button:has-text('Clear drift marker')");
+    await idle(page);
+    await expect(page.locator("[data-id='s4.matrix.drift']")).toHaveCount(0);
+    await expect(r2.locator("[data-id^='s4.matrix.cell']").last()).toContainText("L3");
   });
 });

@@ -1,7 +1,6 @@
 // 90-day backtest result set (fictional), three-tier sampling (A stratified /
-// B random / C edge+adversarial), per-intent metrics, and the conformal
-// calibration card. Consumed by the Builder screen (M6); recorded here so the
-// prototype never computes "results" at runtime.
+// B random / C edge+adversarial), per-intent metrics. Consumed by the Builder
+// screen (M6); recorded here so the prototype never computes "results" at runtime.
 import type { BiText } from "./types.ts";
 
 export const BACKTEST_WINDOW = {
@@ -82,29 +81,6 @@ export const INTENT_METRICS: IntentMetric[] = [
   { intentCode: "contact_detail_change", triggers: 176, aiVsHumanAgreement: 0.91, noEditApproval: 0.0, recallRegulated: null, criticalMisses: 0, regretPpm: 0, conservativePpm: 0, unitCostUsd: 0.0 },
   { intentCode: "wire_recall_request", triggers: 11, aiVsHumanAgreement: 0.0, noEditApproval: 0.0, recallRegulated: null, criticalMisses: 0, regretPpm: 0, conservativePpm: 0, unitCostUsd: 0.0 },
 ];
-
-export const CONFORMAL_CARD = {
-  method: {
-    zh: "分裂共形预测（split conformal），稀有意图弃权兜底（FR-3.5）",
-    en: "Split conformal prediction, rare-intent abstain fallback (FR-3.5)",
-  },
-  alpha: 0.05,
-  calibrationSize: 500,
-  coverageObserved: 0.956,
-  abstainRate: 0.078,
-  // Risk-coverage curve points {coverage, avgSetSize}
-  curve: [
-    { coverage: 0.80, avgSetSize: 1.05 },
-    { coverage: 0.90, avgSetSize: 1.18 },
-    { coverage: 0.95, avgSetSize: 1.42 },
-    { coverage: 0.98, avgSetSize: 1.87 },
-    { coverage: 0.99, avgSetSize: 2.31 },
-  ],
-  verdict: {
-    zh: "覆盖率达标（≥1−α）；稀有意图在高覆盖下自动弃权转人。",
-    en: "Coverage meets 1−α; rare intents abstain to human at high coverage.",
-  },
-};
 
 export const READINESS_CHECKS = [
   {

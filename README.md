@@ -43,7 +43,7 @@ npm run tts        # 重新生成演示语音（edge-tts，中/英各 41 条 →
 
 ## 3. 一键演示（demo 前必读）
 
-右上角 **Run demo** 菜单，五个脚本；建议现场顺序：
+右上角 **Run demo** 菜单，第一项 **全部连播 · 5 段依次自动播放**（一键从第一个 demo 播到最后一个，中途不用碰菜单；每段之间自动重置并出开场卡）。下面五项是单独跑某一段用的。建议现场顺序：
 
 | 脚本 | 时长（1×） | 内容 |
 |---|---|---|
@@ -55,9 +55,14 @@ npm run tts        # 重新生成演示语音（edge-tts，中/英各 41 条 →
 
 客户界面右侧的**审计视图**里有三块：身份保障闸门（含重定档 before/after）、**本案这一行放权矩阵**（R×I→L，标出本案例所在列，格值是 runtime 实际判定的结果，不是另算一遍；列上方一行是 **L 轴的毕业封顶**）、决策卷宗 Trace（每条判定都能按 seq 指到具体那一行，如 `s1.trace.entry.7`）。只在要讲 before/after 的时候打开，其余时间关掉，避免两栏信息同时抢注意力。
 
-控制条（屏幕底部）：
+**开场卡**：每段启动后先在画面正中列出 Overview + Demo 1–4 五行，本次要演的那一行高亮并标"即将开始"；只有背景音乐、没有语音。约 6.5 秒后自动关掉进正片，**点任意处（或按 `Space`/`→`）可立刻跳过**，`Esc` 停止。
 
-- `Space` 暂停/继续；`→` 单步；`Esc` 停止
+**连播的段间重置**：每段开始前重置整个 app —— IDB 存档 / 事件流 / 幂等台账、mock 数据、模拟时钟（回 Day 0）、故障标志、毕业覆盖（`graduationOverrides`）、审计视图开关。必须这么做的原因：builder 那段会双签晋升一个意图、把另一个降级，而 `graduationOverrides` 在 `caseRunner.reset()` 里是**故意**不被清掉的（它算策略配置而非案件状态）；builder 段又没有任何 `load` 拍，所以普通的 `caseStore.reset()` 在该路径下是空操作。不重置的话，builder 之后的段会读到被改过的毕业级别，身份判定跟着错。段与段之间有约 0.9 秒黑场，避免上一段的最后一帧和下一段的 reset 撞在一起。
+
+控制条（屏幕底部）——**开场卡期间不显示**：
+
+- 连播时标题前显示 `2/5` 这样的章号，进度条按整场进度走；单独跑一段时只显示该段进度
+- `Space` 暂停/继续（开场卡上是"跳过"）；`→` 单步（开场卡上是"跳过"）；`Esc` 停止整场
 - 速度按钮循环 **1× → 2× → 4×**（现场建议 2×/4×）
 - 脚本中的审批点击是**真实点击**（require click），点不到会出现红色 blocker 并暂停，按 `→` 单步或重开脚本
 - 中/英切换（顶栏 `中文/EN` 按钮）不打断播放
@@ -111,7 +116,7 @@ npm run tts        # 重新生成演示语音（edge-tts，中/英各 41 条 →
 src/runtime/   LangGraph 9 节点图、闸门、政策引擎、身份、时钟、幂等、checkpoint
 src/mocks/     fixtures（客户/账户/政策/三邮件/回测）+ 11 组 MSW handler + DLP
 src/screens/   四屏（customer / agent / supervisor / builder）+ Settings
-src/demo/      一键演示：脚本、runner、FakeCursor、Tooltip、控制条
+src/demo/      一键演示：开场卡 agenda.ts、脚本、runner、FakeCursor、Tooltip、控制条
 src/locales/   7 个 namespace 的 en/zh JSON
 server/        Dev BFF（Provider 设置、key 掩码、LLM 代理与回退）
 evals/         promptfoo 自定义 provider 与六集用例

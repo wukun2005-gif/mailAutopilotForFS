@@ -142,7 +142,7 @@ export const GRADUATION_TABLE: GraduationEntry[] = [
     label: { zh: "Reg E 争议受理（演示用影子态）", en: "Reg E intake (demo shadow)" },
     risk: "R2",
     regulated: true,
-    triggers90d: 580,
+    triggers90d: 640,
     criticalMisses: 0,
     noEditApproval: 0.955,
     graduatedL: "L2",

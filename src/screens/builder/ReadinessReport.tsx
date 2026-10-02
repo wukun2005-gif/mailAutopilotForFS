@@ -35,7 +35,7 @@ function evaluate(g: GraduationEntry, negativeColumnPresent: boolean, t: (k: str
       headline: t("readiness.rareHeadline"),
       details: [
         { text: t("readiness.rareTriggers", { count: g.triggers90d }), pass: null },
-        { text: t("readiness.rareConformal"), pass: null },
+        { text: t("readiness.rareFallback"), pass: null },
       ],
     };
   }
@@ -99,6 +99,10 @@ export function ReadinessReport({
   const [signedCompliance, setSignedCompliance] = useState(false);
   const [signedBusiness, setSignedBusiness] = useState(false);
   const both = signedCompliance && signedBusiness;
+  console.warn(
+    `[demo] readiness render: intent=${entry.intentCode} status=${entry.status} dualSigned=${entry.dualSigned} ` +
+      `signable=${verdict.signable} alreadySigned=${alreadySigned} compliance=${signedCompliance} business=${signedBusiness}`,
+  );
 
   return (
     <div className="rounded-lg border border-line bg-white p-3" data-id="s4.readiness">
@@ -112,8 +116,8 @@ export function ReadinessReport({
       </h3>
       <p className="mt-0.5 text-[13.5px] text-gray-700">{verdict.headline}</p>
       <ul className="mt-1 space-y-0.5">
-        {verdict.details.map((d) => (
-          <li key={d.text} className="flex items-center gap-1 text-[13px] text-gray-600">
+        {verdict.details.map((d, idx) => (
+          <li key={idx} data-id={`s4.readiness.check${idx}`} className="flex items-center gap-1 text-[13px] text-gray-600">
             {d.pass == null ? (
               <span className="w-3.5 text-faint">·</span>
             ) : d.pass ? (
@@ -130,7 +134,7 @@ export function ReadinessReport({
         <summary className="cursor-pointer text-[13px] text-teal">{t("readiness.globalChecks")}</summary>
         <ul className="mt-1 space-y-0.5">
           {READINESS_CHECKS.map((c) => (
-            <li key={c.code} className="flex items-start gap-1 text-[13px]">
+            <li key={c.code} data-id={`s4.readiness.global.${c.code}`} className="flex items-start gap-1 text-[13px]">
               <CheckCircle2 size={11} className={cn("mt-0.5 shrink-0", c.pass ? "text-emerald-600" : "text-red-600")} />
               <span>
                 <span className="font-medium">{c.label[lang]}</span>
@@ -162,7 +166,10 @@ export function ReadinessReport({
                 label={t("readiness.complianceSigns")}
                 signed={signedCompliance}
                 disabled={!verdict.signable}
-                onClick={() => setSignedCompliance(true)}
+                onClick={() => {
+                  console.warn("[demo] SIGN compliance clicked");
+                  setSignedCompliance(true);
+                }}
                 id="s4.sign.compliance"
               />
               <SignButton
@@ -170,13 +177,19 @@ export function ReadinessReport({
                 label={t("readiness.businessSigns")}
                 signed={signedBusiness}
                 disabled={!verdict.signable}
-                onClick={() => setSignedBusiness(true)}
+                onClick={() => {
+                  console.warn("[demo] SIGN business clicked");
+                  setSignedBusiness(true);
+                }}
                 id="s4.sign.business"
               />
               {both && (
                 <button
                   data-id="s4.sign.apply"
-                  onClick={onPromote}
+                  onClick={() => {
+                    console.warn("[demo] APPLY graduation clicked → calling onPromote");
+                    onPromote();
+                  }}
                   className="inline-flex items-center gap-1 rounded bg-navy px-2.5 py-1 text-[13.5px] font-semibold text-white"
                 >
                   <PenLine size={11} /> {t("readiness.apply")}

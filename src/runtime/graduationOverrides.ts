@@ -11,6 +11,8 @@ export interface GradOverride {
   cap?: LLevel;
   /** Promoted above the fixture table via dual sign-off. */
   promotedTo?: LLevel;
+  /** Auto-degraded by drift detection (PSI / tool failure rate / new intent cluster). */
+  driftDegraded?: boolean;
 }
 
 const RANK: Record<LLevel, number> = { L0: 0, L1: 1, L2: 2, L3: 3 };
@@ -34,6 +36,7 @@ class OverrideStore {
 
   promote(intentCode: string, level: LLevel) {
     const cur = this.map.get(intentCode) ?? {};
+    console.warn(`[demo] graduationOverrides.promote(${intentCode} → ${level})`);
     this.map.set(intentCode, { ...cur, promotedTo: level });
     this.emit();
   }
@@ -41,6 +44,13 @@ class OverrideStore {
   cap(intentCode: string, level: LLevel) {
     const cur = this.map.get(intentCode) ?? {};
     this.map.set(intentCode, { ...cur, cap: level });
+    this.emit();
+  }
+
+  /** Mark an intent as auto-degraded by drift detection (fail-closed). */
+  setDriftDegraded(intentCode: string, degraded: boolean) {
+    const cur = this.map.get(intentCode) ?? {};
+    this.map.set(intentCode, { ...cur, driftDegraded: degraded });
     this.emit();
   }
 
@@ -63,6 +73,7 @@ class OverrideStore {
     let level = baseline;
     if (o?.promotedTo) level = o.promotedTo;
     if (o?.cap && level && RANK[o.cap] < RANK[level]) level = o.cap;
+    if (o?.driftDegraded && level && RANK["L3"] > RANK.L2 && RANK[level] > RANK.L2) level = "L2";
     return level;
   }
 }

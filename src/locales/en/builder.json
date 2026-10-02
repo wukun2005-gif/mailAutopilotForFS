@@ -30,10 +30,13 @@
     "locked": "locked",
     "lockedTitle": "AI neither generates nor executes content; locked step-up template only",
     "shadowUnlock": "shadow · sign to unlock",
+    "shadowBadge": "Shadow Running",
     "manualCap": "manual cap",
     "legendLocked": "locked template / shadow",
     "legendNever": "hard never: config + no tool",
-    "legendR4": "R4 is permanently human L0 decide / L1 AI-drafts-human-signs"
+    "legendR4": "R4 is permanently human L0 decide / L1 AI-drafts-human-signs",
+    "driftNotice": "Drift auto-degrade active: {{intent}} dropped to L2",
+    "driftDetail": "PSI / tool failure rate / new intent cluster over threshold → auto-executed (fail-closed, no human approval). Re-run backtest, then dual-sign to restore."
   },
   "backtest": {
     "title": "90-day backtest replay · {{from}} → {{to}}",
@@ -51,7 +54,11 @@
       "regretAuto": "overturned after auto",
       "regretConservative": "handed to human, should have automated"
     },
-    "regretNote": "Regret rates are per million items. FR-8.4 two-way regret: both directions have to sit on the same screen — watching only “overturned after auto” flatters a conservative posture, watching only “should have automated” flatters an aggressive one; watch one direction alone and the human hand-off rate can be squeezed down to flatter the numbers."
+    "regretNote": "Regret rates are per million items. Two-way regret: both directions have to sit on the same screen — watching only “overturned after auto” flatters a conservative posture, watching only “should have automated” flatters an aggressive one; watch one direction alone and the human hand-off rate can be squeezed down to flatter the numbers.",
+    "driftTrigger": "Simulate drift trigger",
+    "driftTooltip": "Simulate PSI / tool failure rate / new intent cluster over threshold → auto-degrade (fail-closed, no human approval required)",
+    "driftActive": "Drift triggered: {{intent}} auto-degraded to L2",
+    "driftClear": "Clear drift marker"
   },
   "sampling": {
     "title": "Three-tier sampling across three frames",
@@ -81,7 +88,7 @@
     "neverDetail": "Graduation is structurally unreachable for this intent.",
     "rareHeadline": "Rare intent: 90-day volume can never reach the sample bar",
     "rareTriggers": "Only {{count}} triggers in 90 days; held at human handling.",
-    "rareConformal": "Conformal abstain fallback routes these to an agent.",
+    "rareFallback": "Abstention fallback routes these to an agent.",
     "regVolume": "regulated bar: ≥600 triggers — {{count}}",
     "regMisses": "0 critical misses — {{count}}",
     "negativeColumn": "detector-negative re-label column present",
@@ -92,15 +99,5 @@
     "shadowNot": "In shadow: evidence does not yet meet the graduation bar",
     "graduatedSignable": "Graduated and in production at the signed level",
     "graduatedNot": "Evidence does not meet the graduation bar"
-  },
-  "conformal": {
-    "title": "Conformal abstention calibration",
-    "methodDemo": "method demo · fictional values",
-    "targetAlpha": "target α",
-    "calibrationN": "calibration n",
-    "observedCoverage": "observed coverage",
-    "abstainRate": "abstain rate",
-    "coveragePct": "coverage %",
-    "avgSetSize": "avg set size"
   }
 }

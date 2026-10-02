@@ -1,12 +1,13 @@
 // BacktestRunner — 90-day recorded-data replay. The progress bar is an
 // animation; every number behind it is a recorded fixture (never computed).
 import { useEffect, useRef, useState } from "react";
-import { Play, RotateCcw } from "lucide-react";
+import { Play, RotateCcw, AlertTriangle } from "lucide-react";
 import {
   BACKTEST_WINDOW,
   INTENT_METRICS,
   type IntentMetric,
 } from "@/mocks/fixtures/index.ts";
+import { graduationOverrides } from "@/runtime/graduationOverrides.ts";
 import { useTranslation } from "react-i18next";
 
 function pct(x: number): string {
@@ -39,10 +40,10 @@ function MetricRow({ m, dim }: { m: IntentMetric; dim?: boolean }) {
       <td className="px-2 font-mono text-[13px]">
         {m.unitCostUsd > 0 ? `$${m.unitCostUsd.toFixed(2)}` : "—"}
       </td>
-      <td className={`px-2 font-mono text-[13px] ${m.regretPpm > 500 ? "font-bold text-red-700" : ""}`}>
+      <td className={`px-2 font-mono text-[13px] ${m.regretPpm > 500 ? "font-bold text-red-700" : ""}`} data-id="s4.backtest.regretAuto">
         {ppm(m.regretPpm)}
       </td>
-      <td className={`px-2 font-mono text-[13px] ${m.conservativePpm > 500 ? "font-bold text-amber-700" : ""}`}>
+      <td className={`px-2 font-mono text-[13px] ${m.conservativePpm > 500 ? "font-bold text-amber-700" : ""}`} data-id="s4.backtest.regretConservative">
         {ppm(m.conservativePpm)}
       </td>
     </tr>
@@ -54,6 +55,7 @@ export function BacktestRunner({ selectedIntent }: { selectedIntent: string }) {
   const lang = i18n.language?.startsWith("zh") ? "zh" : "en";
   const [progress, setProgress] = useState(0);
   const [running, setRunning] = useState(false);
+  const [driftIntent, setDriftIntent] = useState<string | null>(null);
   const timer = useRef<number | null>(null);
   const startedAt = useRef(0);
 
@@ -78,23 +80,55 @@ export function BacktestRunner({ selectedIntent }: { selectedIntent: string }) {
     }, 100);
   };
 
+  /** Simulate drift detection exceeding threshold → auto-degrade this intent. */
+  const simulateDrift = () => {
+    graduationOverrides.setDriftDegraded(selectedIntent, true);
+    setDriftIntent(selectedIntent);
+  };
+
   const done = progress >= 100;
 
   return (
     <div className="rounded-lg border border-line bg-white p-3" data-id="s4.backtest">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between flex-wrap gap-2">
         <h3 className="text-[15px] font-semibold text-navy">
           {t("backtest.title", { from: BACKTEST_WINDOW.from, to: BACKTEST_WINDOW.to })}
         </h3>
-        <button
-          data-id="s4.backtest.run"
-          onClick={run}
-          disabled={running}
-          className="inline-flex items-center gap-1 rounded bg-teal px-2.5 py-1 text-[13.5px] font-semibold text-white disabled:opacity-50"
-        >
-          {done ? <RotateCcw size={11} /> : <Play size={11} />}
-          {done ? t("backtest.rerun") : t("backtest.run")}
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            data-id="s4.backtest.run"
+            onClick={run}
+            disabled={running}
+            className="inline-flex items-center gap-1 rounded bg-teal px-2.5 py-1 text-[13.5px] font-semibold text-white disabled:opacity-50"
+          >
+            {done ? <RotateCcw size={11} /> : <Play size={11} />}
+            {done ? t("backtest.rerun") : t("backtest.run")}
+          </button>
+          {/* Drift simulation: only enabled after replay completes, shows the
+              fail-closed auto-degrade path (FR-3.4 AC2). */}
+          {done && !driftIntent && (
+            <button
+              data-id="s4.backtest.drift"
+              onClick={simulateDrift}
+              className="inline-flex items-center gap-1 rounded bg-amber-600 px-2.5 py-1 text-[13.5px] font-semibold text-white"
+              title={t("backtest.driftTooltip")}
+            >
+              <AlertTriangle size={11} /> {t("backtest.driftTrigger")}
+            </button>
+          )}
+          {driftIntent && (
+            <span className="inline-flex items-center gap-1 rounded bg-amber-100 px-2.5 py-1 text-[13.5px] font-semibold text-amber-900">
+              <AlertTriangle size={11} /> {t("backtest.driftActive", { intent: t("customer:trace.intents." + driftIntent, { defaultValue: driftIntent }) })}
+              <button
+                data-id="s4.backtest.driftClear"
+                onClick={() => { graduationOverrides.setDriftDegraded(driftIntent, false); setDriftIntent(null); }}
+                className="ml-1 underline"
+              >
+                {t("backtest.driftClear")}
+              </button>
+            </span>
+          )}
+        </div>
       </div>
       <div className="mt-2 h-2 overflow-hidden rounded bg-gray-100">
         <div
@@ -122,8 +156,8 @@ export function BacktestRunner({ selectedIntent }: { selectedIntent: string }) {
                 <th>{t("backtest.headers.recall")}</th>
                 <th>{t("backtest.headers.misses")}</th>
                 <th>{t("backtest.headers.cost")}</th>
-                <th>{t("backtest.headers.regretAuto")}</th>
-                <th>{t("backtest.headers.regretConservative")}</th>
+                <th data-id="s4.backtest.headers.regretAuto">{t("backtest.headers.regretAuto")}</th>
+                <th data-id="s4.backtest.headers.regretConservative">{t("backtest.headers.regretConservative")}</th>
               </tr>
             </thead>
             <tbody>

@@ -3,12 +3,91 @@
   "tabs": {
     "queue": "Approval queue",
     "clocks": "Statutory clocks",
-    "fraud": "Fraud quarantine"
+    "fraud": "Fraud quarantine",
+    "metrics": "Success metrics"
   },
   "kpi": {
     "pending": "pending approvals",
     "clocks": "clocks within 5 days",
     "quarantined": "quarantined messages"
+  },
+  "metrics": {
+    "title": "Success metrics & guardrails",
+    "subtitle": "All three headline metrics and all eight guardrails show numbers; the target / threshold column is the pilot stage gate and the monthly review criteria",
+    "main": {
+      "varr": {
+        "name": "VARR · verified autonomous resolution rate",
+        "tile": "VARR autonomous resolution · all valid inbound",
+        "value": "14.2%",
+        "unit": "week-6 observation",
+        "target": "Gate: pilot week-6 observation band 10–20%",
+        "detail": "Handled end-to-end by AI with zero human touch, no repeat contact in 14 days, no hand-off request, not overturned by QA ÷ all valid inbound"
+      },
+      "ttr": {
+        "name": "MEDIAN TTR · time to resolution",
+        "tile": "median TTR · autonomous cases",
+        "value": "12 min",
+        "unit": "autonomous median",
+        "target": "Gate: autonomous < 15 min; all inbound < 1 business day",
+        "detail": "All inbound incl. disputes 0.9 days; fictional-profile baseline 3.2 days, replaced by customer data in pilot week 1"
+      },
+      "trust": {
+        "name": "TRUST · trust & compliance index",
+        "tile": "critical errors / 1k autonomous",
+        "value": "0",
+        "unit": "critical errors / 1k autonomous",
+        "target": "One-vote veto: any miss invalidates VARR and revokes autonomy",
+        "detail": "Statutory clock met 100% · customer promise kept 100% · regulated recall 99.6% (gate 99.5%) · dossier completeness 100%"
+      }
+    },
+    "guard": {
+      "title": "Guardrail metrics (monthly review)",
+      "name": "Guardrail",
+      "value": "Current value",
+      "threshold": "Threshold & action",
+      "rows": {
+        "regret": {
+          "name": "Regret rate",
+          "value": "1.4% (worst intent 2.1%)",
+          "threshold": "Two consecutive weeks > pilot baseline +2pp → that intent drops back to L2 (threshold is a pilot-calibration assumption)"
+        },
+        "bidirectional": {
+          "name": "Bidirectional monitoring",
+          "value": "should-have-automated 3.1% · should-not-have 1.4%",
+          "threshold": "Read both sides, so the team cannot depress the hand-off rate to chase VARR"
+        },
+        "escalation": {
+          "name": "Hand-off rate & escalation reasons",
+          "value": "23.6% (identity 41 / confidence 26 / regulated 19 / fraud 10 / system failure 4 %)",
+          "threshold": "System-failure share > 10% raises an engineering alert; unusually high “identity” share → improve the step-up path"
+        },
+        "customer": {
+          "name": "Customer-side signals",
+          "value": "CSAT 4.4/5 · repeat contact 6.8% · one-click hand-off 11.2% · vulnerable-customer hand-off 2.3%",
+          "threshold": "CSAT not below the human-channel baseline 4.3; rising repeat contact freezes graduation for that intent"
+        },
+        "clockHealth": {
+          "name": "Clock health",
+          "value": "2 in the 48h warning zone · 0 untouched at due · 100% clock attainment",
+          "threshold": "Any case untouched inside the 48-hour warning zone → pinned on the supervisor board + alert"
+        },
+        "drift": {
+          "name": "Drift detection",
+          "value": "PSI 0.07 (intent/language distribution vs backtest window)",
+          "threshold": "PSI or distribution drift over threshold (pilot-calibrated assumption), or a new intent cluster → auto-degrade + labeling queue"
+        },
+        "regDetection": {
+          "name": "Regulated-case detection latency",
+          "value": "P99 6 minutes",
+          "threshold": "P99 ≤ 15 minutes; breach alerts, and regulated cases jump the queue during ingest backlog"
+        },
+        "pleaseCall": {
+          "name": "“Please call us” ending rate",
+          "value": "9% (fictional-profile baseline 22%)",
+          "threshold": "Falls month over month; a rise on any intent → re-check that the step-up path is usable"
+        }
+      }
+    }
   },
   "approval": {
     "overdue": "overdue",
@@ -83,6 +162,7 @@
     "confirm": "confirm fraud · warn customer on-file number only",
     "release": "false positive · release",
     "smsSent": "warning SMS sent only to on-file {{phone}}",
+    "closed": "fraud confirmed · case closed · dossier sealed for the record",
     "released": "released as false positive, logged.",
     "sarTitle": "SAR supporting record · locked template (facts only, no conclusions)",
     "sarNote": "recorded for the compliance queue; never transmitted to the forged address",

@@ -13,11 +13,17 @@ const METADATA_TIMEOUT_MS = 1200;
 /** The manifest must not hold a beat hostage either. */
 const MANIFEST_TIMEOUT_MS = 1500;
 
-/** 32-bit FNV-1a over UTF-16 code units (same function as tts/generate.py). */
+/** 32-bit FNV-1a over UTF-16-LE bytes (same function as tts/generate.py). */
 function fnv1a(text: string): string {
-  let h = 0x811c9dc5;
+  const buffer = new ArrayBuffer(text.length * 2);
+  const view = new Uint16Array(buffer);
   for (let i = 0; i < text.length; i++) {
-    h ^= text.charCodeAt(i);
+    view[i] = text.charCodeAt(i);
+  }
+  const bytes = new Uint8Array(buffer);
+  let h = 0x811c9dc5;
+  for (const byte of bytes) {
+    h ^= byte;
     h = Math.imul(h, 0x01000193) >>> 0;
   }
   return h.toString(16);

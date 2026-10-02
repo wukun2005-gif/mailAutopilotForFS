@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { TopBar } from "@/components/TopBar";
 import { ScenarioBar } from "@/components/ScenarioBar";
 import { FakeCursor } from "@/components/demo/FakeCursor";
+import { AgendaCard } from "@/components/demo/AgendaCard";
 import { DemoControlBar } from "@/components/demo/DemoControlBar";
 import { bindHashSync, useUIStore } from "@/store/uiStore";
 import { CustomerScreen } from "@/screens/CustomerScreen";
@@ -26,6 +27,7 @@ export default function App() {
         {screen === "builder" && <BuilderScreen />}
         {screen === "settings" && <SettingsScreen />}
       </main>
+      <AgendaCard />
       <FakeCursor />
       <DemoControlBar />
     </div>

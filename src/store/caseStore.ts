@@ -29,6 +29,17 @@ export interface CaseStoreState {
   /** Simulate a process restart (page refresh) — new graph, same checkpoints. */
   simulateRestart: () => Promise<void>;
   reset: () => Promise<void>;
+  /**
+   * Wipe the world with no scenario loaded — the state a demo chapter must
+   * never inherit from the one before it.
+   *
+   * `reset()` is conditional (it re-loads whichever scenario is current), so it
+   * is a no-op on a fresh page and it leaves the previous chapter's clock and
+   * checkpoints in place when the next script loads no scenario of its own
+   * (builder does not). This one always clears: IDB stores, mock stores, the
+   * sim clock, fault flags, and every case field in the store.
+   */
+  resetWorld: () => Promise<void>;
   refresh: () => Promise<void>;
   /** Agent edits a draft (FR-7.1): recorded into the dossier, never silent. */
   recordDraftEdit: (draftId: string, editedText: string) => Promise<void>;
@@ -134,6 +145,27 @@ export const useCaseStore = create<CaseStoreState>((set, get) => ({
   reset: async () => {
     const id = get().scenarioId;
     if (id) await get().loadScenario(id);
+  },
+
+  resetWorld: async () => {
+    // A throwaway runner is enough: its reset() wipes the IDB stores, the mock
+    // stores, the sim clock and the fault flags, none of which depend on which
+    // scenario the runner was built for.
+    const r = new CaseRunner(get().scenarioId ?? "email1");
+    await r.reset();
+    // Drop the scenario the chapter was running on: the next one loads its own
+    // (builder loads none), and leaving it set would let a click act on a case
+    // that is no longer on screen.
+    runner = null;
+    set({
+      scenarioId: null,
+      caseState: null,
+      events: [],
+      next: [],
+      busy: false,
+      reattached: false,
+      clock: simClock.snapshot(),
+    });
   },
 
   recordDraftEdit: async (draftId, editedText) => {

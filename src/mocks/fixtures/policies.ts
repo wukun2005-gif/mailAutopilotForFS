@@ -171,11 +171,20 @@ export const REGE_RECEIPT_TEMPLATE = {
   },
 };
 
+/**
+ * The record filed with the compliance queue after a confirmed BEC/ATO case
+ * (PRD §5.2 suspicious-activity reporting). It is FILED, never sent: the
+ * customer's own warning travels on the on-file channel instead (see
+ * onFileWarningSms), so this template carries observed facts about the
+ * message and the case — no addressee, no reassurance, no conclusion about
+ * intent. Rendering it on the supervisor card is the compliance story; the
+ * customer's side of the same case is the SMS in the app.
+ */
 export const FRAUD_LOCKED_TEMPLATE = {
   templateId: "TPL_FRAUD_LOCKED",
-  subject: { zh: "我们已收到您的请求", en: "We've received your request" },
+  subject: { zh: "可疑活动备案记录（只含事实）", en: "Suspicious activity record (facts only)" },
   body: {
-    zh: "尊敬的客户：\n\n我们已收到您的信息。出于账户安全，资料变更请求无法通过邮件办理，我们的团队将通过预留联系方式与您确认。如这不是您本人的操作，请立即拨打卡背客服电话。\n\nLarkspur Bank 安全团队",
-    en: "Dear Customer,\n\nWe've received your information. For your security, profile changes can't be processed by email, and our team will confirm through the contact details on file. If you did not send this, please call the number on the back of your card immediately.\n\nLarkspur Bank Security Team",
+    zh: "备案编号：SAR-2026-0924-0033\n案件编号：CASE-ATO-3309\n受理时间：2026-09-24 22:47（服务器到达时间戳）\n\n来件记录\n· 发件地址：jane.d0e@outlook.com（与档案内 jane.doe@gmail.com 形近）\n· 显示名：声称客户本人\n· 协议校验：SPF 通过 · DKIM 通过 · DMARC 策略 none\n· 附件：id-verification.png，内嵌指令文本（作为数据归档，未执行）\n· 请求动作：手机号变更 · 补发卡片寄送至未登记地址\n\n处置记录\n· 身份保障定档：I0（无法关联到账户）\n· 动作风险：R3，邮件渠道不提供对应工具，未执行\n· 客户通知：短信，仅发送至档案内号码\n· 档案字段变更：无\n\n本记录由锁定模板生成，仅含上述事实字段，不含结论性判断。",
+    en: "Record id: SAR-2026-0924-0033\nCase id: CASE-ATO-3309\nReceived: 2026-09-24 22:47 (server arrival timestamp)\n\nMessage as received\n· Sender address: jane.d0e@outlook.com (lookalike of on-file jane.doe@gmail.com)\n· Display name: claims to be the customer\n· Protocol checks: SPF pass · DKIM pass · DMARC policy none\n· Attachment: id-verification.png, embeds instruction text (filed as data, not executed)\n· Requested actions: phone number change · replacement card dispatched to an unregistered address\n\nHandling as recorded\n· Identity assurance: I0 (cannot be linked to an account)\n· Action risk: R3 — no such tool in the email channel, nothing executed\n· Customer notification: SMS, on-file number only\n· Profile fields changed: none\n\nGenerated from a locked template. The fields above are the facts the system recorded; no conclusion about intent is stated here.",
   },
 };

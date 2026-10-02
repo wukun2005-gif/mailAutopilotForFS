@@ -3,8 +3,11 @@
 // card, a clock-board table, a greyed-out fraud button), and a caption that
 // follows the pointer lands on top of exactly the thing it is describing.
 // A fixed band keeps every line fully on screen and lets the pointer move
-// anywhere; when the highlighted element sits low on the screen the band moves
-// to the top instead, so the caption never covers its own subject.
+// anywhere; when the highlighted element sits too low for that band, the
+// caption moves UP to sit immediately above the element rather than jumping to
+// a fixed offset at the top of the window — a top-anchored band lands on
+// whatever the screen happens to put there (the supervisor KPI row), which is
+// a second thing the audience now has to read past.
 import { AnimatePresence, motion } from "framer-motion";
 import { useDemoStore } from "@/demo/demoStore.ts";
 
@@ -25,7 +28,19 @@ export function Tooltip({
   const highlight = useDemoStore((s) => s.highlight);
   if (!text) return null;
   const floor = window.innerHeight - BAND - BAND_MAX - 24;
-  const low = highlight ? highlight.rect.y + highlight.rect.h > floor : position.y > floor;
+  // Default: the band above the playback bar, clear of the subject either way.
+  let style: { top?: number; bottom?: number } = { bottom: BAND };
+  // Without a highlight there is only the pointer position, which has no size:
+  // treat it as a point so the same two branches still hold.
+  const subject = highlight ? highlight.rect : { ...position, h: 0 };
+  if (subject.y + subject.h > floor) {
+    // Too low for the band. Sit directly above the subject — the caption hugs
+    // the thing it names instead of covering an unrelated row near the top.
+    const above = subject.y - BAND_MAX - 16;
+    // If there is no room above either (a subject near the top), the caption
+    // goes below it rather than on top of it.
+    style = above >= 56 ? { top: above } : { top: Math.min(subject.y + subject.h + 12, floor) };
+  }
   return (
     <AnimatePresence mode="wait">
       <motion.div
@@ -35,7 +50,7 @@ export function Tooltip({
         exit={{ opacity: 0, y: -8, scale: 0.98 }}
         transition={{ duration: 0.25 }}
         className="pointer-events-none fixed left-1/2 z-[9998] w-[min(720px,92vw)] -translate-x-1/2 rounded-xl bg-navy/95 px-5 py-3 text-center text-[16.5px] font-medium leading-relaxed text-white shadow-2xl backdrop-blur"
-        style={low ? { top: 96 } : { bottom: BAND }}
+        style={style}
       >
         {text}
       </motion.div>

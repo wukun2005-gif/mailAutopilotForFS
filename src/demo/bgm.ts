@@ -24,7 +24,14 @@ class BgmPlayer {
     });
   }
 
+  /**
+   * Idempotent: a one-click run chains five scripts and each one calls this.
+   * Re-creating the element would restart the track from its first bar at
+   * every chapter change; the loop should just keep running underneath.
+   */
   start(): void {
+    const cur = this.audio;
+    if (cur && !cur.paused && !cur.ended) return;
     this.stop();
     const a = new Audio();
     a.src = `${import.meta.env.BASE_URL}bgm-trailer.mp3`;

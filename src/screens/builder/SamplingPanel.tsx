@@ -31,6 +31,7 @@ export function SamplingPanel({
           {SAMPLE_TIERS.map((tier) => (
             <div
               key={tier.tier}
+              data-id={`s4.sampling.tier${tier.tier}`}
               className={cn(
                 "rounded border p-2 text-[13.5px]",
                 tier.tier === "C" ? "border-red-300 bg-red-50/50" : "border-line",
@@ -63,9 +64,9 @@ export function SamplingPanel({
             {SAMPLING_FRAMES.map((f) => (
               <tr key={f.code} className="border-b border-line/60">
                 <td className="py-0.5 text-left font-sans">{f.label[lang]}</td>
-                <td className="text-center">{f.tierA}</td>
-                <td className="text-center">{f.tierB}</td>
-                <td className={cn("text-center", !showC && "text-gray-300")}>
+                <td className="text-center" data-id={`s4.sampling.frame${f.code}.tierA`}>{f.tierA}</td>
+                <td className="text-center" data-id={`s4.sampling.frame${f.code}.tierB`}>{f.tierB}</td>
+                <td className={cn("text-center", !showC && "text-gray-300")} data-id={`s4.sampling.frame${f.code}.tierC`}>
                   {showC ? f.tierC : "—"}
                 </td>
               </tr>

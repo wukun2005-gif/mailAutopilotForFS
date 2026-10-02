@@ -47,19 +47,31 @@ export function FraudQuarantine({ state }: { state: CaseStateType }) {
             <span className="font-mono">{CUSTOMER_JANE.emailsOnFile[0]}</span>
           </div>
           {email3?.auth && (
-            <div className="mt-0.5 font-mono text-[13px] text-red-700">
+            <div
+              className="mt-0.5 font-mono text-[13px] text-red-700"
+              data-id="s3.fraud.auth"
+            >
               SPF {email3.auth.spf} · DKIM {email3.auth.dkim} · DMARC {email3.auth.dmarc}
             </div>
           )}
           {state.identity && (
-            <div className="mt-0.5 font-mono text-[13px] text-red-700">
+            <div
+              className="mt-0.5 font-mono text-[13px] text-red-700"
+              data-id="s3.fraud.identity"
+            >
               {t("fraud.identityLevel", { level: state.identity.level })}
             </div>
           )}
         </div>
         <ul className="mt-2 space-y-1">
           {(state.fraud?.signals ?? []).map((s) => (
-            <li key={s} className="flex items-start gap-1.5 rounded bg-white px-2 py-1 text-[13.5px]">
+            <li
+              key={s}
+              // One hook per signal line: a caption that names the injection or
+              // the lookalike lights that line, not the whole card.
+              data-id={`s3.fraud.signal.${s}`}
+              className="flex items-start gap-1.5 rounded bg-white px-2 py-1 text-[13.5px]"
+            >
               <Lock size={11} className="mt-0.5 shrink-0 text-red-600" />
               <span>{signalLabel(s, t)}</span>
             </li>
@@ -112,6 +124,11 @@ export function FraudQuarantine({ state }: { state: CaseStateType }) {
             {t("fraud.release")}
           </button>
         </div>
+        {confirmed && (
+          <div className="mt-1.5 text-[13.5px] font-semibold text-navy" data-id="s3.fraud.closed">
+            {t("fraud.closed")}
+          </div>
+        )}
         {smsSent && (
           <div className="mt-1.5 text-[13.5px] text-emerald-700" data-id="s3.fraud.onfile">
             {t("fraud.smsSent", { phone: CUSTOMER_JANE.phoneOnFile })}
@@ -128,7 +145,7 @@ export function FraudQuarantine({ state }: { state: CaseStateType }) {
           <p className="text-[13px] text-faint">
             {t("fraud.sarNote")}
           </p>
-          <div className="mt-2 rounded border border-line bg-paper p-2">
+          <div className="mt-2 rounded border border-line bg-paper p-2" data-id="s3.sar.letter">
             <TricolorLetter draft={sarDraft} audit={false} />
           </div>
         </div>

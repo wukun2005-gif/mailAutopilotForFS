@@ -9,8 +9,12 @@ export function FakeCursor() {
   const position = useDemoStore((s) => s.cursor);
   const clicking = useDemoStore((s) => s.clicking);
   const tooltip = useDemoStore((s) => s.tooltip);
+  // The opening card is a full-screen takeover: a pointer parked in the middle
+  // of a list of rows the audience is meant to read is one more thing to look
+  // at, and the first beat re-anchors the cursor anyway.
+  const agenda = useDemoStore((s) => s.agendaScriptId);
 
-  if (!visible) return null;
+  if (!visible || agenda) return null;
 
   return (
     <>

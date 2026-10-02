@@ -6,7 +6,6 @@ import { useDemoStore } from "@/demo/demoStore.ts";
 import { demoRunner } from "@/demo/runner.ts";
 import { SCRIPT_BY_ID } from "@/demo/scripts.ts";
 import { useTranslation } from "react-i18next";
-import { cn } from "@/lib/utils";
 
 const SPEEDS = [1, 2, 4];
 
@@ -23,6 +22,8 @@ export function DemoControlBar() {
   const chapter = useDemoStore((s) => s.chapter);
   const speed = useDemoStore((s) => s.speed);
   const blocker = useDemoStore((s) => s.blocker);
+  const agendaScriptId = useDemoStore((s) => s.agendaScriptId);
+  const queued = useDemoStore((s) => s.queued);
   const set = useDemoStore((s) => s.set);
 
   useEffect(() => {
@@ -30,6 +31,13 @@ export function DemoControlBar() {
       const tag = (e.target as HTMLElement)?.tagName;
       if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
       if (e.key === "Escape") demoRunner.stop();
+      // While the opening card is up, Space / → means "get on with it" — the
+      // card is not a beat, so there is nothing to pause or single-step yet.
+      if (agendaScriptId && (e.key === " " || e.key === "ArrowRight")) {
+        e.preventDefault();
+        demoRunner.dismissAgenda();
+        return;
+      }
       if (e.key === " ") {
         e.preventDefault();
         if (status === "playing") demoRunner.pause();
@@ -39,9 +47,12 @@ export function DemoControlBar() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [status]);
+  }, [status, agendaScriptId]);
 
-  if (status === "idle") return null;
+  // The opening card is a full-screen takeover, so the transport bar goes with
+  // it: the card has no beat to scrub and its own countdown owns the window.
+  // The key handler above is registered regardless, so Esc/Space still work.
+  if (status === "idle" || agendaScriptId) return null;
   const script = scriptId ? SCRIPT_BY_ID[scriptId] : null;
   const progress = totalBeats ? Math.round((beatIndex / totalBeats) * 100) : 0;
   const cycleSpeed = () => {
@@ -55,6 +66,7 @@ export function DemoControlBar() {
       className="fixed bottom-3 left-1/2 z-[9997] w-[640px] max-w-[94vw] -translate-x-1/2 rounded-xl border border-line bg-white/95 px-3 py-2 shadow-2xl backdrop-blur"
       data-id="demo.bar"
       data-status={status}
+      data-script={scriptId ?? ""}
       data-beat={beatIndex}
       data-total={totalBeats}
     >
@@ -118,14 +130,32 @@ export function DemoControlBar() {
         <div className="min-w-0 flex-1">
           <div className="flex items-center justify-between text-[13px]">
             <span className="truncate font-semibold text-navy">
+              {/* A chained run says which chapter of the show this is; a single
+                  script has no chapter number to show. */}
+              {queued && (
+                <span className="mr-1.5 rounded bg-teal/15 px-1.5 py-0.5 font-mono text-[12px] text-teal">
+                  {queued.index}/{queued.total}
+                </span>
+              )}
               {script ? t(script.nameKey) : ""} · <span className="text-faint">{chapter}</span>
             </span>
             <span className="ml-2 font-mono text-faint">
               {beatIndex}/{totalBeats}
             </span>
           </div>
+          {/* In a chained run the bar tracks the WHOLE show, not the current
+              chapter: once the demo runs unattended, "how much is left" is the
+              question the audience is actually asking. The lighter segment
+              behind the fill is the part already played. */}
           <div className="mt-0.5 h-1 overflow-hidden rounded bg-gray-100">
-            <div className={cn("h-full rounded bg-teal transition-all")} style={{ width: `${progress}%` }} />
+            <div
+              className="h-full rounded bg-teal transition-all"
+              style={{
+                width: queued
+                  ? `${((queued.index - 1 + progress / 100) / queued.total) * 100}%`
+                  : `${progress}%`,
+              }}
+            />
           </div>
         </div>
         <button data-id="demo.stop" onClick={() => demoRunner.stop()} className="rounded p-1.5 text-red-700 hover:bg-red-50" title="Esc">
