@@ -22,6 +22,8 @@ This product targets the intersection of three problems, not just "slow replies"
 
 **Thread = case.** Every email thread is handled as a case with a statutory clock, an identity-assurance level, and a sealed decision dossier. AI does all the determinable work, bank policy draws the boundary through configurable rules, and humans step in only at consequential decision points.
 
+![Email case flow before vs after](public/email-flow-before-after.svg)
+
 Differentiators (vs. Glia-style per-topic reply governance and horizontal Copilots):
 
 - **Regulated intents recognized and clocked on arrival** — even a half-sentence buried in a multi-intent email ("I don't recognize this charge") counts as notice; the clock starts at the intake timestamp.
