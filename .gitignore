@@ -16,3 +16,31 @@ v0.2-sections/
 ai-memory-research-report.html
 email-autopilot-prototype-dev-plan-v0.1.html
 report-*-text-export.txt
+
+# 只保留在本地、不进仓库：PPTX / Keynote 那条线的全部遗留（2026-10-03 清理）
+# 注意 deck-html/ 是要发布的浏览器 deck，不受下面任何一条影响
+.backups/
+.workbuddy-ai/
+deck/
+deck-v2/
+deck-v2-notes/
+deck-review.html
+en1-identity-45s.mp4
+APPLE-EVENTS-ISSUE.md
+KEYNOTE-PPTX-FIX.md
+scripts/build-pptx.py
+scripts/build-pptx-editable.py
+scripts/pptx-to-html.py
+scripts/keynote_skeleton.py
+scripts/make-keynote-skeleton.py
+scripts/preview-pptx.mjs
+scripts/render-editable.mjs
+scripts/render-key-slides.mjs
+scripts/shot-pptx-html.mjs
+scripts/fix-type-pass.py
+scripts/fix-type-pass2.py
+scripts/fix-visual-pass.py
+scripts/review-shots.mjs
+scripts/qa-deck.mjs
+scripts/check-deck.mjs
+scripts/check-lang.mjs
