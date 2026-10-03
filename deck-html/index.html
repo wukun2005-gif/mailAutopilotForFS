@@ -222,6 +222,16 @@ body.fs #tocshow{display:none}
   padding:7px 10px;cursor:pointer}
 .fsbtn:hover{background:rgba(18,26,35,.96);border-color:var(--teal);color:var(--teal)}
 
+/* play affordance shown until the clip is actually requested (see armVideo) */
+.vplay{position:absolute;inset:0;z-index:3;display:flex;align-items:center;justify-content:center;
+  background:rgba(4,7,11,.30);border:0;padding:0;cursor:pointer}
+.vplay::after{content:"▶";width:58px;height:58px;border-radius:50%;padding-left:5px;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(6,10,15,.78);border:2px solid var(--teal);color:var(--teal);font-size:23px;
+  box-shadow:0 6px 22px rgba(0,0,0,.55)}
+.vplay:hover{background:rgba(4,7,11,.18)}
+.vplay.gone{display:none}
+
 /* one big video beside three points */
 .vidslot{position:relative;height:420px;aspect-ratio:16/9;flex:0 0 auto;
   border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#000}
@@ -669,7 +679,8 @@ body.fs #tocshow{display:none}
         <div class="dsc">A lookalike sender claims to be the customer. Identity is challenged inside the thread before a word is written.</div>
         <div class="shot slot">
           <div class="ph"><span class="tri">▶</span>Video 1 · 6:53</div>
-          <video src="assets/clips/demo-1-identity.mp4" controls preload="metadata" playsinline></video>
+          <video data-src="assets/clips/demo-1-identity.mp4" poster="assets/shots/poster-1.jpg" controls preload="none" playsinline></video>
+          <button class="vplay" type="button" aria-label="Play video 1, 17 MB"></button>
           <button class="fsbtn" type="button">⛶ Full screen</button>
         </div>
         <div class="cap">Verified in-thread, AI disclosed</div>
@@ -679,7 +690,8 @@ body.fs #tocshow{display:none}
         <div class="dsc">A dispute buried in a multi-intent email: the case opens and the clock runs before a human reads it.</div>
         <div class="shot slot">
           <div class="ph"><span class="tri">▶</span>Video 2 · 3:15</div>
-          <video src="assets/clips/demo-2-dispute.mp4" controls preload="metadata" playsinline></video>
+          <video data-src="assets/clips/demo-2-dispute.mp4" poster="assets/shots/poster-2.jpg" controls preload="none" playsinline></video>
+          <button class="vplay" type="button" aria-label="Play video 2, 8.9 MB"></button>
           <button class="fsbtn" type="button">⛶ Full screen</button>
         </div>
         <div class="cap">Missing materials never pause the clock</div>
@@ -689,7 +701,8 @@ body.fs #tocshow{display:none}
         <div class="dsc">A takeover asks for a mobile-number change and a card to a new address; both writes are greyed out on this channel.</div>
         <div class="shot slot">
           <div class="ph"><span class="tri">▶</span>Video 3 · 4:19</div>
-          <video src="assets/clips/demo-3-fraud.mp4" controls preload="metadata" playsinline></video>
+          <video data-src="assets/clips/demo-3-fraud.mp4" poster="assets/shots/poster-3.jpg" controls preload="none" playsinline></video>
+          <button class="vplay" type="button" aria-label="Play video 3, 9.7 MB"></button>
           <button class="fsbtn" type="button">⛶ Full screen</button>
         </div>
         <div class="cap">Unreachable, not merely switched off</div>
@@ -706,7 +719,8 @@ body.fs #tocshow{display:none}
   <div class="fig">
     <div class="vidslot">
       <div class="ph"><span class="tri">▶</span>Video 4 · Admin walkthrough · 3:31</div>
-      <video src="assets/clips/demo-4-admin.mp4" controls preload="metadata" playsinline></video>
+      <video data-src="assets/clips/demo-4-admin.mp4" poster="assets/shots/poster-4.jpg" controls preload="none" playsinline></video>
+      <button class="vplay" type="button" aria-label="Play video 4, 10 MB"></button>
       <button class="fsbtn" type="button">⛶ Full screen</button>
     </div>
     <div class="stack" style="flex:0 0 356px">
@@ -1271,6 +1285,7 @@ slides.forEach(function(s,idx){
   c.classList.add('on');
   c.querySelectorAll('video').forEach(function(v){v.remove();});
   c.querySelectorAll('.fsbtn').forEach(function(v){v.remove();});
+  c.querySelectorAll('.vplay').forEach(function(v){v.remove();});
   th.appendChild(c);
   const lab=document.createElement('span'); lab.className='toclabel';
   const h=s.querySelector('h1,h2');
@@ -1281,11 +1296,35 @@ slides.forEach(function(s,idx){
 });
 const tocItems=[...tocList.querySelectorAll('.tocitem')];
 
+/* ── lazy video ──
+   The four clips are 45 MB together. Leaving them in src= made Chrome pull all
+   four the moment the deck opened, so the first paint waited on 45 MB of video
+   nobody had asked for yet. src is parked in data-src and only attached when a
+   clip is actually wanted: a click on its cover, or the full-screen button. */
+function armVideo(v){
+  if(!v.dataset.src) return;
+  v.src=v.dataset.src;
+  delete v.dataset.src;
+  v.load();
+  const btn=v.parentElement&&v.parentElement.querySelector('.vplay');
+  if(btn) btn.classList.add('gone');
+}
+document.querySelectorAll('.vplay').forEach(function(btn){
+  btn.addEventListener('click',function(e){
+    e.stopPropagation();
+    const v=btn.parentElement.querySelector('video');
+    if(!v) return;
+    armVideo(v);
+    const p=v.play(); if(p&&p.catch) p.catch(function(){});
+  });
+});
+
 /* ── lightbox: lives on <body>, outside the scaled slide, so it can go big ── */
 const lb=document.getElementById('lightbox');
 let lbVideo=null, lbHome=null;
 function openLb(v){
   if(lbVideo) return;
+  armVideo(v);
   lbVideo=v; lbHome=v.parentElement;
   lb.appendChild(v);
   lb.classList.add('on');
