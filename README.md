@@ -4,6 +4,8 @@
 
 Full demo video: https://youtu.be/GR680tlGrTw
 
+Live slide deck: https://wukun2005-gif.github.io/mailAutopilotForFS/deck-html/
+
 All banks, customers, accounts, amounts, and backtest numbers in this repo are **fictional**. The prototype runs fully offline on recorded fixtures.
 
 Product spec: [PRD v0.2](https://wukun2005-gif.github.io/mailAutopilotForFS/email-autopilot-fs-prd_en.html)
