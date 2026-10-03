@@ -2,7 +2,7 @@
 
 ![Demo preview](public/demo-intro.gif)
 
-Full demo video: https://youtu.be/3JK_lSlJqjk
+Full demo video: https://youtu.be/GR680tlGrTw
 
 All banks, customers, accounts, amounts, and backtest numbers in this repo are **fictional**. The prototype runs fully offline on recorded fixtures.
 
