@@ -48,7 +48,7 @@ async function railClick(label) {
   await p.mouse.click(pt.x, pt.y);
   await p.waitForTimeout(400);
 }
-await railClick("Three emails");
+await railClick("Four screens");
 await p.screenshot({ path: "/Users/wukun/Documents/tmp/mailAutopilotForFS/deck/build/html-rail.png" });
 const on12 = await p.evaluate(() => ({
   pos: document.querySelector("#stage > .slide.on .colophon")?.textContent.trim(),
