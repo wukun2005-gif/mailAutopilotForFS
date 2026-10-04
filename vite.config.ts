@@ -27,7 +27,7 @@ export default defineConfig({
       ignored: [
         "**/_backup/**",
         "**/_shots/**",
-        (p: string) => /[\\/]index\.html$/.test(p) === false && p.endsWith(".html"),
+        (p: string) => p.endsWith(".html") && p !== fileURLToPath(new URL("./index.html", import.meta.url)),
       ],
     },
   },
