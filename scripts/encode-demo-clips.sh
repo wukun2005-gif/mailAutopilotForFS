@@ -11,7 +11,7 @@
 # KEEP THE AUDIO. The demos carry a narration track (Stream #0:1, aac stereo).
 # Do NOT pass -an.
 set -e
-cd /Users/wukun/Documents/tmp/mailAutopilotForFS/deck/_html-source/assets/clips
+cd /Users/wukun/Documents/tmp/mailAutopilotForFS/deck-html/assets/clips
 D=/Users/wukun/Downloads
 
 enc() {
