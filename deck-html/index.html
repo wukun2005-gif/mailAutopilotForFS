@@ -30,6 +30,16 @@ body.notoc .stage{left:0}
 }
 .eyebrow .n{color:var(--teal);font-weight:600}
 .eyebrow::after{content:"";flex:1;height:1px;background:var(--line)}
+/* repo link, sat right after the section name so the rule line still fills */
+.eyebrow .gh{display:inline-flex;align-items:center;gap:7px;padding:5px 13px;
+  border:1px solid #4EA8F5;border-radius:999px;text-decoration:none;
+  font:700 16px/1 var(--sans);letter-spacing:.01em;color:#7FC4FF;
+  background:rgba(78,168,245,.14);
+  box-shadow:0 0 0 3px rgba(78,168,245,.10);
+  transition:background .12s,color .12s,box-shadow .12s}
+.eyebrow .gh:hover{color:#0B1117;background:#7FC4FF;border-color:#7FC4FF;
+  box-shadow:0 0 0 4px rgba(127,196,255,.30)}
+.eyebrow .gh svg{width:16px;height:16px;fill:currentColor;flex:0 0 auto}
 h2{font-size:40px;line-height:1.12;font-weight:600;margin:0 0 5px;letter-spacing:-.02em}
 .claim{font-size:22px;line-height:1.4;color:var(--soft);margin:0 0 14px;max-width:68ch}
 /* safe center: centres when the content fits, but never pushes the first row
@@ -488,6 +498,22 @@ body.fs #tocshow{display:none}
   <div class="colophon"><span>06 / 18</span></div>
 </section>
 
+<!-- ═══ 10 DIFFERENTIATION ═══ -->
+<section class="slide">
+  <p class="eyebrow"><span class="n">03</span> Why us</p>
+  <h2>Same email. A different thing is being governed.</h2>
+  <div class="chart">
+    <table>
+      <tr><th></th><th>Response modes — the incumbent approach</th><th>What we do inside every email</th></tr>
+      <tr><td class="k">Says</td><td>Three degrees of freedom on one generator — verbatim, rephrased, or constrained. Chosen per topic.</td><td class="k">Three different sources assembled: locked disclosure, system slots, generated connective text.</td></tr>
+      <tr><td class="k">Does</td><td>Not governed. The mode controls the prose, not the action.</td><td class="k">Action risk R0–R4 — reversibility and impact — decides whether the machine may act at all.</td></tr>
+      <tr><td class="k">To whom</td><td>Not governed.</td><td class="k">Identity assurance I0–I3 — how strongly the sender is tied to the account — decides what may be disclosed or done.</td></tr>
+    </table>
+  </div>
+  <p class="note"><b>“They govern what the AI says, topic by topic. We govern what it says, does, and to whom — inside every email.”</b> IDC, 2026: Talkdesk “suits buyers looking for vertical-specific AI workflows rather than generic, horizontal automation.”</p>
+  <div class="colophon"><span>07 / 18</span></div>
+</section>
+
 <!-- ═══ 7 THREAD = CASE ═══ -->
 <section class="slide">
   <p class="eyebrow"><span class="n">03</span> How it works</p>
@@ -513,7 +539,7 @@ body.fs #tocshow{display:none}
       <text class="lgd" x="710" y="288">the only part that goes through a model</text>
     </svg>
   </div>
-  <div class="colophon"><span>07 / 18</span></div>
+  <div class="colophon"><span>08 / 18</span></div>
 </section>
 
 <!-- ═══ 8 THE REPLY ═══ -->
@@ -521,14 +547,14 @@ body.fs #tocshow{display:none}
   <p class="eyebrow"><span class="n">03</span> How it works</p>
   <h2>The reply, assembled from three sources.</h2>
   <div class="fig">
-    <img src="assets/shots/shot-letter.png" alt="The assembled reply, coloured by source" style="max-height:414px">
+    <img data-src="assets/shots/shot-letter.jpg" alt="The assembled reply, coloured by source" style="max-height:414px">
     <div class="stack">
-      <img src="assets/shots/shot-policy.png" alt="The policy pack that decided" style="width:100%">
+      <img data-src="assets/shots/shot-policy.jpg" alt="The policy pack that decided" style="width:100%">
       <div class="lgd" style="font-size:16px;color:var(--dim)">Colour key — <span style="color:#8B5CF6;font-weight:600">purple: generated connective text</span> · <span style="color:#3F8F4A;font-weight:600">green: system slots, checked field by field</span> · <span style="color:#3B7DD8;font-weight:600">blue: locked disclosure, never generated</span></div>
     </div>
   </div>
   <p class="note"><b>The letter is not written. It is assembled</b> — the disclosure and the amounts are filled from the system, and the only thing a model touches is the sentence that joins them. That sentence is boxed in by the two facts on either side of it: it can connect them, never add one.</p>
-  <div class="colophon"><span>08 / 18</span></div>
+  <div class="colophon"><span>09 / 18</span></div>
 </section>
 
 <!-- ═══ 8 SCOPE ═══ -->
@@ -583,7 +609,7 @@ body.fs #tocshow{display:none}
     </svg>
   </div>
   <p class="note">Wave 2, once wave 1 has graduated: payments and payoff, complaints and vulnerability signals.</p>
-  <div class="colophon"><span>09 / 18</span></div>
+  <div class="colophon"><span>10 / 18</span></div>
 </section>
 
 <!-- ═══ 9 AUTONOMY ═══ -->
@@ -618,49 +644,33 @@ body.fs #tocshow{display:none}
       <text class="lgd" x="36" y="314">Graduation: backtest → shadow → dual sign-off (compliance + operations) → autonomous · auto-demotion on drift</text>
     </svg>
   </div>
-  <div class="colophon"><span>10 / 18</span></div>
-</section>
-
-<!-- ═══ 10 DIFFERENTIATION ═══ -->
-<section class="slide">
-  <p class="eyebrow"><span class="n">03</span> Why us</p>
-  <h2>Same email. A different thing is being governed.</h2>
-  <div class="chart">
-    <table>
-      <tr><th></th><th>Response modes — the incumbent approach</th><th>What we do inside every email</th></tr>
-      <tr><td class="k">Says</td><td>Three degrees of freedom on one generator — verbatim, rephrased, or constrained. Chosen per topic.</td><td class="k">Three different sources assembled: locked disclosure, system slots, generated connective text.</td></tr>
-      <tr><td class="k">Does</td><td>Not governed. The mode controls the prose, not the action.</td><td class="k">Action risk R0–R4 — reversibility and impact — decides whether the machine may act at all.</td></tr>
-      <tr><td class="k">To whom</td><td>Not governed.</td><td class="k">Identity assurance I0–I3 — how strongly the sender is tied to the account — decides what may be disclosed or done.</td></tr>
-    </table>
-  </div>
-  <p class="note"><b>“They govern what the AI says, topic by topic. We govern what it says, does, and to whom — inside every email.”</b> IDC, 2026: Talkdesk “suits buyers looking for vertical-specific AI workflows rather than generic, horizontal automation.”</p>
   <div class="colophon"><span>11 / 18</span></div>
 </section>
 
 <!-- ═══ 11 PROTOTYPE · FOUR SCREENS ═══ -->
 <section class="slide">
-  <p class="eyebrow"><span class="n">03</span> Prototype</p>
+  <p class="eyebrow"><span class="n">03</span> Prototype <a class="gh" href="https://github.com/wukun2005-gif/mailAutopilotForFS/" target="_blank" rel="noopener" title="Open the source repository on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>github.com/wukun2005-gif/mailAutopilotForFS</a></p>
   <h2>Four screens, one case — nobody starts cold.</h2>
   <div class="chart">
     <div class="screens four">
       <div class="scr">
         <div class="lab">Customer · no login</div>
-        <div class="shot"><img src="assets/shots/crop-thread.png" alt="The customer thread"></div>
+        <div class="shot"><img data-src="assets/shots/crop-thread.jpg" alt="The customer thread"></div>
         <div class="cap">Thread = case — verified in-thread, AI disclosed</div>
       </div>
       <div class="scr">
         <div class="lab">Agent · Banking Workspace</div>
-        <div class="shot"><img src="assets/shots/crop-agent.png" alt="Policy evaluation in the case pack"></div>
+        <div class="shot"><img data-src="assets/shots/crop-agent.jpg" alt="Policy evaluation in the case pack"></div>
         <div class="cap">Policy verdict, not model mood</div>
       </div>
       <div class="scr">
         <div class="lab">Supervisor · Console</div>
-        <div class="shot"><img src="assets/shots/crop-clocks.png" alt="The statutory clock board"></div>
+        <div class="shot"><img data-src="assets/shots/crop-clocks.jpg" alt="The statutory clock board"></div>
         <div class="cap">Statutory clocks, live</div>
       </div>
       <div class="scr">
         <div class="lab">Admin · Policy</div>
-        <div class="shot"><img src="assets/shots/crop-matrix.png" alt="The autonomy matrix"></div>
+        <div class="shot"><img data-src="assets/shots/crop-matrix.jpg" alt="The autonomy matrix"></div>
         <div class="cap">R3 and R4 do not respond — no setting can switch them on</div>
       </div>
     </div>
@@ -670,7 +680,7 @@ body.fs #tocshow{display:none}
 
 <!-- ═══ 12 PROTOTYPE · THREE DEMOS ═══ -->
 <section class="slide">
-  <p class="eyebrow"><span class="n">03</span> Prototype</p>
+  <p class="eyebrow"><span class="n">03</span> Prototype <a class="gh" href="https://github.com/wukun2005-gif/mailAutopilotForFS/" target="_blank" rel="noopener" title="Open the source repository on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>github.com/wukun2005-gif/mailAutopilotForFS</a></p>
   <h2>Three emails, three proofs.</h2>
   <div class="chart">
     <div class="screens three">
@@ -714,7 +724,7 @@ body.fs #tocshow{display:none}
 
 <!-- ═══ 13 PROTOTYPE · ADMIN ═══ -->
 <section class="slide">
-  <p class="eyebrow"><span class="n">03</span> Prototype</p>
+  <p class="eyebrow"><span class="n">03</span> Prototype <a class="gh" href="https://github.com/wukun2005-gif/mailAutopilotForFS/" target="_blank" rel="noopener" title="Open the source repository on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>github.com/wukun2005-gif/mailAutopilotForFS</a></p>
   <h2>Admin: the bank writes the limits, not the model.</h2>
   <div class="fig">
     <div class="vidslot">
@@ -1296,6 +1306,22 @@ slides.forEach(function(s,idx){
 });
 const tocItems=[...tocList.querySelectorAll('.tocitem')];
 
+/* ── lazy images ──
+   Same reason as the clips: the deck carries six screenshots spread over two
+   pages, and eagerly fetching all of them made the load event wait on every
+   one. src is parked in data-src and attached when the owning page is opened,
+   so a viewer who never reaches page 8 or 12 never downloads them. The .shot
+   boxes have a fixed height, so nothing shifts when a picture lands. */
+function armImage(img){
+  if(!img.dataset.src) return;
+  img.src=img.dataset.src;
+  delete img.dataset.src;
+}
+function armSlide(sl){
+  if(!sl) return;
+  sl.querySelectorAll('img[data-src]').forEach(armImage);
+}
+
 /* ── lazy video ──
    The four clips are 45 MB together. Leaving them in src= made Chrome pull all
    four the moment the deck opened, so the first paint waited on 45 MB of video
@@ -1359,6 +1385,7 @@ function fit(){
 function show(n){
   i=Math.max(0,Math.min(slides.length-1,n));
   slides.forEach(function(sl,k){sl.classList.toggle('on',k===i);});
+  armSlide(slides[i]);
   tocItems.forEach(function(it,k){it.classList.toggle('on',k===i);});
   if(tocItems[i]&&tocItems[i].scrollIntoView) tocItems[i].scrollIntoView({block:'nearest'});
   document.getElementById('pos').textContent=(i+1)+' / '+slides.length;
