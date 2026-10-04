@@ -111,8 +111,8 @@ table.tight td{padding:4px 8px;line-height:1.28}
 .risk .idx{display:flex;align-items:center;gap:8px;font-size:13px;letter-spacing:.14em;
   color:var(--red);font-weight:600}
 .risk .idx .d{width:9px;height:9px;border-radius:50%;background:var(--red);flex:0 0 auto}
-.risk .h{font-size:19px;font-weight:600;color:var(--ink);line-height:1.3}
-.risk .w{font-size:14.5px;color:var(--dim);line-height:1.42}
+.risk .h{font-size:19px;font-weight:600;color:var(--ink);line-height:1.3;min-height:25px}
+.risk .w{font-size:14.5px;color:var(--dim);line-height:1.42;min-height:42px}
 .risk .div{height:1px;background:var(--line)}
 .risk .k{font-size:12.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--teal);font-weight:600}
 .risk ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
@@ -181,13 +181,6 @@ table.tight td{padding:4px 8px;line-height:1.28}
 .slide.backup{background:#121820}
 .slide.backup .eyebrow .n{color:var(--amber)}
 
-.hud{
-  position:fixed;bottom:14px;left:calc(50% + 93px);transform:translateX(-50%);
-  font-size:12px;color:#7c8896;background:rgba(8,11,15,.85);
-  padding:7px 15px;border-radius:20px;display:flex;gap:16px;z-index:50;
-}
-body.notoc .hud{left:50%}
-.hud b{color:#dbe4ec;font-weight:600}
 .bar{position:fixed;top:0;left:0;height:2px;background:var(--teal);z-index:60;transition:width .22s}
 .ov{position:fixed;top:12px;right:16px;z-index:60;font-size:11px;color:#5f6b78}
 
@@ -292,8 +285,6 @@ body.light #toc{background:#FFFFFF}
 body.light #toc .toclist::-webkit-scrollbar-thumb{background:#C8D2DC}
 body.light #tocshow{background:rgba(255,255,255,.94)}
 body.light .tocitem:hover .tocthumb{border-color:#8FA0B0}
-body.light .hud{background:rgba(255,255,255,.92);color:#5D6C7B}
-body.light .hud b{color:#16202B}
 body.light .ov{color:#6B7A8A}
 body.light .tcell.b{background:#FBF3DF;border-color:#E0C9A0}
 body.light .eyebrow .gh{color:#1565C0;border-color:#4EA8F5}
@@ -342,10 +333,10 @@ body.light [style*="color:#F5B544"]{color:#A96F00!important}
 body.light [style*="color:#F2786E"]{color:#C63F31!important}
 </style>
 </head>
-<body>
+<body class="light">
 <div class="bar" id="bar"></div>
-<div class="ov">↑ ↓ · F fullscreen · T pages · P print</div>
-<button id="themebtn" class="themebtn" type="button" title="Switch between dark and light">☾ Dark</button>
+<div class="ov">↑ ↓ · F fullscreen · T pages</div>
+<button id="themebtn" class="themebtn" type="button" title="Switch to dark">☀ Light</button>
 
 <aside id="toc">
   <div class="tochead"><span>Pages · <b id="toccount">29</b></span><button id="toctoggle" type="button" title="Hide this rail (T)">◧</button></div>
@@ -387,7 +378,7 @@ body.light [style*="color:#F2786E"]{color:#C63F31!important}
       </div>
     </div>
   </div>
-  <div class="colophon"><span>02 / 19</span></div>
+  <div class="colophon"><span>02 / 20</span></div>
 </section>
 
 <!-- ═══ 3 BEACHHEAD ═══ -->
@@ -417,7 +408,7 @@ body.light [style*="color:#F2786E"]{color:#C63F31!important}
       <text class="lgd" x="24" y="314">262 = FDIC BankFind, 2026-09-25, FDIC-insured only. NCUA stopped publishing asset bands in 2025Q4, so in-band credit unions are not counted.</text>
     </svg>
   </div>
-  <div class="colophon"><span>03 / 19</span></div>
+  <div class="colophon"><span>03 / 20</span></div>
 </section>
 
 <!-- ═══ 3 CLOCK ═══ -->
@@ -444,7 +435,7 @@ body.light [style*="color:#F2786E"]{color:#C63F31!important}
       <text class="lgd" x="24" y="316">12 CFR 1005.11 · a half-sentence inside a friendly email still counts as notice</text>
     </svg>
   </div>
-  <div class="colophon"><span>04 / 19</span></div>
+  <div class="colophon"><span>04 / 20</span></div>
 </section>
 
 <!-- ═══ 4 COST ═══ -->
@@ -501,7 +492,7 @@ body.light [style*="color:#F2786E"]{color:#C63F31!important}
       <text class="lgd" x="0" y="406" font-size="15">27h and 22%: Larkspur profile, assumption — replaced by the customer's own mail in week one</text>
     </svg>
   </div>
-  <div class="colophon"><span>05 / 19</span></div>
+  <div class="colophon"><span>05 / 20</span></div>
 </section>
 
 <!-- ═══ 5 ROI ═══ -->
@@ -531,7 +522,7 @@ body.light [style*="color:#F2786E"]{color:#C63F31!important}
   </div>
   <p class="note"><b>Net-new, not cannibalised.</b> Async mail is the safest autonomy proving ground and 90 days of history is a ready-made eval set; on assumption-based math ≈$268k of resolution fees outweighs the ≈$63k of seats they replace.</p>
   <p class="note" style="font-size:15.5px"><b>Three levers move together</b> across the three cases — failed demand, autonomy, copilot uplift. Full arithmetic in B1, and every input is recalculated from the customer's own mail in week one.</p>
-  <div class="colophon"><span>06 / 19</span></div>
+  <div class="colophon"><span>06 / 20</span></div>
 </section>
 
 <!-- ═══ 6 FIELD ═══ -->
@@ -600,7 +591,7 @@ body.light [style*="color:#F2786E"]{color:#C63F31!important}
   </div>
   <p class="note"><b>Window: 12–18 months.</b> We spend it on what Talkdesk already ships — CXA Operations Center, Agent Builder, Automation Flows, and core-banking connectors since April 2025. Freshworks has shipped autonomous email since 2025-06; nobody has shipped the <i>case</i>.</p>
   <p class="note" style="font-size:15.5px"><b>Why this over our other opportunities:</b> voice is the existing base, so email is an add-on to the same install base rather than new-customer acquisition; async mail carries no real-time interruption risk, so it is the lowest-risk way to graduate the autonomy matrix; and it reuses the same runtime, so the marginal build is the vertical layer alone.</p>
-  <div class="colophon"><span>07 / 19</span></div>
+  <div class="colophon"><span>07 / 20</span></div>
 </section>
 
 <!-- ═══ 10 DIFFERENTIATION ═══ -->
@@ -659,7 +650,7 @@ body.light [style*="color:#F2786E"]{color:#C63F31!important}
     </svg>
   </div>
   <p class="note"><b>“They govern what the AI says, topic by topic. We govern what it says, does, and to whom — inside every email.”</b> IDC, 2026: Talkdesk “suits buyers looking for vertical-specific AI workflows rather than generic, horizontal automation.”</p>
-  <div class="colophon"><span>08 / 19</span></div>
+  <div class="colophon"><span>08 / 20</span></div>
 </section>
 
 <!-- ═══ 7 THREAD = CASE ═══ -->
@@ -687,7 +678,7 @@ body.light [style*="color:#F2786E"]{color:#C63F31!important}
       <text class="lgd" x="710" y="288">the only part that goes through a model</text>
     </svg>
   </div>
-  <div class="colophon"><span>09 / 19</span></div>
+  <div class="colophon"><span>09 / 20</span></div>
 </section>
 
 <!-- ═══ 8 THE REPLY ═══ -->
@@ -702,7 +693,7 @@ body.light [style*="color:#F2786E"]{color:#C63F31!important}
     </div>
   </div>
   <p class="note"><b>The letter is not written. It is assembled</b> — the disclosure and the amounts are filled from the system, and the only thing a model touches is the sentence that joins them. That sentence is boxed in by the two facts on either side of it: it can connect them, never add one.</p>
-  <div class="colophon"><span>10 / 19</span></div>
+  <div class="colophon"><span>10 / 20</span></div>
 </section>
 
 <!-- ═══ 8 SCOPE ═══ -->
@@ -757,7 +748,7 @@ body.light [style*="color:#F2786E"]{color:#C63F31!important}
     </svg>
   </div>
   <p class="note">Wave 2, once wave 1 has graduated: payments and payoff, complaints and vulnerability signals.</p>
-  <div class="colophon"><span>11 / 19</span></div>
+  <div class="colophon"><span>11 / 20</span></div>
 </section>
 
 <!-- ═══ 9 AUTONOMY ═══ -->
@@ -792,7 +783,7 @@ body.light [style*="color:#F2786E"]{color:#C63F31!important}
       <text class="lgd" x="36" y="314">Graduation: backtest → shadow → dual sign-off (compliance + operations) → autonomous · auto-demotion on drift</text>
     </svg>
   </div>
-  <div class="colophon"><span>12 / 19</span></div>
+  <div class="colophon"><span>12 / 20</span></div>
 </section>
 
 <!-- ═══ 11 PROTOTYPE · FOUR SCREENS ═══ -->
@@ -823,7 +814,7 @@ body.light [style*="color:#F2786E"]{color:#C63F31!important}
       </div>
     </div>
   </div>
-  <div class="colophon"><span>13 / 19</span></div>
+  <div class="colophon"><span>13 / 20</span></div>
 </section>
 
 <!-- ═══ 12 PROTOTYPE · THREE DEMOS ═══ -->
@@ -867,7 +858,7 @@ body.light [style*="color:#F2786E"]{color:#C63F31!important}
       </div>
     </div>
   </div>
-  <div class="colophon"><span>14 / 19</span></div>
+  <div class="colophon"><span>14 / 20</span></div>
 </section>
 
 <!-- ═══ 13 PROTOTYPE · ADMIN ═══ -->
@@ -896,7 +887,7 @@ body.light [style*="color:#F2786E"]{color:#C63F31!important}
       </div>
     </div>
   </div>
-  <div class="colophon"><span>15 / 19</span></div>
+  <div class="colophon"><span>15 / 20</span></div>
 </section>
 
 <!-- ═══ 14 ARCHITECTURE ═══ -->
@@ -940,7 +931,7 @@ body.light [style*="color:#F2786E"]{color:#C63F31!important}
       <text class="lgd" x="0" y="386" font-size="15">Where a real gap appears we file a platform requirement rather than building a bypass. No new runtime.</text>
     </svg>
   </div>
-  <div class="colophon"><span>16 / 19</span></div>
+  <div class="colophon"><span>16 / 20</span></div>
 </section>
 
 <!-- ═══ 15 METRICS ═══ -->
@@ -975,13 +966,13 @@ body.light [style*="color:#F2786E"]{color:#C63F31!important}
       <text class="lgd" x="0" y="300">Eight guardrails run alongside — Backup B5.</text>
     </svg>
   </div>
-  <div class="colophon"><span>17 / 19</span></div>
+  <div class="colophon"><span>17 / 20</span></div>
 </section>
 
 <!-- ═══ 16 RISKS ═══ -->
 <section class="slide">
   <p class="eyebrow"><span class="n">06</span> Risk</p>
-  <h2>Three risks would end this product.</h2>
+  <h2>Top risks would end this product.</h2>
   <div class="chart">
     <div class="risks">
       <div class="risk">
@@ -1010,8 +1001,8 @@ body.light [style*="color:#F2786E"]{color:#C63F31!important}
       </div>
       <div class="risk">
         <div class="idx"><span class="d"></span>RISK 03</div>
-        <div class="h">Numeric hallucination and irreversible writes</div>
-        <div class="w">An invented fee, date or deadline is a Reg E and UDAAP violation; one wrong write can be unrecoverable.</div>
+        <div class="h">Numeric hallucination</div>
+        <div class="w">An invented fee or date is a Reg E and UDAAP violation; one wrong write can be unrecoverable.</div>
         <div class="div"></div>
         <div class="k">What we built</div>
         <ul>
@@ -1023,7 +1014,7 @@ body.light [style*="color:#F2786E"]{color:#C63F31!important}
     </div>
   </div>
   <p class="note"><b>Also on the register:</b> tipping-off vs duty to speak (31 CFR 1020.320(e)) · over-disclosure to an unverified sender (GLBA) · third-party risk review · vulnerable-customer fairness · the judge itself failing (14% verdict flip rate). Full list in Backup B10.</p>
-  <div class="colophon"><span>18 / 19</span></div>
+  <div class="colophon"><span>18 / 20</span></div>
 </section>
 
 <!-- ═══ 17 THE ASK ═══ -->
@@ -1055,7 +1046,13 @@ body.light [style*="color:#F2786E"]{color:#C63F31!important}
       </div>
     </div>
   </div>
-  <div class="colophon"><span>19 / 19</span></div>
+  <div class="colophon"><span>19 / 20</span></div>
+</section>
+
+<!-- ═══ 20 THANK YOU ═══ -->
+<section class="slide title" style="padding-left:200px">
+  <h1 style="text-align:center">Thank you.</h1>
+  <p class="sub" style="text-align:center;margin-left:0">Questions — and the assumptions you would replace first.</p>
 </section>
 
 <!-- ═══ B1 ═══ -->
@@ -1424,8 +1421,6 @@ body.light [style*="color:#F2786E"]{color:#C63F31!important}
 
 </div>
 
-<div class="hud"><span id="pos">1 / 29</span><span style="opacity:.4">|</span><span>↑ ↓ · F fullscreen · T pages · P print</span></div>
-
 <div id="lightbox">
   <button class="lbclose" id="lbclose" type="button">✕ Close · Esc</button>
   <div class="lbtip">The native player controls also offer true full-screen</div>
@@ -1443,7 +1438,7 @@ function setTheme(m){
   themeBtn.title=light?'Switch to dark':'Switch to light';
   try{localStorage.setItem('deck-theme',light?'light':'dark')}catch(e){}
 }
-setTheme((function(){try{return localStorage.getItem('deck-theme')||'dark'}catch(e){return 'dark'}})());
+setTheme((function(){try{return localStorage.getItem('deck-theme')||'light'}catch(e){return 'light'}})());
 themeBtn.addEventListener('click',function(){
   setTheme(document.body.classList.contains('light')?'dark':'light');
 });
@@ -1553,7 +1548,6 @@ function show(n){
   armSlide(slides[i]);
   tocItems.forEach(function(it,k){it.classList.toggle('on',k===i);});
   if(tocItems[i]&&tocItems[i].scrollIntoView) tocItems[i].scrollIntoView({block:'nearest'});
-  document.getElementById('pos').textContent=(i+1)+' / '+slides.length;
   document.getElementById('bar').style.width=(((i+1)/slides.length)*100)+'%';
 }
 function toggleRail(force){
@@ -1584,7 +1578,6 @@ addEventListener('keydown',function(e){
 document.getElementById('stage').addEventListener('click',function(e){
   if(e.target.closest('video'))return;
   if(e.target.closest('.fsbtn'))return;
-  show(i+1);
 });
 fit();addEventListener('resize',fit);show(0);
 </script>
