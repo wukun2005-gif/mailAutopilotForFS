@@ -268,7 +268,7 @@ body.fs #tocshow{display:none}
 </head>
 <body>
 <div class="bar" id="bar"></div>
-<div class="ov">← → · F fullscreen · T pages · P print</div>
+<div class="ov">↑ ↓ · F fullscreen · T pages · P print</div>
 
 <aside id="toc">
   <div class="tochead"><span>Pages · <b id="toccount">29</b></span><button id="toctoggle" type="button" title="Hide this rail (T)">◧</button></div>
@@ -1273,7 +1273,7 @@ body.fs #tocshow{display:none}
 
 </div>
 
-<div class="hud"><span id="pos">1 / 29</span><span style="opacity:.4">|</span><span>← → · F fullscreen · T pages · P print</span></div>
+<div class="hud"><span id="pos">1 / 29</span><span style="opacity:.4">|</span><span>↑ ↓ · F fullscreen · T pages · P print</span></div>
 
 <div id="lightbox">
   <button class="lbclose" id="lbclose" type="button">✕ Close · Esc</button>
@@ -1408,8 +1408,8 @@ addEventListener('keydown',function(e){
     if(e.key==='Escape') closeLb();
     return;
   }
-  if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){e.preventDefault();show(i+1);}
-  if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();show(i-1);}
+  if(e.key==='ArrowDown'||e.key==='PageDown'||e.key===' '){e.preventDefault();show(i+1);}
+  if(e.key==='ArrowUp'||e.key==='PageUp'){e.preventDefault();show(i-1);}
   if(e.key==='Home')show(0);
   if(e.key==='End')show(slides.length-1);
   if(e.key.toLowerCase()==='t'){toggleRail();}
