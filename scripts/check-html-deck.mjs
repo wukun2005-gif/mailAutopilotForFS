@@ -1,6 +1,6 @@
 // Functional check of the browser deck: thumbnail rail, navigation, lightbox.
 const DECK_BASE = process.env.DECK_BASE || "file:///Users/wukun/Documents/tmp/mailAutopilotForFS";
-const DECK_URL = process.env.DECK_URL || `${DECK_BASE}/deck/_html-source/index.html`;
+const DECK_URL = process.env.DECK_URL || `${DECK_BASE}/deck-html/index.html`;
 import { chromium } from "@playwright/test";
 
 const b = await chromium.launch({ headless: true, channel: "chrome" });
@@ -20,18 +20,38 @@ const info = await p.evaluate(() => ({
   tocLabels: [...document.querySelectorAll("#toclist .toclabel")].slice(10, 14).map((e) => e.textContent),
   videos: document.querySelectorAll("#stage video").length,
   fsbtns: document.querySelectorAll("#stage .fsbtn").length,
-  pos: document.getElementById("pos")?.textContent,
+  pos: document.querySelector("#stage > .slide.on .colophon")?.textContent.trim(),
 }));
 console.log("structure:", JSON.stringify(info, null, 2));
 
 // jump via the rail to page 12, then open a demo full size
 // jump via the rail to the demos page, then open a demo full size
 // (find it by label — hardcoded page numbers break whenever a page is inserted)
-await p.click('#toclist .tocitem:has-text("Three emails")');
-await p.waitForTimeout(400);
+//
+// The rail is a 31-item scroll container: locator.click() re-scrolls it between
+// measuring and dispatching, so the pointer lands on a neighbouring page. Scroll
+// it here, then send the mouse at the item's live centre.
+async function railClick(label) {
+  await p.evaluate((s) => {
+    const it = [...document.querySelectorAll("#toclist .tocitem")]
+      .find((e) => (e.textContent || "").includes(s));
+    if (!it) throw new Error("no rail item labelled: " + s);
+    it.scrollIntoView({ block: "center" });
+  }, label);
+  await p.waitForTimeout(300);
+  const pt = await p.evaluate((s) => {
+    const it = [...document.querySelectorAll("#toclist .tocitem")]
+      .find((e) => (e.textContent || "").includes(s));
+    const r = it.getBoundingClientRect();
+    return { x: r.x + r.width / 2, y: r.y + r.height / 2 };
+  }, label);
+  await p.mouse.click(pt.x, pt.y);
+  await p.waitForTimeout(400);
+}
+await railClick("Three emails");
 await p.screenshot({ path: "/Users/wukun/Documents/tmp/mailAutopilotForFS/deck/build/html-rail.png" });
 const on12 = await p.evaluate(() => ({
-  pos: document.getElementById("pos").textContent,
+  pos: document.querySelector("#stage > .slide.on .colophon")?.textContent.trim(),
   // must scope to #stage: the rail holds an .on clone of every slide
   head: document.querySelector("#stage > .slide.on h2")?.textContent,
   videosInStage: document.querySelectorAll("#stage video").length,
@@ -80,7 +100,7 @@ console.log("T shows     ->", JSON.stringify(await p.evaluate(() => ({ notoc: do
 console.log("js errors:", errs.length ? errs : "none");
 
 // page: the admin walkthrough (found by label, not by index)
-await p.click('#toclist .tocitem:has-text("Admin: the bank writes")');
+await railClick("Admin: the bank writes");
 await p.waitForTimeout(2000);
 await p.screenshot({ path: "/Users/wukun/Documents/tmp/mailAutopilotForFS/deck/build/html-admin.png" });
 await b.close();

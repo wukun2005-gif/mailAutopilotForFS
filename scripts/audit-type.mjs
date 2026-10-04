@@ -8,7 +8,7 @@ const MIN_OK = 12; // pt - below this is unreadable on a projector
 const b = await chromium.launch({ headless: true, channel: "chrome" });
 const ctx = await b.newContext({ viewport: { width: 1280, height: 764 }, deviceScaleFactor: 1, locale: "en-US" });
 const p = await ctx.newPage();
-await p.goto("http://localhost:5199/deck/_html-source/index.html", { waitUntil: "load" });
+await p.goto("http://localhost:5199/deck-html/index.html", { waitUntil: "load" });
 await p.waitForTimeout(1000);
 
 const data = await p.evaluate(() => {

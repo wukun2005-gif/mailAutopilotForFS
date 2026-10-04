@@ -1,7 +1,7 @@
 // Capture ENGLISH, element-level (cropped) HD screenshots for the deck.
 // Element crops (not full page) so the type is legible when projected.
 //
-// The deck lives in deck/_html-source/, so assets go there.
+// The deck lives in deck-html/, so assets go there.
 // Only the shots the deck actually uses are captured — anything speculative
 // rots and breaks the run. Add a line here when a slide needs a new screen.
 //
@@ -10,7 +10,7 @@
 import { chromium } from "@playwright/test";
 import { mkdirSync } from "node:fs";
 
-const OUT = "deck/_html-source/assets/shots";
+const OUT = "deck-html/assets/shots";
 mkdirSync(OUT, { recursive: true });
 const BASE = "http://localhost:5199";
 
