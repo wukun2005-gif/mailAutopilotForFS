@@ -437,6 +437,9 @@ body.light svg [fill="#17322E"]{fill:#DDF3EE}
 body.light svg [fill="#3A3320"]{fill:#FBF3DF}
 body.light svg [fill="#2A2418"]{fill:#FBF3DF}
 body.light svg [fill="#3B2320"]{fill:#FBE4E0}
+body.light svg [fill="#35251C"]{fill:#FCEEDF}
+body.light svg [fill="#F0925A"]{fill:#B26510}
+body.light svg [stroke="#F0925A"]{stroke:#C07218}
 /* strokes */
 body.light svg [stroke="#2E3A46"]{stroke:#D3DBE4}
 body.light svg [stroke="#5FD3BE"]{stroke:#0B8C78}
@@ -779,7 +782,7 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
   <p class="eyebrow"><span class="n">06</span> AI and humans</p>
   <h2>Autonomy is earned, intent by intent.</h2>
   <div class="chart">
-    <svg viewBox="0 0 1128 520" role="img">
+    <svg viewBox="0 0 1128 576" role="img">
       <!-- ── 1 · what is governed inside every email ── -->
       <text x="0" y="12" fill="#9BAAB9" font-size="14" font-weight="600" letter-spacing="1.4">SAYS · DOES · TO WHOM — WHAT GOVERNS EVERY REPLY</text>
       <rect x="0" y="24" width="368" height="96" rx="10" fill="#1D2530" stroke="#2E3A46"/>
@@ -798,7 +801,7 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       <text x="778" y="102" fill="#5FD3BE" font-size="14.5">We: I0–I3 identity — what may be disclosed</text>
 
       <!-- ── 2 · where the human sits ── -->
-      <text class="lgd" x="0" y="156" style="font-size:16px">R (action risk) × I (identity assurance) → L (where the human sits). Nothing starts autonomous.</text>
+      <text x="0" y="156" fill="#EAF0F6" font-size="16.5" font-weight="600">R (action risk) × I (identity assurance) → <tspan fill="#5FD3BE">L (where the human sits)</tspan><tspan fill="#9BAAB9" font-weight="400"> · nothing starts autonomous</tspan></text>
 
       <rect class="card2" x="256" y="168" width="196" height="30" rx="6"/><text class="lgb" x="354" y="188" text-anchor="middle" style="font-size:15px">I0 · identity unconfirmed</text>
       <rect class="card2" x="464" y="168" width="196" height="30" rx="6"/><text class="lgb" x="562" y="188" text-anchor="middle" style="font-size:15px">I1 · sender domain only</text>
@@ -829,29 +832,51 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       <rect class="card2" x="36" y="362" width="196" height="34" rx="6"/><text class="lgb" x="134" y="380" text-anchor="middle" style="font-size:15px">R4 · adjudication</text><text class="lgb" x="134" y="395" text-anchor="middle" style="font-size:14px">/ money movement</text>
       <rect x="256" y="362" width="820" height="34" rx="6" fill="#3A3320" stroke="#F5B544"/><text class="lgb" x="666" y="384" text-anchor="middle" fill="#F5B544" style="font-size:15px">L0 decides · the AI drafts at L1 and a person signs — permanent, no graduation path</text>
 
-      <text class="lgd" x="36" y="416" style="font-size:15px">L0 human only · L1 the AI drafts, a person signs · L2 one-click approval · L3 auto-execute</text>
-      <text class="lgd" x="36" y="436" style="font-size:15px">Graduation: backtest → shadow → dual sign-off (compliance + operations) → autonomous · auto-demotion on drift</text>
+      <!-- L0–L3 spelled out: the matrix output, at the weight the concept carries -->
+      <text x="0" y="414" fill="#EAF0F6" font-size="17" font-weight="600">L0–L3 — who acts. Every cell in the matrix returns one of these four levels:</text>
+
+      <rect x="0" y="426" width="276" height="52" rx="8" fill="#3B2320" stroke="#F2786E"/>
+      <text x="16" y="462" fill="#F2786E" font-size="24" font-weight="700">L0</text>
+      <text x="66" y="449" fill="#EAF0F6" font-size="15.5" font-weight="600">human only</text>
+      <text x="66" y="469" fill="#9BAAB9" font-size="14">a person decides and signs</text>
+
+      <rect x="284" y="426" width="276" height="52" rx="8" fill="#35251C" stroke="#F0925A"/>
+      <text x="300" y="462" fill="#F0925A" font-size="24" font-weight="700">L1</text>
+      <text x="350" y="449" fill="#EAF0F6" font-size="15.5" font-weight="600">AI drafts</text>
+      <text x="350" y="469" fill="#9BAAB9" font-size="14">model writes, a human signs</text>
+
+      <rect x="568" y="426" width="276" height="52" rx="8" fill="#3A3320" stroke="#F5B544"/>
+      <text x="584" y="462" fill="#F5B544" font-size="24" font-weight="700">L2</text>
+      <text x="634" y="449" fill="#EAF0F6" font-size="15.5" font-weight="600">one-click approval</text>
+      <text x="634" y="469" fill="#9BAAB9" font-size="14">a person approves, it runs</text>
+
+      <rect x="852" y="426" width="276" height="52" rx="8" fill="#1B4A44" stroke="#5FD3BE"/>
+      <text x="868" y="462" fill="#5FD3BE" font-size="24" font-weight="700">L3</text>
+      <text x="918" y="449" fill="#EAF0F6" font-size="15.5" font-weight="600">auto-execute</text>
+      <text x="918" y="469" fill="#9BAAB9" font-size="14">acts alone, no one clicks</text>
+
+      <text class="lgd" x="0" y="500" style="font-size:14.5px">Graduation: backtest → shadow → dual sign-off (compliance + operations) → autonomous · auto-demotion on drift</text>
 
       <!-- ── 3 · the four people in the loop ── -->
-      <rect x="0" y="452" width="276" height="68" rx="8" fill="#1D2530" stroke="#2E3A46"/>
-      <text x="16" y="474" fill="#EAF0F6" font-size="15.5" font-weight="600">Customer · no login</text>
-      <text x="16" y="495" fill="#9BAAB9" font-size="13.5">verifies inside the thread;</text>
-      <text x="16" y="512" fill="#9BAAB9" font-size="13.5">the AI is disclosed there</text>
+      <rect x="0" y="508" width="276" height="68" rx="8" fill="#1D2530" stroke="#2E3A46"/>
+      <text x="16" y="530" fill="#EAF0F6" font-size="15.5" font-weight="600">Customer · no login</text>
+      <text x="16" y="551" fill="#9BAAB9" font-size="13.5">verifies inside the thread;</text>
+      <text x="16" y="568" fill="#9BAAB9" font-size="13.5">the AI is disclosed there</text>
 
-      <rect x="284" y="452" width="276" height="68" rx="8" fill="#1D2530" stroke="#2E3A46"/>
-      <text x="300" y="474" fill="#EAF0F6" font-size="15.5" font-weight="600">Agent</text>
-      <text x="300" y="495" fill="#9BAAB9" font-size="13.5">works the case pack: the policy</text>
-      <text x="300" y="512" fill="#9BAAB9" font-size="13.5">verdict, not the model mood</text>
+      <rect x="284" y="508" width="276" height="68" rx="8" fill="#1D2530" stroke="#2E3A46"/>
+      <text x="300" y="530" fill="#EAF0F6" font-size="15.5" font-weight="600">Agent</text>
+      <text x="300" y="551" fill="#9BAAB9" font-size="13.5">works the case pack: the policy</text>
+      <text x="300" y="568" fill="#9BAAB9" font-size="13.5">verdict, not the model mood</text>
 
-      <rect x="568" y="452" width="276" height="68" rx="8" fill="#1D2530" stroke="#2E3A46"/>
-      <text x="584" y="474" fill="#EAF0F6" font-size="15.5" font-weight="600">Supervisor</text>
-      <text x="584" y="495" fill="#9BAAB9" font-size="13.5">owns the statutory clocks</text>
-      <text x="584" y="512" fill="#9BAAB9" font-size="13.5">and every approval</text>
+      <rect x="568" y="508" width="276" height="68" rx="8" fill="#1D2530" stroke="#2E3A46"/>
+      <text x="584" y="530" fill="#EAF0F6" font-size="15.5" font-weight="600">Supervisor</text>
+      <text x="584" y="551" fill="#9BAAB9" font-size="13.5">owns the statutory clocks</text>
+      <text x="584" y="568" fill="#9BAAB9" font-size="13.5">and every approval</text>
 
-      <rect x="852" y="452" width="276" height="68" rx="8" fill="#1D2530" stroke="#2E3A46"/>
-      <text x="868" y="474" fill="#EAF0F6" font-size="15.5" font-weight="600">Admin · the bank</text>
-      <text x="868" y="495" fill="#9BAAB9" font-size="13.5">writes every R × I limit;</text>
-      <text x="868" y="512" fill="#9BAAB9" font-size="13.5">tightens in one click</text>
+      <rect x="852" y="508" width="276" height="68" rx="8" fill="#1D2530" stroke="#2E3A46"/>
+      <text x="868" y="530" fill="#EAF0F6" font-size="15.5" font-weight="600">Admin · the bank</text>
+      <text x="868" y="551" fill="#9BAAB9" font-size="13.5">writes every R × I limit;</text>
+      <text x="868" y="568" fill="#9BAAB9" font-size="13.5">tightens in one click</text>
     </svg>
   </div>
   <div class="colophon"><span>07 / 14</span></div>
@@ -1207,7 +1232,7 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9.2" cy="8.2" r="3.4"/><path d="M3.2 19.4c0-3.3 2.7-5.6 6-5.6s6 2.3 6 5.6"/><path d="M16.2 5.6a3.4 3.4 0 0 1 0 6.4"/><path d="M17.6 19.4c0-2.5-1-4.4-2.6-5.5"/></svg></span>
       <div class="tx">
         <div class="h">1 · Two design partners</div>
-        <div class="d">From the existing voice base — a public mailbox and a listed core. Their own mail is the test set from day one.</div>
+        <div class="d">From the existing voice base — a public mailbox and an off-the-shelf core. Their own mail is the test set from day one.</div>
       </div>
     </div>
     <div class="askchip">
@@ -1243,14 +1268,15 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
 <section class="slide backup">
   <p class="eyebrow"><span class="n">Backup · B1</span> The ROI, line by line</p>
   <h2>Where $2.68M comes from.</h2>
+  <p class="claim">600,000 emails a year at $8 = a $4.8M cost base. Three base-case levers (<a class="xref" data-jump="B11">B11</a>): repeat contacts −15% · resolved autonomously 35% · the rest 30% faster. <b>One price moves all three:</b> $1.50 a resolution, billed only on the 35% the AI resolves — the other two are not billed separately.</p>
   <div class="chart">
     <table>
       <tr><th>Line</th><th>Calculation</th><th>Value</th></tr>
-      <tr><td class="k">Failed demand falls</td><td>510,000 emails net of 15% fewer repeat contacts</td><td class="k">≈ $720k</td></tr>
-      <tr><td class="k">Resolved autonomously</td><td>510,000 × 35% × $8</td><td class="k">≈ $1.43M</td></tr>
-      <tr><td class="k">Copilot uplift on the rest</td><td>331,500 × $8 × 30% faster</td><td class="k">≈ $800k</td></tr>
-      <tr><td class="k">Less per-resolution cost</td><td>178,500 × ≈ $1.50</td><td class="k">− $268k</td></tr>
-      <tr><td class="k">Net</td><td>About 56% of a $4.8M cost base</td><td class="k" style="color:#5FD3BE">≈ $2.68M · ≈32 FTE of capacity</td></tr>
+      <tr><td class="k">Failed demand falls — repeat contacts −15%</td><td>600,000 × 15% × $8</td><td class="k">≈ $720k</td></tr>
+      <tr><td class="k">Resolved autonomously — 35%</td><td>600,000 × 85% × 35% × $8</td><td class="k">≈ $1.43M</td></tr>
+      <tr><td class="k">Copilot uplift on the rest — 65%</td><td>600,000 × 85% × 65% × $8 × 30%</td><td class="k">≈ $800k</td></tr>
+      <tr><td class="k">Less what we charge — $1.50 a resolution</td><td>600,000 × 85% × 35% × $1.50</td><td class="k">− $268k</td></tr>
+      <tr><td class="k">Net</td><td>Sum of the four lines — about 56% of the $4.8M cost base</td><td class="k" style="color:#5FD3BE">≈ $2.68M · ≈32 FTE of capacity</td></tr>
     </table>
   </div>
   <p class="note"><b>Two denominators, both reported.</b> 35% is measured against email net of failed demand; against all valid inbound it is ≈30%. Both are published side by side, so the denominator is never chosen after the fact.</p>
@@ -1564,7 +1590,7 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
 <!-- ═══ B10 ═══ -->
 <section class="slide backup">
   <p class="eyebrow"><span class="n">Backup · B10</span> Full risk register</p>
-  <h2>Eleven risks, each with evidence and a countermeasure.</h2>
+  <h2>Thirteen risks, each with evidence and a countermeasure.</h2>
   <div class="chart">
     <table class="tight">
       <tr><th style="width:22%">Risk</th><th style="width:38%">Evidence</th><th>Countermeasure</th></tr>
@@ -1579,6 +1605,8 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       <tr><td class="k">09 · The evaluation itself failing</td><td><b style="color:#F2786E">LLM-as-judge: 14% average verdict flip rate</b>; position bias spans two orders of magnitude</td><td>Randomized paired order, fixed rubric, structural checks, sampled human review</td></tr>
       <tr><td class="k">10 · Fairness and vulnerable customers</td><td>FCA Consumer Duty; UK DISP: summary resolution within 3 business days</td><td>Group monitoring, vulnerable-customer eval coverage, no hard-sell on hardship signals</td></tr>
       <tr><td class="k">11 · An intent stuck at L2</td><td>Graduation needs 90 days of samples — a low-volume intent may never collect them</td><td>Wave 1 selected on sample volume before any build; shadow run labels from day 1; L2 measured on assist rate and handle time, re-tested quarterly</td></tr>
+      <tr><td class="k">12 · L2 approvals turn into rubber-stamping</td><td>One-click approvals drift toward auto-yes without reading</td><td>Watch the approve-without-edit rate, sample the approved files, re-test quarterly</td></tr>
+      <tr><td class="k">13 · Step-up link collides with no-link training</td><td>Banks train customers to never click a link in an email</td><td>Single-use in-thread link plus an app/OTP path; locked template states both options</td></tr>
     </table>
     <p class="note" style="font-size:15px"><b>Not immunity:</b> CFPB guidance was withdrawn from 2025-05, but Reg E and Reg Z still stand with a private right of action and state attorneys general are stepping in — hence proactive AI identity disclosure regardless of requirement.</p>
   </div>
