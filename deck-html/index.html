@@ -172,11 +172,11 @@ section.assumptions table.sm td{padding:4px 10px;line-height:1.3}
 .screens.four .shot{height:192px}
 /* one page for screens + clips: four screens over three clips. The clips stay
    small on purpose — the viewer clicks Full screen and watches outside the slide. */
-.chart.merge{gap:16px}
+.chart.merge{gap:12px}
 .chart.merge .screens.four{grid-template-columns:repeat(4,1fr);gap:14px}
-.chart.merge .screens.four .shot{height:200px}
+.chart.merge .screens.four .shot{height:150px}
 .chart.merge .screens.three .scr{gap:6px}
-.chart.merge .screens.three .shot.slot{height:130px}
+.chart.merge .screens.three .shot.slot{height:112px}
 .chart.merge .scr .lab{font-size:15px}
 .chart.merge .scr .cap{font-size:12.5px;line-height:1.35}
 /* the four screens are the evidence: stretch to fill the frame — a little distortion,
@@ -289,6 +289,45 @@ table.score td.f .g{font-style:normal;font-weight:700;margin-right:5px}
 .slide.backup .eyebrow .n{color:var(--amber)}
 
 .bar{position:fixed;top:0;left:0;height:2px;background:var(--teal);z-index:60;transition:width .22s}
+/* ── one-click present: floating caption pill + compact control cluster ──
+   No full-width bar: the caption floats over the bottom of the slide area,
+   the two controls sit in the corner as one rounded cluster. Fixed, so both
+   show on every page; z-index stays above the lightbox so Pause is clickable
+   while the demo film plays full-screen. */
+#pbar{position:fixed;left:186px;right:0;bottom:16px;height:40px;z-index:950;pointer-events:none}
+body.notoc #pbar{left:0}
+#pbar .pcap{position:absolute;left:0;right:300px;bottom:0;width:fit-content;
+  max-width:min(100%,880px);margin:0 auto;text-align:center;
+  padding:10px 20px;border-radius:16px;font:500 14.5px/1.45 var(--sans);
+  background:#1B4A44;border:1px solid rgba(95,211,190,.55);color:#D6F2EC;
+  box-shadow:0 8px 26px rgba(0,0,0,.30);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  pointer-events:auto;transition:opacity .18s}
+#pbar .pcap:empty{display:none}
+#pbar .pctl{position:absolute;right:16px;bottom:0;display:flex;gap:8px;pointer-events:auto}
+#pbar button{font:600 13.5px/1 var(--sans);padding:11px 17px;border-radius:999px;
+  cursor:pointer;white-space:nowrap;background:rgba(20,28,38,.92);
+  border:1px solid #2E3A46;color:#EAF0F6;
+  box-shadow:0 8px 26px rgba(0,0,0,.30);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  transition:border-color .15s,color .15s,background .15s}
+#pbar #pplay{background:#5FD3BE;border-color:#5FD3BE;color:#0B1015}
+#pbar #pplay:hover{background:#7FE0CE;border-color:#7FE0CE}
+#pbar #ptoggle:hover{border-color:#5FD3BE;color:#5FD3BE}
+#pbar button.off{color:#9BAAB9}
+/* Present OFF: the play button does nothing, so it goes gray too */
+#pbar #ptoggle.off ~ #pplay{background:rgba(20,28,38,.72);border-color:#2E3A46;
+  color:#7B8B9B;pointer-events:none;cursor:default}
+body.light #pbar #ptoggle.off ~ #pplay{background:#EDF1F5;border-color:#D5DCE4;color:#9AA8B6}
+body.light #pbar .pcap{background:#16202B;border-color:#16202B;color:#FFFFFF;
+  box-shadow:0 8px 24px rgba(28,44,60,.28)}
+body.light #pbar button{background:rgba(255,255,255,.95);border-color:#D5DCE4;color:#26313D}
+body.light #pbar #pplay{background:#0B8C78;border-color:#0B8C78;color:#FFFFFF}
+body.light #pbar #pplay:hover{background:#097563;border-color:#097563}
+body.light #pbar #ptoggle:hover{border-color:#0B8055;color:#0B8055}
+body.light #pbar button.off{color:#78848F}
+/* the film carries its own captions — ours hides while it plays */
+body.pv-vid #pbar .pcap{visibility:hidden}
+body.pv-vid #lightbox .lbtip{bottom:58px}
 .ov{position:fixed;top:12px;right:16px;z-index:60;font-size:11px;color:#5f6b78}
 /* presenting full screen: nothing may sit on top of the slide's top-right corner */
 body.fs .themebtn,body.fs .ov{display:none}
@@ -480,6 +519,7 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
 <div class="bar" id="bar"></div>
 <div class="ov">F fullscreen · T pages</div>
 <button id="themebtn" class="themebtn" type="button" title="Switch to dark">☀ Light</button>
+<div id="pbar"><span class="pcap" id="pcap"></span><span class="pctl"><button id="ptoggle" type="button" title="Turn auto-present on/off">Auto-Present OFF</button><button id="pplay" type="button" title="Pause / resume the tour">▶ Present</button></span></div>
 
 <aside id="toc">
   <div class="tochead"><span>Pages · <b id="toccount">29</b></span><button id="toctoggle" type="button" title="Hide this rail (T)">◧</button></div>
@@ -505,7 +545,7 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
 <section class="slide">
   <p class="eyebrow"><span class="n">01</span> Assumptions &amp; beachhead</p>
   <h2>Mid-size banks are the beachhead.</h2>
-  <p class="claim">Of 8,445 insured US institutions, 262 banks sit in the band we can actually serve — big enough to run Reg E, small enough to buy rather than build.</p>
+  <p class="claim">Of 8,445 insured US institutions, 262 banks sit in the band we may serve — big enough to run Reg E, small enough to buy rather than build.</p>
   <div class="chart">
     <svg viewBox="0 0 1128 326" role="img">
       <rect x="0" y="96" width="430" height="62" rx="10" fill="#232D38" stroke="#2E3A46"/>
@@ -782,7 +822,7 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
   <p class="eyebrow"><span class="n">06</span> AI and humans</p>
   <h2>Autonomy is earned, intent by intent.</h2>
   <div class="chart">
-    <svg viewBox="0 0 1128 576" role="img">
+    <svg viewBox="0 0 1128 508" role="img">
       <!-- ── 1 · what is governed inside every email ── -->
       <text x="0" y="12" fill="#9BAAB9" font-size="14" font-weight="600" letter-spacing="1.4">SAYS · DOES · TO WHOM — WHAT GOVERNS EVERY REPLY</text>
       <rect x="0" y="24" width="368" height="96" rx="10" fill="#1D2530" stroke="#2E3A46"/>
@@ -856,27 +896,6 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       <text x="918" y="469" fill="#9BAAB9" font-size="14">acts alone, no one clicks</text>
 
       <text class="lgd" x="0" y="500" style="font-size:14.5px">Graduation: backtest → shadow → dual sign-off (compliance + operations) → autonomous · auto-demotion on drift</text>
-
-      <!-- ── 3 · the four people in the loop ── -->
-      <rect x="0" y="508" width="276" height="68" rx="8" fill="#1D2530" stroke="#2E3A46"/>
-      <text x="16" y="530" fill="#EAF0F6" font-size="15.5" font-weight="600">Customer · no login</text>
-      <text x="16" y="551" fill="#9BAAB9" font-size="13.5">verifies inside the thread;</text>
-      <text x="16" y="568" fill="#9BAAB9" font-size="13.5">the AI is disclosed there</text>
-
-      <rect x="284" y="508" width="276" height="68" rx="8" fill="#1D2530" stroke="#2E3A46"/>
-      <text x="300" y="530" fill="#EAF0F6" font-size="15.5" font-weight="600">Agent</text>
-      <text x="300" y="551" fill="#9BAAB9" font-size="13.5">works the case pack: the policy</text>
-      <text x="300" y="568" fill="#9BAAB9" font-size="13.5">verdict, not the model mood</text>
-
-      <rect x="568" y="508" width="276" height="68" rx="8" fill="#1D2530" stroke="#2E3A46"/>
-      <text x="584" y="530" fill="#EAF0F6" font-size="15.5" font-weight="600">Supervisor</text>
-      <text x="584" y="551" fill="#9BAAB9" font-size="13.5">owns the statutory clocks</text>
-      <text x="584" y="568" fill="#9BAAB9" font-size="13.5">and every approval</text>
-
-      <rect x="852" y="508" width="276" height="68" rx="8" fill="#1D2530" stroke="#2E3A46"/>
-      <text x="868" y="530" fill="#EAF0F6" font-size="15.5" font-weight="600">Admin · the bank</text>
-      <text x="868" y="551" fill="#9BAAB9" font-size="13.5">writes every R × I limit;</text>
-      <text x="868" y="568" fill="#9BAAB9" font-size="13.5">tightens in one click</text>
     </svg>
   </div>
   <div class="colophon"><span>07 / 14</span></div>
@@ -892,24 +911,40 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       <div class="scr">
         <div class="lab">Customer · no login</div>
         <div class="shot"><img data-src="assets/shots/scr-customer.png" alt="Customer view — the thread"></div>
-        <div class="cap">Thread = case — verified in-thread, AI disclosed</div>
       </div>
       <div class="scr">
         <div class="lab">Agent · Banking Workspace</div>
         <div class="shot"><img data-src="assets/shots/scr-agent.png" alt="Agent view — the banking workspace"></div>
-        <div class="cap">Policy verdict, not model mood</div>
       </div>
       <div class="scr">
         <div class="lab">Supervisor · Console</div>
         <div class="shot"><img data-src="assets/shots/scr-supervisor.png" alt="Supervisor view — the console"></div>
-        <div class="cap">Statutory clocks, live</div>
       </div>
       <div class="scr">
         <div class="lab">Admin · Policy</div>
         <div class="shot"><img data-src="assets/shots/scr-admin.png" alt="Admin view — the policy matrix"></div>
-        <div class="cap">R3 and R4 do not respond — no setting can switch them on</div>
       </div>
     </div>
+
+    <!-- ── the four people in the loop (moved off page 06) ── -->
+    <svg class="personas" viewBox="0 0 1128 54" role="img" aria-label="The four people in the loop">
+      <rect x="0" y="0" width="276" height="54" rx="8" fill="#1D2530" stroke="#2E3A46"/>
+      <text x="16" y="25" fill="#9BAAB9" font-size="13.5">verifies inside the thread;</text>
+      <text x="16" y="43" fill="#9BAAB9" font-size="13.5">the AI is disclosed there</text>
+
+      <rect x="284" y="0" width="276" height="54" rx="8" fill="#1D2530" stroke="#2E3A46"/>
+      <text x="300" y="25" fill="#9BAAB9" font-size="13.5">works the case pack: the policy</text>
+      <text x="300" y="43" fill="#9BAAB9" font-size="13.5">verdict, not the model mood</text>
+
+      <rect x="568" y="0" width="276" height="54" rx="8" fill="#1D2530" stroke="#2E3A46"/>
+      <text x="584" y="25" fill="#9BAAB9" font-size="13.5">owns the statutory clocks</text>
+      <text x="584" y="43" fill="#9BAAB9" font-size="13.5">and every approval</text>
+
+      <rect x="852" y="0" width="276" height="54" rx="8" fill="#1D2530" stroke="#2E3A46"/>
+      <text x="868" y="25" fill="#9BAAB9" font-size="13.5">writes every R × I limit;</text>
+      <text x="868" y="43" fill="#9BAAB9" font-size="13.5">tightens in one click</text>
+    </svg>
+
     <div class="screens three">
 
       <div class="scr">
@@ -1876,7 +1911,7 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
   <button class="lbclose" id="lbclose" type="button">✕ Close · Esc</button>
   <div class="lbtip">The native player controls also offer true full-screen</div>
 </div>
-
+<script src="assets/voice/present.js"></script>
 <script>
 const slides=[...document.querySelectorAll('.slide')];
 
@@ -2021,6 +2056,7 @@ function show(n){
   tocItems.forEach(function(it,k){it.classList.toggle('on',k===i);});
   if(tocItems[i]&&tocItems[i].scrollIntoView) tocItems[i].scrollIntoView({block:'nearest'});
   document.getElementById('bar').style.width=(((i+1)/slides.length)*100)+'%';
+  if(typeof pvOnShow==='function')pvOnShow();
 }
 function toggleRail(force){
   const hide=(force===undefined)?!document.body.classList.contains('notoc'):force;
@@ -2071,6 +2107,190 @@ document.addEventListener('click',function(e){
     }
   }
 });
+/* ── one-click present: narration + one-line caption + auto tour ──
+   Scope is colophon pages 02/14–13/14. Steps (clip, caption, shots, film) come
+   from assets/voice/present.json, built from tts/deck-voiceover.en.md — this
+   code never parses the md itself. Slide key is read from the colophon, so a
+   reorder by another editor keeps working. Toggle defaults OFF; the tour starts
+   on the first user gesture (browser autoplay rules) or the Present button,
+   always from the current page. Jump anywhere and the tour continues there;
+   toggle off and it goes quiet; toggle on and it resumes from the current page. */
+var pvData=null, pvPresent=false, pvPlaying=false, pvPaused=false, pvArmed=false,
+    pvSteps=null, pvStep=-1, pvTimers=[], pvVideo=null, pvStopping=false, pvTurn=0;
+var pvAudio=new Audio(); pvAudio.preload='auto';
+/* step data rides in present.js (works on file:// and http); the json file is
+   the rebuild source and a fetch fallback for editors who only ship that */
+if(typeof pvPresentData!=='undefined')pvData=pvPresentData;
+else fetch('assets/voice/present.json').then(function(r){return r.json();}).then(function(j){pvData=j;}).catch(function(){pvData=null;});
+function pvColKey(sl){
+  const c=sl&&sl.querySelector('.colophon span');
+  const m=c&&c.textContent.match(/(\d+)\s*\/\s*14/);
+  return m?m[1]:null;
+}
+function pvClearTimers(){pvTimers.forEach(clearTimeout);pvTimers=[];}
+function pvLater(fn,ms){pvTimers.push(setTimeout(fn,ms));}
+function pvCap(t){document.getElementById('pcap').textContent=t||'';}
+function pvBtn(){
+  document.getElementById('pplay').textContent=(pvPlaying&&!pvPaused)?'⏸ Pause':'▶ Present';
+  const t=document.getElementById('ptoggle');
+  t.textContent=pvPresent?'Auto-Present ON':'Auto-Present OFF';
+  t.classList.toggle('off',!pvPresent);
+}
+/* stop everything; quiet=true also drops the tour (used by toggle-off) */
+function pvStop(quiet){
+  pvStopping=true;
+  try{
+    pvAudio.pause();
+    pvClearTimers();
+    if(pvVideo){pvVideo.onended=null;pvVideo.pause();pvVideo=null;}
+    document.body.classList.remove('pv-vid');
+    if(lb.classList.contains('on'))closeLb();
+  }finally{pvStopping=false;}
+  pvCap('');
+  if(quiet){pvPlaying=false;pvPaused=false;}
+  pvTurn++;
+  pvBtn();
+}
+function pvOnShow(){
+  if(!pvPresent||!pvPlaying)return;
+  pvStop(false);                       /* new page: drop the old audio/film */
+  if(pvPaused)return;                  /* jumped while paused: stay quiet */
+  pvStartPage();
+}
+/* begin from the current page; outside 02–13 jump to 02/14 first */
+function pvBegin(){
+  if(!pvData){pvCap('voice files missing');return;}
+  if(!pvData[pvColKey(slides[i])]){show(1);return;}
+  pvStartPage();
+}
+function pvStartPage(){
+  if(!pvPresent||!pvPlaying||pvPaused||!pvData)return;
+  const key=pvColKey(slides[i]);
+  pvSteps=pvData[key]||null;
+  pvStep=-1;
+  if(!pvSteps){pvCap('');return;}      /* outside 02–13: quiet until re-entry */
+  pvStepGo(0);
+}
+function pvShotImg(sl,name){
+  if(name==='shot-letter')return sl.querySelector('figure.zoomshot img');
+  const order=['scr-customer','scr-agent','scr-supervisor','scr-admin'];
+  const k=order.indexOf(name);
+  if(k<0)return null;
+  const scr=sl.querySelectorAll('.screens.four .scr')[k];
+  return scr?scr.querySelector('img'):null;
+}
+function pvStepGo(n){
+  pvClearTimers();
+  pvTurn++;
+  if(pvVideo){pvVideo.onended=null;pvVideo.pause();pvVideo=null;}
+  document.body.classList.remove('pv-vid');
+  if(lb.classList.contains('on'))closeLb();
+  pvStep=n;
+  if(!pvSteps||n>=pvSteps.length){     /* page done: next page, or tour ends */
+    const key=pvColKey(slides[i]);
+    if(key==='13'){pvPlaying=false;pvPaused=false;pvCap('');pvBtn();return;}
+    show(i+1);return;
+  }
+  const st=pvSteps[n], sl=slides[i];
+  pvCap(st.caption);
+  pvAudio.onended=function(){          /* film bullet: voice first, then film */
+    if(!pvPlaying||pvPaused)return;
+    if(st.video)pvPlayFilm(st);else pvStepGo(n+1);
+  };
+  pvAudio.onerror=function(){if(pvPlaying&&!pvPaused)pvStepGo(n+1);};
+  pvAudio.src='assets/voice/'+st.clip;
+  const p=pvAudio.play();
+  if(p&&p.catch)p.catch(function(){pvPaused=true;pvBtn();});
+  if(st.shots&&st.shots.length)pvShotTour(sl,st,n);
+}
+function pvShotTour(sl,st,n){
+  /* one screenshot at a time, equal shares of the narration; restart-safe.
+     tk pins every timer to this step on this page — without it a timer from
+     the previous page fires under the same step number and opens its shot. */
+  const tk=pvTurn;
+  function alive(){return pvPlaying&&!pvPaused&&pvStep===n&&tk===pvTurn;}
+  function imgs(){return st.shots.map(function(s){return pvShotImg(sl,s);}).filter(Boolean);}
+  function cycle(dur){
+    if(!alive())return;
+    const list=imgs();
+    if(!list.length||!(dur>0))return;
+    /* first shot waits out the intro line instead of popping instantly */
+    const lead=Math.min(4000,(dur*1000)*0.15);
+    const share=(dur*1000-lead)/list.length;
+    list.forEach(function(img,k){
+      pvLater(function(){
+        if(!alive())return;
+        if(lb.classList.contains('on'))closeLb();
+        openLb(img,'Click outside the picture or press Esc to close');
+      },lead+k*share);
+    });
+    pvLater(function(){if(pvStep===n&&tk===pvTurn&&lb.classList.contains('on'))closeLb();},dur*1000);
+  }
+  if(pvAudio.duration>0)cycle(pvAudio.duration);
+  else pvAudio.onloadedmetadata=function(){cycle(pvAudio.duration);};
+}
+function pvPlayFilm(st){
+  const sl=slides[i];
+  const v=sl.querySelector('video[src*="demo-2"],video[data-src*="demo-2"]');
+  pvCap('');                           /* the film carries its own captions */
+  document.body.classList.add('pv-vid');
+  if(!v){document.body.classList.remove('pv-vid');pvStepGo(pvStep+1);return;}
+  openLb(v);
+  try{v.playbackRate=1.25;}catch(e){}
+  pvVideo=v;
+  v.onended=function(){
+    pvVideo=null;
+    document.body.classList.remove('pv-vid');
+    if(lb.classList.contains('on'))closeLb();
+    if(pvPlaying&&!pvPaused)pvStepGo(pvStep+1);
+  };
+}
+/* closing the film early (Esc / ✕) skips to the next step, not a dead end */
+var pvOrigCloseLb=closeLb;
+closeLb=function(){
+  const wasFilm=!!pvVideo;
+  pvOrigCloseLb();
+  if(wasFilm&&!pvStopping){
+    pvVideo=null;
+    document.body.classList.remove('pv-vid');
+    if(pvPlaying&&!pvPaused)pvStepGo(pvStep+1);
+  }
+};
+/* a hand-driven clip during the tour would double the sound — hold the tour */
+document.addEventListener('click',function(e){
+  const hit=e.target&&e.target.closest?e.target.closest('.vplay,.fsbtn'):null;
+  if(hit&&pvPlaying&&!pvPaused&&(e.target.closest('#pbar')===null)){pvPaused=true;pvAudio.pause();if(pvVideo)pvVideo.pause();pvClearTimers();pvBtn();}
+});
+document.getElementById('pplay').addEventListener('click',function(){
+  if(!pvPresent)return;
+  if(!pvPlaying){pvPlaying=true;pvPaused=false;pvBegin();}
+  else if(pvPaused){
+    pvPaused=false;
+    if(pvVideo)pvVideo.play();
+    else if(pvAudio.src&&(pvAudio.paused)){ /* shots step: restart it cleanly */
+      const st=pvSteps&&pvSteps[pvStep];
+      if(st&&st.shots&&st.shots.length)pvStepGo(pvStep);
+      else pvAudio.play();
+    } else pvStartPage();
+  }
+  else{pvPaused=true;pvAudio.pause();if(pvVideo)pvVideo.pause();pvClearTimers();}
+  pvBtn();
+});
+document.getElementById('ptoggle').addEventListener('click',function(){
+  pvPresent=!pvPresent;
+  if(!pvPresent){pvArmed=false;pvStop(true);}
+  else{pvPlaying=true;pvPaused=false;pvBegin();}
+  pvBtn();
+});
+/* autoplay rules need one gesture: the first click/keypress arms the tour */
+function pvArmOnce(e){
+  if(navigator.webdriver)return;      /* automated checks drive clicks; no hijack */
+  if(e.target&&e.target.closest&&e.target.closest('#pbar'))return;
+  if(pvPresent&&pvArmed&&!pvPlaying){pvArmed=false;pvPlaying=true;pvPaused=false;pvBegin();pvBtn();}
+}
+document.addEventListener('pointerdown',pvArmOnce);
+document.addEventListener('keydown',pvArmOnce);
+pvBtn();
 fit();addEventListener('resize',fit);show(0);
 </script>
 </body>
