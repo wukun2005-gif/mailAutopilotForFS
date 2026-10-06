@@ -99,5 +99,100 @@
     "shadowNot": "In shadow: evidence does not yet meet the graduation bar",
     "graduatedSignable": "Graduated and in production at the signed level",
     "graduatedNot": "Evidence does not meet the graduation bar"
+  },
+  "views": {
+    "graduation": "Graduation (runtime)",
+    "nominations": "Nominations",
+    "policies": "Policy compiler",
+    "intents": "Intent discovery"
+  },
+  "design": {
+    "never": "AI never nominates",
+    "kind": {
+      "fix_template": "Fix template first",
+      "promote_l3_quota": "Graduate L3 with quota",
+      "never": "Never nominated"
+    },
+    "state": {
+      "fix_first": "Fix the cause first",
+      "in_shadow": "In shadow",
+      "awaiting_sign": "Awaiting dual sign",
+      "granted": "Granted",
+      "rejected": "Rejected",
+      "cooldown": "30-day rate limit"
+    },
+    "afterFix": "after template fix",
+    "proofs": {
+      "consistency": "① Consistency (rule reproduces human calls)",
+      "calc": "② Calculation / judgment split",
+      "variance": "③ Approver variance",
+      "parity": "④ Cohort parity (five proxy dims)",
+      "repro": "reproduction {{rate}}, bar {{bar}}",
+      "sample": "{{n}} samples; ",
+      "edits": "{{b}} of {{a}} human edits were the same wording repair",
+      "judgment": "stays human",
+      "maxGap": "max cohort gap {{gap}}pp / threshold {{threshold}}pp"
+    },
+    "dims": {
+      "language": "language",
+      "age62": "age 62+",
+      "lmi": "LMI census tract",
+      "channel": "channel",
+      "vulnerability": "stated vulnerability"
+    },
+    "actions": {
+      "fix": "Repair template and replay (bar never lowered)",
+      "submit": "{{days}}-day shadow replay passed, submit for dual sign",
+      "signCompliance": "Compliance sign",
+      "signBusiness": "Business sign",
+      "grant": "Grant (human signs the diff)",
+      "reject": "Reject (30-day rate limit)",
+      "granted": "Granted: the next email evaluates against the new config; quota exhaustion auto-ratchets to L2",
+      "cooldown": "Rejected: the same intent will not be re-nominated for {{days}} days"
+    },
+    "nom": {
+      "title": "Graduation nominations (FR-12.1): AI nominates, evidence argues, humans grant",
+      "subtitle": "All four proofs must hold before shadow: consistency, calc/judgment split, approver variance, cohort parity (gap <2pp; no protected attributes like race or sex collected). R3/R4 are never nominated.",
+      "neverTitle": "Never nominated (greyed)"
+    },
+    "pol": {
+      "title": "Policy Compiler (FR-12.3): plain language / docs → clause-level diff",
+      "subtitle": "Human-readable clause and machine-readable rule side by side, with stale templates, 90-day backtest flips, AI dissent cards and cohort impact. Closed world: conditions it cannot express return 'new data source needed'; regulatory summaries produce a checklist only.",
+      "preset": {
+        "COMP-1": "Sentence: refund cap $35→$25",
+        "COMP-2": "Sentence: refund fees to outage complainers",
+        "COMP-3": "Regulatory summary: SR 26-2 update"
+      },
+      "closedTitle": "Closed-world refusal: cannot compile to a rule",
+      "closedHint": "Until that data source is connected and the evidence-field review is done, this request produces no rule and no diff — the AI may not invent fields.",
+      "checklistTitle": "Checklist only (no diff emitted)",
+      "diffTitle": "Clause-level diff (human clause + machine rule)",
+      "clause": "Clause",
+      "field": "Evidence field",
+      "before": "Before",
+      "after": "After",
+      "staleTitle": "Templates / snippets invalidated by the version",
+      "backtest": "{{days}}-day backtest: {{n}} cases flip outcome",
+      "backtestHint": "Flipped cases are listed one by one for signers (the prototype shows the count).",
+      "cohort": "max cohort gap {{gap}}pp (threshold 2pp)",
+      "grant": "Dual sign to take effect (next email uses the new version)",
+      "granted": "Effective: {{version}}; conflicts such as marketing copy are listed as release blockers"
+    },
+    "intents": {
+      "title": "Intent Discovery (FR-12.6): growing new intents from unclassified mail",
+      "subtitle": "High-volume, highly consistent clusters with ready tools become candidates; humans set R/I levels and shadow precedes graduation. Identity-relationship clusters are report-only, routed to specialists, never executable intents.",
+      "volume": "90-day volume",
+      "consistency": "Step consistency",
+      "handle": "Avg handle",
+      "tools": "Tool mapping: ",
+      "state": {
+        "reported": "Reported",
+        "awaiting_level": "Awaiting human R/I",
+        "in_shadow": "In shadow"
+      },
+      "reportOnly": "Report-only, no intent generated: ",
+      "inShadow": "Accepted into 14-day shadow at {{r}} / {{i}}",
+      "accept": "Accept candidate (suggested {{r}} / {{i}}) into shadow"
+    }
   }
 }

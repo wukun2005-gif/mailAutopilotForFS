@@ -99,5 +99,100 @@
     "shadowNot": "影子期：证据尚未达到毕业门槛",
     "graduatedSignable": "已毕业并按签署级别在生产运行",
     "graduatedNot": "证据未达到毕业门槛"
+  },
+  "views": {
+    "graduation": "放权毕业（运行时）",
+    "nominations": "放权提名",
+    "policies": "策略编译器",
+    "intents": "意图发现"
+  },
+  "design": {
+    "never": "AI 不提名",
+    "kind": {
+      "fix_template": "先修模板",
+      "promote_l3_quota": "带额度毕业 L3",
+      "never": "永不提名"
+    },
+    "state": {
+      "fix_first": "先修原因",
+      "in_shadow": "shadow 中",
+      "awaiting_sign": "待双签",
+      "granted": "已授予",
+      "rejected": "已拒绝",
+      "cooldown": "30 天限频"
+    },
+    "afterFix": "修模板后",
+    "proofs": {
+      "consistency": "① 一致性（规则复现人工）",
+      "calc": "② 计算题 / 判断题切分",
+      "variance": "③ 审批人方差",
+      "parity": "④ cohort 公平（五代理维度）",
+      "repro": "复现率 {{rate}}，门槛 {{bar}}",
+      "sample": "样本 {{n}} 件；",
+      "edits": "{{a}} 次人工改稿中 {{b}} 次为同一措辞",
+      "judgment": "留给人",
+      "maxGap": "最大组差 {{gap}}pp / 阈值 {{threshold}}pp"
+    },
+    "dims": {
+      "language": "语言",
+      "age62": "62+",
+      "lmi": "LMI 普查区",
+      "channel": "渠道",
+      "vulnerability": "明说脆弱标记"
+    },
+    "actions": {
+      "fix": "修复模板并重放（不降门槛）",
+      "submit": "{{days}} 天 shadow 重放通过，提交双签",
+      "signCompliance": "合规签署",
+      "signBusiness": "业务签署",
+      "grant": "授予（人签 diff）",
+      "reject": "拒绝（30 天限频）",
+      "granted": "已授予：下一封信按新配置求值，额度用尽自动回 L2",
+      "cooldown": "已拒绝：{{days}} 天内不再提名同一意图"
+    },
+    "nom": {
+      "title": "放权提名（FR-12.1）：AI 提名，证据答辩，人类授予",
+      "subtitle": "四张证明同时成立才可进入 shadow：一致性、计算-判断切分、审批人方差、cohort 公平（组差 <2pp，不采集种族/性别等受保护属性）。R3/R4 永不提名。",
+      "neverTitle": "永不提名（灰色）"
+    },
+    "pol": {
+      "title": "Policy Compiler（FR-12.3）：人话/文档 → 条款级 diff",
+      "subtitle": "人读条款与机读规则并排；同时给失效模板、90 天回测翻转、AI 异议卡与 cohort 影响。闭世界：表达不了的条件直接回「需要新数据源」；监管摘要只生成核查清单。",
+      "preset": {
+        "COMP-1": "句子：退费上限 $35→$25",
+        "COMP-2": "句子：宕机投诉客户退月费",
+        "COMP-3": "监管摘要：SR 26-2 更新"
+      },
+      "closedTitle": "闭世界拒绝：无法编译为规则",
+      "closedHint": "接入该数据源并完成证据字段评审前，此请求不能生成任何规则或 diff——AI 不许编造字段。",
+      "checklistTitle": "只生成核查清单（不生成 diff）",
+      "diffTitle": "条款级 diff（人读条款 + 机读规则）",
+      "clause": "条款",
+      "field": "证据字段",
+      "before": "改前",
+      "after": "改后",
+      "staleTitle": "随版本失效的模板 / 话术",
+      "backtest": "{{days}} 天历史回测：{{n}} 个案件结论翻转",
+      "backtestHint": "翻转案件逐案列示，供签署人核对（原型中展示数量）。",
+      "cohort": "cohort 最大组差 {{gap}}pp（阈值 2pp）",
+      "grant": "双签生效（下一封信按新版本求值）",
+      "granted": "已生效：{{version}}；营销材料等冲突项已列入发布阻断"
+    },
+    "intents": {
+      "title": "意图发现（FR-12.6）：从未归类来信中长出新 intent",
+      "subtitle": "高频、步骤高度一致、工具已就绪的聚类成为候选；R/I 等级由人设定，先 shadow 再谈毕业。身份关系类聚类只报告、转专家，永不生成可执行 intent。",
+      "volume": "90 天来信",
+      "consistency": "步骤一致度",
+      "handle": "平均处理",
+      "tools": "工具映射：",
+      "state": {
+        "reported": "已报告",
+        "awaiting_level": "等人定 R/I",
+        "in_shadow": "shadow 中"
+      },
+      "reportOnly": "只报告、不生成 intent：",
+      "inShadow": "已按 {{r}} / {{i}} 进入 14 天 shadow",
+      "accept": "接受为候选（建议 {{r}} / {{i}}），进入 shadow"
+    }
   }
 }
