@@ -70,5 +70,19 @@
     "AP-OD2-EXPLAIN": "批准第二次豁免的解释函",
     "AP-FRAUD-CONFIRM": "确认 BEC/ATO 隔离",
     "AP-OCR-REVIEW": "人工复核低置信附件（OCR）"
+  },
+  "preventable": {
+    "title": "可预防来信（FR-12.4）",
+    "shadow": "通知规则 shadow 中",
+    "note": "标签只用于指标统计与 Builder 的通知规则提议，不改变本邮件的受理、起钟与答复路径。"
+  },
+  "preview": {
+    "title": "回信后果预览（FR-12.5 · 写作助手，只读建议）",
+    "sample": "基于 {{n}} 个同类结案线程",
+    "current": "当前措辞·14 天复联率",
+    "improved": "建议措辞·复联率",
+    "insert": "一键插入解释句（只改连接措辞）",
+    "inserted": "已插入（记录为一次草稿编辑）",
+    "guard": "不改变结论、不阻塞法定回执；不显示客户价值 / 流失 / 收入"
   }
 }

@@ -70,5 +70,19 @@
     "AP-OD2-EXPLAIN": "Approve second-waiver explanation",
     "AP-FRAUD-CONFIRM": "Confirm BEC/ATO quarantine",
     "AP-OCR-REVIEW": "Manually review low-confidence attachment (OCR)"
+  },
+  "preventable": {
+    "title": "Preventable inbound (FR-12.4)",
+    "shadow": "Notification rule in shadow",
+    "note": "The tag feeds metrics and a Builder notification-rule proposal only; it never changes this email's intake, clock-start or reply path."
+  },
+  "preview": {
+    "title": "Draft consequence preview (FR-12.5 · writing assistant, read-only advice)",
+    "sample": "From {{n}} similar closed threads",
+    "current": "Current wording · 14-day recontact",
+    "improved": "Suggested wording · recontact",
+    "insert": "Insert explanatory sentence (connective wording only)",
+    "inserted": "Inserted (recorded as a draft edit)",
+    "guard": "Never changes the outcome or blocks a statutory receipt; no customer value / churn / revenue shown"
   }
 }

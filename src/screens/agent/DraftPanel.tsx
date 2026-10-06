@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Pencil, Check } from "lucide-react";
 import type { CaseStateType, Draft } from "@/runtime/caseState.ts";
 import { TricolorLetter } from "@/components/TricolorLetter";
+import { ConsequencePreviewCard } from "./ConsequencePreviewCard";
 import { useCaseStore } from "@/store/caseStore";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
@@ -74,6 +75,15 @@ function DraftRow({ draft, state, t }: { draft: Draft; state: CaseStateType; t: 
         <div className="mt-1.5">
           <TricolorLetter draft={draft} audit />
         </div>
+      )}
+      {draft.id === "DR-OD2-EXPLAIN" && (
+        <ConsequencePreviewCard
+          onInsert={(sentence) => {
+            const next = `${text.trim()}\n\n${sentence}`;
+            setText(next);
+            void recordDraftEdit(draft.id, next);
+          }}
+        />
       )}
     </div>
   );
