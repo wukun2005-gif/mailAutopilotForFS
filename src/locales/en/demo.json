@@ -1,6 +1,6 @@
 {
   "start": "Demo",
-  "playAll": "Play all · all five in sequence",
+  "playAll": "Play all · all six in sequence",
   "playing": "Playing demo",
   "blocker": "A required step could not be performed",
   "blockerHint": "use single-step (→) after fixing, or restart",
