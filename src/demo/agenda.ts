@@ -18,6 +18,7 @@ export const AGENDA: AgendaEntry[] = [
   { scriptId: "email2", key: "demo2" },
   { scriptId: "email3", key: "demo3" },
   { scriptId: "builder", key: "demo4" },
+  { scriptId: "day30", key: "demo5" },
 ];
 
 /** How long the card holds the screen before the script starts, at 1×.

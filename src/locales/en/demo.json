@@ -27,6 +27,10 @@
       "demo4": {
         "title": "Demo 4 - Admin",
         "desc": "AI Autonomy is Earned by Auto Test + Human Supervision."
+      },
+      "demo5": {
+        "title": "Demo 5 - Design-time intelligence",
+        "desc": "Runtime keeps the rules; design-time proposes them: AI nominates, evidence argues, humans grant."
       }
     }
   },
@@ -35,7 +39,8 @@
     "email1": "Email 1 · OD fee, two beats",
     "email2": "Email 2 · Reg E dispute, 45 days",
     "email3": "Email 3 · BEC quarantine",
-    "builder": "Builder · backtest & graduation"
+    "builder": "Builder · backtest & graduation",
+    "day30": "Day 30 · Design-time Intelligence (Sense → Prove → Grant → Watch)"
   },
   "trailer": {
     "intro": "Email Autopilot for Financial Services — from mail arrival, to investigation, approval, and reply.",
@@ -70,7 +75,8 @@
     "secondWaiver": "Why it is not automatic: the first overdraft-waiver rule requires no more than 1 waiver in the past 12 months, and that field now reads 2 — so the condition fails and the cell drops from auto-execute to one-click approval. The boundary is the policy result, not the model's mood.",
     "traceAfter": "Verification done, the same code runs a second time, and the dossier gains this line: 'identity level I3', with a single test still unmet — the sender address is still not on file. Further up sits the first verdict, I1; the two lines together are the machine's record of the re-rating.",
     "traceBefore": "The first result of that same check is filed in the decision dossier as well: this line reads 'identity level I1', with the three tests it was missing right below it. What the case looked like before the re-rating is archived on this line.",
-    "verified": "Fourteen days with no new mail, no handoff and no QA reversal — one more line on the audit rail: a verified autonomous resolution. The dossier is sealed for the record, and human edits flow back as samples."
+    "verified": "Fourteen days with no new mail, no handoff and no QA reversal — one more line on the audit rail: a verified autonomous resolution. The dossier is sealed for the record, and human edits flow back as samples.",
+    "previewConsequence": "While writing the explanation, the AI never makes the decision — it is a writing assistant. Same outcome, but the current wording's 14-day recontact rate is 34%; adding one low-balance-alert sentence is predicted to take it to 9%, based on 412 similar closed threads — not on customer worth. One click inserts connective wording only, and the edit is still recorded in the trace."
   },
   "email2": {
     "intake": "Day 0, 08:14: one email, two intents — card delivery status and a $247.18 dispute. Filed on arrival, the Reg E statutory clock starts immediately, without waiting for identity verification.",
@@ -119,5 +125,20 @@
     "matrixTraceAfter": "After verification, the same code runs again. The dossier gains a new line: I3, only the sender address still not on file. Two lines together are the machine record of the re-rating.",
     "noTool": "There is simply no tool function registered for contact changes — config can't reach it, tools don't have it, double insurance.",
     "drift": "Data drift detected: over the past 30 days, the intent's PSI (population stability index) exceeds threshold, or tool call failure rate spikes, or a new intent cluster emerges. The system auto-degrades this intent from L3 to L2 — fail-closed, no human approval needed. Re-run backtest, then dual-sign to restore."
+  },
+  "day30": {
+    "funnel": "Day 30. The first thing the supervisor sees is not an email but the shape of today's inbox: 1,284 arrivals, 63 waiting on the customer, 12 waiting on approval, 1,209 done; PSI of 0.04 says the queue is healthy, and the 8.4% preventable rate is the next improvement frontier.",
+    "p0": "A negative wave: 38 declined-payment and frozen-card emails from one BIN range in 20 minutes — an external event, not individual cases. The system proposes a one-click tightening pack: locked event receipt, routing to card operations, and two intents temporarily downgraded L3 to L2. Note the direction — it can only tighten, never loosen.",
+    "p0applied": "The pack takes effect immediately and auto-expires after 24 hours; it cannot become permanent. Lock it down during the incident, review afterwards — that is the ratchet.",
+    "p1": "The positive wave is more interesting: 212 repeat-NSF complaints in 7 days. Scanning all 3,904 affected accounts, 212 wrote in and 3,692 were silently charged and never wrote — candidates for proactive remediation. But three gates: confirm the bank error first, then dual-sign the sample and the total, $117,120 — none skippable.",
+    "p1batches": "Remediation rolls out in staged batches — 1%, 10%, 100% — each idempotent and reversible, reconciled to the scan tape account by account. The AI computed the entire calculation; a human pressed every batch.",
+    "p2": "P2 is a friction wave: login questions, 71% from customers over 62. No money, no policy change — it routes only, to a notification-rule shadow and the product team. Preventable problems should be solved before customers write in.",
+    "nom": "Graduation nominations in Builder: every card must produce four proofs at once — consistency, calc/judgment split, approver variance, cohort parity. Card A reproduces humans 96.8% of the time, 0.2 points short. The prescription is not to lower the bar — it is to fix the template and replay: 99% after the fix.",
+    "nomgranted": "Card B covers above-cap goodwill refunds: of 412 human approvals, 92% were calculations and 8% judgments. After dual sign it graduates to quota L3 — $8,000 per month, then it auto-ratchets back to L2. The AI runs the calculations 24/7; judgments stay human forever. R3 contact-detail changes and R4 dispute adjudication are never nominated.",
+    "pol": "The Policy Compiler: an admin writes one sentence — 'refund cap from $35 to $25' — and it compiles to a clause-level diff, plus the templates it invalidates, 47 flipped cases in a 90-day backtest, three AI dissent cards, and a 1.7-point LMI cohort gap. The second sentence — 'refund outage complainers' — is refused by the closed world: that evidence field does not exist, and the AI may not invent it.",
+    "polgranted": "After dual sign, V13 takes effect and the next email evaluates against it; the marketing page still saying $35 is listed as a release blocker. Humans sign the diff, not every letter.",
+    "intents": "Intent discovery: 186 statement-copy requests in 90 days, 91% following the same four steps with ready tools. The AI only nominates — humans set R/I levels, and it enters shadow first. Identity-relationship clusters like bereavement are report-only, routed to specialists, never executable intents.",
+    "preventable": "Back to today's inbound: this 'where is my card' email carries a preventable tag — the card-shipped event already existed and an ETA notice could have gone out first. The tag feeds metrics and proposals only; it never changes this email's intake or statutory clock.",
+    "outro": "That is the design-time intelligence layer: the runtime keeps the rules with every gate intact; design-time proposes them — AI nominates, evidence argues, humans grant. Sense, Prove, Grant, Watch closes the loop: the system improves every day, and every improvement is signed off by a person."
   }
 }
