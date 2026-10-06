@@ -115,6 +115,9 @@ const email1: DemoScript = {
     // much. The reason is only readable there.
     { id: "1-32", chapter: "day21", action: { t: "goto", screen: "agent" } },
     { id: "1-33", chapter: "day21", action: { t: "tooltip", key: "email1.secondWaiver", ms: 7000, focus: "s2.policy.row.OD-1.FAIL" } },
+    // FR-12.5: the writing-time consequence preview beside the L2 explanation
+    // draft — suggests connective wording only, never the decision.
+    { id: "1-33a", chapter: "day21", action: { t: "tooltip", key: "email1.previewConsequence", ms: 6000, focus: "s2.draft.preview" } },
     { id: "1-34", chapter: "day21", action: { t: "goto", screen: "supervisor" } },
     { id: "1-35", chapter: "day21", action: { t: "tooltip", key: "email1.l2queue", ms: 5000, focus: "s3.approvalcard" } },
     { id: "1-36", chapter: "day21", action: { t: "cursor", target: "s3.approve", click: true, require: true, wait: 1600 } },
@@ -303,7 +306,69 @@ const builder: DemoScript = {
   ],
 };
 
-export const SCRIPTS: DemoScript[] = [trailer, email1, email2, email3, builder];
+// ── Day 30 (~2.5min): design-time intelligence, Act 4 of the demo ──────────
+// Runtime stays deterministic; every WoW beat lives one layer upstream:
+// Sense (waves) → Prove (four proofs, compiled diff) → Grant (dual sign) →
+// Watch (ratchet expiry, quota, shadow). No LLM ever sits in the decision path.
+const day30: DemoScript = {
+  id: "day30",
+  nameKey: "scripts.day30",
+  beats: [
+    // ── Sense: the wave board ──
+    { id: "d0", chapter: "waves", action: { t: "goto", screen: "supervisor" } },
+    { id: "d1", chapter: "waves", action: { t: "cursor", target: "s3.tab.waves", click: true, wait: 900 } },
+    { id: "d2", chapter: "waves", action: { t: "tooltip", key: "day30.funnel", ms: 7000, focus: "s3.waves.funnel" } },
+    // P0 negative wave: one-click ratchet, tighter-only, auto-expires.
+    { id: "d3", chapter: "waves", action: { t: "tooltip", key: "day30.p0", ms: 6000, focus: "s3.wave.WAVE-P0" } },
+    { id: "d4", chapter: "waves", action: { t: "cursor", target: "s3.waves.tighten.WAVE-P0", click: true, wait: 1000 } },
+    { id: "d5", chapter: "waves", action: { t: "tooltip", key: "day30.p0applied", ms: 6000, focus: "s3.waves.applied.WAVE-P0" } },
+    // P1 positive wave: proactive remediation behind three gates, staged batches.
+    { id: "d6", chapter: "waves", action: { t: "tooltip", key: "day30.p1", ms: 7000, focus: "s3.wave.WAVE-P1" } },
+    { id: "d7", chapter: "waves", action: { t: "cursor", target: "s3.waves.confirm.WAVE-P1", click: true, wait: 500 } },
+    { id: "d8", chapter: "waves", action: { t: "cursor", target: "s3.waves.signSample.WAVE-P1", click: true, wait: 500 } },
+    { id: "d9", chapter: "waves", action: { t: "cursor", target: "s3.waves.signTotal.WAVE-P1", click: true, wait: 500 } },
+    { id: "d10", chapter: "waves", action: { t: "cursor", target: "s3.waves.batch.WAVE-P1", click: true, wait: 800 } },
+    { id: "d11", chapter: "waves", action: { t: "cursor", target: "s3.waves.batch.WAVE-P1", click: true, wait: 800 } },
+    { id: "d12", chapter: "waves", action: { t: "cursor", target: "s3.waves.batch.WAVE-P1", click: true, wait: 800 } },
+    { id: "d13", chapter: "waves", action: { t: "cursor", target: "s3.waves.batch.WAVE-P1", click: true, wait: 800 } },
+    { id: "d14", chapter: "waves", action: { t: "cursor", target: "s3.waves.batch.WAVE-P1", click: true, wait: 800 } },
+    { id: "d15", chapter: "waves", action: { t: "cursor", target: "s3.waves.batch.WAVE-P1", click: true, wait: 800 } },
+    { id: "d16", chapter: "waves", action: { t: "tooltip", key: "day30.p1batches", ms: 7000, focus: "s3.waves.batches.WAVE-P1" } },
+    // P2 friction wave: route only, no money action.
+    { id: "d17", chapter: "waves", action: { t: "cursor", target: "s3.waves.route.WAVE-P2", click: true, wait: 700 } },
+    { id: "d18", chapter: "waves", action: { t: "tooltip", key: "day30.p2", ms: 5000, focus: "s3.waves.routed.WAVE-P2" } },
+    // ── Prove & grant: nominations ──
+    { id: "d19", chapter: "nominations", action: { t: "goto", screen: "builder" } },
+    { id: "d20", chapter: "nominations", action: { t: "cursor", target: "s4.view.nominations", click: true, wait: 900 } },
+    { id: "d21", chapter: "nominations", action: { t: "tooltip", key: "day30.nom", ms: 7000, focus: "s4.nom.NOM-A" } },
+    { id: "d22", chapter: "nominations", action: { t: "cursor", target: "s4.nom.fix.NOM-A", click: true, wait: 700 } },
+    { id: "d23", chapter: "nominations", action: { t: "cursor", target: "s4.nom.submit.NOM-A", click: true, wait: 700 } },
+    { id: "d24", chapter: "nominations", action: { t: "cursor", target: "s4.nom.sign.compliance.NOM-B", click: true, wait: 400 } },
+    { id: "d25", chapter: "nominations", action: { t: "cursor", target: "s4.nom.sign.business.NOM-B", click: true, wait: 400 } },
+    { id: "d26", chapter: "nominations", action: { t: "cursor", target: "s4.nom.apply.NOM-B", click: true, wait: 900 } },
+    { id: "d27", chapter: "nominations", action: { t: "tooltip", key: "day30.nomgranted", ms: 6000, focus: "s4.nom.granted.NOM-B" } },
+    // ── Policy compiler ──
+    { id: "d28", chapter: "policies", action: { t: "cursor", target: "s4.view.policies", click: true, wait: 900 } },
+    { id: "d29", chapter: "policies", action: { t: "cursor", target: "s4.pol.example.COMP-1", click: true, wait: 500 } },
+    { id: "d30", chapter: "policies", action: { t: "tooltip", key: "day30.pol", ms: 7000, focus: "s4.pol.artifact.COMP-1" } },
+    { id: "d31", chapter: "policies", action: { t: "cursor", target: "s4.pol.sign.compliance.COMP-1", click: true, wait: 400 } },
+    { id: "d32", chapter: "policies", action: { t: "cursor", target: "s4.pol.sign.business.COMP-1", click: true, wait: 400 } },
+    { id: "d33", chapter: "policies", action: { t: "cursor", target: "s4.pol.apply.COMP-1", click: true, wait: 900 } },
+    { id: "d34", chapter: "policies", action: { t: "tooltip", key: "day30.polgranted", ms: 5000, focus: "s4.pol.granted.COMP-1" } },
+    // ── Intent discovery ──
+    { id: "d35", chapter: "intents", action: { t: "cursor", target: "s4.view.intents", click: true, wait: 900 } },
+    { id: "d36", chapter: "intents", action: { t: "cursor", target: "s4.cand.accept.CAND-1", click: true, wait: 700 } },
+    { id: "d37", chapter: "intents", action: { t: "tooltip", key: "day30.intents", ms: 5000, focus: "s4.cand.accepted.CAND-1" } },
+    // ── Watch: the preventable tag on today's inbound (FR-12.4) ──
+    { id: "d38", chapter: "watch", action: { t: "goto", screen: "agent" } },
+    { id: "d39", chapter: "watch", action: { t: "load", scenario: "email2" } },
+    { id: "d40", chapter: "watch", action: { t: "inject", emailId: "EM-2-IN-1" } },
+    { id: "d41", chapter: "watch", action: { t: "tooltip", key: "day30.preventable", ms: 6000, focus: "s2.preventable" } },
+    { id: "d42", chapter: "outro", action: { t: "tooltip", key: "day30.outro", ms: 8000 } },
+  ],
+};
+
+export const SCRIPTS: DemoScript[] = [trailer, email1, email2, email3, builder, day30];
 export const SCRIPT_BY_ID: Record<string, DemoScript> = Object.fromEntries(
   SCRIPTS.map((s) => [s.id, s]),
 );
