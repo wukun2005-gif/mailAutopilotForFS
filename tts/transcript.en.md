@@ -102,6 +102,10 @@ Twenty-one days later, the same row read once more: identity is still I3 and the
 
 Why it is not automatic: the first overdraft-waiver rule requires no more than 1 waiver in the past 12 months, and that field now reads 2 — so the condition fails and the cell drops from auto-execute to one-click approval. The boundary is the policy result, not the model's mood.
 
+### 1-33a · day21 · caption 6000 ms · audio 26.7s · email1.previewConsequence · pointer s2.draft.preview
+
+While writing the explanation, the AI never makes the decision — it is a writing assistant. Same outcome, but the current wording's 14-day recontact rate is 34%; adding one low-balance-alert sentence is predicted to take it to 9%, based on 412 similar closed threads — not on customer worth. One click inserts connective wording only, and the edit is still recorded in the trace.
+
 ### 1-35 · day21 · caption 5000 ms · audio 12.7s · email1.l2queue · pointer s3.approvalcard
 
 The explanation draft goes into the supervisor queue — the customer always keeps a human reconsideration path. Sending passes the same compliance check, with disclosure and a handoff.
@@ -279,3 +283,61 @@ Wire recalls are rare: 90 days can never reach the sample bar. They stay human, 
 ### b16 · outro · caption 5000 ms · audio 5.8s · builder.outro
 
 Every autonomous action in this demo traces back to evidence a regulator would accept.
+
+## day30 · Day 30 · Design-time Intelligence (Sense → Prove → Grant → Watch)
+
+### d2 · waves · caption 7000 ms · audio 23.3s · day30.funnel · pointer s3.waves.funnel
+
+Day 30. The first thing the supervisor sees is not an email but the shape of today's inbox: 1,284 arrivals, 63 waiting on the customer, 12 waiting on approval, 1,209 done; PSI of 0.04 says the queue is healthy, and the 8.4% preventable rate is the next improvement frontier.
+
+### d3 · waves · caption 6000 ms · audio 24.4s · day30.p0 · pointer s3.wave.WAVE-P0
+
+A negative wave: 38 declined-payment and frozen-card emails from one BIN range in 20 minutes — an external event, not individual cases. The system proposes a one-click tightening pack: locked event receipt, routing to card operations, and two intents temporarily downgraded L3 to L2. Note the direction — it can only tighten, never loosen.
+
+### d5 · waves · caption 6000 ms · audio 12.0s · day30.p0applied · pointer s3.waves.applied.WAVE-P0
+
+The pack takes effect immediately and auto-expires after 24 hours; it cannot become permanent. Lock it down during the incident, review afterwards — that is the ratchet.
+
+### d6 · waves · caption 7000 ms · audio 29.0s · day30.p1 · pointer s3.wave.WAVE-P1
+
+The positive wave is more interesting: 212 repeat-NSF complaints in 7 days. Scanning all 3,904 affected accounts, 212 wrote in and 3,692 were silently charged and never wrote — candidates for proactive remediation. But three gates: confirm the bank error first, then dual-sign the sample and the total, $117,120 — none skippable.
+
+### d16 · waves · caption 7000 ms · audio 16.5s · day30.p1batches · pointer s3.waves.batches.WAVE-P1
+
+Remediation rolls out in staged batches — 1%, 10%, 100% — each idempotent and reversible, reconciled to the scan tape account by account. The AI computed the entire calculation; a human pressed every batch.
+
+### d18 · waves · caption 5000 ms · audio 17.7s · day30.p2 · pointer s3.waves.routed.WAVE-P2
+
+P2 is a friction wave: login questions, 71% from customers over 62. No money, no policy change — it routes only, to a notification-rule shadow and the product team. Preventable problems should be solved before customers write in.
+
+### d21 · nominations · caption 7000 ms · audio 24.7s · day30.nom · pointer s4.nom.NOM-A
+
+Graduation nominations in Builder: every card must produce four proofs at once — consistency, calc/judgment split, approver variance, cohort parity. Card A reproduces humans 96.8% of the time, 0.2 points short. The prescription is not to lower the bar — it is to fix the template and replay: 99% after the fix.
+
+### d27 · nominations · caption 6000 ms · audio 28.8s · day30.nomgranted · pointer s4.nom.granted.NOM-B
+
+Card B covers above-cap goodwill refunds: of 412 human approvals, 92% were calculations and 8% judgments. After dual sign it graduates to quota L3 — $8,000 per month, then it auto-ratchets back to L2. The AI runs the calculations 24/7; judgments stay human forever. R3 contact-detail changes and R4 dispute adjudication are never nominated.
+
+### d27a · nominations · caption 6000 ms · audio 21.7s · day30.canary · pointer s4.nom.canary.NOM-CANARY
+
+The card beside it is a canary: three proofs pass and only the fourth fails — a 2.4pp cohort gap against the 2pp bar — and it was planted knowing it should be rejected. If a signer approves it on reflex, their bulk signing rights are suspended on the spot. Human sign-off on a diff is itself something we have to police.
+
+### d30 · policies · caption 7000 ms · audio 29.3s · day30.pol · pointer s4.pol.artifact.COMP-1
+
+The Policy Compiler: an admin writes one sentence — 'refund cap from $35 to $25' — and it compiles to a clause-level diff, plus the templates it invalidates, 47 flipped cases in a 90-day backtest, three AI dissent cards, and a 1.7-point LMI cohort gap. The second sentence — 'refund outage complainers' — is refused by the closed world: that evidence field does not exist, and the AI may not invent it.
+
+### d34 · policies · caption 5000 ms · audio 13.8s · day30.polgranted · pointer s4.pol.granted.COMP-1
+
+After dual sign, V13 takes effect and the next email evaluates against it; the marketing page still saying $35 is listed as a release blocker. Humans sign the diff, not every letter.
+
+### d37 · intents · caption 5000 ms · audio 23.5s · day30.intents · pointer s4.cand.accepted.CAND-1
+
+Intent discovery: 186 statement-copy requests in 90 days, 91% following the same four steps with ready tools. The AI only nominates — humans set R/I levels, and it enters shadow first. Identity-relationship clusters like bereavement are report-only, routed to specialists, never executable intents.
+
+### d41 · watch · caption 6000 ms · audio 17.8s · day30.preventable · pointer s2.preventable
+
+Back to today's inbound: this 'where is my card' email carries a preventable tag — the card-shipped event already existed and an ETA notice could have gone out first. The tag feeds metrics and proposals only; it never changes this email's intake or statutory clock.
+
+### d42 · outro · caption 8000 ms · audio 19.8s · day30.outro
+
+That is the design-time intelligence layer: the runtime keeps the rules with every gate intact; design-time proposes them — AI nominates, evidence argues, humans grant. Sense, Prove, Grant, Watch closes the loop: the system improves every day, and every improvement is signed off by a person.

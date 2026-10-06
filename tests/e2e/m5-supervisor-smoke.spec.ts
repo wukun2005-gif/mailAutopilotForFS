@@ -65,7 +65,10 @@ test.describe("M5 supervisor cockpit smoke", () => {
     await expect(page.locator("[data-id='s3.metrics']")).toBeVisible();
     await expect(page.locator("[data-id='s3.metrics.varr']")).toContainText("14.2%");
     await expect(page.locator("[data-id='s3.metrics.guardrails']")).toContainText("PSI");
-    await expect(page.locator("[data-id='s3.metrics.guardrails'] tbody tr")).toHaveCount(8);
+    // PRD §4.2 guardrails: the original eight plus the four v0.3 rows the
+    // design-time layer added (cohort parity, preventable rate, canary hit
+    // rate, bulk remediation error rate).
+    await expect(page.locator("[data-id='s3.metrics.guardrails'] tbody tr")).toHaveCount(12);
   });
 
   test("email 3: fraud quarantine confirm → on-file SMS + SAR locked template", async ({ page }) => {

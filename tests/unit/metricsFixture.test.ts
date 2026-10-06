@@ -20,6 +20,8 @@ function metrics(lang: "zh" | "en") {
 }
 
 const MAIN = ["varr", "ttr", "trust"] as const;
+// PRD §4.2, plus the four v0.3 rows the design-time layer added (FR-12.1
+// canary, FR-12.2 remediation, FR-12.4 preventable, FR-12.7 cohort parity).
 const GUARD = [
   "regret",
   "bidirectional",
@@ -29,6 +31,10 @@ const GUARD = [
   "drift",
   "regDetection",
   "pleaseCall",
+  "cohortParity",
+  "preventable",
+  "canary",
+  "remediationError",
 ] as const;
 
 function str(node: Json, path: string[]): string {

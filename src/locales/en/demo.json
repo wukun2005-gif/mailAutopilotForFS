@@ -139,6 +139,7 @@
     "polgranted": "After dual sign, V13 takes effect and the next email evaluates against it; the marketing page still saying $35 is listed as a release blocker. Humans sign the diff, not every letter.",
     "intents": "Intent discovery: 186 statement-copy requests in 90 days, 91% following the same four steps with ready tools. The AI only nominates — humans set R/I levels, and it enters shadow first. Identity-relationship clusters like bereavement are report-only, routed to specialists, never executable intents.",
     "preventable": "Back to today's inbound: this 'where is my card' email carries a preventable tag — the card-shipped event already existed and an ETA notice could have gone out first. The tag feeds metrics and proposals only; it never changes this email's intake or statutory clock.",
-    "outro": "That is the design-time intelligence layer: the runtime keeps the rules with every gate intact; design-time proposes them — AI nominates, evidence argues, humans grant. Sense, Prove, Grant, Watch closes the loop: the system improves every day, and every improvement is signed off by a person."
+    "outro": "That is the design-time intelligence layer: the runtime keeps the rules with every gate intact; design-time proposes them — AI nominates, evidence argues, humans grant. Sense, Prove, Grant, Watch closes the loop: the system improves every day, and every improvement is signed off by a person.",
+    "canary": "The card beside it is a canary: three proofs pass and only the fourth fails — a 2.4pp cohort gap against the 2pp bar — and it was planted knowing it should be rejected. If a signer approves it on reflex, their bulk signing rights are suspended on the spot. Human sign-off on a diff is itself something we have to police."
   }
 }

@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "Email Autopilot for Financial Services — usability prototype (Larkspur Bank, fictional data). PRD v0.2 Appendix A / Dev Plan v0.4.1.",
+  "description": "Email Autopilot for Financial Services — usability prototype (Larkspur Bank, fictional data). PRD v0.3 Appendix A (incl. Act 4 design-time intelligence) / Dev Plan v0.4.1.",
   "engines": {
     "node": ">=22.22.0"
   },

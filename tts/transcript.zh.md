@@ -102,6 +102,10 @@ Day 21，同一封线程里又来一封：客户第二次要求退还透支费�
 
 为什么不自动退：透支费退还规则第一条要求“近 12 个月退免记录 ≤ 1 次”，现在这一栏是 2，所以这条判不通过，格子从自动放行降到一键审批。边界在政策求值结果，不在模型心情。
 
+### 1-33a · day21 · caption 6000 ms · audio 25.2s · email1.previewConsequence · pointer s2.draft.preview
+
+写解释信时，AI 不替人做决定，只做写作助手：同样结论下，当前措辞的 14 天复联率是 34%，加上一句低余额提醒的解释句预计降到 9%——依据是 412 个同类结案线程，不是客户值多少钱。一键插入只改连接措辞，每一次编辑照样进轨迹。
+
 ### 1-35 · day21 · caption 5000 ms · audio 10.4s · email1.l2queue · pointer s3.approvalcard
 
 解释草稿进主管队列——客户始终保留人工复议的入口。发出去同样要过合规检查，带披露和转人工入口。
@@ -279,3 +283,61 @@ prompt injection、BEC、ATO，遇到的是一个攻击面在设计时就闭合�
 ### b16 · outro · caption 5000 ms · audio 5.8s · builder.outro
 
 这个 demo 里的每一个自动动作，都能追溯到监管能接受的证据。
+
+## day30 · Day 30 · 设计时智能层（Sense → Prove → Grant → Watch）
+
+### d2 · waves · caption 7000 ms · audio 22.0s · day30.funnel · pointer s3.waves.funnel
+
+第 30 天。主管看到的第一块不是单封邮件，而是今天收件箱的整体形状：1284 封进件，63 封等客户、12 封等审批，1209 封办结；PSI 0.04 说明队列很健康，可预防率 8.4% 是下一阶段的改进空间。
+
+### d3 · waves · caption 6000 ms · audio 20.5s · day30.p0 · pointer s3.wave.WAVE-P0
+
+负面浪：20 分钟内 38 封同一 BIN 段的拒付和冻卡咨询，这是外部事件，不是单案。系统建议一键收紧包：已知事件回执、转卡运营工单、两个意图临时从 L3 降到 L2。注意方向——只能收紧，不能放松。
+
+### d5 · waves · caption 6000 ms · audio 11.2s · day30.p0applied · pointer s3.waves.applied.WAVE-P0
+
+收紧包即时生效，24 小时后自动到期，不允许变成永久配置。出事时先收住，事后再复盘，这就是棘轮。
+
+### d6 · waves · caption 7000 ms · audio 25.0s · day30.p1 · pointer s3.wave.WAVE-P1
+
+正面浪更有意思：7 天 212 封重复透支费投诉，扫描全部 3904 个相关账户，212 人写了信，3692 人被默默扣了费没写信——这是主动补救的候选。但三道闸：先确认是银行错误，再双签样本和总额，金额 11.7 万美元，一道都不能少。
+
+### d16 · waves · caption 7000 ms · audio 13.9s · day30.p1batches · pointer s3.waves.batches.WAVE-P1
+
+补救按 1%、10%、100% 三批放量，每批幂等、可冲正，名单与扫描台账逐笔对账。AI 算清了整道计算题，按下每一批的是人。
+
+### d18 · waves · caption 5000 ms · audio 15.8s · day30.p2 · pointer s3.waves.routed.WAVE-P2
+
+P2 是摩擦浪：登录咨询，62 岁以上占 71%。不动钱、不改政策，只路由给通知规则 shadow 和产品团队——可预防的问题，要在客户写信之前解决。
+
+### d21 · nominations · caption 7000 ms · audio 20.7s · day30.nom · pointer s4.nom.NOM-A
+
+Builder 的放权提名：每张卡要同时拿出四张证明——一致性、计算/判断切分、审批人方差、cohort 公平。卡 A 复现率 96.8%，差 0.2 个点，AI 的处方不是降门槛，而是修模板后重放，修完 99%。
+
+### d27 · nominations · caption 6000 ms · audio 25.7s · day30.nomgranted · pointer s4.nom.granted.NOM-B
+
+卡 B 是超阈值善意减免：412 件人批里 92% 是计算题，8% 才是判断题。双签之后授予带额度的 L3，每月 8000 美元用尽自动回到 L2。AI 把计算题做到 24 小时可用，判断题永远留给人。R3 改联系方式、R4 争议裁决，永不提名。
+
+### d27a · nominations · caption 6000 ms · audio 21.4s · day30.canary · pointer s4.nom.canary.NOM-CANARY
+
+旁边这张卡是金丝雀：三项证明都过，只有第四项组差 2.4 个百分点超了 2 个百分点的门槛——它是我们故意插进来的、本该被拒的提名。签字人如果顺手点了同意，批量签字权限立刻暂停。人签 diff 这件事，本身也要被监督。
+
+### d30 · policies · caption 7000 ms · audio 26.2s · day30.pol · pointer s4.pol.artifact.COMP-1
+
+Policy Compiler：管理员写一句人话「退费上限从 35 改到 25」，系统编译出条款级 diff，同时列出会失效的模板、90 天回测里 47 个翻转案件、三张 AI 异议卡，还有 LMI 人群 1.7 个点的组差。第二句「宕机投诉退月费」直接被闭世界拒绝——没有这个证据字段，AI 不许编。
+
+### d34 · policies · caption 5000 ms · audio 12.8s · day30.polgranted · pointer s4.pol.granted.COMP-1
+
+双签之后 V13 生效，下一封信就按新版本求值；营销页还写着 35 美元，被列为发布阻断项。人签的是 diff，不是每一封信。
+
+### d37 · intents · caption 5000 ms · audio 22.0s · day30.intents · pointer s4.cand.accepted.CAND-1
+
+意图发现：90 天 186 封索要对账单副本的来信，91% 是同样四步，工具也已就绪。AI 只负责提名，R/I 等级由人定，先进 shadow。而丧亲支持这类身份关系场景，只报告、转专家，永不生成可执行 intent。
+
+### d41 · watch · caption 6000 ms · audio 17.0s · day30.preventable · pointer s2.preventable
+
+回到今天的来信：这封卡在哪的邮件，系统打上「可预防」标签——卡已寄出的事件早就存在，本可以先发一封 ETA 通知。标签只做统计和提议，不改变这封信的受理和法定时钟。
+
+### d42 · outro · caption 8000 ms · audio 18.4s · day30.outro
+
+这就是设计时智能层：运行时守规矩，闸门一个不少；设计时提规矩，AI 提名、证据答辩、人类授予。Sense、Prove、Grant、Watch 形成闭环，系统每天都在变好，但每一次变好都有人签字。

@@ -10,6 +10,10 @@
 import { useTranslation } from "react-i18next";
 
 /** Order is display order; copy lives in locales/{zh,en}/supervisor.json. */
+// PRD §4.2 guardrails. The last four are the v0.3 additions that come with the
+// design-time layer: cohort parity gates every nomination and policy diff, the
+// preventable rate and canary hit rate police the two new loops, and the
+// remediation error rate gates the P1 positive wave's money-moving batches.
 const GUARD_ROWS = [
   "regret",
   "bidirectional",
@@ -19,6 +23,10 @@ const GUARD_ROWS = [
   "drift",
   "regDetection",
   "pleaseCall",
+  "cohortParity",
+  "preventable",
+  "canary",
+  "remediationError",
 ] as const;
 
 const MAIN = ["varr", "ttr", "trust"] as const;

@@ -25,8 +25,11 @@ test.describe("M3 customer screen smoke", () => {
     await page.click("[data-id='s1.phone.verify']");
     await waitIdle(page);
 
-    // I3 earned and the refund confirmation letter delivered.
-    await expect(page.getByText("identity level", { exact: false })).toContainText("I3");
+    // I3 earned and the refund confirmation letter delivered. Since the dc270e0
+    // readability pass the intake label reads "identity at intake: I3" (the
+    // trace rail's "identity level I3" lives in audit view), so assert on the
+    // stable data-id anchor under the inbound message.
+    await expect(page.locator("[data-id='s1.thread.in.identity']")).toContainText("I3");
     await expect(page.locator("[data-id='s1.phone.casecard']")).toHaveCount(0);
 
     // Audit trace exists and shows the refund outbound after I3 resume.

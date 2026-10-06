@@ -2,7 +2,11 @@
 // convention as graduationOverrides). Holds nominations, waves, compilations
 // and candidate intents; writes through to runtime controls ONLY where a human
 // grant must take effect (ratchet caps, graduated level, V13 policy flag).
-import { CANDIDATE_INTENTS, NOMINATIONS } from "@/mocks/fixtures/designTime.ts";
+import {
+  CANDIDATE_INTENTS,
+  NOMINATIONS,
+  NOTICE_RULES,
+} from "@/mocks/fixtures/designTime.ts";
 import { COMPILATIONS, WAVES } from "@/mocks/fixtures/designTimeWaves.ts";
 import { faultController } from "@/tools/faultController.ts";
 import { graduationOverrides } from "@/runtime/graduationOverrides.ts";
@@ -20,6 +24,7 @@ import type {
   CandidateIntent,
   Compilation,
   Nomination,
+  NoticeRule,
   Wave,
 } from "./types.ts";
 
@@ -32,7 +37,14 @@ class DesignTimeStore {
   private waves: Wave[] = [];
   private compilations: Compilation[] = [];
   private candidates: CandidateIntent[] = [];
+  private notices: NoticeRule[] = [];
   private listeners = new Set<Listener>();
+  /** §4.2 canary ledger: planted nominations known to be reject-worthy. The
+   *  quarter opened with 4 planted and 4 caught (100% hit rate); the card in
+   *  the tray is the one currently under review. */
+  private canaryPlanted = 4;
+  private canaryCaught = 4;
+  private canaryMissed = false;
 
   constructor() {
     this.reset();
@@ -45,6 +57,10 @@ class DesignTimeStore {
     this.waves = clone(WAVES);
     this.compilations = clone(COMPILATIONS);
     this.candidates = clone(CANDIDATE_INTENTS);
+    this.notices = clone(NOTICE_RULES);
+    this.canaryPlanted = 4;
+    this.canaryCaught = 4;
+    this.canaryMissed = false;
     this.emit();
   }
 
@@ -81,6 +97,9 @@ class DesignTimeStore {
   signNomination(id: string, role: "compliance" | "business"): void {
     const n = this.findNom(id);
     if (!n || n.state !== "awaiting_sign") return;
+    // One wrongly signed canary suspends the signer's bulk signing rights:
+    // every other nomination is then signed one at a time, never in bulk.
+    if (this.canaryMissed && !n.canary) return;
     if (!n.signedBy) n.signedBy = [];
     if (!n.signedBy.some((s) => s.role === role)) {
       n.signedBy.push({ role, at: simClock.snapshot().isoDate });
@@ -91,6 +110,15 @@ class DesignTimeStore {
   grantNomination(id: string): void {
     const n = this.findNom(id);
     if (!n || n.state !== "awaiting_sign" || !signaturesComplete(n.signedBy ?? [])) return;
+    // A canary is never grantable, however many signatures it collects: it
+    // exists to be rejected, and granting it is the miss the metric measures.
+    if (n.canary) {
+      this.canaryPlanted += 1;
+      this.canaryMissed = true;
+      n.signedBy = [];
+      this.emit();
+      return;
+    }
     n.state = "granted";
     if (n.proposedLevel) graduationOverrides.promote(n.intentCode, n.proposedLevel);
     this.emit();
@@ -99,10 +127,24 @@ class DesignTimeStore {
   rejectNomination(id: string): void {
     const n = this.findNom(id);
     if (!n || n.neverNominated) return;
+    if (n.canary) {
+      this.canaryPlanted += 1;
+      this.canaryCaught += 1;
+    }
     n.state = "cooldown";
     n.rejectedAt = simClock.now();
     n.signedBy = [];
     this.emit();
+  }
+
+  /** §4.2 canary hit rate. Must stay 100%; a miss suspends bulk signing. */
+  getCanary(): { planted: number; caught: number; hitRatePct: number; missed: boolean } {
+    return {
+      planted: this.canaryPlanted,
+      caught: this.canaryCaught,
+      hitRatePct: Math.round((this.canaryCaught / this.canaryPlanted) * 1000) / 10,
+      missed: this.canaryMissed,
+    };
   }
 
   // ── Waves (FR-12.2) ──
@@ -192,6 +234,50 @@ class DesignTimeStore {
     this.emit();
   }
 
+  // ── Notice rules (FR-12.4) ──
+
+  getNoticeRules(): NoticeRule[] {
+    return this.notices;
+  }
+
+  /** AC3: a new rule is born in shadow — record "would have sent", send
+   *  nothing — and the counterfactual decides whether it earns a dual sign. */
+  setNoticeShadow(id: string): void {
+    const r = this.findNotice(id);
+    if (!r || r.mode !== "off") return;
+    r.mode = "shadow";
+    // The shadow window starts recording; fictional counterfactual figures.
+    r.shadowStats = { windowDays: 30, wouldHaveSent: 214, stillWroteIn: 26, controlSize: 230, controlWroteIn: 78 };
+    this.emit();
+  }
+
+  signNotice(id: string, role: "compliance" | "business"): void {
+    const r = this.findNotice(id);
+    if (!r || r.mode !== "shadow") return;
+    if (!r.signedBy) r.signedBy = [];
+    if (!r.signedBy.some((s) => s.role === role)) {
+      r.signedBy.push({ role, at: simClock.snapshot().isoDate });
+    }
+    this.emit();
+  }
+
+  /** Live only after dual sign, and only while the shadow evidence holds. */
+  grantNotice(id: string): void {
+    const r = this.findNotice(id);
+    if (!r || r.mode !== "shadow" || !signaturesComplete(r.signedBy ?? [])) return;
+    r.mode = "live";
+    this.emit();
+  }
+
+  /** AC3: if the notice did not reduce the inbound, the rule is withdrawn. */
+  withdrawNotice(id: string): void {
+    const r = this.findNotice(id);
+    if (!r || r.mode !== "live") return;
+    r.mode = "off";
+    r.signedBy = [];
+    this.emit();
+  }
+
   // ── Candidate intents (FR-12.6) ──
 
   getCandidates(): CandidateIntent[] {
@@ -215,6 +301,9 @@ class DesignTimeStore {
   }
   private findComp(id: string): Compilation | undefined {
     return this.compilations.find((x) => x.id === id);
+  }
+  private findNotice(id: string): NoticeRule | undefined {
+    return this.notices.find((x) => x.id === id);
   }
 }
 

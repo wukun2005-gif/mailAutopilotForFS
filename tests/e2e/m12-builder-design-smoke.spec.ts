@@ -47,6 +47,49 @@ test.describe("M12-3 Builder design-time views", () => {
     await expect(page.locator("[data-id='s4.pol.checklist.COMP-3']")).toBeVisible();
   });
 
+  test("canary nomination: grantable-looking card is the trap — granting it suspends bulk signing", async ({ page }) => {
+    await openView(page, "nominations");
+    // Hit rate starts at 100%.
+    await expect(page.locator("[data-id='s4.nom.canaryLedger']")).toContainText("100");
+
+    // A rare intent gets an observation report, never a nomination.
+    await expect(page.locator("[data-id='s4.nom.NOM-RARE']")).toContainText(/insufficient|样本不足/i);
+    expect(await page.locator("[data-id='s4.nom.NOM-RARE'] button").count()).toBe(0);
+
+    // The canary collects both signatures like any other card…
+    await page.click("[data-id='s4.nom.sign.compliance.NOM-CANARY']");
+    await page.click("[data-id='s4.nom.sign.business.NOM-CANARY']");
+    await page.click("[data-id='s4.nom.apply.NOM-CANARY']");
+    // …but granting it is the miss: no autonomy, and bulk signing is suspended.
+    await expect(page.locator("[data-id='s4.nom.canaryMissed.NOM-CANARY']")).toBeVisible();
+    await expect(page.locator("[data-id='s4.nom.bulkSuspended']")).toBeVisible();
+    await expect(page.locator("[data-id='s4.nom.granted.NOM-CANARY']")).toHaveCount(0);
+    await page.click("[data-id='s4.nom.sign.compliance.NOM-B']");
+    await expect(page.locator("[data-id='s4.nom.apply.NOM-B']")).toBeDisabled();
+  });
+
+  test("pre-empt: notice rules are born in shadow and only send after a dual sign", async ({ page }) => {
+    await openView(page, "preempt");
+    // NOTICE-1 is already shadowing with counterfactual stats.
+    await expect(page.locator("[data-id='s4.preempt.mode.NOTICE-1']")).toContainText(/shadow/i);
+    await expect(page.locator("[data-id='s4.preempt.stats.NOTICE-1']")).toBeVisible();
+
+    // One signature is not enough to start sending.
+    await page.click("[data-id='s4.preempt.sign.compliance.NOTICE-1']");
+    await expect(page.locator("[data-id='s4.preempt.grant.NOTICE-1']")).toBeDisabled();
+    await page.click("[data-id='s4.preempt.sign.business.NOTICE-1']");
+    await page.click("[data-id='s4.preempt.grant.NOTICE-1']");
+    await expect(page.locator("[data-id='s4.preempt.live.NOTICE-1']")).toBeVisible();
+    // Withdrawable at any time if the inbound class does not fall (AC3).
+    await page.click("[data-id='s4.preempt.withdraw.NOTICE-1']");
+    await expect(page.locator("[data-id='s4.preempt.mode.NOTICE-1']")).toContainText(/not enabled|未启用/i);
+
+    // A rule that has not been proposed yet can only enter shadow, never live.
+    await expect(page.locator("[data-id='s4.preempt.mode.NOTICE-2']")).toContainText(/not enabled|未启用/i);
+    await page.click("[data-id='s4.preempt.shadow.NOTICE-2']");
+    await expect(page.locator("[data-id='s4.preempt.mode.NOTICE-2']")).toContainText(/shadow/i);
+  });
+
   test("intent discovery: candidate accepted into shadow at human-set levels; bereavement is report-only", async ({ page }) => {
     await openView(page, "intents");
     await page.click("[data-id='s4.cand.accept.CAND-1']");

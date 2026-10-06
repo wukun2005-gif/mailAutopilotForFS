@@ -6,6 +6,7 @@ import type {
   ConsequencePreview,
   FunnelCounts,
   Nomination,
+  NoticeRule,
   PreventableTag,
 } from "@/runtime/designTime/types.ts";
 
@@ -172,6 +173,147 @@ export const NOMINATIONS: Nomination[] = [
       approverVariance: { maxGapPp: 0, approvers: 0, detail: { zh: "AI 不提名", en: "AI never nominates" } },
       cohortParity: { gaps: [], maxGapPp: 0, thresholdPp: 2 },
     },
+  },
+  {
+    // §4.2 / §12.1 canary: planted knowing it must be rejected. The first three
+    // proofs pass; only proof ④ fails (language gap 2.4pp > 2pp bar, locked
+    // translations not pre-approved). A signer reading the card rejects it; a
+    // signer rubber-stamping diff approves it and loses bulk signing rights.
+    id: "NOM-CANARY",
+    intentCode: "card_replacement_eta",
+    intentLabel: { zh: "补卡进度查询（提名）", en: "Replacement-card ETA (nomination)" },
+    risk: "R1",
+    kind: "promote_l3_quota",
+    state: "awaiting_sign",
+    shadowDays: 14,
+    cooldownDays: 30,
+    proposedLevel: "L3",
+    evidence: {
+      consistency: {
+        reproRate: 0.981,
+        sampleSize: 604,
+        thresholdRate: 0.97,
+        criticalMisses: 0,
+        regulated: false,
+      },
+      calcJudgment: {
+        calcShare: 0.94,
+        calcPattern: {
+          zh: "寄出事件 + 追踪号 → 同一答复，人批 604 件中 94% 同模式",
+          en: "Ship event + tracking number → same answer; 94% of 604 human approvals share one pattern",
+        },
+        judgmentShare: 0.06,
+        judgmentCriteria: [
+          { zh: "地址异常 / 退回重寄的判断件", en: "Address exception / returned-and-reshipped cases" },
+        ],
+      },
+      approverVariance: {
+        maxGapPp: 1.8,
+        approvers: 5,
+        detail: { zh: "5 名审批人免修改批准率 96.1%–97.9%", en: "Five approvers' no-edit rate 96.1%–97.9%" },
+      },
+      // The single failing proof — and the whole point of the canary.
+      cohortParity: {
+        gaps: [
+          { dim: "language", gapPp: 2.4 },
+          { dim: "age62", gapPp: 0.3 },
+          { dim: "lmi", gapPp: 0.4 },
+          { dim: "channel", gapPp: 0.2 },
+          { dim: "vulnerability", gapPp: 0.1 },
+        ],
+        maxGapPp: 2.4,
+        thresholdPp: 2,
+      },
+    },
+    quota: {
+      kind: "items_month",
+      amount: 1500,
+      label: { zh: "每月 1,500 件额度，用尽自动回 L2", en: "1,500 items/month allowance; auto-ratchet to L2 when exhausted" },
+    },
+    canary: {
+      expected: "reject",
+      tell: {
+        zh: "第 ④ 项证明未过：语言维度组差 2.4pp 超过 2pp 门槛（西语锁定段翻译尚未预批准），按 FR-12.7 提名自动不成立——正确动作是拒绝。",
+        en: "Proof ④ fails: the language gap is 2.4pp against the 2pp bar (the Spanish locked translation is not pre-approved yet), so under FR-12.7 the nomination is void — reject it.",
+      },
+    },
+  },
+  {
+    // AC5: a rare intent never gets a nomination, only an observation report.
+    id: "NOM-RARE",
+    intentCode: "safe_deposit_inquiry",
+    intentLabel: { zh: "保管箱查询（稀有意图）", en: "Safe-deposit-box inquiry (rare intent)" },
+    risk: "R1",
+    kind: "observation",
+    state: "insufficient_sample",
+    shadowDays: 0,
+    cooldownDays: 30,
+    observation: {
+      requiredSample: 300,
+      observedSample: 47,
+      note: {
+        zh: "90 天仅 47 件，不足非受监管意图 300 件门槛：不出提名、不缩短 shadow、不降低门槛，只留观测报告；继续停留 L2。",
+        en: "Only 47 cases in 90 days, short of the 300-case bar for non-regulated intents: no nomination, no shortened shadow, no lowered bar — an observation report only, and it stays at L2.",
+      },
+    },
+    evidence: {
+      consistency: { reproRate: 0, sampleSize: 47, thresholdRate: 0.97, criticalMisses: 0, regulated: false },
+      calcJudgment: {
+        calcShare: 0,
+        calcPattern: { zh: "样本不足，不下结论", en: "Insufficient sample; no conclusion drawn" },
+        judgmentShare: 1,
+        judgmentCriteria: [
+          { zh: "需分行现场核验，保持人工", en: "Requires in-branch verification; stays human" },
+        ],
+      },
+      approverVariance: { maxGapPp: 0, approvers: 0, detail: { zh: "样本不足，不下结论", en: "Insufficient sample; no conclusion drawn" } },
+      cohortParity: { gaps: [], maxGapPp: 0, thresholdPp: 2 },
+    },
+  },
+];
+
+// ── FR-12.4 event-triggered notice rules (Builder shadow switch) ──
+
+export const NOTICE_RULES: NoticeRule[] = [
+  {
+    id: "NOTICE-1",
+    eventKey: "card_shipped",
+    eventLabel: { zh: "补卡寄出事件（含追踪号）", en: "Replacement card shipped (with tracking number)" },
+    ruleLabel: { zh: "寄出后主动发 ETA 通知", en: "Send a proactive ETA notice after shipment" },
+    mode: "shadow",
+    shadowStats: {
+      windowDays: 30,
+      wouldHaveSent: 214,
+      stillWroteIn: 26,
+      controlSize: 230,
+      controlWroteIn: 78,
+    },
+    constraints: [
+      { zh: "锁定模板 + slots，只陈述账户事实", en: "Locked template + slots; account facts only" },
+      { zh: "每客户频控，尊重 opt-out", en: "Per-customer frequency cap; opt-out honoured" },
+      { zh: "只发 on-file 地址", en: "On-file address only" },
+      { zh: "无营销内容、无产品推荐", en: "No marketing, no product recommendation" },
+      { zh: "不附索要信息 / 凭据的链接", en: "No links that ask for information or credentials" },
+    ],
+  },
+  {
+    id: "NOTICE-2",
+    eventKey: "fee_assessed",
+    eventLabel: { zh: "透支费入账事件", en: "Overdraft fee posted" },
+    ruleLabel: { zh: "入账当日主动发余额提醒", en: "Proactive low-balance alert the day the fee posts" },
+    mode: "off",
+    shadowStats: {
+      windowDays: 0,
+      wouldHaveSent: 0,
+      stillWroteIn: 0,
+      controlSize: 0,
+      controlWroteIn: 0,
+    },
+    constraints: [
+      { zh: "教育性内容，不推产品", en: "Educational content only; no product push" },
+      { zh: "每客户频控，尊重 opt-out", en: "Per-customer frequency cap; opt-out honoured" },
+      { zh: "只发 on-file 地址", en: "On-file address only" },
+    ],
   },
 ];
 

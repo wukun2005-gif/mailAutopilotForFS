@@ -14,6 +14,7 @@ import {
   PauseCircle,
   Scale,
   GitCompareArrows,
+  BellRing,
   Search,
 } from "lucide-react";
 import { GRADUATION_TABLE } from "@/mocks/fixtures/index.ts";
@@ -26,10 +27,11 @@ import { ReadinessReport } from "./builder/ReadinessReport";
 import { NominationsView } from "./builder/design/NominationsView";
 import { PoliciesView } from "./builder/design/PoliciesView";
 import { IntentsView } from "./builder/design/IntentsView";
+import { PreemptView } from "./builder/design/PreemptView";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
 
-type BuilderView = "graduation" | "nominations" | "policies" | "intents";
+type BuilderView = "graduation" | "nominations" | "policies" | "preempt" | "intents";
 
 export function BuilderScreen() {
   const { t, i18n } = useTranslation("builder");
@@ -62,6 +64,7 @@ export function BuilderScreen() {
     { id: "graduation", label: t("views.graduation"), icon: GraduationCap },
     { id: "nominations", label: t("views.nominations"), icon: Scale },
     { id: "policies", label: t("views.policies"), icon: GitCompareArrows },
+    { id: "preempt", label: t("views.preempt"), icon: BellRing },
     { id: "intents", label: t("views.intents"), icon: Search },
   ];
 
@@ -87,6 +90,7 @@ export function BuilderScreen() {
         <div className="min-h-0 flex-1 overflow-y-auto">
           {view === "nominations" && <NominationsView />}
           {view === "policies" && <PoliciesView />}
+          {view === "preempt" && <PreemptView />}
           {view === "intents" && <IntentsView />}
         </div>
       )}

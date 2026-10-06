@@ -38,7 +38,7 @@
         "value": "0",
         "unit": "critical errors / 1k autonomous",
         "target": "One-vote veto: any miss invalidates VARR and revokes autonomy",
-        "detail": "Statutory clock met 100% · customer promise kept 100% · regulated recall 99.6% (gate 99.5%) · dossier completeness 100%"
+        "detail": "Statutory clock met 100% · customer promise kept 100% · regulated recall 99.6% (gate 99.5%) · dossier completeness 100% · cohort parity max gap 0.6pp (gate 2pp)"
       }
     },
     "guard": {
@@ -86,6 +86,26 @@
           "name": "“Please call us” ending rate",
           "value": "9% (fictional-profile baseline 22%)",
           "threshold": "Falls month over month; a rise on any intent → re-check that the step-up path is usable"
+        },
+        "cohortParity": {
+          "name": "Cohort parity gap",
+          "value": "Max gap 0.6pp (language / 62+ / LMI tract / channel / stated vulnerability)",
+          "threshold": "Every gap < 2pp is a precondition for a nomination or a policy diff to take effect; a breach blocks the nomination and locates the source in identification / step-up / approver variance; no protected attributes collected"
+        },
+        "preventable": {
+          "name": "Preventable-inbound rate",
+          "value": "8.4% (share of inbound an existing event-triggered notice could have prevented)",
+          "threshold": "Reviewed quarterly; once the matching notice rule ships this class must fall, otherwise the rule is withdrawn (shadow counterfactual basis)"
+        },
+        "canary": {
+          "name": "Canary-nomination hit rate",
+          "value": "100% (planted nominations known to be reject-worthy, correctly rejected)",
+          "threshold": "Must stay 100%; one wrong signature suspends that signer's bulk signing rights and re-trains them (30-day nomination rate limit, evidence bar and dissent cards are the front-line defences)"
+        },
+        "remediationError": {
+          "name": "Bulk remediation error rate",
+          "value": "0 wrong refunds (1% and 10% batches released)",
+          "threshold": "0 wrong refunds is the precondition for the next batch; sample and total dual-signed before every 1%→10%→100% step, all operations idempotent and reversible"
         }
       }
     }
