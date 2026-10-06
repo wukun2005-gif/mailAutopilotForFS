@@ -274,7 +274,7 @@ export const INBOX_FUNNEL: FunnelCounts = {
   triaged: 1284,
   waitingCustomer: 63,
   waitingApproval: 12,
-  done: 1189,
+  done: 1209, // 1284 − 63 − 12 (funnel reconciles exactly)
   psi: 0.04,
   preventableRatePct: 8.4,
 };

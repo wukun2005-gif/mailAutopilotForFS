@@ -4,7 +4,8 @@
     "queue": "审批队列",
     "clocks": "法定时钟",
     "fraud": "欺诈隔离",
-    "metrics": "成功指标"
+    "metrics": "成功指标",
+    "waves": "浪涌看板"
   },
   "kpi": {
     "pending": "待审批",
@@ -174,5 +175,59 @@
       "DMARC_NONE": "入站邮件 DMARC 策略为 none / SPF 对齐失败"
     },
     "atoScore": "ATO 风险分 {{value}} / 100"
+  },
+  "waves": {
+    "title": "浪涌看板 · Sense（收件箱群体信号）",
+    "subtitle": "AI 识别跨案件的共同模式并提议动作；收紧、赔付、路由都由主管授予。所有数字为虚构示意。",
+    "note": "运行时守规矩，设计时提规矩：本看板的任何动作都不直接改单封信的裁决，只通过双签后的策略/额度生效。",
+    "severity": {
+      "P0": "P0 负面浪",
+      "P1": "P1 正面浪",
+      "P2": "P2 摩擦浪"
+    },
+    "funnel": {
+      "title": "收件箱处理漏斗（Day 30 快照，虚构）",
+      "arrived": "到达",
+      "triaged": "已分诊",
+      "waitingCustomer": "等客户",
+      "waitingApproval": "等审批",
+      "done": "已办结",
+      "psi": "PSI 节奏稳定指数",
+      "psiHint": "越低越平稳，>0.2 提示异常浪",
+      "preventable": "可预防来信率",
+      "preventableHint": "事件通知本可提前发出的来信占比（FR-12.4）"
+    },
+    "p0": {
+      "samples": "样本措辞",
+      "pack": "一键收紧包（棘轮）",
+      "tightenBtn": "一键收紧（即时生效）",
+      "applied": "已收紧：{{hours}}h 后自动到期（约 {{until}}），到期自动恢复原级别",
+      "ratchetNote": "棘轮只能紧不能松；放宽必须走双签，UI 里不提供一键放宽"
+    },
+    "p1": {
+      "signature": "磁带签名",
+      "scan": "全磁带扫描",
+      "writers": "来信客户",
+      "silent": "沉默受害者",
+      "amount": "赔付总额",
+      "gateError": "① 合规/法务确认这是银行错误（不是客户责任）",
+      "confirmBtn": "确认银行错误",
+      "gateSample": "② 双签：先签首批样本（1%）",
+      "gateTotal": "③ 双签：签总额（${{total}}）与最终 100% 批次",
+      "signBtn": "签署",
+      "stages": "分批赔付（每笔幂等、可冲正）",
+      "reversible": "可整批冲正",
+      "complete": "全部批次完成；付款台账 WORM 留痕，可按客户冲正",
+      "finishBatch": "完成 {{pct}}% 批次",
+      "startBatch": "启动 {{pct}}% 批次",
+      "waitGates": "先完成三道授予闸",
+      "cumulative": "累计",
+      "idempotent": "幂等键前缀 {{prefix}}，同一客户同一磁带重复执行不重复付款"
+    },
+    "p2": {
+      "cohorts": "群体分布",
+      "recommended": "建议动作",
+      "routeBtn": "转 FR-12.4 通知 shadow + 产品团队"
+    }
   }
 }
