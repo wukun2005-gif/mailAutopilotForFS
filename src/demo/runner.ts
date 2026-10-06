@@ -14,6 +14,7 @@ import type { Beat } from "./types.ts";
 import { caseActions, useCaseStore } from "@/store/caseStore.ts";
 import { useUIStore } from "@/store/uiStore.ts";
 import { graduationOverrides } from "@/runtime/graduationOverrides.ts";
+import { designTimeStore } from "@/runtime/designTime/store.ts";
 import { faultController } from "@/tools/faultController.ts";
 
 const reducedMotion =
@@ -307,6 +308,9 @@ class DemoRunner {
     // session and wrong here: the builder chapter promotes an intent and
     // degrades another, and the next chapter must meet the fixture table.
     graduationOverrides.reset();
+    // M12 design-time state (nominations, waves, compilations, candidates)
+    // re-seeds the same way the builder overrides do.
+    designTimeStore.reset();
     bgmPlayer.start();
     this.loopAlive = true;
     return script;
