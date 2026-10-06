@@ -72,12 +72,12 @@
     "AP-OCR-REVIEW": "人工复核低置信附件（OCR）"
   },
   "preventable": {
-    "title": "可预防来信（FR-12.4）",
+    "title": "可预防来信",
     "shadow": "通知规则 shadow 中",
     "note": "标签只用于指标统计与 Builder 的通知规则提议，不改变本邮件的受理、起钟与答复路径。"
   },
   "preview": {
-    "title": "回信后果预览（FR-12.5 · 写作助手，只读建议）",
+    "title": "回信后果预览（写作助手，只读建议）",
     "sample": "基于 {{n}} 个同类结案线程",
     "current": "当前措辞·14 天复联率",
     "improved": "建议措辞·复联率",

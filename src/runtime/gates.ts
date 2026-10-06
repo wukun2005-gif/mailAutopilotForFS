@@ -134,7 +134,10 @@ export function decideCell(args: DecideCellArgs): CellDecision {
         queueable: false,
       };
     }
-    if (args.secondWaiverWithin12m) {
+    // Second waiver within 12 months is the trigger that forced L2 under V12. After
+    // Card B's V14 diff, a goodwill-patterned case already PASSes OD-1, so only the
+    // still-failing cases are sent back to a human; the patterned case graduates at L3.
+    if (args.secondWaiverWithin12m && args.policyOverall !== "PASS") {
       return {
         cell: l("L2"),
         reasonCodes: ["SECOND_WAIVER_12M_FORCED_HUMAN_L2", "HUMAN_RECONSIDERATION_OPEN"],

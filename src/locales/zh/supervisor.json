@@ -215,11 +215,12 @@
       "psi": "PSI 节奏稳定指数",
       "psiHint": "越低越平稳，>0.2 提示异常浪",
       "preventable": "可预防来信率",
-      "preventableHint": "事件通知本可提前发出的来信占比（FR-12.4）"
+      "preventableHint": "事件通知本可提前发出的来信占比"
     },
     "p0": {
       "samples": "样本措辞",
       "pack": "一键收紧包（棘轮）",
+      "notGraduated": "未毕业（已在人工）",
       "tightenBtn": "一键收紧（即时生效）",
       "applied": "已收紧：{{hours}}h 后自动到期（约 {{until}}），到期自动恢复原级别",
       "ratchetNote": "棘轮只能紧不能松；放宽必须走双签，UI 里不提供一键放宽"
@@ -247,7 +248,7 @@
     "p2": {
       "cohorts": "群体分布",
       "recommended": "建议动作",
-      "routeBtn": "转 FR-12.4 通知 shadow + 产品团队"
+      "routeBtn": "转通知 shadow + 产品团队"
     }
   }
 }

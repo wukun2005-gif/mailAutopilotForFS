@@ -151,15 +151,16 @@
       "grant": "授予（人签 diff）",
       "reject": "拒绝（30 天限频）",
       "granted": "已授予：下一封信按新配置求值，额度用尽自动回 L2",
+      "grantedPlain": "已授予",
       "cooldown": "已拒绝：{{days}} 天内不再提名同一意图"
     },
     "nom": {
-      "title": "放权提名（FR-12.1）：AI 提名，证据答辩，人类授予",
+      "title": "放权提名：AI 提名，证据答辩，人类授予",
       "subtitle": "四张证明同时成立才可进入 shadow：一致性、计算-判断切分、审批人方差、cohort 公平（组差 <2pp，不采集种族/性别等受保护属性）。R3/R4 永不提名。",
       "neverTitle": "永不提名（灰色）"
     },
     "pol": {
-      "title": "Policy Compiler（FR-12.3）：人话/文档 → 条款级 diff",
+      "title": "Policy Compiler：人话/文档 → 条款级 diff",
       "subtitle": "人读条款与机读规则并排；同时给失效模板、90 天回测翻转、AI 异议卡与 cohort 影响。闭世界：表达不了的条件直接回「需要新数据源」；监管摘要只生成核查清单。",
       "preset": {
         "COMP-1": "句子：退费上限 $35→$25",
@@ -182,7 +183,7 @@
       "granted": "已生效：{{version}}；营销材料等冲突项已列入发布阻断"
     },
     "intents": {
-      "title": "意图发现（FR-12.6）：从未归类来信中长出新 intent",
+      "title": "意图发现：从未归类来信中长出新 intent",
       "subtitle": "高频、步骤高度一致、工具已就绪的聚类成为候选；R/I 等级由人设定，先 shadow 再谈毕业。身份关系类聚类只报告、转专家，永不生成可执行 intent。",
       "volume": "90 天来信",
       "consistency": "步骤一致度",
@@ -198,25 +199,25 @@
       "accept": "接受为候选（建议 {{r}} / {{i}}），进入 shadow"
     },
     "obs": {
-      "title": "稀有意图观测报告（AC5：不出提名）",
+      "title": "稀有意图观测报告（不出提名）",
       "required": "门槛 {{required}} 件 / 实测 {{observed}} 件"
     },
     "canary": {
       "badge": "金丝雀提名 · 已知应拒",
       "tellTitle": "为什么这张卡必须被拒：",
       "hit": "金丝雀命中率 {{caught}}/{{planted}}（{{rate}}%）",
-      "hint": "定期植入已知应拒的提名，测签字人是否还在认真审（§4.2 须 100%）",
+      "hint": "定期植入已知应拒的提名，测签字人是否还在认真审（命中率须 100%）",
       "missed": "误签：这张卡本应被拒。",
       "suspended": "该签字人的批量签字权限已暂停，其余提名须逐份签（重培后恢复）"
     },
     "preempt": {
-      "title": "可预防来信与事件触发通知（FR-12.4）",
+      "title": "可预防来信与事件触发通知",
       "subtitle": "通知本身是确定性 Automation Flow；AI 只负责发现哪些信本可预防、该建哪条规则。新规则先 shadow（只记不发 + 反事实统计），双签后才真实发送。",
       "event": "触发事件：",
       "statsTitle": "shadow 反事实统计（{{days}} 天窗口）",
       "statsBody": "本来会发 {{sent}} 封 → 其中 {{still}} 封（{{stillPct}}）仍然写信进来；对照组 {{control}} 户未收到通知 → {{controlIn}} 户（{{controlPct}}）写信进来",
       "statsHint": "规则上线后该类来信未下降则撤回规则；发送受锁定模板、频控、opt-out、on-file 地址约束，无营销、无索要信息链接。",
-      "constraints": "发送硬约束（AC2）",
+      "constraints": "发送硬约束",
       "mode": {
         "off": "未启用",
         "shadow": "shadow（只记不发）",

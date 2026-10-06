@@ -332,7 +332,7 @@ After dual sign, V13 takes effect and the next email evaluates against it; the m
 
 ### d37 · intents · caption 5000 ms · audio 23.5s · day30.intents · pointer s4.cand.accepted.CAND-1
 
-Intent discovery: 186 statement-copy requests in 90 days, 91% following the same four steps with ready tools. The AI only nominates — humans set R/I levels, and it enters shadow first. Identity-relationship clusters like bereavement are report-only, routed to specialists, never executable intents.
+Intent discovery: 186 statement-copy requests in 90 days, 91% following the same four steps with ready tools. The AI only nominates — humans set R/I levels, and it enters shadow first.
 
 ### d41 · watch · caption 6000 ms · audio 17.8s · day30.preventable · pointer s2.preventable
 

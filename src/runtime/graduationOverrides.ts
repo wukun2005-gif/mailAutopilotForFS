@@ -67,13 +67,26 @@ class OverrideStore {
     this.emit();
   }
 
-  /** Effective graduated level given fixture baseline. */
-  effective(intentCode: string, baseline: LLevel | null): LLevel | null {
+  /** Effective level with the cap lifted: what the intent would run at if no
+   *  manual cap / wave ratchet were holding it down. The wave board reads this
+   *  so a tightening pack can never advertise a "from" level that the
+   *  graduation table does not show (FR-12.2: the pack is a promise about the
+   *  SAME runtime the Builder board renders). */
+  unclamped(intentCode: string, baseline: LLevel | null): LLevel | null {
     const o = this.map.get(intentCode);
     let level = baseline;
     if (o?.promotedTo) level = o.promotedTo;
-    if (o?.cap && level && RANK[o.cap] < RANK[level]) level = o.cap;
     if (o?.driftDegraded && level && RANK["L3"] > RANK.L2 && RANK[level] > RANK.L2) level = "L2";
+    return level;
+  }
+
+  /** Effective graduated level given fixture baseline. */
+  effective(intentCode: string, baseline: LLevel | null): LLevel | null {
+    const o = this.map.get(intentCode);
+    let level = this.unclamped(intentCode, baseline);
+    // A cap only ever lowers, and never graduates: an intent with no effective
+    // level (shadow / never) stays without one.
+    if (o?.cap && level && RANK[o.cap] < RANK[level]) level = o.cap;
     return level;
   }
 }

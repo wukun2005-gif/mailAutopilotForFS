@@ -14,7 +14,7 @@ import type { NodeDeps, NodeFn } from "./graphNodes.ts";
 import { emailById, unwrap as unwrapEnvelope } from "./graphNodes.ts";
 import { appendEvent } from "./eventStore.ts";
 import { addBusinessDays, simClock } from "./simClock.ts";
-import { CUSTOMER_JANE, DISPUTE_EMAIL2 } from "@/mocks/fixtures/index.ts";
+import { CUSTOMER_JANE, DISPUTE_EMAIL2, OD_FEES } from "@/mocks/fixtures/index.ts";
 import {
   cardDeliveryLetter,
   fraudLockedLetter,
@@ -126,7 +126,7 @@ export function makeAct(deps: NodeDeps): NodeFn {
       return { approvals: clockApprovals, actions: actionEntries };
     }
 
-    if (!["email", "step_up"].includes(state.turn.kind)) return {};
+    if (!["email", "step_up", "policy_refresh"].includes(state.turn.kind)) return {};
     const emailId = state.currentEmailId;
     if (!emailId) return {};
     const decisions = state.decisions.filter((d) => d.sourceEmailId === emailId);
@@ -223,20 +223,54 @@ export function makeAct(deps: NodeDeps): NodeFn {
           await caseCard(emailId);
           updates.status = "awaiting_customer";
         } else if (cell.kind === "L" && cell.level === "L3") {
-          const already = state.actions.some(
+          const fee = emailId === "EM-1-IN-2" ? OD_FEES[1]! : OD_FEES[0]!;
+          const priorRefunds = state.actions.filter(
             (a) => a.actionType === "refund_od_fee" && a.status === "done",
-          );
+          ).length;
+          // EM-1-IN-1 refunds ODF-3318; the second request (EM-1-IN-2) has its own fee
+          // (ODF-3319), so it must run even though ODF-3318 is already refunded.
+          const already = fee.feeId === "ODF-3318" ? priorRefunds > 0 : priorRefunds > 1;
           if (!already) {
             const r = await deps.gateway.callWrite({
               caseId: state.caseId, actionType: "refund_od_fee",
-              keySeed: "refund:ODF-3318", body: { feeId: "ODF-3318", amountCents: 3500 },
+              keySeed: `refund:${fee.feeId}`, body: { feeId: fee.feeId, amountCents: fee.amountCents },
             });
             track(r);
             await emit(state, "act", r.replayed ? "idempotent_replay" : "tool_result", {
               refund: r.data, replayed: r.replayed,
             });
           }
-          addDraft(refundConfirmationLetter(state.customerId));
+          addDraft(
+            refundConfirmationLetter(
+              state.customerId,
+              fee,
+              emailId === "EM-1-IN-2" ? "DR-OD2-REFUND" : "DR-OD1-REFUND",
+            ),
+          );
+          // A policy refresh that lands L3 while the old L2 explanation is
+          // still queued: the explanation ("I cannot refund this fee") now
+          // contradicts the executed refund — retire it instead of letting
+          // the checkpoint pause on a decision the new pack already overrode.
+          const stale = state.approvals.find(
+            (a) => a.id === OD2_APPROVAL && a.status === "pending",
+          );
+          if (stale) {
+            updates.approvals = [
+              ...(updates.approvals ?? []),
+              {
+                ...stale,
+                status: "rejected" as const,
+                reasonCode: "SUPERSEDED_BY_POLICY_V14",
+                decidedBy: "policy_engine",
+                decidedAt: simClock.now(),
+              },
+            ];
+            const pc = state.promiseClocks?.find((p) => p.id === "PC:DR-OD2-HOLDING");
+            if (pc && !pc.fulfilledAt)
+              updates.promiseClocks = [
+                { ...pc, fulfillByDraftId: emailId === "EM-1-IN-2" ? "DR-OD2-REFUND" : pc.fulfillByDraftId },
+              ];
+          }
           updates.status = "pending_verify";
         } else if (cell.kind === "L" && cell.level === "L2") {
           // Holding reply goes out immediately (no approval linked); the

@@ -1,6 +1,6 @@
 // IntentsView — FR-12.6 Intent Discovery. Clusters of inbound mail the
 // existing intent taxonomy misses become candidates; humans set R/I levels
-// and accept them into shadow. Some clusters (bereavement) are reported for
+// and accept them into shadow. R3/R4 clusters are reported for
 // specialist routing only and never become an executable intent.
 import { useEffect, useReducer } from "react";
 import { useTranslation } from "react-i18next";

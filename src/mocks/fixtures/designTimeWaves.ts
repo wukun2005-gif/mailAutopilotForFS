@@ -33,8 +33,13 @@ export const WAVES: Wave[] = [
       },
       ticket: { zh: "自动建工单给卡运营团队（附 BIN 段 + 38 封样本）", en: "Auto-file ticket to card operations (BIN range + 38 samples attached)" },
       downgrades: [
-        { intentCode: "card_lock", intentLabel: { zh: "锁卡 / 冻卡咨询", en: "Card lock / freeze inquiry" }, from: "L3", to: "L2" },
-        { intentCode: "transaction_lookup", intentLabel: { zh: "拒付交易查询", en: "Denied-transaction lookup" }, from: "L3", to: "L2" },
+        // Only intents that really run at L3 in this build: a ratchet entry
+        // pointing at a shadow row (or an intent the detector never emits)
+        // would promise a downgrade the runtime cannot perform. Labels mirror
+        // the graduation table — the wave card and the Builder board must name
+        // the same intent the same way.
+        { intentCode: "card_lock", intentLabel: { zh: "借记卡锁卡（低影响写，已核验后自动）", en: "Debit card lock (low-impact write, auto once verified)" }, to: "L2" },
+        { intentCode: "transaction_detail", intentLabel: { zh: "交易明细查询（单笔扣费明细）", en: "Transaction detail (single charge detail)" }, to: "L2" },
       ],
       expiresHours: 24,
     },

@@ -9,6 +9,7 @@ export type FaultFlag =
   | "dlpBlock" // next outbound draft contains a PAN → blocked
   | "otpLockout" // OTP wrong 3× → locked
   | "policyV13" // policy evaluate reports V13
+  | "policyV14" // Card B demo: policy evaluate reports V14 (goodwill pattern passes OD-1)
   | "sessionExpired" // identity downgrade ① verification session invalid
   | "threadClosed" // identity downgrade ② Day-14 close really closed thread
   | "spoofSignal" // identity downgrade ③ lookalike signal (FR-2.1 AC3)
@@ -31,6 +32,7 @@ export interface FaultState {
   dlpBlock: boolean;
   otpLockout: boolean;
   policyV13: boolean;
+  policyV14: boolean;
   sessionExpired: boolean;
   threadClosed: boolean;
   spoofSignal: boolean;
@@ -45,6 +47,7 @@ const INITIAL: FaultState = {
   dlpBlock: false,
   otpLockout: false,
   policyV13: false,
+  policyV14: false,
   sessionExpired: false,
   threadClosed: false,
   spoofSignal: false,

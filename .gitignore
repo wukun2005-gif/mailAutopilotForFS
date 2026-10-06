@@ -44,3 +44,12 @@ scripts/review-shots.mjs
 scripts/qa-deck.mjs
 scripts/check-deck.mjs
 scripts/check-lang.mjs
+
+# 只保留在本地、不进仓库：环境配置、本地工具产物、临时测试（2026-10-06 清理）
+.env
+.trae-html-share-packages/
+_backup-prd-v0.2.html
+proposals-review-2026-10-06.md
+scripts/shot-loop.mjs
+tests/unit/repro2.test.ts
+tts/candidates/

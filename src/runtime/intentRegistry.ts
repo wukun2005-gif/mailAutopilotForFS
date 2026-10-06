@@ -34,6 +34,15 @@ export const INTENT_SPECS: Record<string, IntentSpec> = {
     regulated: false,
     fieldClass: "transaction_detail", // I3 field (unmentioned transactions)
   },
+  // Graduated L3 R2 write in the graduation table, so it needs a spec here too:
+  // a wave ratchet caps an intent by code, and a code with no spec is an intent
+  // the runtime cannot run (and cannot tighten).
+  card_lock: {
+    intentCode: "card_lock",
+    risk: "R2",
+    regulated: false,
+    fieldClass: "none",
+  },
   od_fee_refund: {
     intentCode: "od_fee_refund",
     risk: "R2",
@@ -167,4 +176,16 @@ export function graduatedLevel(intentCode: string): import("./state.ts").LLevel 
   const row = GRADUATION_TABLE.find((g) => g.intentCode === intentCode);
   const baseline = row && row.status === "graduated" ? row.graduatedL : null;
   return graduationOverrides.effective(intentCode, baseline);
+}
+
+/**
+ * The level this intent runs at with no cap in force — the level the Builder
+ * board shows before anyone tightens it. The wave board reads it so the
+ * "L3 → L2" a tightening pack promises is the level the graduation table
+ * actually carries, never a hardcoded number.
+ */
+export function uncappedLevel(intentCode: string): import("./state.ts").LLevel | null {
+  const row = GRADUATION_TABLE.find((g) => g.intentCode === intentCode);
+  const baseline = row && row.status === "graduated" ? row.graduatedL : null;
+  return graduationOverrides.unclamped(intentCode, baseline);
 }

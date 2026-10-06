@@ -17,6 +17,28 @@ test.describe("M12-2 Wave board (FR-12.2)", () => {
     await expect(applied).toContainText("24");
   });
 
+  test("the tightened intents read L2 on the admin board, not L3", async ({ page }) => {
+    await openWaves(page);
+    // The pack names its targets and the level it is taking them from; both are
+    // read from the graduation table, so they cannot drift from the Builder.
+    const named = page.locator("[data-id^='s3.waves.downgrade.']");
+    await expect(named).toHaveCount(2);
+    for (let i = 0; i < 2; i++) await expect(named.nth(i)).toContainText("L3 → L2");
+
+    await page.click("[data-id='s3.waves.tighten.WAVE-P0']");
+    await expect(page.locator("[data-id='s3.waves.applied.WAVE-P0']")).toBeVisible();
+
+    // Same intents, Builder → graduation: the R1 row (transaction_detail) and
+    // the R2 row (card_lock) must both be capped at L2 with the cap notice.
+    await page.click("[data-nav='builder']");
+    await page.click("[data-id='s4.intent.transaction_detail']");
+    await expect(page.locator("[data-id='s4.cap.notice']")).toContainText("L2");
+    await expect(page.locator("[data-id='s4.matrix.cell.R1.I3']")).toContainText("L2");
+    await page.click("[data-id='s4.intent.card_lock']");
+    await expect(page.locator("[data-id='s4.cap.notice']")).toContainText("L2");
+    await expect(page.locator("[data-id='s4.matrix.cell.R2.I3']")).toContainText("L2");
+  });
+
   test("P1 remediation: gates block batches, then 1%→10%→100% stages run in order", async ({ page }) => {
     await openWaves(page);
     // Before the three gates, the batch button is disabled.

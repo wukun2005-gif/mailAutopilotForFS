@@ -208,7 +208,7 @@ export function NominationCard({ n, fixed }: { n: Nomination; fixed: boolean }) 
         )}
         {n.state === "granted" && (
           <span className="inline-flex items-center gap-1 text-[12.5px] font-semibold text-emerald-700" data-id={`s4.nom.granted.${n.id}`}>
-            <CheckCircle2 size={14} /> {t("design.actions.granted")}
+            <CheckCircle2 size={14} /> {n.quota ? t("design.actions.granted") : t("design.actions.grantedPlain")}
           </span>
         )}
         {n.state === "cooldown" && (

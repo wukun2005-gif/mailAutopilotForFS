@@ -22,6 +22,19 @@ afterEach(async () => {
 });
 afterAll(() => server.close());
 
+describe("empty case state", () => {
+  // A freshly loaded scenario has no emails, so LangGraph's append-only
+  // collections do not exist yet. The V14 policy refresh (fired by a design-time
+  // grant, long before any email arrives) must read that as "nothing pending".
+  it("policy refresh and approval pickup no-op instead of throwing", async () => {
+    const r = new CaseRunner("email1");
+    await r.reset();
+    expect((await r.snapshot()).state.approvals).toBeUndefined();
+    await expect(r.refreshPolicy()).resolves.toBeDefined();
+    await expect(r.approveDue()).resolves.toBeDefined();
+  });
+});
+
 describe("email 1 — overdraft fee: deny → step-up → auto refund → verified → second waiver L2", () => {
   it("runs the full beat-1 lifecycle to a verified autonomous resolution", async () => {
     const r = new CaseRunner("email1");

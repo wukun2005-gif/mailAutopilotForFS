@@ -151,15 +151,16 @@
       "grant": "Grant (human signs the diff)",
       "reject": "Reject (30-day rate limit)",
       "granted": "Granted: the next email evaluates against the new config; quota exhaustion auto-ratchets to L2",
+      "grantedPlain": "Granted",
       "cooldown": "Rejected: the same intent will not be re-nominated for {{days}} days"
     },
     "nom": {
-      "title": "Graduation nominations (FR-12.1): AI nominates, evidence argues, humans grant",
+      "title": "Graduation nominations : AI nominates, evidence argues, humans grant",
       "subtitle": "All four proofs must hold before shadow: consistency, calc/judgment split, approver variance, cohort parity (gap <2pp; no protected attributes like race or sex collected). R3/R4 are never nominated.",
       "neverTitle": "Never nominated (greyed)"
     },
     "pol": {
-      "title": "Policy Compiler (FR-12.3): plain language / docs → clause-level diff",
+      "title": "Policy Compiler : plain language / docs → clause-level diff",
       "subtitle": "Human-readable clause and machine-readable rule side by side, with stale templates, 90-day backtest flips, AI dissent cards and cohort impact. Closed world: conditions it cannot express return 'new data source needed'; regulatory summaries produce a checklist only.",
       "preset": {
         "COMP-1": "Sentence: refund cap $35→$25",
@@ -182,7 +183,7 @@
       "granted": "Effective: {{version}}; conflicts such as marketing copy are listed as release blockers"
     },
     "intents": {
-      "title": "Intent Discovery (FR-12.6): growing new intents from unclassified mail",
+      "title": "Intent Discovery : growing new intents from unclassified mail",
       "subtitle": "High-volume, highly consistent clusters with ready tools become candidates; humans set R/I levels and shadow precedes graduation. Identity-relationship clusters are report-only, routed to specialists, never executable intents.",
       "volume": "90-day volume",
       "consistency": "Step consistency",
@@ -198,25 +199,25 @@
       "accept": "Accept candidate (suggested {{r}} / {{i}}) into shadow"
     },
     "obs": {
-      "title": "Rare-intent observation reports (AC5: no nomination)",
+      "title": "Rare-intent observation reports (no nomination)",
       "required": "{{required}}-case bar / {{observed}} observed"
     },
     "canary": {
       "badge": "Canary nomination · reject-worthy",
       "tellTitle": "Why this card must be rejected:",
       "hit": "Canary hit rate {{caught}}/{{planted}} ({{rate}}%)",
-      "hint": "A nomination known to be reject-worthy is planted periodically to test whether signers are still reading (§4.2 requires 100%)",
+      "hint": "A nomination known to be reject-worthy is planted periodically to test whether signers are still reading (hit rate must be 100%)",
       "missed": "Wrongly signed: this card should have been rejected.",
       "suspended": "This signer's bulk signing rights are suspended; every other nomination is signed one at a time (restored after re-training)"
     },
     "preempt": {
-      "title": "Preventable inbound and event-triggered notices (FR-12.4)",
+      "title": "Preventable inbound and event-triggered notices ",
       "subtitle": "The notice itself is a deterministic Automation Flow; the AI's job is discovery — which inbound a notice could have prevented, and which rule to build. A new rule is born in shadow (record-only plus counterfactual stats) and only sends for real after a dual sign.",
       "event": "Trigger event:",
       "statsTitle": "Shadow counterfactual ({{days}}-day window)",
       "statsBody": "Would have sent {{sent}}, of which {{still}} ({{stillPct}}) still wrote in; control group of {{control}} who got no notice, {{controlIn}} ({{controlPct}}) wrote in",
       "statsHint": "If this class of inbound does not fall after the rule ships, the rule is withdrawn. Sending is bounded by locked templates, frequency caps, opt-out, on-file addresses, no marketing and no credential-seeking links.",
-      "constraints": "Sending constraints (AC2)",
+      "constraints": "Sending constraints",
       "mode": {
         "off": "Not enabled",
         "shadow": "Shadow (record only)",

@@ -21,6 +21,9 @@ import {
   consistencyPasses,
 } from "@/runtime/designTime/logic.ts";
 import type { Nomination, RemediationPlan, TighteningPack } from "@/runtime/designTime/types.ts";
+import { INTENT_SPECS, graduatedLevel, uncappedLevel } from "@runtime/intentRegistry.ts";
+import { graduationOverrides } from "@runtime/graduationOverrides.ts";
+import { simClock } from "@runtime/simClock.ts";
 
 const HOUR = 3_600_000;
 const NOW = Date.UTC(2026, 9, 22, 8, 14);
@@ -94,6 +97,53 @@ describe("FR-12.2 P0 ratchet", () => {
 
   it("unapplied pack reports not_applied", () => {
     expect(ratchetState(pack(), NOW)).toBe("not_applied");
+  });
+
+  // The pack is a promise about the SAME runtime the Builder board renders, so
+  // every intent it names must be one that really runs above the target level.
+  // A shadow row (or an intent the detector never emits) would leave the board
+  // showing the old level after the wave was tightened — the pack would claim a
+  // downgrade that never happened.
+  it("only names intents that actually run at L3 today", () => {
+    for (const d of WAVES[0].tightening!.downgrades) {
+      expect(INTENT_SPECS[d.intentCode], `${d.intentCode} is not a registered intent`).toBeDefined();
+      expect(uncappedLevel(d.intentCode), `${d.intentCode} has no uncapped level`).toBe("L3");
+      expect(graduatedLevel(d.intentCode)).toBe("L3");
+    }
+  });
+
+  it("tightening drops each named intent to L2 in the runtime the Builder reads", () => {
+    graduationOverrides.reset();
+    designTimeStore.reset();
+    const codes = WAVES[0].tightening!.downgrades.map((d) => d.intentCode);
+    designTimeStore.applyTightening("WAVE-P0");
+    for (const code of codes) {
+      expect(graduatedLevel(code), `${code} still runs uncapped`).toBe("L2");
+      // The cap is a hold-down, not a re-graduation: the level it will return to
+      // when the 24h ratchet expires is still readable.
+      expect(uncappedLevel(code)).toBe("L3");
+    }
+    expect(designTimeStore.getWaves()[0].status).toBe("tightening_applied");
+    designTimeStore.reset();
+    graduationOverrides.reset();
+  });
+
+  it("expiry releases exactly what the ratchet capped", () => {
+    graduationOverrides.reset();
+    designTimeStore.reset();
+    // A human's own cap on an intent the wave never touched must survive it.
+    graduationOverrides.cap("general_inquiry", "L2");
+    designTimeStore.applyTightening("WAVE-P0");
+    simClock.set(simClock.now() + 25 * HOUR);
+    designTimeStore.getWaves(); // expiry runs on read
+    for (const d of WAVES[0].tightening!.downgrades) {
+      expect(graduatedLevel(d.intentCode)).toBe("L3");
+    }
+    expect(graduatedLevel("general_inquiry")).toBe("L2");
+    expect(designTimeStore.getWaves()[0].status).toBe("resolved");
+    simClock.reset();
+    designTimeStore.reset();
+    graduationOverrides.reset();
   });
 });
 

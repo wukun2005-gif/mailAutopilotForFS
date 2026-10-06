@@ -343,29 +343,6 @@ export const CANDIDATE_INTENTS: CandidateIntent[] = [
     ],
     state: "awaiting_level",
   },
-  {
-    id: "CAND-2",
-    proposedCode: "bereavement_support",
-    label: { zh: "丧亲 / 账户继承聚类", en: "Bereavement / estate cluster" },
-    volume90d: 47,
-    trendPct: 3,
-    stepConsistency: 0.38,
-    steps: [
-      { zh: "识别丧亲信号", en: "Detect bereavement signal" },
-      { zh: "转丧亲专家小组 + 安抚模板", en: "Route to bereavement specialist team + empathy template" },
-    ],
-    avgHandleMin: 22,
-    cohortDist: { zh: "高度异质：POA、死亡证明、共同账户、债务清偿各不相同", en: "Highly heterogeneous: POA, death certificate, joint accounts, debt settlement" },
-    suggestedR: "R4",
-    suggestedI: "I0",
-    toolsMapping: [],
-    reportOnly: true,
-    reportReason: {
-      zh: "涉及身份关系变更（R3/R4），只报告并转专家，永不生成可执行 intent",
-      en: "Involves identity-relationship change (R3/R4): report and route to specialists, never generate an executable intent",
-    },
-    state: "reported",
-  },
 ];
 
 // ── FR-12.5 Draft consequence preview (hangs on email-1 second-waiver draft) ──
@@ -377,12 +354,11 @@ export const DRAFT_PREVIEW: ConsequencePreview = {
   improvedRecontactPct: 9,
   sampleSize: 412,
   reasons: [
-    { zh: "草稿只说「不能退」，没解释是 12 个月一次的政策额度，客户以为是被针对", en: "The draft only says 'cannot refund' without explaining the once-per-12-months allowance; customers read it as arbitrary" },
     { zh: "没有给出下次避免透支费的具体动作", en: "No concrete action to avoid the next overdraft fee" },
   ],
   insertSentence: {
-    zh: "建议插入一句：「您的账户在过去 12 个月已使用过一次 courtesy refund；开通低余额提醒（回复 ALERTS 即可）通常可以避免这类费用。」",
-    en: "Suggested insert: 'Your account has used its once-per-12-months courtesy refund; enrolling in low-balance alerts (reply ALERTS) typically prevents this fee.'",
+    zh: "建议插入一句：「开通低余额提醒（回复 ALERTS 即可）通常可以避免这类费用。」",
+    en: "Suggested insert: 'Enrolling in low-balance alerts (reply ALERTS) typically prevents this fee.'",
   },
   precedents: [
     { kind: "closed", sharePct: 71, summary: { zh: "一次办结：含政策解释 + 下一步动作", en: "Closed in one: policy explanation + next step included" } },

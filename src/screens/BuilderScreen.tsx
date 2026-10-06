@@ -20,6 +20,7 @@ import {
 import { GRADUATION_TABLE } from "@/mocks/fixtures/index.ts";
 import type { GraduationEntry } from "@/mocks/fixtures/index.ts";
 import { graduationOverrides } from "@/runtime/graduationOverrides.ts";
+import { designTimeStore } from "@/runtime/designTime/store.ts";
 import { AutonomyMatrix } from "./builder/AutonomyMatrix";
 import { BacktestRunner } from "./builder/BacktestRunner";
 import { SamplingPanel } from "./builder/SamplingPanel";
@@ -52,6 +53,7 @@ export function BuilderScreen() {
   const [rev, bump] = useReducer((x: number) => x + 1, 0);
 
   useEffect(() => graduationOverrides.subscribe(bump), []);
+  useEffect(() => designTimeStore.subscribe(bump), []);
 
   const selected =
     GRADUATION_TABLE.find((g) => g.intentCode === selectedCode) ?? GRADUATION_TABLE[0];

@@ -10,6 +10,9 @@ import {
 import { COMPILATIONS, WAVES } from "@/mocks/fixtures/designTimeWaves.ts";
 import { faultController } from "@/tools/faultController.ts";
 import { graduationOverrides } from "@/runtime/graduationOverrides.ts";
+import { GRADUATION_TABLE } from "@/mocks/fixtures/graduation.ts";
+import { L_RANK } from "@/runtime/gates.ts";
+import { graduatedLevel } from "@/runtime/intentRegistry.ts";
 import { simClock } from "@/runtime/simClock.ts";
 import {
   RATCHET_HOURS,
@@ -39,6 +42,9 @@ class DesignTimeStore {
   private candidates: CandidateIntent[] = [];
   private notices: NoticeRule[] = [];
   private listeners = new Set<Listener>();
+  /** Accepted candidates that have been appended to GRADUATION_TABLE as
+   *  shadow rows; removed again on reset so the fixture table re-seeds. */
+  private addedShadowCodes: string[] = [];
   /** §4.2 canary ledger: planted nominations known to be reject-worthy. The
    *  quarter opened with 4 planted and 4 caught (100% hit rate); the card in
    *  the tray is the one currently under review. */
@@ -58,6 +64,11 @@ class DesignTimeStore {
     this.compilations = clone(COMPILATIONS);
     this.candidates = clone(CANDIDATE_INTENTS);
     this.notices = clone(NOTICE_RULES);
+    for (const code of this.addedShadowCodes) {
+      const i = GRADUATION_TABLE.findIndex((g) => g.intentCode === code);
+      if (i >= 0) GRADUATION_TABLE.splice(i, 1);
+    }
+    this.addedShadowCodes = [];
     this.canaryPlanted = 4;
     this.canaryCaught = 4;
     this.canaryMissed = false;
@@ -121,6 +132,9 @@ class DesignTimeStore {
     }
     n.state = "granted";
     if (n.proposedLevel) graduationOverrides.promote(n.intentCode, n.proposedLevel);
+    // Card B (quota-limited L3) carries the V14 policy pack: the same above-threshold
+    // case that FAiled under V12 OD-1 now auto-approves via the goodwill pattern.
+    if (n.kind === "promote_l3_quota") faultController.set("policyV14", true);
     this.emit();
   }
 
@@ -159,7 +173,20 @@ class DesignTimeStore {
     const w = this.findWave(id);
     if (!w || !w.tightening || w.status !== "active") return;
     w.tightening = applyRatchet(w.tightening, simClock.now());
-    for (const d of w.tightening.downgrades) graduationOverrides.cap(d.intentCode, d.to);
+    // Ratchet = tighter only, and only what actually runs above the target. An
+    // intent with no effective level (shadow / never) or one already at or
+    // below `to` is NOT capped: a cap that changes nothing would still show up
+    // as a "manual cap" on the Builder board and expire as a promise the ratchet
+    // never kept. Only the codes capped here are released at expiry, so a human's
+    // own cap on the same intent survives the wave.
+    const capped: string[] = [];
+    for (const d of w.tightening.downgrades) {
+      const current = graduatedLevel(d.intentCode);
+      if (!current || L_RANK[d.to] >= L_RANK[current]) continue;
+      graduationOverrides.cap(d.intentCode, d.to);
+      capped.push(d.intentCode);
+    }
+    w.tightening.cappedCodes = capped;
     w.status = "tightening_applied";
     this.emit();
   }
@@ -168,7 +195,9 @@ class DesignTimeStore {
     let changed = false;
     for (const w of this.waves) {
       if (w.tightening && ratchetState(w.tightening, simClock.now()) === "expired" && w.status === "tightening_applied") {
-        for (const d of w.tightening.downgrades) graduationOverrides.clearCap(d.intentCode);
+        for (const code of w.tightening.cappedCodes ?? w.tightening.downgrades.map((d) => d.intentCode)) {
+          graduationOverrides.clearCap(code);
+        }
         w.status = "resolved";
         changed = true;
       }
@@ -288,6 +317,24 @@ class DesignTimeStore {
     const c = this.candidates.find((x) => x.id === id);
     if (!c || c.reportOnly) return;
     c.state = "in_shadow";
+    // The accepted candidate becomes a real (shadow-state) intent row: it
+    // shows up in the runtime intent/graduation lists, fail-closed at L0,
+    // until it earns dual sign and graduates.
+    if (!GRADUATION_TABLE.some((g) => g.intentCode === c.proposedCode)) {
+      GRADUATION_TABLE.push({
+        intentCode: c.proposedCode,
+        label: c.label,
+        risk: c.suggestedR,
+        regulated: false,
+        triggers90d: c.volume90d,
+        criticalMisses: 0,
+        noEditApproval: null,
+        graduatedL: null,
+        status: "shadow",
+        dualSigned: false,
+      });
+      this.addedShadowCodes.push(c.proposedCode);
+    }
     this.emit();
   }
 

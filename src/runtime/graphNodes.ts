@@ -9,6 +9,7 @@ import {
   POLICY_PACKS,
   OD_FEE_WAIVER_V12,
   OD_FEE_WAIVER_V13,
+  OD_FEE_WAIVER_V14,
   REGE_INTAKE_V3,
   REGE_POS_INVEST_90,
   type EmailMessage,
@@ -190,7 +191,7 @@ export function makeIdentity(): NodeFn {
 
 export function makePolicy(deps: NodeDeps): NodeFn {
   return async (state) => {
-    if (!["email", "step_up"].includes(state.turn.kind)) return {};
+    if (!["email", "step_up", "policy_refresh"].includes(state.turn.kind)) return {};
     const emailId = state.currentEmailId;
     if (!emailId) return {};
     const hits = state.intents.filter((i) => i.sourceEmailId === emailId);
@@ -206,7 +207,11 @@ export function makePolicy(deps: NodeDeps): NodeFn {
         const priorRefunds = state.actions.filter(
           (a) => a.actionType === "refund_od_fee" && a.status === "done",
         ).length;
-        const pack = faultController.isOn("policyV13") ? OD_FEE_WAIVER_V13 : OD_FEE_WAIVER_V12;
+        const pack = faultController.isOn("policyV14")
+          ? OD_FEE_WAIVER_V14
+          : faultController.isOn("policyV13")
+            ? OD_FEE_WAIVER_V13
+            : OD_FEE_WAIVER_V12;
         cards.push(
           evaluatePack(
             pack,
@@ -215,6 +220,9 @@ export function makePolicy(deps: NodeDeps): NodeFn {
               waivers12m: priorRefunds + 1,
               accountStatus: accounts[0]?.status ?? "good",
               feeAmountCents: OD_FEES[0]!.amountCents,
+              // Card B's goodwill pattern: within 24h of the shortfall the customer
+              // made the funds whole and a same-day inbound deposit is pending.
+              goodwillPattern: faultController.isOn("policyV14"),
             },
             { sourceEmailId: emailId },
           ),
@@ -247,7 +255,7 @@ export function makePolicy(deps: NodeDeps): NodeFn {
 
 export function makeAutonomy(): NodeFn {
   return async (state) => {
-    if (!["email", "step_up"].includes(state.turn.kind)) return {};
+    if (!["email", "step_up", "policy_refresh"].includes(state.turn.kind)) return {};
     const emailId = state.currentEmailId;
     if (!emailId) return {};
     const level = state.identity?.level ?? "I0";
