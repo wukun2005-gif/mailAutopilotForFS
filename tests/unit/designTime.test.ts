@@ -1,7 +1,8 @@
 // M12 design-time logic unit tests (PRD v0.3 §6.6 / FR-12.1–12.3).
 import { describe, expect, it } from "vitest";
-import { NOMINATIONS } from "@/mocks/fixtures/designTime.ts";
+import { NOMINATIONS, NOTICE_RULES } from "@/mocks/fixtures/designTime.ts";
 import { WAVES } from "@/mocks/fixtures/designTimeWaves.ts";
+import { designTimeStore } from "@/runtime/designTime/store.ts";
 import {
   COHORT_PARITY_THRESHOLD_PP,
   NON_REG_REPRO_BAR,
@@ -141,5 +142,86 @@ describe("FR-12.2 P1 staged remediation", () => {
     const p = plan();
     expect(remediationKey(p, 42)).toBe("REM-NSF-20260930-000042");
     expect(remediationKey(p, 42)).toBe("REM-NSF-20260930-000042");
+  });
+});
+
+describe("FR-12.1 canary nomination (§4.2 hit rate, §12.1 rubber-stamp risk)", () => {
+  it("passes three proofs and fails only cohort parity — the signer has to read card ④", () => {
+    const c = nom("NOM-CANARY");
+    expect(c.canary?.expected).toBe("reject");
+    const blockers = nominationBlockers(c, NOW);
+    expect(blockers).toEqual(["parity"]);
+    expect(consistencyPasses(c.evidence)).toBe(true);
+  });
+
+  it("rejecting it keeps the hit rate at 100%", () => {
+    designTimeStore.reset();
+    const before = designTimeStore.getCanary();
+    expect(before.hitRatePct).toBe(100);
+    designTimeStore.rejectNomination("NOM-CANARY");
+    const after = designTimeStore.getCanary();
+    expect(after.caught).toBe(before.caught + 1);
+    expect(after.planted).toBe(before.planted + 1);
+    expect(after.hitRatePct).toBe(100);
+    expect(after.missed).toBe(false);
+  });
+
+  it("granting it is the miss: no autonomy is written and bulk signing is suspended", () => {
+    designTimeStore.reset();
+    designTimeStore.signNomination("NOM-CANARY", "compliance");
+    designTimeStore.signNomination("NOM-CANARY", "business");
+    designTimeStore.grantNomination("NOM-CANARY");
+    const c = designTimeStore.getCanary();
+    expect(c.missed).toBe(true);
+    expect(c.hitRatePct).toBeLessThan(100);
+    // The canary never becomes autonomy, however many signatures it collects.
+    expect(designTimeStore.getNominations().find((n) => n.id === "NOM-CANARY")?.state).not.toBe(
+      "granted",
+    );
+    // …and a suspended signer cannot bulk-sign the real nominations any more.
+    designTimeStore.signNomination("NOM-B", "compliance");
+    expect(designTimeStore.getNominations().find((n) => n.id === "NOM-B")?.signedBy ?? []).toEqual(
+      [],
+    );
+    designTimeStore.reset();
+  });
+});
+
+describe("FR-12.1 AC5 rare intents", () => {
+  it("get an observation report instead of a nomination", () => {
+    const r = nom("NOM-RARE");
+    expect(r.kind).toBe("observation");
+    expect(r.state).toBe("insufficient_sample");
+    expect(r.observation!.observedSample).toBeLessThan(r.observation!.requiredSample);
+    expect(r.observation!.observedSample).toBeLessThan(300);
+    expect(r.proposedLevel).toBeUndefined();
+  });
+});
+
+describe("FR-12.4 notice rules: shadow first, dual sign to send", () => {
+  it("a rule must not skip shadow, and must not send before both signatures", () => {
+    designTimeStore.reset();
+    expect(NOTICE_RULES[0].mode).toBe("shadow");
+    // Single signature is not enough.
+    designTimeStore.signNotice("NOTICE-1", "compliance");
+    designTimeStore.grantNotice("NOTICE-1");
+    expect(designTimeStore.getNoticeRules()[0].mode).toBe("shadow");
+    designTimeStore.signNotice("NOTICE-1", "business");
+    designTimeStore.grantNotice("NOTICE-1");
+    expect(designTimeStore.getNoticeRules()[0].mode).toBe("live");
+    // Withdrawal is always available once live (AC3: no fall in inbound → pull it).
+    designTimeStore.withdrawNotice("NOTICE-1");
+    expect(designTimeStore.getNoticeRules()[0].mode).toBe("off");
+    designTimeStore.reset();
+  });
+
+  it("an unproposed rule starts shadow-only, never live", () => {
+    designTimeStore.reset();
+    expect(designTimeStore.getNoticeRules()[1].mode).toBe("off");
+    designTimeStore.grantNotice("NOTICE-2");
+    expect(designTimeStore.getNoticeRules()[1].mode).toBe("off");
+    designTimeStore.setNoticeShadow("NOTICE-2");
+    expect(designTimeStore.getNoticeRules()[1].mode).toBe("shadow");
+    designTimeStore.reset();
   });
 });

@@ -104,14 +104,16 @@
     "graduation": "放权毕业（运行时）",
     "nominations": "放权提名",
     "policies": "策略编译器",
-    "intents": "意图发现"
+    "intents": "意图发现",
+    "preempt": "可预防来信"
   },
   "design": {
     "never": "AI 不提名",
     "kind": {
       "fix_template": "先修模板",
       "promote_l3_quota": "带额度毕业 L3",
-      "never": "永不提名"
+      "never": "永不提名",
+      "observation": "样本不足 · 仅观测报告"
     },
     "state": {
       "fix_first": "先修原因",
@@ -119,7 +121,8 @@
       "awaiting_sign": "待双签",
       "granted": "已授予",
       "rejected": "已拒绝",
-      "cooldown": "30 天限频"
+      "cooldown": "30 天限频",
+      "insufficient_sample": "样本不足，不出提名"
     },
     "afterFix": "修模板后",
     "proofs": {
@@ -193,6 +196,40 @@
       "reportOnly": "只报告、不生成 intent：",
       "inShadow": "已按 {{r}} / {{i}} 进入 14 天 shadow",
       "accept": "接受为候选（建议 {{r}} / {{i}}），进入 shadow"
+    },
+    "obs": {
+      "title": "稀有意图观测报告（AC5：不出提名）",
+      "required": "门槛 {{required}} 件 / 实测 {{observed}} 件"
+    },
+    "canary": {
+      "badge": "金丝雀提名 · 已知应拒",
+      "tellTitle": "为什么这张卡必须被拒：",
+      "hit": "金丝雀命中率 {{caught}}/{{planted}}（{{rate}}%）",
+      "hint": "定期植入已知应拒的提名，测签字人是否还在认真审（§4.2 须 100%）",
+      "missed": "误签：这张卡本应被拒。",
+      "suspended": "该签字人的批量签字权限已暂停，其余提名须逐份签（重培后恢复）"
+    },
+    "preempt": {
+      "title": "可预防来信与事件触发通知（FR-12.4）",
+      "subtitle": "通知本身是确定性 Automation Flow；AI 只负责发现哪些信本可预防、该建哪条规则。新规则先 shadow（只记不发 + 反事实统计），双签后才真实发送。",
+      "event": "触发事件：",
+      "statsTitle": "shadow 反事实统计（{{days}} 天窗口）",
+      "statsBody": "本来会发 {{sent}} 封 → 其中 {{still}} 封（{{stillPct}}）仍然写信进来；对照组 {{control}} 户未收到通知 → {{controlIn}} 户（{{controlPct}}）写信进来",
+      "statsHint": "规则上线后该类来信未下降则撤回规则；发送受锁定模板、频控、opt-out、on-file 地址约束，无营销、无索要信息链接。",
+      "constraints": "发送硬约束（AC2）",
+      "mode": {
+        "off": "未启用",
+        "shadow": "shadow（只记不发）",
+        "live": "已生效"
+      },
+      "actions": {
+        "startShadow": "开启 shadow（只记录本来会发）",
+        "signCompliance": "合规签",
+        "signBusiness": "业务签",
+        "goLive": "双签通过后转真实发送",
+        "live": "真实发送中",
+        "withdraw": "撤回规则"
+      }
     }
   }
 }

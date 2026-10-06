@@ -56,7 +56,10 @@ const tooltipBeats = SCRIPTS.flatMap((s) =>
 );
 
 describe("demo script data-id hooks", () => {
-  it("every cursor target exists in source", () => {
+  // Reads every .ts/.tsx/.json under src/ into one string; under a full parallel
+  // run that can exceed vitest's 5s default, so both gates carry their own
+  // budget. The work is I/O, not assertion — a slow run is not a failed gate.
+  it("every cursor target exists in source", { timeout: 30_000 }, () => {
     const root = join(process.cwd(), "src");
     const corpus = walk(root).map((f) => readFileSync(f, "utf8")).join("\n");
     const missing: string[] = [];
@@ -84,7 +87,7 @@ describe("demo script data-id hooks", () => {
     }
   });
 
-  it("every tooltip focus target exists in source", () => {
+  it("every tooltip focus target exists in source", { timeout: 30_000 }, () => {
     const root = join(process.cwd(), "src");
     const corpus = walk(root).map((f) => readFileSync(f, "utf8")).join("\n");
     const missing = tooltipBeats

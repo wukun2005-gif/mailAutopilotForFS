@@ -3,7 +3,9 @@
 // fix → shadow → dual sign → grant. R3/R4 cards render greyed with no actions.
 import { useTranslation } from "react-i18next";
 import {
+  AlertTriangle,
   Ban,
+  Bird,
   CheckCircle2,
   FileSignature,
   Lock,
@@ -53,6 +55,29 @@ export function NominationCard({ n, fixed }: { n: Nomination; fixed: boolean }) 
   const reproOk = consistencyPasses(e, repro);
   const parityOk = maxCohortGap(e.cohortParity.gaps) < e.cohortParity.thresholdPp;
 
+  // AC5: rare intents get an observation report, never a nomination — no
+  // shadow shortening, no bar lowering, no grant button.
+  if (n.kind === "observation" && n.observation) {
+    return (
+      <div className="rounded-lg border border-dashed border-line bg-paper p-3" data-id={`s4.nom.${n.id}`}>
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="rounded bg-navy px-1.5 py-0.5 font-mono text-[12px] font-bold text-white">{n.risk}</span>
+          <h4 className="text-[13.5px] font-semibold text-navy">{n.intentLabel[lang]}</h4>
+          <span className="rounded bg-amber-100 px-1.5 py-0.5 text-[11.5px] font-semibold text-amber-900">
+            {t("design.kind.observation")}
+          </span>
+          <span className="ml-auto text-[12px] font-semibold uppercase text-faint">
+            {t("design.state.insufficient_sample")}
+          </span>
+        </div>
+        <div className="mt-1.5 font-mono text-[12.5px] text-navy" data-id={`s4.nom.sample.${n.id}`}>
+          {t("design.obs.required", { required: n.observation.requiredSample, observed: n.observation.observedSample })}
+        </div>
+        <p className="mt-1 text-[12.5px] text-gray-700">{n.observation.note[lang]}</p>
+      </div>
+    );
+  }
+
   if (n.neverNominated) {
     return (
       <div className="rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 p-3 opacity-80" data-id={`s4.nom.${n.id}`}>
@@ -75,6 +100,14 @@ export function NominationCard({ n, fixed }: { n: Nomination; fixed: boolean }) 
         <span className="rounded bg-sky-100 px-1.5 py-0.5 text-[11.5px] font-semibold text-sky-900">
           {t(`design.kind.${n.kind}`)}
         </span>
+        {n.canary && (
+          <span
+            className="inline-flex items-center gap-1 rounded bg-violet-100 px-1.5 py-0.5 text-[11.5px] font-semibold text-violet-900"
+            data-id={`s4.nom.canary.${n.id}`}
+          >
+            <Bird size={12} /> {t("design.canary.badge")}
+          </span>
+        )}
         <span className="ml-auto rounded bg-paper px-1.5 py-0.5 text-[12px] font-semibold text-faint" data-id={`s4.nom.state.${n.id}`}>
           {t(`design.state.${n.state}`)}
         </span>
@@ -115,6 +148,23 @@ export function NominationCard({ n, fixed }: { n: Nomination; fixed: boolean }) 
       {n.quota && (
         <div className="mt-1.5 rounded-md border border-teal/40 bg-teal-soft/50 px-2 py-1 text-[12.5px] text-teal" data-id={`s4.nom.quota.${n.id}`}>
           {n.quota.label[lang]}
+        </div>
+      )}
+
+      {n.canary && (
+        <div
+          className="mt-1.5 rounded-md border border-violet-200 bg-violet-50 px-2.5 py-1.5 text-[12.5px] text-violet-900"
+          data-id={`s4.nom.canaryTell.${n.id}`}
+        >
+          <span className="font-semibold">{t("design.canary.tellTitle")}</span> {n.canary.tell[lang]}
+        </div>
+      )}
+      {n.canary && designTimeStore.getCanary().missed && (
+        <div
+          className="mt-1.5 rounded-md border border-red-300 bg-red-50 px-2.5 py-1.5 text-[12.5px] font-semibold text-red-700"
+          data-id={`s4.nom.canaryMissed.${n.id}`}
+        >
+          <AlertTriangle size={13} className="mr-1 inline" /> {t("design.canary.missed")}
         </div>
       )}
 

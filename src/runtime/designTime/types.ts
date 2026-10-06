@@ -13,9 +13,10 @@ export type NominationState =
   | "awaiting_sign" // shadow passed; waiting dual sign
   | "granted"
   | "rejected"
-  | "cooldown"; // rejected → 30-day rate limit
+  | "cooldown" // rejected → 30-day rate limit
+  | "insufficient_sample"; // AC5: rare intents get an observation report, never a nomination
 
-export type NominationKind = "fix_template" | "promote_l3_quota" | "never";
+export type NominationKind = "fix_template" | "promote_l3_quota" | "never" | "observation";
 
 /** Five proxy dimensions for cohort parity (PRD §6.6; protected attributes
  *  like race/sex are never collected). */
@@ -72,6 +73,12 @@ export interface Nomination {
   /** R3/R4 rows: AI never nominates, shown greyed. */
   neverNominated?: boolean;
   neverReason?: BiText;
+  /** AC5 observation report for rare intents: what is missing, what is seen. */
+  observation?: { requiredSample: number; observedSample: number; note: BiText };
+  /** Canary (§4.2, §12.1): a nomination planted knowing it must be rejected.
+   *  Signing one suspends that signer's bulk signing rights — the defence
+   *  against rubber-stamping diffs. */
+  canary?: { expected: "reject"; tell: BiText };
   signedBy?: Array<{ role: "compliance" | "business"; at: string }>;
   rejectedAt?: number;
   cooldownDays: number;
@@ -234,6 +241,35 @@ export interface PreventableTag {
   eventAt: string;
   ruleLabel: BiText;
   shadowState: "observing" | "would_have_sent";
+}
+
+// ── FR-12.4 event-triggered notice rules (Builder shadow switch) ──
+//
+// The notice itself is ordinary deterministic automation — the AI's job is
+// discovering WHICH inbound a notice could have prevented. So a new rule is
+// born in shadow: it records "would have sent" and nothing else, and the
+// counterfactual (did those customers still write in?) decides whether it
+// earns a dual sign and goes live (AC3).
+
+export interface NoticeRule {
+  id: string;
+  eventKey: string;
+  eventLabel: BiText;
+  ruleLabel: BiText;
+  /** off = not proposed; shadow = record only; live = actually sent. */
+  mode: "off" | "shadow" | "live";
+  /** Counterfactual collected in shadow: notice vs. control group. */
+  shadowStats: {
+    windowDays: number;
+    wouldHaveSent: number;
+    stillWroteIn: number; // of the would-have-sent group
+    controlSize: number; // comparable customers who got no notice
+    controlWroteIn: number;
+  };
+  /** AC2 hard constraints the send inherits: locked template, frequency cap,
+   *  opt-out, on-file address only, no marketing, no credential links. */
+  constraints: BiText[];
+  signedBy?: Array<{ role: "compliance" | "business"; at: string }>;
 }
 
 // ── FR-12.2 board headline ──

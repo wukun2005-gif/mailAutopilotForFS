@@ -347,6 +347,8 @@ const day30: DemoScript = {
     { id: "d25", chapter: "nominations", action: { t: "cursor", target: "s4.nom.sign.business.NOM-B", click: true, wait: 400 } },
     { id: "d26", chapter: "nominations", action: { t: "cursor", target: "s4.nom.apply.NOM-B", click: true, wait: 900 } },
     { id: "d27", chapter: "nominations", action: { t: "tooltip", key: "day30.nomgranted", ms: 6000, focus: "s4.nom.granted.NOM-B" } },
+    // ── Watch the watchmen: the canary planted among the nominations (§4.2) ──
+    { id: "d27a", chapter: "nominations", action: { t: "tooltip", key: "day30.canary", ms: 6000, focus: "s4.nom.canary.NOM-CANARY" } },
     // ── Policy compiler ──
     { id: "d28", chapter: "policies", action: { t: "cursor", target: "s4.view.policies", click: true, wait: 900 } },
     { id: "d29", chapter: "policies", action: { t: "cursor", target: "s4.pol.example.COMP-1", click: true, wait: 500 } },
