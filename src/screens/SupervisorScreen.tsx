@@ -2,17 +2,18 @@
 // statutory clock, keep fraud isolated. All three tabs read the same runtime
 // state as the customer and agent views; approvals resume the real graph.
 import { useEffect, useState } from "react";
-import { Inbox, Clock, ShieldAlert, BarChart3 } from "lucide-react";
+import { Inbox, Clock, ShieldAlert, BarChart3, Activity } from "lucide-react";
 import { useCaseStore } from "@/store/caseStore";
 import { ApprovalQueue } from "./supervisor/ApprovalQueue";
 import { ClockBoard } from "./supervisor/ClockBoard";
 import { FraudQuarantine } from "./supervisor/FraudQuarantine";
 import { MetricsPanel } from "./supervisor/MetricsPanel";
+import { WavesPanel } from "./supervisor/WavesPanel";
 import { regEClocks, DAY0_EPOCH, simClock } from "@/runtime/simClock.ts";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
 
-type Tab = "queue" | "clocks" | "fraud" | "metrics";
+type Tab = "queue" | "clocks" | "fraud" | "waves" | "metrics";
 
 export function SupervisorScreen() {
   const { t } = useTranslation("supervisor");
@@ -20,6 +21,7 @@ export function SupervisorScreen() {
     { id: "queue", label: t("tabs.queue"), icon: Inbox },
     { id: "clocks", label: t("tabs.clocks"), icon: Clock },
     { id: "fraud", label: t("tabs.fraud"), icon: ShieldAlert },
+    { id: "waves", label: t("tabs.waves"), icon: Activity },
     { id: "metrics", label: t("tabs.metrics"), icon: BarChart3 },
   ];
   const scenarioId = useCaseStore((s) => s.scenarioId);
@@ -91,6 +93,7 @@ export function SupervisorScreen() {
         {tab === "queue" && <ApprovalQueue state={caseState} />}
         {tab === "clocks" && <ClockBoard state={caseState} />}
         {tab === "fraud" && <FraudQuarantine state={caseState} />}
+        {tab === "waves" && <WavesPanel />}
         {tab === "metrics" && <MetricsPanel />}
       </div>
     </div>

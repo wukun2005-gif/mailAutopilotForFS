@@ -4,7 +4,8 @@
     "queue": "Approval queue",
     "clocks": "Statutory clocks",
     "fraud": "Fraud quarantine",
-    "metrics": "Success metrics"
+    "metrics": "Success metrics",
+    "waves": "Waves"
   },
   "kpi": {
     "pending": "pending approvals",
@@ -174,5 +175,59 @@
       "DMARC_NONE": "DMARC policy none / SPF alignment failure on the inbound message"
     },
     "atoScore": "ATO risk score {{value}} / 100"
+  },
+  "waves": {
+    "title": "Wave board · Sense (population signals across the inbox)",
+    "subtitle": "AI detects shared patterns across cases and proposes; tightening, remediation and routing are granted by the supervisor. All numbers are fictional illustrations.",
+    "note": "Runtime obeys, design-time proposes: nothing here changes a single case's verdict; effects land only via dual-signed policy or allowance.",
+    "severity": {
+      "P0": "P0 Negative",
+      "P1": "P1 Positive",
+      "P2": "P2 Friction"
+    },
+    "funnel": {
+      "title": "Inbox processing funnel (Day-30 snapshot, fictional)",
+      "arrived": "Arrived",
+      "triaged": "Triaged",
+      "waitingCustomer": "Waiting on customer",
+      "waitingApproval": "Waiting on approval",
+      "done": "Done",
+      "psi": "PSI pacing index",
+      "psiHint": "lower is steadier; >0.2 flags an anomaly wave",
+      "preventable": "Preventable inbound",
+      "preventableHint": "share an event notice could have sent first (FR-12.4)"
+    },
+    "p0": {
+      "samples": "Sample wording",
+      "pack": "One-click tightening pack (ratchet)",
+      "tightenBtn": "Tighten now (immediate)",
+      "applied": "Tightened: auto-expires after {{hours}}h (~{{until}}), prior levels restore automatically",
+      "ratchetNote": "The ratchet is tighter-only; loosening requires dual sign and has no one-click button here"
+    },
+    "p1": {
+      "signature": "Tape signature",
+      "scan": "Full tape scan",
+      "writers": "Customers who wrote",
+      "silent": "Silent victims",
+      "amount": "Total remediation",
+      "gateError": "① Compliance/legal confirm this is a bank error (not customer fault)",
+      "confirmBtn": "Confirm bank error",
+      "gateSample": "② Dual sign: sign the first sample batch (1%)",
+      "gateTotal": "③ Dual sign: sign the total (${{total}}) and the final 100% batch",
+      "signBtn": "Sign",
+      "stages": "Staged payouts (idempotent per payment, reversible)",
+      "reversible": "Full-batch reversal available",
+      "complete": "All batches complete; payment ledger is WORM-recorded and reversible per customer",
+      "finishBatch": "Finish {{pct}}% batch",
+      "startBatch": "Start {{pct}}% batch",
+      "waitGates": "Clear the three grant gates first",
+      "cumulative": "cumulative",
+      "idempotent": "Idempotency key prefix {{prefix}} — re-running for the same customer and tape never double-pays"
+    },
+    "p2": {
+      "cohorts": "Cohort spread",
+      "recommended": "Recommended action",
+      "routeBtn": "Route to FR-12.4 notice shadow + product team"
+    }
   }
 }
