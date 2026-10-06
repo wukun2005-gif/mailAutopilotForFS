@@ -11,6 +11,7 @@ import { PolicyEvaluationCard } from "./agent/PolicyEvaluationCard";
 import { MissingMaterialsCard } from "./agent/MissingMaterialsCard";
 import { PendingActionsCard } from "./agent/PendingActionsCard";
 import { DraftPanel } from "./agent/DraftPanel";
+import { PreventableTagCard } from "./agent/PreventableTagCard";
 import { StatutoryClockStrip } from "@/components/ClockBadge";
 import { TraceRail } from "@/components/TraceRail";
 import { SCENARIOS } from "@/runtime/scenarios.ts";
@@ -62,6 +63,7 @@ export function AgentScreen() {
             </span>
           </div>
           {caseState.scenarioId === "email2" && <StatutoryClockStrip pcDone={pcDone} />}
+          {caseState.scenarioId === "email2" && <PreventableTagCard />}
           <PendingActionsCard state={caseState} />
           <IntentEvidenceCard state={caseState} />
           <PolicyEvaluationCard state={caseState} />
