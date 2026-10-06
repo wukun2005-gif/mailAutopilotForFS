@@ -29,8 +29,8 @@
         "desc": "AI Autonomy is Earned by Auto Test + Human Supervision."
       },
       "demo5": {
-        "title": "Demo 5 - Design-time intelligence",
-        "desc": "Runtime keeps the rules; design-time proposes them: AI nominates, evidence argues, humans grant."
+        "title": "Demo 5 - Detection, Prediction & Recommendation",
+        "desc": "AI helps humans improve service quality"
       }
     }
   },
@@ -40,7 +40,7 @@
     "email2": "Email 2 · Reg E dispute, 45 days",
     "email3": "Email 3 · BEC quarantine",
     "builder": "Builder · backtest & graduation",
-    "day30": "Day 30 · Design-time Intelligence (Sense → Prove → Grant → Watch)"
+    "day30": "Intelligence Upgrade - AI Assists"
   },
   "trailer": {
     "intro": "Email Autopilot for Financial Services — from mail arrival, to investigation, approval, and reply.",
@@ -137,7 +137,7 @@
     "nomgranted": "Card B covers above-cap goodwill refunds: of 412 human approvals, 92% were calculations and 8% judgments. After dual sign it graduates to quota L3 — $8,000 per month, then it auto-ratchets back to L2. The AI runs the calculations 24/7; judgments stay human forever. R3 contact-detail changes and R4 dispute adjudication are never nominated.",
     "pol": "The Policy Compiler: an admin writes one sentence — 'refund cap from $35 to $25' — and it compiles to a clause-level diff, plus the templates it invalidates, 47 flipped cases in a 90-day backtest, three AI dissent cards, and a 1.7-point LMI cohort gap. The second sentence — 'refund outage complainers' — is refused by the closed world: that evidence field does not exist, and the AI may not invent it.",
     "polgranted": "After dual sign, V13 takes effect and the next email evaluates against it; the marketing page still saying $35 is listed as a release blocker. Humans sign the diff, not every letter.",
-    "intents": "Intent discovery: 186 statement-copy requests in 90 days, 91% following the same four steps with ready tools. The AI only nominates — humans set R/I levels, and it enters shadow first. Identity-relationship clusters like bereavement are report-only, routed to specialists, never executable intents.",
+    "intents": "Intent discovery: 186 statement-copy requests in 90 days, 91% following the same four steps with ready tools. The AI only nominates — humans set R/I levels, and it enters shadow first.",
     "preventable": "Back to today's inbound: this 'where is my card' email carries a preventable tag — the card-shipped event already existed and an ETA notice could have gone out first. The tag feeds metrics and proposals only; it never changes this email's intake or statutory clock.",
     "outro": "That is the design-time intelligence layer: the runtime keeps the rules with every gate intact; design-time proposes them — AI nominates, evidence argues, humans grant. Sense, Prove, Grant, Watch closes the loop: the system improves every day, and every improvement is signed off by a person.",
     "canary": "The card beside it is a canary: three proofs pass and only the fourth fails — a 2.4pp cohort gap against the 2pp bar — and it was planted knowing it should be rejected. If a signer approves it on reflex, their bulk signing rights are suspended on the spot. Human sign-off on a diff is itself something we have to police."

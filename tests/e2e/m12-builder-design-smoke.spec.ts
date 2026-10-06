@@ -90,11 +90,9 @@ test.describe("M12-3 Builder design-time views", () => {
     await expect(page.locator("[data-id='s4.preempt.mode.NOTICE-2']")).toContainText(/shadow/i);
   });
 
-  test("intent discovery: candidate accepted into shadow at human-set levels; bereavement is report-only", async ({ page }) => {
+  test("intent discovery: candidate accepted into shadow at human-set levels", async ({ page }) => {
     await openView(page, "intents");
     await page.click("[data-id='s4.cand.accept.CAND-1']");
     await expect(page.locator("[data-id='s4.cand.accepted.CAND-1']")).toContainText(/shadow/);
-    await expect(page.locator("[data-id='s4.cand.report.CAND-2']")).toBeVisible();
-    expect(await page.locator("[data-id='s4.cand.CAND-2'] button").count()).toBe(0);
   });
 });

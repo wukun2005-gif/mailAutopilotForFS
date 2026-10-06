@@ -98,10 +98,18 @@ export type WaveStatus =
 export interface TighteningPack {
   ackTemplate: BiText; // known-event receipt: account facts only, no links
   ticket: BiText; // internal ticket to the owning ops team
-  downgrades: Array<{ intentCode: string; intentLabel: BiText; from: LLevel; to: LLevel }>;
+  /** Affected intents to hold down for the duration of the wave. The "from"
+   *  level is NOT stored here: it is read from the graduation table at render
+   *  and apply time (uncappedLevel), so the pack can never claim a level the
+   *  Builder board does not show for that intent. */
+  downgrades: Array<{ intentCode: string; intentLabel: BiText; to: LLevel }>;
   expiresHours: number; // ratchet auto-reverses at now + 24h
   appliedAt?: number;
   expiresAt?: number;
+  /** Intents this pack actually capped — exactly what expiry releases. Entries
+   *  skipped as already-tight-enough are absent, so the ratchet never lifts a
+   *  cap it did not set. */
+  cappedCodes?: string[];
 }
 
 export interface RemediationBatch {
@@ -208,7 +216,7 @@ export interface CandidateIntent {
   suggestedR: RLevel;
   suggestedI: ILevel;
   toolsMapping: BiText[];
-  /** Clusters like bereavement are reported for specialist routing only;
+  /** R3/R4 clusters are reported for specialist routing only;
    *  they never generate an executable intent. */
   reportOnly?: boolean;
   reportReason?: BiText;

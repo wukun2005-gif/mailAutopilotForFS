@@ -124,11 +124,28 @@ export class CaseRunner {
     );
   }
 
+  /** Re-run policy → autonomy → act for the open email under the current
+   *  fault flags (Card B grant flips policyV14). No-ops when nothing is
+   *  waiting on the old verdict. */
+  async refreshPolicy(): Promise<RunnerSnapshot> {
+    const snap = await this.snapshot();
+    // A freshly loaded scenario has no emails yet: LangGraph state keys the
+    // append-only collections do not exist until something appends, so an
+    // "empty" case is approvals === undefined, not [].
+    const pending = (snap.state.approvals ?? []).some(
+      (a) => a.status === "pending" && a.intentCode === "od_fee_refund",
+    );
+    if (!pending || !snap.state.currentEmailId) return snap;
+    return this.invoke(
+      this.baseTurn({ kind: "policy_refresh", emailId: snap.state.currentEmailId }),
+    );
+  }
+
   /** Convenience: approve the single currently-paused approval. */
   async approveDue(extra: Partial<ResumePayload> = {}): Promise<RunnerSnapshot> {
     const snap = await this.snapshot();
     const state = snap.state;
-    const dueApproval = state.approvals.find(
+    const dueApproval = (state.approvals ?? []).find(
       (a) => a.status === "pending" && a.blocking !== false && this.isDue(a),
     );
     if (!dueApproval) return snap;

@@ -332,7 +332,7 @@ Policy Compiler：管理员写一句人话「退费上限从 35 改到 25」，�
 
 ### d37 · intents · caption 5000 ms · audio 22.0s · day30.intents · pointer s4.cand.accepted.CAND-1
 
-意图发现：90 天 186 封索要对账单副本的来信，91% 是同样四步，工具也已就绪。AI 只负责提名，R/I 等级由人定，先进 shadow。而丧亲支持这类身份关系场景，只报告、转专家，永不生成可执行 intent。
+意图发现：90 天 186 封索要对账单副本的来信，91% 是同样四步，工具也已就绪。AI 只负责提名，R/I 等级由人定，先进 shadow。
 
 ### d41 · watch · caption 6000 ms · audio 17.0s · day30.preventable · pointer s2.preventable
 

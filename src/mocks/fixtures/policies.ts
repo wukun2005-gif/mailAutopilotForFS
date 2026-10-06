@@ -16,7 +16,8 @@ export interface PolicyCondition {
     | "feeAmountCents"
     | "reportedWithin60d"
     | "errorNoticePresent"
-    | "channelIsPOSDebit";
+    | "channelIsPOSDebit"
+    | "goodwillPattern";
   comparator: Comparator;
   value: number | string | string[] | boolean;
 }
@@ -72,6 +73,29 @@ export const OD_FEE_WAIVER_V12: PolicyPack = {
     },
   ],
   effect: "refund_fee",
+};
+
+// V14 is what Card B (od_fee_refund above the within-threshold block) proposes:
+// the 12-month cap is still the default, but the same-day-replenished + same-day-pending-deposit
+// goodwill pattern passes as a calculation, not a judgment call. Always keep the engine
+// deterministic: the LLM's only job was producing this diff; humans sign it.
+export const OD_FEE_WAIVER_V14: PolicyPack = {
+  ...OD_FEE_WAIVER_V12,
+  version: "V14",
+  conditions: [
+    {
+      code: "OD-1",
+      label: {
+        zh: "符合「24 小时内回补 + 当日有在途入账」善意模式，或 12 个月内退免 ≤ 1 次",
+        en: "Goodwill pattern (funds made whole within 24h + same-day pending deposit), or ≤1 waiver in 12 months",
+      },
+      evidenceKey: "goodwillPattern",
+      comparator: "eq",
+      value: true,
+    },
+    OD_FEE_WAIVER_V12.conditions[1]!,
+    OD_FEE_WAIVER_V12.conditions[2]!,
+  ],
 };
 
 // Simulated future version the dev panel can switch to (threshold tightens).
@@ -144,6 +168,7 @@ export const REGE_POS_INVEST_90: PolicyPack = {
 export const POLICY_PACKS: Record<string, PolicyPack> = {
   OD_FEE_WAIVER_V12,
   OD_FEE_WAIVER_V13,
+  OD_FEE_WAIVER_V14,
   REGE_INTAKE_V3,
   REGE_POS_INVEST_90,
 };

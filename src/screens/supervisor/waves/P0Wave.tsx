@@ -4,6 +4,8 @@
 import { useTranslation } from "react-i18next";
 import { Lock, CheckCircle2, ChevronDown } from "lucide-react";
 import { designTimeStore } from "@/runtime/designTime/store.ts";
+import { uncappedLevel } from "@/runtime/intentRegistry.ts";
+import { GRADUATION_TABLE } from "@/mocks/fixtures/index.ts";
 import { utcYmd } from "@/runtime/simClock.ts";
 import type { Wave } from "@/runtime/designTime/types.ts";
 import { Field, SeverityBadge, Sparkline } from "./waveUi";
@@ -42,14 +44,21 @@ export function P0Wave({ wave }: { wave: Wave }) {
           <ul className="list-disc space-y-0.5 pl-4 text-[12.5px]">
             <li>{pack.ackTemplate[lang]}</li>
             <li>{pack.ticket[lang]}</li>
-            {pack.downgrades.map((d) => (
-              <li key={d.intentCode}>
-                {d.intentLabel[lang]}:{" "}
-                <span className="font-mono font-semibold">
-                  {d.from} → {d.to}
-                </span>
-              </li>
-            ))}
+            {pack.downgrades.map((d) => {
+              // Name and "from" both come from the graduation table — the same
+              // source the Builder board renders — so a pack can never promise a
+              // level the admin board does not show for that intent.
+              const row = GRADUATION_TABLE.find((g) => g.intentCode === d.intentCode);
+              const from = uncappedLevel(d.intentCode);
+              return (
+                <li key={d.intentCode} data-id={`s3.waves.downgrade.${d.intentCode}`}>
+                  {row?.label[lang] ?? d.intentLabel[lang]}:{" "}
+                  <span className="font-mono font-semibold">
+                    {from ?? t("waves.p0.notGraduated")} → {d.to}
+                  </span>
+                </li>
+              );
+            })}
           </ul>
         </Field>
       </div>

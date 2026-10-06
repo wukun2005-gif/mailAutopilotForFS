@@ -7,7 +7,11 @@ test.describe("M12-4 Agent-side advisory features", () => {
     await page.click("[data-id='dev.inject.EM-2-IN-1']");
     const tag = page.locator("[data-id='s2.preventable']");
     await expect(tag).toBeVisible();
-    await expect(tag).toContainText(/FR-12.4/);
+    // The tag names the on-file event a notice could have ridden on, and the
+    // rule it proposes. (Asserted on content, not on the requirement id: the
+    // UI copy carries no FR numbers.)
+    await expect(tag).toContainText("card_shipped");
+    await expect(tag).toContainText("2026-09-15");
   });
 
   test("FR-12.5 consequence preview on the second-waiver explanation draft (email 1)", async ({ page }) => {

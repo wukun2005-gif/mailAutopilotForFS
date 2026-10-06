@@ -77,7 +77,7 @@
       "policyV13": "policy v13 (2nd waiver FAIL)",
       "sessionExpired": "I3 session expired",
       "threadClosed": "thread closed",
-      "spoofSignal": "AC3 spoof signal",
+      "spoofSignal": "spoof signal",
       "newThread": "new thread (no I3 inherit)",
       "noDigital": "no digital banking (link fallback)",
       "otpLockout": "OTP lockout",

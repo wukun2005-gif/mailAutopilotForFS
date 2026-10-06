@@ -77,7 +77,7 @@
       "policyV13": "政策 v13（第二次豁免 FAIL）",
       "sessionExpired": "I3 会话过期",
       "threadClosed": "线程已关闭",
-      "spoofSignal": "AC3 仿冒信号",
+      "spoofSignal": "仿冒信号",
       "newThread": "新线程（不继承 I3）",
       "noDigital": "未开通网银（链接兜底）",
       "otpLockout": "OTP 锁定",

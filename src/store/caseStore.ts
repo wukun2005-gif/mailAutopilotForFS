@@ -7,6 +7,7 @@ import { CaseRunner, type ClockTarget } from "@/runtime/caseRunner.ts";
 import { appendEvent, listEvents } from "@/runtime/eventStore.ts";
 import { simClock, type ClockSnapshot } from "@/runtime/simClock.ts";
 import { faultController } from "@/tools/faultController.ts";
+import { designTimeStore } from "@/runtime/designTime/store.ts";
 import type { CaseStateType } from "@/runtime/caseState.ts";
 import type { CaseEvent } from "@/runtime/state.ts";
 import type { ScenarioId } from "@/runtime/scenarios.ts";
@@ -50,6 +51,30 @@ export interface CaseStoreState {
 
 let runner: CaseRunner | null = null;
 
+/** Card B grant flips faultController.policyV14. The checkpoint still holds the
+ *  V12/FAIL/L2 verdict for the open email — re-run policy → autonomy → act so
+ *  the case is re-decided under the new pack instead of staying pinned. The
+ *  runner writes to IDB, so the store never edits caseState itself (any local
+ *  patch is overwritten by the next pull()). */
+let prevV14 = false;
+function onDesignTimeChange(set: (p: Partial<CaseStoreState>) => void) {
+  const on = faultController.isOn("policyV14");
+  const flipped = on && !prevV14;
+  prevV14 = on;
+  if (!flipped || !runner) return;
+  set({ busy: true });
+  runner
+    .refreshPolicy()
+    .then(() => pull(set, get0))
+    .catch(() => set({ busy: false }));
+}
+
+let storeRef: { get: () => CaseStoreState } | null = null;
+function get0(): CaseStoreState {
+  return storeRef!.get();
+}
+
+
 async function pull(
   set: (p: Partial<CaseStoreState>) => void,
   get: () => CaseStoreState,
@@ -61,7 +86,10 @@ async function pull(
   set({ caseState: snap.state, events, next: snap.next, clock: simClock.snapshot(), reattached });
 }
 
-export const useCaseStore = create<CaseStoreState>((set, get) => ({
+export const useCaseStore = create<CaseStoreState>((set, get) => {
+  storeRef = { get };
+  designTimeStore.subscribe(() => onDesignTimeChange(set));
+  return ({
   scenarioId: null,
   caseState: null,
   events: [],
@@ -79,6 +107,11 @@ export const useCaseStore = create<CaseStoreState>((set, get) => ({
     runner = new CaseRunner(id);
     await runner.reset();
     faultController.reset();
+    // Design-time grants are policy config (like graduationOverrides): a
+    // scenario switch must not silently drop Card B's V14 pack.
+    if (designTimeStore.getNominations().some((n) => n.kind === "promote_l3_quota" && n.state === "granted"))
+      faultController.set("policyV14", true);
+    prevV14 = faultController.isOn("policyV14");
     set({ scenarioId: id, reattached: false });
     await pull(set, get, false);
     set({ busy: false });
@@ -186,7 +219,8 @@ export const useCaseStore = create<CaseStoreState>((set, get) => ({
     });
     await pull(set, get);
   },
-}));
+  });
+});
 
 /** Imperative API for the demo Director (M7), avoiding React re-render churn. */
 export const caseActions = {
@@ -196,7 +230,7 @@ export const caseActions = {
   advance: (t: ClockTarget) => useCaseStore.getState().advance(t),
   approveDue: async () => {
     const s = useCaseStore.getState();
-    const due = s.caseState?.approvals.find((a) => a.status === "pending");
+    const due = s.caseState?.approvals?.find((a) => a.status === "pending");
     if (due) {
       await s.approve({ approvalId: due.id, decision: "approve", outcome: "error" });
     }

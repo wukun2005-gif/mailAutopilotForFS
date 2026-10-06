@@ -55,12 +55,16 @@ describe("decideCell — fail-closed matrix", () => {
     expect(i2.cell).toEqual({ kind: "L", level: "L3" });
   });
 
-  it("second waiver within 12 months is forced to L2 even at I3 with PASS policy", () => {
-    const d = decideCell({
-      ...base, risk: "R2", identity: "I3", secondWaiverWithin12m: true,
+  it("second waiver within 12 months is forced to L2 only when the policy does not pass; V14 goodwill PASS graduates to L3", () => {
+    const forced = decideCell({
+      ...base, risk: "R2", identity: "I3", secondWaiverWithin12m: true, policyOverall: "FAIL",
     });
-    expect(d.cell).toEqual({ kind: "L", level: "L2" });
-    expect(d.queueable).toBe(true);
+    expect(forced.cell).toEqual({ kind: "L", level: "L2" });
+    expect(forced.queueable).toBe(true);
+    const goodwill = decideCell({
+      ...base, risk: "R2", identity: "I3", secondWaiverWithin12m: true, policyOverall: "PASS",
+    });
+    expect(goodwill.cell).toEqual({ kind: "L", level: "L3" });
   });
 
   it("policy-version degradation caps an L3 intent at L2", () => {

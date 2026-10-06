@@ -215,11 +215,12 @@
       "psi": "PSI pacing index",
       "psiHint": "lower is steadier; >0.2 flags an anomaly wave",
       "preventable": "Preventable inbound",
-      "preventableHint": "share an event notice could have sent first (FR-12.4)"
+      "preventableHint": "share an event notice could have sent first "
     },
     "p0": {
       "samples": "Sample wording",
       "pack": "One-click tightening pack (ratchet)",
+      "notGraduated": "not graduated (already human)",
       "tightenBtn": "Tighten now (immediate)",
       "applied": "Tightened: auto-expires after {{hours}}h (~{{until}}), prior levels restore automatically",
       "ratchetNote": "The ratchet is tighter-only; loosening requires dual sign and has no one-click button here"
@@ -247,7 +248,7 @@
     "p2": {
       "cohorts": "Cohort spread",
       "recommended": "Recommended action",
-      "routeBtn": "Route to FR-12.4 notice shadow + product team"
+      "routeBtn": "Route to notice shadow + product team"
     }
   }
 }

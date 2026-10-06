@@ -13,6 +13,7 @@ import {
   LOCKED_TEMPLATE,
   OD_FEES,
   REGE_RECEIPT_TEMPLATE,
+  type ODFee,
 } from "@/mocks/fixtures/index.ts";
 import { addCalendarDays, DAY0_EPOCH, simClock, utcYmd } from "./simClock.ts";
 
@@ -113,18 +114,17 @@ export function caseCardMessage(): { body: string; kind: string } {
 
 // ── Email 1, beat 1: L3 OD-fee refund confirmation ──
 
-export function refundConfirmationLetter(to: string): Draft {
-  const fee = OD_FEES[0]!;
-  return base("DR-OD1-REFUND", "od_fee_refund", "email", to, [
+export function refundConfirmationLetter(to: string, fee: ODFee = OD_FEES[0]!, draftId = "DR-OD1-REFUND"): Draft {
+  return base(draftId, "od_fee_refund", "email", to, [
     ai(
       "Hi Jane — thanks for being a customer for all these years, and sorry about the surprise fee.",
     ),
     slot(
-      `The ${usd(fee.amountCents)} overdraft fee posted on 2026-09-19 has been refunded to ` +
+      `The ${usd(fee.amountCents)} overdraft fee posted on ${fee.postedAt} has been refunded to ` +
         `your checking account ending 8821. It should appear within one business day (by ${utcYmd(
           simClock.now() + 86_400_000,
         )}).`,
-      "core:ODF-3318 / account:DDA-8821",
+      `core:${fee.feeId} / account:DDA-8821`,
     ),
     tpl(
       "This message confirms a completed adjustment. If anything looks wrong, reply here and " +

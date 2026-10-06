@@ -5,6 +5,7 @@ import { http } from "msw";
 import {
   OD_FEE_WAIVER_V12,
   OD_FEE_WAIVER_V13,
+  OD_FEE_WAIVER_V14,
   POLICY_PACKS,
   REGE_INTAKE_V3,
   REGE_POS_INVEST_90,
@@ -34,7 +35,9 @@ function compare(c: PolicyCondition, evidence: Record<string, unknown>): Verdict
 
 function evaluate(policyId: string, evidence: Record<string, unknown>) {
   let pack = POLICY_PACKS[policyId] ?? OD_FEE_WAIVER_V12;
-  if (pack.policyId === "OD_FEE_WAIVER" && faultController.isOn("policyV13")) {
+  if (pack.policyId === "OD_FEE_WAIVER" && faultController.isOn("policyV14")) {
+    pack = OD_FEE_WAIVER_V14;
+  } else if (pack.policyId === "OD_FEE_WAIVER" && faultController.isOn("policyV13")) {
     pack = OD_FEE_WAIVER_V13;
   }
   const results = pack.conditions.map((c) => ({
@@ -55,7 +58,7 @@ export const policyHandlers = [
     await mockLatency(40);
     return jsonOk(
       envelope({
-        odFee: faultController.isOn("policyV13") ? "V13" : "V12",
+        odFee: faultController.isOn("policyV14") ? "V14" : faultController.isOn("policyV13") ? "V13" : "V12",
         regE: REGE_INTAKE_V3.version,
         regEPos: REGE_POS_INVEST_90.version,
       }),

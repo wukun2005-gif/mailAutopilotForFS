@@ -188,7 +188,11 @@ export interface Turn {
     | "adjudication"
     | "fraud_review"
     | "approval"
-    | "draft_edit";
+    | "draft_edit"
+    /** Policy pack switched under an open case (e.g. Card B grant → V14):
+     *  re-runs policy → autonomy → act for the current email so a paused L2
+     *  approval is re-decided under the new pack instead of staying pinned. */
+    | "policy_refresh";
   emailId?: string;
   atDayN?: number;
   approvalId?: string;
