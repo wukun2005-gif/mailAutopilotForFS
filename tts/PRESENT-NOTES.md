@@ -1,9 +1,10 @@
 # One-click present — cross-AI notes (2026-10-05, local only, do not push)
 
 ## Voice (locked by user)
-- `en-US-EricNeural`, rate `-5%` — standard American, no announcer tone.
-- Set in `scripts/build-present-voice.sh`: `VOICE=` / `VOICE_RATE=` (env `PV_VOICE`/`PV_RATE` also works).
-- `-15%` was tried and sounds aged on Eric; keep `-5%` unless the user says otherwise.
+- Piper `en_US-ryan-high` (MIT, offline, no network at build time) — standard American male.
+- Set in `scripts/build-present-voice.sh`: `VOICE_MODEL=` / `VOICE_SPEED=` (env `PV_MODEL`/`PV_SPEED` also works).
+- `VOICE_SPEED` is Piper's length_scale: 1.05 reads ~5% slower.
+- Engine/models installed once by `bash scripts/setup-local-tts.sh` into `tts/.local/` (gitignored).
 
 ## Voiceover text stays voice-agnostic
 - Do NOT hand-spell numbers in `tts/deck-voiceover.en.md` (no "Day zero", no "six hundred thousand").

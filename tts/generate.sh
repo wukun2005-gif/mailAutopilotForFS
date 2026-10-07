@@ -1,11 +1,10 @@
 #!/usr/bin/env bash
-# Ensure a local venv with edge-tts, then generate narration transcripts + audio.
-# Usage: bash tts/generate.sh [--force] [--transcript-only]
+# Ensure the local offline TTS env, then generate narration transcripts + audio.
+# Usage: bash tts/generate.sh [--force] [--transcript-only] [--lang en|zh]
 set -euo pipefail
 cd "$(dirname "$0")/.."
-VENV=tts/.venv
+VENV=tts/.local/venv
 if [ ! -x "$VENV/bin/python" ]; then
-  python3 -m venv "$VENV"
+  bash scripts/setup-local-tts.sh
 fi
-"$VENV/bin/pip" install -q --disable-pip-version-check edge-tts
 exec "$VENV/bin/python" tts/generate.py "$@"

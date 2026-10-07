@@ -600,7 +600,7 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
 <div class="bar" id="bar"></div>
 <div class="ov">F fullscreen · T pages</div>
 <button id="themebtn" class="themebtn" type="button" title="Switch to dark">☀ Light</button>
-<div id="pbar"><span class="pcap" id="pcap"></span><span class="pslid"><span id="ptime"></span><input id="pslider" type="range" min="0" max="10" step="0.1" value="0" disabled title="Seek within this page's narration"><button id="pspeed" type="button" title="Narration speed">1.25×</button></span><span class="pctl"><button id="ptoggle" type="button" title="Turn auto-present on/off">Auto-Present OFF</button><button id="pplay" type="button" title="Pause / resume the tour">▶ Present</button></span></div>
+<div id="pbar"><span class="pcap" id="pcap"></span><span class="pslid"><span id="ptime"></span><input id="pslider" type="range" min="0" max="10" step="0.1" value="0" disabled title="Seek within this page's narration"><button id="pspeed" type="button" title="Narration speed">1×</button></span><span class="pctl"><button id="ptoggle" type="button" title="Turn auto-present on/off">Auto-Present OFF</button><button id="pplay" type="button" title="Pause / resume the tour">▶ Present</button></span></div>
 
 <aside id="toc">
   <div class="tochead"><span>Pages · <b id="toccount">29</b></span><button id="toctoggle" type="button" title="Hide this rail (T)">◧</button></div>
@@ -2350,7 +2350,7 @@ var pvData=null, pvPresent=false, pvPlaying=false, pvPaused=false, pvArmed=false
    The slider covers only this page's voice clips, one cumulative timeline;
    the demo film is not counted (it plays at its own fixed rate and has its
    own controls) — while the film runs the slider simply stays put. */
-var pvRate=1.25, pvRates=[1,1.25,1.5,1.75,2],
+var pvRate=1, pvRates=[1,1.25,1.5,1.75,2],
     pvDurCache={},          /* clip filename → seconds, survives page jumps */
     pvPageSteps=null, pvPageDurs=[], pvStartAt=0, pvDragging=false;
 var pvAudio=new Audio(); pvAudio.preload='auto';

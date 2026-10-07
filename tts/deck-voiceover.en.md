@@ -15,11 +15,11 @@ Captions:
 Actions: none.
 
 ## 03/15 · The clock starts at the inbox.
-Infos: (1) Reg E clock (2) email slowest/most expensive (3) 28% switching tax.
+Infos: (1) Reg E clock (2) email slowest/expensive (3) 28% switching tax.
 Script:
 - An email is a written error notice under Reg E, so the clock starts the moment it lands: 10 business days to act, 45 days to resolve.
 - The FDIC counted 136 Reg E violations last year, 74 percent of them in error resolution — an unread inbox is a liability.
-- Email is also the slowest, most expensive channel the bank runs: 6 to 12 dollars a contact, 27 hours to a first reply, 28 percent of agent time lost switching systems.
+- Email is also the slowest but expensive channel the bank runs: 6 to 12 dollars a contact, 27 hours to a first reply, 28 percent of agent time lost switching systems.
 Captions:
 - Day 0 the clock runs: 10 days to act, 45 days to resolve.
 - 136 Reg E violations, 74% in error resolution.

@@ -1,12 +1,14 @@
 #!/usr/bin/env bash
 # Rebuild one-click-present voice assets from tts/deck-voiceover.en.md:
-#   deck-html/assets/voice/pNNbM.mp3  narration clips (VOICE/VOICE_RATE below)
+#   deck-html/assets/voice/pNNbM.mp3  narration clips (VOICE_MODEL/VOICE_SPEED below)
 #   deck-html/assets/voice/present.json + present.js  step config for the player
 # Voice is a build-time setting: voiceover text stays voice-agnostic.
+# Engine: Piper (MIT licence, en_US-ryan-high model, MIT) — synthesised offline,
+# no network call at build time. One-time setup: bash scripts/setup-local-tts.sh
 # Usage: bash scripts/build-present-voice.sh
-#   PV_VOICE / PV_RATE env overrides work too, without editing this file.
-VOICE="en-US-EricNeural"
-VOICE_RATE="-5%"
+#   PV_MODEL / PV_SPEED env overrides work too, without editing this file.
+VOICE_MODEL="tts/.local/models/en_US-ryan-high.onnx"
+VOICE_SPEED="1.05"   # Piper length_scale: 1.05 reads ~5% slower, the old -5% rate
 set -euo pipefail
 cd "$(dirname "$0")/.."
 mkdir -p deck-html/assets/voice /tmp/voice_src
@@ -81,34 +83,34 @@ for k in range(1, len(pages), 3):
 json.dump(conf, open('/tmp/voice_conf.json', 'w'), ensure_ascii=False, indent=1)
 print("pages:", len(conf), "clips:", sum(len(v) for v in conf.values()))
 PY
-VENV=tts/.venv
+PYBIN=tts/.local/venv/bin/python
 if [ "${1:-}" = "--conf-only" ]; then
   echo "conf-only: skipping TTS (clips unchanged)"
 else
-if [ ! -x "$VENV/bin/python" ]; then python3 -m venv "$VENV"; fi
-"$VENV/bin/pip" install -q --disable-pip-version-check edge-tts
-PV_VOICE="$VOICE" PV_RATE="$VOICE_RATE" "$VENV/bin/python" - <<'PY'
-import asyncio, edge_tts, os, pathlib
-PV_VOICE = os.environ.get("PV_VOICE", "en-US-EricNeural")
-PV_RATE = os.environ.get("PV_RATE", "-15%")
-async def one(p):
-    out = f"deck-html/assets/voice/{p.name[:-4]}"
-    for _ in range(3):
-        try:
-            await edge_tts.Communicate(p.read_text().strip(), PV_VOICE, rate=PV_RATE, pitch="+0Hz").save(out)
-            print("ok", out)
-            return
-        except Exception as e:
-            print("retry", p.name, e)
-            await asyncio.sleep(2)
-    raise SystemExit(f"FAIL {p.name}")
-async def run():
-    sem = asyncio.Semaphore(4)
-    async def w(p):
-        async with sem:
-            await one(p)
-    await asyncio.gather(*[w(p) for p in sorted(pathlib.Path('/tmp/voice_src').glob('*.txt'))])
-asyncio.run(run())
+if [ ! -x "$PYBIN" ] || [ ! -f "$VOICE_MODEL" ]; then
+  echo "local TTS not set up — run: bash scripts/setup-local-tts.sh" >&2
+  exit 1
+fi
+PV_MODEL="$VOICE_MODEL" PV_SPEED="$VOICE_SPEED" "$PYBIN" - <<'PY'
+import os, pathlib, shutil, subprocess, wave
+from piper import PiperVoice
+from piper.config import SynthesisConfig
+ffmpeg = shutil.which("ffmpeg")
+if not ffmpeg:
+    raise SystemExit("ffmpeg not found — it writes the mp3 clips")
+voice = PiperVoice.load(os.environ["PV_MODEL"])   # one load covers every clip
+cfg = SynthesisConfig(length_scale=float(os.environ.get("PV_SPEED", "1.05")))
+out_dir = pathlib.Path("deck-html/assets/voice")
+for p in sorted(pathlib.Path("/tmp/voice_src").glob("*.txt")):
+    stem = p.name[:-len(".txt")]            # "p02b1.mp3.txt" -> "p02b1.mp3"
+    wav = out_dir / (stem[:-len(".mp3")] + ".wav")
+    with wave.open(str(wav), "wb") as w:
+        voice.synthesize_wav(p.read_text().strip(), w, syn_config=cfg)
+    subprocess.run([ffmpeg, "-y", "-loglevel", "error", "-i", str(wav),
+                    "-codec:a", "libmp3lame", "-b:a", "64k", "-ac", "1",
+                    str(out_dir / stem)], check=True)
+    wav.unlink()
+    print("ok", out_dir / stem)
 PY
 fi
 python3 - <<'PY'
