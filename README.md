@@ -32,7 +32,7 @@ Differentiators (vs. per-topic style reply governance and horizontal Copilots):
 - **Attack surface designed closed** — lookalike-address detection, attachment prompt-injection treated as data, contact-change (R3) tool functions simply not registered on the email channel, customer warned only over the on-file channel.
 - **Promises tracked to fulfillment** — any deadline the AI states to the customer becomes a promise clock at send time and is only cleared when the fulfillment letter goes out (UDAAP safeguard).
 - **Autonomy is earned, not assumed** — per-intent graduation (backtest + sampling + negative relabel + dual sign-off), auto-degradation on drift. Positioning: *"They govern what the AI says, topic by topic. We govern what it says, does, and to whom — inside every email."*
-- **Design-time proposes, runtime stays deterministic** — the LLM never decides a live email; it reads history and config to *nominate* delegation grants, policy diffs, intent candidates, and preventable-inbound finds, each earned through backtest → shadow → Product + Compliance dual sign. Humans sign the diff, not every email. The ratchet: tightening can take effect same-day with auto-expiry; loosening must earn its way.
+- **Intelligence proposes, runtime stays deterministic** — the LLM never decides a live email; it reads history and config to *nominate* delegation grants, policy diffs, intent candidates, and preventable-inbound finds, each earned through backtest → shadow → Product + Compliance dual sign. Humans sign the diff, not every email. The ratchet: tightening can take effect same-day with auto-expiry; loosening must earn its way.
 
 ## Run it
 
@@ -58,4 +58,4 @@ npm run eval     # promptfoo safety evals
 | 1 | Customer Email | Webmail, mobile-bank case card, step-up, source-colored reply, Reg E clock bar |
 | 2 | Agent Handoff | Case dossier: intent evidence, policy evaluation, missing materials, editable L2 draft |
 | 3 | Supervisor | Approval queue (one-click / chained), statutory clock board, BEC/ATO quarantine |
-| 4 | Admin | R×I autonomy matrix, 90-day backtest, sampling tiers, readiness report + dual sign-off; design-time nominations (graduation proposer, wave board, policy compiler) feeding the same gates |
+| 4 | Admin | R×I autonomy matrix, 90-day backtest, sampling tiers, readiness report + dual sign-off; intelligence nominations (graduation proposer, wave board, policy compiler) feeding the same gates |
