@@ -24,7 +24,7 @@ This product targets the intersection of three problems, not just "slow replies"
 
 ![Email case flow before vs after](public/email-flow-before-after.svg)
 
-Differentiators (vs. Glia-style per-topic reply governance and horizontal Copilots):
+Differentiators (vs. per-topic style reply governance and horizontal Copilots):
 
 - **Regulated intents recognized and clocked on arrival** — even a half-sentence buried in a multi-intent email ("I don't recognize this charge") counts as notice; the clock starts at the intake timestamp.
 - **Delegation by identity assurance + in-thread step-up** — R (action risk R0–R4) × I (identity assurance I0–I3) × L (autonomy L0–L3) matrix computed by the same pure function as production; verification happens inside the thread (app secure message, OTP), identity is re-rated in place.
