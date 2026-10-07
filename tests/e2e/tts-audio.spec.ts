@@ -103,7 +103,13 @@ async function startScript(page: Page, id: string, lang: "zh" | "en") {
   });
   await page.goto("/");
   await page.waitForSelector("[data-id='top.demo']");
-  if (lang === "en") {
+  // The language persists across tests in one worker, so set it explicitly:
+  // clicking the toggle blindly used to flip an already-English run back to
+  // Chinese, and a test called "en" would silently voice the zh clips.
+  const current = await page.evaluate(() =>
+    (window.localStorage.getItem("i18nextLng") ?? "").toLowerCase(),
+  );
+  if (current.startsWith("en") !== (lang === "en")) {
     await page.click("[data-id='top.lang']");
     await page.waitForTimeout(300);
   }
@@ -162,6 +168,30 @@ for (const lang of ["zh", "en"] as const) {
     expect(errors.filter((e) => !/Failed to load resource|msw/i.test(e))).toEqual([]);
   });
 }
+
+/**
+ * Day 30 is the act that carries the whole design-time layer, and one caption
+ * in it (the intent-discovery beat) was edited after its clip was generated —
+ * the runtime then drops the stale clip and plays caption-only, which reads as
+ * "the narration skipped that part". The manifest check in demoDataIds covers
+ * both locales per key; this is the end-to-end version on the language the demo
+ * is actually presented in: every clip must play, none may fall back.
+ */
+test("zh: day30 demo voices every clip (no stale-caption fallback)", async ({ page }) => {
+  instrumentAudio(page);
+  const { errors, staleWarnings } = await startScript(page, "day30", "zh");
+  await runToDone(page);
+  const state = await audioState(page);
+  expect(
+    staleWarnings,
+    "caption changed after generation — app falls back to caption-only",
+  ).toEqual([]);
+  expect(state.errors, "clip failed to load/play").toEqual([]);
+  expect(state.silent, "clip created but never started playing").toEqual([]);
+  expect(state.total, "no narration clips were even created").toBeGreaterThan(0);
+  expect(state.played).toBe(state.total);
+  expect(errors.filter((e) => !/Failed to load resource|msw/i.test(e))).toEqual([]);
+});
 
 /**
  * The table caption must actually SHOW the table (2026-10-02 recording: beat

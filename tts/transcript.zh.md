@@ -284,7 +284,7 @@ prompt injection、BEC、ATO，遇到的是一个攻击面在设计时就闭合�
 
 这个 demo 里的每一个自动动作，都能追溯到监管能接受的证据。
 
-## day30 · Day 30 · 设计时智能层（Sense → Prove → Grant → Watch）
+## day30 · 智能提升 - AI助力
 
 ### d2 · waves · caption 7000 ms · audio 22.0s · day30.funnel · pointer s3.waves.funnel
 
@@ -330,7 +330,7 @@ Policy Compiler：管理员写一句人话「退费上限从 35 改到 25」，�
 
 双签之后 V13 生效，下一封信就按新版本求值；营销页还写着 35 美元，被列为发布阻断项。人签的是 diff，不是每一封信。
 
-### d37 · intents · caption 5000 ms · audio 22.0s · day30.intents · pointer s4.cand.accepted.CAND-1
+### d37 · intents · caption 5000 ms · audio 14.4s · day30.intents · pointer s4.cand.accepted.CAND-1
 
 意图发现：90 天 186 封索要对账单副本的来信，91% 是同样四步，工具也已就绪。AI 只负责提名，R/I 等级由人定，先进 shadow。
 

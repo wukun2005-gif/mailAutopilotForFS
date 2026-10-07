@@ -41,11 +41,23 @@ function lookup(d: Locale, dotted: string): string | undefined {
   return typeof cur === "string" ? cur : undefined;
 }
 
-/** 32-bit FNV-1a over UTF-16 code units; must match tts/generate.py. */
+/**
+ * 32-bit FNV-1a over UTF-16-LE *bytes* — the exact function in
+ * src/demo/narration.ts and tts/generate.py. Hashing the code units directly
+ * (the obvious-looking version) produces a different digest for every
+ * non-ASCII caption, which silently marked all 164 clips stale and hid the one
+ * clip that really was.
+ */
 function fnv1a(text: string): string {
-  let h = 0x811c9dc5;
+  const buffer = new ArrayBuffer(text.length * 2);
+  const view = new Uint16Array(buffer);
   for (let i = 0; i < text.length; i++) {
-    h ^= text.charCodeAt(i);
+    view[i] = text.charCodeAt(i);
+  }
+  const bytes = new Uint8Array(buffer);
+  let h = 0x811c9dc5;
+  for (const byte of bytes) {
+    h ^= byte;
     h = Math.imul(h, 0x01000193) >>> 0;
   }
   return h.toString(16);

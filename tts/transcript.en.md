@@ -284,7 +284,7 @@ Wire recalls are rare: 90 days can never reach the sample bar. They stay human, 
 
 Every autonomous action in this demo traces back to evidence a regulator would accept.
 
-## day30 · Day 30 · Design-time Intelligence (Sense → Prove → Grant → Watch)
+## day30 · Intelligence Upgrade - AI Assists
 
 ### d2 · waves · caption 7000 ms · audio 23.3s · day30.funnel · pointer s3.waves.funnel
 
@@ -330,7 +330,7 @@ The Policy Compiler: an admin writes one sentence — 'refund cap from $35 to $2
 
 After dual sign, V13 takes effect and the next email evaluates against it; the marketing page still saying $35 is listed as a release blocker. Humans sign the diff, not every letter.
 
-### d37 · intents · caption 5000 ms · audio 23.5s · day30.intents · pointer s4.cand.accepted.CAND-1
+### d37 · intents · caption 5000 ms · audio 15.9s · day30.intents · pointer s4.cand.accepted.CAND-1
 
 Intent discovery: 186 statement-copy requests in 90 days, 91% following the same four steps with ready tools. The AI only nominates — humans set R/I levels, and it enters shadow first.
 
