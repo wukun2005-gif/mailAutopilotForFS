@@ -6,6 +6,8 @@ server-data/
 tests/e2e/test-results/
 eval-results/
 tts/.venv/
+tts/.local/
+__pycache__/
 
 # 只保留在本地、不进仓库：文档备份、截图产物、外部话题源稿（2026-10-02 清理）
 test-results/
