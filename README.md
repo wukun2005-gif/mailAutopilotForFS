@@ -6,7 +6,7 @@ Full demo video: https://youtu.be/aJrcyzUdL28
 
 Live slide deck: https://wukun2005-gif.github.io/mailAutopilotForFS/deck-html/
 
-Product spec: [PRD v0.3](https://wukun2005-gif.github.io/mailAutopilotForFS/email-autopilot-fs-prd_en.html)
+Product spec: [PRD](https://wukun2005-gif.github.io/mailAutopilotForFS/email-autopilot-fs-prd_en.html)
 
 ## Problem
 

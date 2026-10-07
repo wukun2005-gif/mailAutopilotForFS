@@ -15,7 +15,7 @@
 
   <text x="40" y="48" font-size="20" font-weight="700" fill="#16324f">Email case flow: before vs after</text>
   <text x="40" y="70" font-size="13" fill="#4b5563">Condensed from PRD §6.1 (nine steps). D1–D5 mark where each differentiator acts. D6 durable runtime underlies all steps.</text>
-  <text x="40" y="88" font-size="13" fill="#4b5563">D7 (v0.3) is an intelligence side path — it proposes diffs, never touches a live case.</text>
+  <text x="40" y="88" font-size="13" fill="#4b5563">D7 is an intelligence side path — it proposes diffs, never touches a live case.</text>
 
   <!-- BEFORE -->
   <text x="40" y="108" font-size="14" font-weight="700" fill="#9f1239">BEFORE — the public mailbox today</text>
@@ -148,10 +148,10 @@
   <polyline points="1075,460 1075,540 904,540" fill="none" stroke="#0f766e" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrT)"/>
   <text x="1010" y="532" font-size="11" fill="#0f766e">samples</text>
 
-  <!-- D7 intelligence layer (v0.3, M12 — side path, proposes diffs, never touches a live case) -->
+  <!-- D7 intelligence layer (M12 — side path, proposes diffs, never touches a live case) -->
   <rect x="300" y="588" width="600" height="88" rx="10" fill="#f5f0ff" stroke="#6d28d9" stroke-width="1.5" stroke-dasharray="7 4"/>
   <rect x="314" y="598" width="30" height="16" rx="8" fill="#6d28d9"/><text x="320" y="610" font-size="10" font-weight="700" fill="#ffffff">D7</text>
-  <text x="350" y="610" font-size="12.5" font-weight="700" fill="#16324f">Intelligence layer (v0.3 — proposes diffs, never touches a live case)</text>
+  <text x="350" y="610" font-size="12.5" font-weight="700" fill="#16324f">Intelligence layer (proposes diffs, never touches a live case)</text>
   <text x="314" y="632" font-size="11.5" fill="#4b5563">Sense→Propose→Prove→Grant→Watch: graduation proposer · wave board · policy compiler</text>
   <text x="314" y="650" font-size="11.5" fill="#4b5563">preventable-inbound · consequence preview (+ intent discovery) → signed config diff</text>
   <text x="314" y="668" font-size="11.5" fill="#4b5563">→ box 4 matrix + locked templates via same gates; parity gate &lt; 2pp</text>
@@ -171,6 +171,6 @@
     <rect x="40" y="744" width="30" height="16" rx="8" fill="#0f766e"/><text x="46" y="756" font-size="10" font-weight="700" fill="#ffffff">D5</text>
     <text x="76" y="756">Controlled generation — locked template + system slots + generated sentences, gated</text>
     <rect x="640" y="744" width="30" height="16" rx="8" fill="#6d28d9"/><text x="646" y="756" font-size="10" font-weight="700" fill="#ffffff">D7</text>
-    <text x="676" y="756">Intelligence proposes (v0.3) — AI nominates, evidence argues, humans sign the diff</text>
+    <text x="676" y="756">Intelligence proposes — AI nominates, evidence argues, humans sign the diff</text>
   </g>
 </svg>
