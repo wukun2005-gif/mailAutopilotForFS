@@ -10,7 +10,7 @@ Product spec: [PRD v0.3](https://wukun2005-gif.github.io/mailAutopilotForFS/emai
 
 ## Problem
 
-The public support mailbox is the slowest, most expensive, and least automated service channel:
+The public support mailbox is the slowest but  expensive, and least automated service channel:
 
 - **Customers** wait days for a first reply, get told "please call us" (one contact becomes two), and get no clear timeline during fraud anxiety.
 - **Operations** burns 20–40% of agent time on after-contact work across 5+ systems while Monday backlogs pile up.
