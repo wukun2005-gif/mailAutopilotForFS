@@ -55,7 +55,7 @@ export function AgendaCard() {
                   >
                     <span
                       className={cn(
-                        "w-[270px] shrink-0 whitespace-nowrap text-[17px] font-semibold",
+                        "w-[270px] shrink-0 text-[17px] font-semibold",
                         active ? "text-white" : "text-navy",
                       )}
                     >

@@ -16,9 +16,9 @@ An unauthenticated dispute email is triaged, filed and clocked on arrival — no
 
 Verification done, identity upgraded to I3, same rule re-evaluated, $35 overdraft fee auto-refunded. Reply still three sources: locked template, system slots, generated sentences.
 
-### t11 · metrics · caption 5000 ms · audio 11.0s · trailer.metrics · pointer s3.metrics
+### t11 · metrics · caption 5000 ms · audio 10.8s · trailer.metrics · pointer s3.metrics
 
-Success metrics and guardrails: three headline numbers and eight guardrails, all showing values — the target column is the pilot stage gate and monthly review criteria.
+Success metrics and guardrails: three headline metrics and twelve guardrails, every one shown as a number — the target column is the pilot-stage gate, reviewed monthly.
 
 ### t16 · fraud · caption 5000 ms · audio 9.9s · trailer.fraud · pointer s3.fraud.requested
 
@@ -27,6 +27,10 @@ A business email scam is quarantined: the requested contact changes are structur
 ### t19 · builder · caption 5000 ms · audio 8.0s · trailer.builder · pointer s4.matrix.never
 
 Autonomy is earned: backtest, sampling, dual sign-off — and the hard cells cannot be opened from configuration at all.
+
+### t19b · design · caption 8000 ms · audio 25.6s · trailer.designTime · pointer s4.nom.NOM-B
+
+After thirty days of running, the system starts improving itself: the AI reads the cases humans already approved and nominates the calculation blocks where the same evidence always produced the same answer, with the evidence card on the signing desk. Product and compliance sign a configuration diff — humans sign the diff, not every letter. Tightening can be immediate; loosening has to go through the process.
 
 ### t20 · outro · caption 5000 ms · audio 6.6s · trailer.outro
 

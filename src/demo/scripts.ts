@@ -6,7 +6,10 @@
 // list and the current UI are kept in lockstep on purpose.
 import type { DemoScript } from "./types.ts";
 
-// ── Trailer (~90s): 3 chapters only, stay on each screen longer ─────────────
+// ── Trailer (~100s): 4 chapters only, stay on each screen longer ────────────
+// Chapters 1–3 are runtime (intake → metrics → fraud), chapter 4 is the
+// design-time layer: the runtime stays deterministic, the improvement happens
+// one layer upstream and still ends in a human signature on a diff.
 const trailer: DemoScript = {
   id: "trailer90s",
   nameKey: "scripts.trailer",
@@ -34,6 +37,10 @@ const trailer: DemoScript = {
     { id: "t17", chapter: "fraud", action: { t: "cursor", target: "s3.fraud.confirm", click: true, require: true, wait: 1500 } },
     { id: "t18", chapter: "builder", action: { t: "goto", screen: "builder" } },
     { id: "t19", chapter: "builder", action: { t: "tooltip", key: "trailer.builder", ms: 5000, focus: "s4.matrix.never" } },
+    // Chapter 4: design-time (v0.3) — the AI nominates, the evidence argues,
+    // humans sign the diff. One screen is enough for the trailer's promise.
+    { id: "t19a", chapter: "design", action: { t: "cursor", target: "s4.view.nominations", click: true, wait: 900 } },
+    { id: "t19b", chapter: "design", action: { t: "tooltip", key: "trailer.designTime", ms: 8000, focus: "s4.nom.NOM-B" } },
     { id: "t20", chapter: "outro", action: { t: "tooltip", key: "trailer.outro", ms: 5000 } },
   ],
 };

@@ -16,9 +16,9 @@
 
 核验完成，身份升到 I3，同一条规则重新算，透支费 35 美元自动退回客户账户。回信还是三段拼装：固定模板、系统槽位、生成语句。
 
-### t11 · metrics · caption 5000 ms · audio 10.1s · trailer.metrics · pointer s3.metrics
+### t11 · metrics · caption 5000 ms · audio 10.2s · trailer.metrics · pointer s3.metrics
 
-成功指标与护栏：三个主指标和八条护栏全部显示数值——目标列就是试点阶段门槛，月度评审口径。
+成功指标与护栏：三个主指标和十二条护栏全部显示数值——目标列就是试点阶段门槛，月度评审口径。
 
 ### t16 · fraud · caption 5000 ms · audio 9.4s · trailer.fraud · pointer s3.fraud.requested
 
@@ -27,6 +27,10 @@
 ### t19 · builder · caption 5000 ms · audio 7.8s · trailer.builder · pointer s4.matrix.never
 
 自主权是“挣来”的：回测、抽样、双签——而且最硬的格子在配置层根本打不开。
+
+### t19b · design · caption 8000 ms · audio 21.4s · trailer.designTime · pointer s4.nom.NOM-B
+
+系统运行三十天之后开始自己变好：AI 读人批过的案件，把"同证据同结论"的计算题块提名放权，证据卡摆在签字桌上。产品与合规签的是一份配置 diff——人签 diff，不签每封信。收紧可以即时生效，放宽必须走流程。
 
 ### t20 · outro · caption 5000 ms · audio 6.1s · trailer.outro
 
