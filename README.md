@@ -59,5 +59,3 @@ npm run eval     # promptfoo safety evals
 | 2 | Agent Handoff | Case dossier: intent evidence, policy evaluation, missing materials, editable L2 draft |
 | 3 | Supervisor | Approval queue (one-click / chained), statutory clock board, BEC/ATO quarantine |
 | 4 | Admin | R×I autonomy matrix, 90-day backtest, sampling tiers, readiness report + dual sign-off; design-time nominations (graduation proposer, wave board, policy compiler) feeding the same gates |
-
-One-click demo (`Run demo` menu, top right): `trailer90s` (~90s cut), `email1` (overdraft-fee two beats, identity I1→I3), `email2` (45-day Reg E dispute), `email3` (BEC quarantine), `builder` (backtest & graduation).
