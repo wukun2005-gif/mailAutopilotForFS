@@ -3,7 +3,7 @@
 #   deck-html/assets/voice/pNNbM.mp3  narration clips (VOICE_MODEL/VOICE_SPEED below)
 #   deck-html/assets/voice/present.json + present.js  step config for the player
 # Voice is a build-time setting: voiceover text stays voice-agnostic.
-# Engine: Piper (MIT licence, en_US-ryan-high model, MIT) — synthesised offline,
+# Engine: Piper (MIT licence, en_US-joe-medium model, MIT) — synthesised offline,
 # no network call at build time. One-time setup: bash scripts/setup-local-tts.sh
 # Usage: bash scripts/build-present-voice.sh
 #   PV_MODEL / PV_SPEED env overrides work too, without editing this file.
