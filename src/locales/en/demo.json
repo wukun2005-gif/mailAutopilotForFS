@@ -29,8 +29,8 @@
         "desc": "AI Autonomy is Earned by Auto Test + Human Supervision."
       },
       "demo5": {
-        "title": "Demo 5 - Detection, Prediction & Recommendation",
-        "desc": "AI helps humans improve service quality"
+        "title": "Demo 5 - Intelligence",
+        "desc": "AI Assists Humans To Improve Service Quality"
       }
     }
   },
@@ -48,11 +48,12 @@
     "dossier": "Every policy condition is PASS or FAIL, and the rail on the right spells each decision out in plain words.",
     "clocks": "The board is not just this case: the table below is every open dispute in the mailbox, and who is due first is obvious.",
     "approve": "Statutory obligations surface in the supervisor queue with one-click approval. Approval executes immediately; reply carries AI disclosure and human handoff.",
-    "metrics": "Success metrics and guardrails: three headline numbers and eight guardrails, all showing values — the target column is the pilot stage gate and monthly review criteria.",
+    "metrics": "Success metrics and guardrails: three headline metrics and twelve guardrails, every one shown as a number — the target column is the pilot-stage gate, reviewed monthly.",
     "fraud": "A business email scam is quarantined: the requested contact changes are structurally unreachable, and the customer is warned only through the on-file channel.",
     "builder": "Autonomy is earned: backtest, sampling, dual sign-off — and the hard cells cannot be opened from configuration at all.",
     "outro": "Deterministic where the law requires it, autonomous where evidence has earned it, auditable everywhere.",
-    "refund": "Verification done, identity upgraded to I3, same rule re-evaluated, $35 overdraft fee auto-refunded. Reply still three sources: locked template, system slots, generated sentences."
+    "refund": "Verification done, identity upgraded to I3, same rule re-evaluated, $35 overdraft fee auto-refunded. Reply still three sources: locked template, system slots, generated sentences.",
+    "designTime": "After thirty days of running, the system starts improving itself: the AI reads the cases humans already approved and nominates the calculation blocks where the same evidence always produced the same answer, with the evidence card on the signing desk. Product and compliance sign a configuration diff — humans sign the diff, not every letter. Tightening can be immediate; loosening has to go through the process."
   },
   "email1": {
     "caseCard": "Verification happens inside the same mail thread: the app pushes a notice, the one-time code goes to the phone number on file, six digits go in, and the case keeps going on its own.",
