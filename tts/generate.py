@@ -35,7 +35,7 @@ AUDIO_DIR = ROOT / "public" / "tts"
 MODELS_DIR = HERE / ".local" / "models"
 LANGS = ("zh", "en")
 # Local, offline voices: (engine, voice, speed).
-# en: Kokoro af_heart (Apache-2.0). zh: Piper zh_CN-huayan-medium (MIT) —
+# en: Kokoro af_heart (Apache-2.0). zh: Piper zh_CN-chaowen-medium (MIT) —
 # Kokoro's Mandarin phonemisation is broken (its espeak backend reads 第 as
 # "tˈi"), Piper's Chinese frontend reads it correctly.
 VOICES = {
