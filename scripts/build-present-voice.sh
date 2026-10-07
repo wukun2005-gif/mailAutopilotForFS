@@ -7,7 +7,7 @@
 # no network call at build time. One-time setup: bash scripts/setup-local-tts.sh
 # Usage: bash scripts/build-present-voice.sh
 #   PV_MODEL / PV_SPEED env overrides work too, without editing this file.
-VOICE_MODEL="tts/.local/models/en_US-ryan-high.onnx"
+VOICE_MODEL="tts/.local/models/en_US-joe-medium.onnx"
 VOICE_SPEED="1.05"   # Piper length_scale: 1.05 reads ~5% slower, the old -5% rate
 set -euo pipefail
 cd "$(dirname "$0")/.."

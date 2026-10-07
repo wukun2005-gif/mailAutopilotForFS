@@ -44,8 +44,8 @@ fetch() { # <url> <dest>
 }
 PIPER=https://huggingface.co/rhasspy/piper-voices/resolve/main
 KOKORO=https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.1
-fetch "$PIPER/en/en_US/ryan/high/en_US-ryan-high.onnx"       "$MODELS/en_US-ryan-high.onnx"
-fetch "$PIPER/en/en_US/ryan/high/en_US-ryan-high.onnx.json"  "$MODELS/en_US-ryan-high.onnx.json"
+fetch "$PIPER/en/en_US/joe/medium/en_US-joe-medium.onnx"       "$MODELS/en_US-joe-medium.onnx"
+fetch "$PIPER/en/en_US/joe/medium/en_US-joe-medium.onnx.json"  "$MODELS/en_US-joe-medium.onnx.json"
 fetch "$PIPER/zh/zh_CN/huayan/medium/zh_CN-huayan-medium.onnx"      "$MODELS/zh_CN-huayan-medium.onnx"
 fetch "$PIPER/zh/zh_CN/huayan/medium/zh_CN-huayan-medium.onnx.json" "$MODELS/zh_CN-huayan-medium.onnx.json"
 fetch "$KOKORO/kokoro-v1.0.onnx"       "$MODELS/kokoro-v1.0.onnx"
@@ -54,7 +54,7 @@ fetch "$KOKORO/voices-v1.0.bin"        "$MODELS/voices-v1.0.bin"
 "$VENV/bin/python" - <<'PY'
 from piper import PiperVoice
 from kokoro_onnx import Kokoro
-PiperVoice.load("tts/.local/models/en_US-ryan-high.onnx")
+PiperVoice.load("tts/.local/models/en_US-joe-medium.onnx")
 PiperVoice.load("tts/.local/models/zh_CN-huayan-medium.onnx")
 Kokoro("tts/.local/models/kokoro-v1.0.onnx", "tts/.local/models/voices-v1.0.bin")
 print("local TTS ready: Piper (MIT) + Kokoro (Apache-2.0), offline")
