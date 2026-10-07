@@ -34,9 +34,9 @@ Differentiators (vs. Glia-style per-topic reply governance and horizontal Copilo
 - **Attack surface designed closed** — lookalike-address detection, attachment prompt-injection treated as data, contact-change (R3) tool functions simply not registered on the email channel, customer warned only over the on-file channel.
 - **Promises tracked to fulfillment** — any deadline the AI states to the customer becomes a promise clock at send time and is only cleared when the fulfillment letter goes out (UDAAP safeguard).
 - **Autonomy is earned, not assumed** — per-intent graduation (backtest + sampling + negative relabel + dual sign-off), auto-degradation on drift. Positioning: *"They govern what the AI says, topic by topic. We govern what it says, does, and to whom — inside every email."*
-- **Design-time proposes, runtime stays deterministic (v0.3, M12)** — the LLM never decides a live email; it reads history and config to *nominate* delegation grants, policy diffs, intent candidates, and preventable-inbound finds, each earned through backtest → shadow → Product + Compliance dual sign. Humans sign the diff, not every email. The ratchet: tightening can take effect same-day with auto-expiry; loosening must earn its way.
+- **Design-time proposes, runtime stays deterministic** — the LLM never decides a live email; it reads history and config to *nominate* delegation grants, policy diffs, intent candidates, and preventable-inbound finds, each earned through backtest → shadow → Product + Compliance dual sign. Humans sign the diff, not every email. The ratchet: tightening can take effect same-day with auto-expiry; loosening must earn its way.
 
-Explicitly out of scope: dispute/credit/adverse-action adjudication, investment or insurance advice, legal-document responses, autonomous high-impact (R3) writes over email, private customization for large banks. v0.3 makes eight more cut categories explicit: AI adjudication or direct money movement, value-based differentiation, marketing/cross-sell, cross-bank data, changing regulated-instrument form, personification/sensitive inference, production changes without a signed diff, and out-of-scope adjacent products.
+Explicitly out of scope: dispute/credit/adverse-action adjudication, investment or insurance advice, legal-document responses, autonomous high-impact (R3) writes over email, private customization for large banks.
 
 ## Run it
 
@@ -64,6 +64,6 @@ No separate backend needed: `server/` is a Vite dev middleware (provider setting
 | 1 | Customer Email | Webmail, mobile-bank case card, step-up, source-colored reply, Reg E clock bar |
 | 2 | Agent Handoff | Case dossier: intent evidence, policy evaluation, missing materials, editable L2 draft |
 | 3 | Supervisor | Approval queue (one-click / chained), statutory clock board, BEC/ATO quarantine |
-| 4 | Admin | R×I autonomy matrix, 90-day backtest, sampling tiers, readiness report + dual sign-off; v0.3: design-time nominations (graduation proposer, wave board, policy compiler) feeding the same gates |
+| 4 | Admin | R×I autonomy matrix, 90-day backtest, sampling tiers, readiness report + dual sign-off; design-time nominations (graduation proposer, wave board, policy compiler) feeding the same gates |
 
-One-click demo (`Run demo` menu, top right): `trailer90s` (~90s cut), `email1` (overdraft-fee two beats, identity I1→I3), `email2` (45-day Reg E dispute), `email3` (BEC quarantine), `builder` (backtest & graduation). `Play all` runs all five in sequence.
+One-click demo (`Run demo` menu, top right): `trailer90s` (~90s cut), `email1` (overdraft-fee two beats, identity I1→I3), `email2` (45-day Reg E dispute), `email3` (BEC quarantine), `builder` (backtest & graduation).
