@@ -1,4 +1,6 @@
-// i18next bootstrap — zh-CN default, en switchable; persisted in localStorage.
+// i18next bootstrap — en default, zh switchable; persisted in localStorage.
+// Default is English: detection only reads localStorage (no navigator), and
+// an empty/unknown detection falls back to `fallbackLng: "en"`.
 // Seven namespaces: common + one per screen + demo. Resources are statically
 // bundled (no async backend); M8 wires i18next-parser for missing-key audit.
 import i18n from "i18next";
@@ -37,7 +39,7 @@ void i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
-    fallbackLng: "zh",
+    fallbackLng: "en",
     supportedLngs: ["zh", "en"],
     nonExplicitSupportedLngs: true,
     defaultNS: "common",
@@ -63,7 +65,7 @@ void i18n
       },
     },
     detection: {
-      order: ["localStorage", "navigator"],
+      order: ["localStorage"],
       caches: ["localStorage"],
       lookupLocalStorage: "eap.lang",
     },

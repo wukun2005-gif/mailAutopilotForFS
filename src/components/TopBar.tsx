@@ -49,7 +49,7 @@ export function TopBar() {
           </div>
         </div>
 
-        {/* Nav tabs (settings lives as a gear at the far right) */}
+        {/* Nav tabs */}
         <nav className="ml-2 flex h-full items-stretch gap-0.5">
           {SCREENS.filter((id) => id !== "settings").map((id) => {
             const Icon = ICONS[id];
@@ -147,18 +147,6 @@ export function TopBar() {
             )}
           </div>
 
-          {/* Settings gear, far right */}
-          <button
-            data-nav="settings"
-            onClick={() => setScreen("settings")}
-            title={t("nav.settings")}
-            className={cn(
-              "rounded-full p-1.5 transition-colors",
-              screen === "settings" ? "bg-white/15 text-white" : "text-white/65 hover:bg-white/10 hover:text-white",
-            )}
-          >
-            <Settings size={17} />
-          </button>
         </div>
       </div>
     </header>
