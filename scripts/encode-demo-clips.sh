@@ -29,6 +29,8 @@ enc "$D/MailPilotForBank_en_1_Identity-Assurance.mov" . demo-1-identity.mp4
 enc "$D/MailPilotForBank_en_2_Dispute-Handling.mov"   . demo-2-dispute.mp4
 enc "$D/MailPilotForBank_en_3_Fraud-Defense.mov"      . demo-3-fraud.mp4
 enc "$D/MailPilotForBank_en_4_Admin.mov"              . demo-4-admin.mp4
+# Demo 5 (design-time / intelligence) arrives as an .mp4, not a .mov master.
+enc "$D/MailPilotForBank_en_5_Intelligence.mp4"       . demo-5-intelligence.mp4
 
 echo "=== ALL DONE ==="
 for f in demo-*.mp4; do

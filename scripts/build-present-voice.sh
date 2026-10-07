@@ -55,7 +55,9 @@ def speak(t):
     t = re.sub(r'\b[Dd]ay 0\b', 'Day zero', t)
     return t
 text = open('tts/deck-voiceover.en.md').read()
-pages = re.split(r'^## (\d+)/14 · (.+?)$', text, flags=re.M)
+# Page count is read from the heading, not hardcoded: the deck grew a page and
+# the old "/14" literal silently produced zero pages.
+pages = re.split(r'^## (\d+)/\d+ · (.+?)$', text, flags=re.M)
 conf = {}
 for k in range(1, len(pages), 3):
     num, body = pages[k], pages[k + 2]

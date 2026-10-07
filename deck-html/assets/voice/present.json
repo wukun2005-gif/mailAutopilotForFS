@@ -118,12 +118,50 @@
  "08": [
   {
    "clip": "p08b1.mp3",
-   "caption": "Four screens on top, three proofs below — one case running through all of them.",
+   "caption": "The engine stays deterministic — that is the compliance story, and it does not change. What changes is who writes the rules.",
    "shots": [],
    "video": false
   },
   {
    "clip": "p08b2.mp3",
+   "caption": "Sense, propose, prove, grant, watch — a loop, not a pipeline. The model reads ninety days of human decisions, the drafts people edited and the mail nobody classified, and it proposes.",
+   "shots": [],
+   "video": false
+  },
+  {
+   "clip": "p08b3.mp3",
+   "caption": "Six capabilities, and where they land: graduation proposer, policy compiler and intent discovery in Builder; wave board in Supervisor; pre-empt tag and consequence preview in the agent.",
+   "shots": [],
+   "video": false
+  },
+  {
+   "clip": "p08b4.mp3",
+   "caption": "Every proposal carries four proofs — consistency, the calculation-and-judgment split, approver variance, cohort parity under two points — and two constraints: a monthly allowance, and the existing auto-demotion.",
+   "shots": [],
+   "video": false
+  },
+  {
+   "clip": "p08b5.mp3",
+   "caption": "Grant is a dual signature on a diff, never on a letter. Tightening is immediate and expires; loosening has to earn its way through backtest, shadow and two signatures.",
+   "shots": [],
+   "video": false
+  },
+  {
+   "clip": "p08b6.mp3",
+   "caption": "Then watch feeds back into sense: allowances, drift, rejected nominations. The gates already existed — what was missing was a nominator.",
+   "shots": [],
+   "video": false
+  }
+ ],
+ "09": [
+  {
+   "clip": "p09b1.mp3",
+   "caption": "Four screens on top, four proofs below — one case running through all of them.",
+   "shots": [],
+   "video": false
+  },
+  {
+   "clip": "p09b2.mp3",
    "caption": "The same case in four hands: Customer, no login — the thread is the case, AI disclosed. Agent sees the policy verdict, not the model mood. Supervisor sees the statutory clocks, live. Admin writes every limit — R3 and R4 have no switch.",
    "shots": [
     "scr-customer",
@@ -134,34 +172,14 @@
    "video": false
   },
   {
-   "clip": "p08b3.mp3",
+   "clip": "p09b3.mp3",
    "caption": "Then the proof: demo 2, dispute handling,",
    "shots": [],
    "video": true
   },
   {
-   "clip": "p08b4.mp3",
-   "caption": "Demo 1 and demo 3 exist but do not play today; their claims sit on the captions — verified in-thread, and a fraud target unreachable, not switched off.",
-   "shots": [],
-   "video": false
-  }
- ],
- "09": [
-  {
-   "clip": "p09b1.mp3",
-   "caption": "Four groups want this customer — CCaaS, CRM agents, AI startups and FS specialists — scored on four columns: email-native case, statutory clock, core execution, voice ops.",
-   "shots": [],
-   "video": false
-  },
-  {
-   "clip": "p09b2.mp3",
-   "caption": "Nobody has the email case: CCaaS has voice and execution but no clock, CRM never touches the core, startups have no clock, FS specialists stop at the case.",
-   "shots": [],
-   "video": false
-  },
-  {
-   "clip": "p09b3.mp3",
-   "caption": "Our row is that target state on the same grid, and the window is 12 to 18 months on what already ships — while Freshworks has shipped autonomous email since June 2025.",
+   "clip": "p09b4.mp3",
+   "caption": "Demo 1, demo 3 and demo 5 exist but do not play today; their claims sit on the captions — verified in-thread, a fraud target unreachable rather than switched off, and a system that improves itself under a human signature.",
    "shots": [],
    "video": false
   }
@@ -169,19 +187,19 @@
  "10": [
   {
    "clip": "p10b1.mp3",
-   "caption": "The money: 600,000 emails a year at $8 is a $4.8M cost base, and at the base case 35 percent resolved returns $2.68M — 56 percent of the base.",
+   "caption": "Four groups want this customer — CCaaS, CRM agents, AI startups and FS specialists — scored on four columns: email-native case, statutory clock, core execution, voice ops.",
    "shots": [],
    "video": false
   },
   {
    "clip": "p10b2.mp3",
-   "caption": "The bank keeps that $2.68M; the vendor nets about $205k a bank. Times 262 banks, that is roughly $54M at full adoption.",
+   "caption": "Nobody has the email case: CCaaS has voice and execution but no clock, CRM never touches the core, startups have no clock, FS specialists stop at the case.",
    "shots": [],
    "video": false
   },
   {
    "clip": "p10b3.mp3",
-   "caption": "Three levers move it together — failed demand, autonomy and copilot uplift — measured from week-one mail, with $1.50 an assumption, not a list price.",
+   "caption": "Our row is that target state on the same grid, and the window is 12 to 18 months on what already ships — while Freshworks has shipped autonomous email since June 2025.",
    "shots": [],
    "video": false
   }
@@ -189,19 +207,19 @@
  "11": [
   {
    "clip": "p11b1.mp3",
-   "caption": "Success is three numbers: VARR 25 to 35 percent by six months, median time to resolution under 15 minutes autonomous from a 3.2-day baseline, and Trust, which can veto both.",
+   "caption": "The money: 600,000 emails a year at $8 is a $4.8M cost base, and at the base case 35 percent resolved returns $2.68M — 56 percent of the base.",
    "shots": [],
    "video": false
   },
   {
    "clip": "p11b2.mp3",
-   "caption": "Trust is the veto: zero key errors, clocks at 100 percent, regulated intent recall at least 99.5 percent — one miss voids VARR.",
+   "caption": "The bank keeps that $2.68M; the vendor nets about $205k a bank. Times 262 banks, that is roughly $54M at full adoption.",
    "shots": [],
    "video": false
   },
   {
    "clip": "p11b3.mp3",
-   "caption": "The release path is 59 days — backtest, shadow, L2 graduations, first L3 — with eight guardrails running alongside.",
+   "caption": "Three levers move it together — failed demand, autonomy and copilot uplift — measured from week-one mail, with $1.50 an assumption, not a list price.",
    "shots": [],
    "video": false
   }
@@ -209,19 +227,19 @@
  "12": [
   {
    "clip": "p12b1.mp3",
-   "caption": "Risk one: a missed intent — half a sentence starts a clock. Recall gates everything.",
+   "caption": "Success is three numbers: VARR 25 to 35 percent by six months, median time to resolution under 15 minutes autonomous from a 3.2-day baseline, and Trust, which can veto both.",
    "shots": [],
    "video": false
   },
   {
    "clip": "p12b2.mp3",
-   "caption": "Risk two: the inbox is the attack surface — injected text never becomes instruction.",
+   "caption": "Trust is the veto: zero key errors, clocks at 100 percent, regulated intent recall at least 99.5 percent — one miss voids VARR.",
    "shots": [],
    "video": false
   },
   {
    "clip": "p12b3.mp3",
-   "caption": "Risk three: invented numbers — figures come from the system; money stays human-signed.",
+   "caption": "The release path is 59 days — backtest, shadow, L2 graduations, first L3 — with twelve guardrails running alongside.",
    "shots": [],
    "video": false
   }
@@ -229,18 +247,32 @@
  "13": [
   {
    "clip": "p13b1.mp3",
-   "caption": "One policy engine and one clock engine, written once by the bank: email now in wave 1, more intents in wave 2, voice and chat after that.",
+   "caption": "Risk one: a missed intent — half a sentence starts a clock. Recall gates everything.",
    "shots": [],
    "video": false
   },
   {
    "clip": "p13b2.mp3",
-   "caption": "The ask on day zero: two design partners from the existing voice base, two platform pieces — in-thread step-up and dispute intake — and one price question, a per-resolution price.",
+   "caption": "Risk two: the inbox is the attack surface — injected text never becomes instruction.",
    "shots": [],
    "video": false
   },
   {
    "clip": "p13b3.mp3",
+   "caption": "Risk three: invented numbers — figures come from the system; money stays human-signed. The rest of the register, including sign-off fatigue, is in backup ten.",
+   "shots": [],
+   "video": false
+  }
+ ],
+ "14": [
+  {
+   "clip": "p14b1.mp3",
+   "caption": "One policy engine and one clock engine, written once by the bank: email now in wave 1, more intents in wave 2, voice and chat after that.",
+   "shots": [],
+   "video": false
+  },
+  {
+   "clip": "p14b2.mp3",
    "caption": "The new part is the layer, not the channel: the limit matrix, the clock, step-up, dispute intake and email defense — on a stack that already ships.",
    "shots": [],
    "video": false

@@ -87,7 +87,7 @@ td.k{color:var(--ink);font-weight:600}
 tr:last-child td{border-bottom:none}
 
 /* content-height, not flex:1 — stretching these two cards to fill the slide
-   left ~180px of empty card on Scope and B7, which reads as a mistake. */
+   left ~180px of empty card on Scope and B8, which reads as a mistake. */
 .panels{display:grid;grid-template-columns:1fr 1fr;gap:18px;min-height:0}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px 20px;display:flex;flex-direction:column}
 .panel .ph{font-size:19px;font-weight:600;margin-bottom:11px;display:flex;align-items:center;gap:9px}
@@ -111,7 +111,15 @@ table.xs td{padding:5px 9px;line-height:1.3}
 table.tight{font-size:12.5px;table-layout:fixed}
 table.tight th{font-size:11.5px;letter-spacing:.04em;padding:0 8px 5px}
 table.tight td{padding:3px 8px;line-height:1.28}
-/* B12 puts eighteen rows in two columns — tightened so the closing note clears both tables */
+/* B6 grew to twelve guardrails and B11 to seventeen risks: both pages fit by
+   tightening their own tables, not by running past the slide box */
+table.xs.pin{font-size:12px}
+table.xs.pin th{padding:0 9px 5px}
+table.xs.pin td{padding:3.5px 9px;line-height:1.26}
+table.tight.pin{font-size:10.8px}
+table.tight.pin th{font-size:11px;padding:0 8px 4px}
+table.tight.pin td{padding:2px 8px;line-height:1.22}
+/* B13 puts eighteen rows in two columns — tightened so the closing note clears both tables */
 section.assumptions table.sm{font-size:14.5px}
 section.assumptions table.sm th{padding:0 10px 6px}
 section.assumptions table.sm td{padding:4px 10px;line-height:1.3}
@@ -122,6 +130,8 @@ section.assumptions table.sm td{padding:4px 10px;line-height:1.3}
 .qa .a{font-size:15px;color:var(--soft);line-height:1.4;margin-top:6px}
 
 .risks{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;min-height:0}
+/* Three cards on the mainline again: sign-off fatigue moved to the register
+   (B11 · 14), where the rest of the long tail lives. */
 .risk{background:var(--panel);border:1px solid var(--line);border-radius:10px;
   padding:9px 16px;display:flex;flex-direction:column;gap:6px;min-width:0}
 .risk .idx{display:flex;align-items:center;gap:8px;font-size:12.5px;letter-spacing:.14em;
@@ -132,10 +142,33 @@ section.assumptions table.sm td{padding:4px 10px;line-height:1.3}
 .risk .div{height:1px;background:var(--line)}
 .risk .k{font-size:12.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--teal);font-weight:600}
 .risk ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px}
-.risk li{font-size:14.5px;line-height:1.34,color:var(--soft);padding-left:15px;position:relative}
+.risk li{font-size:14.5px;line-height:1.34;color:var(--soft);padding-left:15px;position:relative}
 .risk li::before{content:"";position:absolute;left:0;top:8px;width:5px;height:5px;
   border-radius:50%;background:var(--teal)}
 .risk li b{color:var(--ink);font-weight:600}
+/* 13/15: the threat gets a picture — a donut, a blocked flow, gate rows.
+   All colours ride CSS vars, so light and dark both hold. */
+.risk .viz{margin-top:11px;display:flex;align-items:center;gap:12px;min-height:74px}
+.risk .viz.col{flex-direction:column;align-items:stretch;justify-content:center;gap:8px}
+.risk .ring{width:74px;height:74px;flex:0 0 74px;border-radius:50%;position:relative;display:grid;place-items:center;
+  background:conic-gradient(var(--red) 0 74%,var(--line) 74% 100%)}
+.risk .ring::after{content:"74%";position:absolute;inset:11px;border-radius:50%;background:var(--panel);
+  display:grid;place-items:center;font-size:15.5px;font-weight:700;color:var(--red)}
+.risk .vcap{font-size:13.5px;line-height:1.36;color:var(--soft)}
+.risk .vcap b{display:block;font-size:16.5px;color:var(--ink);font-weight:600;margin-bottom:3px}
+.risk .frow{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.risk .frow i,.risk .frow span{font-style:normal;font-size:12.5px;font-weight:600;padding:4px 9px;
+  border-radius:999px;white-space:nowrap}
+.risk .frow .bad{border:1px solid var(--red);color:var(--red);background:rgba(242,120,110,.14)}
+.risk .frow .ok{border:1px solid var(--teal);color:var(--teal);background:rgba(95,211,190,.14)}
+.risk .frow .off{border:1px dashed var(--line);color:var(--dim)}
+.risk .frow b{color:var(--red);font-size:15px;font-weight:700}
+.risk .gate{display:flex;flex-direction:column;gap:7px}
+.risk .gr{display:flex;gap:9px;align-items:center;font-size:13.5px;line-height:1.3;color:var(--soft)}
+.risk .gr em{font-style:normal;font-weight:700;font-size:15px;width:17px;text-align:center;flex:0 0 17px}
+.risk .gr .yes{color:var(--teal)}
+.risk .gr .no{color:var(--red)}
+.risk .gr .sig{color:var(--amber)}
 
 .colhead{display:grid;grid-template-columns:1fr 56px 1fr;margin-bottom:10px}
 .colhead .ha,.colhead .hb{font-size:14px;letter-spacing:.14em;text-transform:uppercase;font-weight:600}
@@ -187,6 +220,21 @@ section.assumptions table.sm td{padding:4px 10px;line-height:1.3}
 .chart.merge .screens.four .shot:hover{border-color:var(--teal)}
 /* the clips are previews: fill the frame, no stretching — full screen for detail */
 .chart.merge .screens.three .shot.slot video{object-fit:cover}
+/* the four demo films share one row now that the design-time one joined them:
+   the same card, a notch tighter, and no zoom cursor on a video */
+.chart.merge .screens.four.vids .scr{gap:6px}
+.chart.merge .screens.four.vids .shot.slot{height:104px;cursor:default}
+.chart.merge .screens.four.vids .shot.slot video{object-fit:cover}
+.chart.merge .screens.four.vids .shot:hover{border-color:var(--line)}
+.chart.merge .screens.four.vids .lab{font-size:13.5px}
+.chart.merge .screens.four.vids .cap{font-size:12px}
+/* The films get their own band: four screens above and four films below are not
+   a 1:1 mapping, but two bare 4-up grids read as one. The band insets the films
+   so the columns stop lining up, and names the group outright. */
+.filmband{background:var(--panel2);border:1px solid var(--line);border-radius:12px;
+  padding:8px 14px 12px;display:flex;flex-direction:column;gap:8px;flex:0 0 auto}
+.filmhead{display:flex;align-items:baseline;gap:16px;
+  font-size:12.5px;letter-spacing:.15em;text-transform:uppercase;font-weight:600;color:var(--ink)}
 /* page 06: the nine-step diagram beside the reply screenshot, click it to enlarge */
 .chart.thread{flex-direction:row;align-items:center;gap:18px}
 .chart.thread>svg{flex:1;width:auto;min-width:0}
@@ -242,7 +290,30 @@ text .xref{cursor:pointer;text-decoration:underline;text-decoration-thickness:2p
   text-underline-offset:3px;font-weight:600}
 body.light a.xref:hover{color:#0B8055}
 
-/* the ask, one line per item, riding under the roadmap on the mainline page */
+/* The ask, item by item — the backup page (B19). Restored from the pre-review
+   deck, where it was B14 and got cut when the backups were trimmed to B1–B17. */
+.asklist{display:flex;flex-direction:column;gap:14px;min-height:0}
+.askrow{display:flex;gap:16px;align-items:flex-start;background:var(--panel);
+  border:1px solid var(--line);border-radius:10px;padding:16px 20px}
+.askrow .num{width:34px;height:34px;flex:0 0 34px;border-radius:50%;background:var(--teal);color:#151B22;
+  font-weight:700;display:flex;align-items:center;justify-content:center;font-size:17px}
+.askrow .num.am{background:var(--amber)}
+.askrow .h{font-size:20px;font-weight:600;color:var(--ink);line-height:1.3}
+.askrow .d{font-size:16px;color:var(--soft);margin-top:5px;line-height:1.4}
+
+/* Intelligence page (08/15): the loop diagram plus six icon cells, one key line
+   each. The page has to read from the back of the room — card prose did not. */
+.cap6{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;flex:0 0 auto}
+.cap{background:var(--panel);border:1px solid var(--line);border-radius:10px;
+  padding:13px 15px 14px;min-width:0}
+.caph{display:flex;align-items:center;gap:10px}
+.ci{width:26px;height:26px;flex:0 0 26px;fill:none;stroke:var(--teal);
+  stroke-width:2.3;stroke-linecap:round;stroke-linejoin:round}
+.ct{font-size:17px;font-weight:600;color:var(--ink);line-height:1.2}
+.cd{font-size:14.5px;line-height:1.42;color:var(--soft);margin-top:7px}
+.cd i{font-style:normal;font-size:11.5px;font-weight:600;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--teal);margin-right:7px}
+/* kept for the roadmap page's one-line ask strip (no longer used) */
 .askstrip{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:10px}
 .askstrip .askhead{grid-column:1/-1;display:flex;align-items:center;gap:8px;
   font-size:13px;letter-spacing:1.4px;font-weight:600;
@@ -305,6 +376,15 @@ body.notoc #pbar{left:0}
   pointer-events:auto;transition:opacity .18s}
 #pbar .pcap:empty{display:none}
 #pbar .pctl{position:absolute;right:16px;bottom:0;display:flex;gap:8px;pointer-events:auto}
+/* per-page narration slider + speed, a row above the button cluster */
+#pbar .pslid{position:absolute;right:16px;bottom:44px;display:flex;align-items:center;
+  gap:10px;pointer-events:auto}
+#pbar #ptime{font:600 12px/1 var(--sans);color:#9BAAB9;min-width:74px;text-align:right;
+  font-variant-numeric:tabular-nums}
+#pbar #pslider{width:190px;accent-color:#5FD3BE;cursor:pointer;margin:0}
+#pbar #pslider:disabled{opacity:.35;cursor:default}
+#pbar #pspeed{padding:5px 11px;font-size:12.5px}
+body.light #pbar #ptime{color:#5A6774}
 #pbar button{font:600 13.5px/1 var(--sans);padding:11px 17px;border-radius:999px;
   cursor:pointer;white-space:nowrap;background:rgba(20,28,38,.92);
   border:1px solid #2E3A46;color:#EAF0F6;
@@ -473,6 +553,7 @@ body.light svg [fill="#2E3A46"]{fill:#C8D2DC}
 body.light svg [fill="#1E4A44"]{fill:#DCF3EE}
 body.light svg [fill="#1B4A44"]{fill:#D6F2EC}
 body.light svg [fill="#17322E"]{fill:#DDF3EE}
+body.light svg [fill="#14291F"]{fill:#C3EADD}
 body.light svg [fill="#3A3320"]{fill:#FBF3DF}
 body.light svg [fill="#2A2418"]{fill:#FBF3DF}
 body.light svg [fill="#3B2320"]{fill:#FBE4E0}
@@ -519,7 +600,7 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
 <div class="bar" id="bar"></div>
 <div class="ov">F fullscreen · T pages</div>
 <button id="themebtn" class="themebtn" type="button" title="Switch to dark">☀ Light</button>
-<div id="pbar"><span class="pcap" id="pcap"></span><span class="pctl"><button id="ptoggle" type="button" title="Turn auto-present on/off">Auto-Present OFF</button><button id="pplay" type="button" title="Pause / resume the tour">▶ Present</button></span></div>
+<div id="pbar"><span class="pcap" id="pcap"></span><span class="pslid"><span id="ptime"></span><input id="pslider" type="range" min="0" max="10" step="0.1" value="0" disabled title="Seek within this page's narration"><button id="pspeed" type="button" title="Narration speed">1.25×</button></span><span class="pctl"><button id="ptoggle" type="button" title="Turn auto-present on/off">Auto-Present OFF</button><button id="pplay" type="button" title="Pause / resume the tour">▶ Present</button></span></div>
 
 <aside id="toc">
   <div class="tochead"><span>Pages · <b id="toccount">29</b></span><button id="toctoggle" type="button" title="Hide this rail (T)">◧</button></div>
@@ -568,7 +649,7 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       <text class="lgd" x="24" y="314" style="font-size:14px">Bands not to scale · 262 = FDIC BankFind, 2026-09-25, FDIC-insured only. NCUA stopped publishing asset bands in 2025Q4, so in-band credit unions are not counted.</text>
     </svg>
   </div>
-  <div class="colophon"><span>02 / 14</span></div>
+  <div class="colophon"><span>02 / 15</span></div>
 </section>
 
 <!-- ═══ 03 WHY FS CARES ═══ -->
@@ -638,7 +719,7 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       <text class="lgd" x="0" y="424" style="font-size:13px">Loaded cost: Gartner / ICMI / Forrester ranges (2026) · 28%: Talkdesk 2026, NewtonX n=252 · 27h and 22%: Larkspur profile, assumption — replaced in week one</text>
     </svg>
   </div>
-  <div class="colophon"><span>03 / 14</span></div>
+  <div class="colophon"><span>03 / 15</span></div>
 </section>
 
 <!-- ═══ 04 WHY WE PRIORITIZE EMAIL ═══ -->
@@ -710,8 +791,8 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
         </tr>
     </table>
   </div>
-  <p class="note" style="font-size:16.5px"><b>What email still costs us:</b> pricing is our own $1.50 assumption (<a class="xref" data-jump="B11">B11</a>: no public price), and an auditable number takes 90 days to build — where nobody has done it, the blank is also the opportunity. Bars: length = how much, colour = good or bad.</p>
-  <div class="colophon"><span>04 / 14</span></div>
+  <p class="note" style="font-size:16.5px"><b>What email still costs us:</b> pricing is our own $1.50 assumption (<a class="xref" data-jump="B12">B12</a>: no public price), and an auditable number takes 90 days to build — where nobody has done it, the blank is also the opportunity. Bars: length = how much, colour = good or bad.</p>
+  <div class="colophon"><span>04 / 15</span></div>
 </section>
 
 <!-- ═══ 05 WHERE WE START · PRIORITIES ═══ -->
@@ -720,7 +801,7 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
   <h2>We automate the work, not the decision.</h2>
   <p class="claim">Sort order first — volume × determinability × identity achievability, gated by regulatory risk. Then one line: everything reversible goes to the machine, everything consequential stays with a person.</p>
   <div class="chart">
-    <svg viewBox="0 0 1128 400" role="img">
+    <svg viewBox="0 0 1128 356" role="img" style="max-height:none;flex:0 0 auto">
       <text x="0" y="18" fill="#9BAAB9" font-size="15" font-weight="600" letter-spacing="1.4">SHARE OF INBOUND INTAKE · WAVE ASSIGNMENT</text>
       <g font-size="14">
         <rect x="700" y="5" width="13" height="13" rx="3" fill="#5FD3BE"/><text x="720" y="17" fill="#9BAAB9">Wave 1</text>
@@ -765,8 +846,8 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       <text class="lg" x="20" y="383" fill="#5FD3BE">Dispute intake is Wave 1; adjudication is permanently L0 — humans decide and sign.</text>
     </svg>
   </div>
-  <p class="note"><b>Route-only in wave 1:</b> complaints, fraud and off-brief mail are detected, clocked and handed to a person — never answered autonomously. The UDAAP wording review for complaints follows in wave 2, with payments and payoff. Sort logic and the full wave matrix: <b><a class="xref" data-jump="B8">B8</a></b>.</p>
-  <div class="colophon"><span>05 / 14</span></div>
+  <p class="note" style="font-size:16.5px"><b>Route-only in wave 1:</b> complaints, fraud and off-brief mail are detected, clocked and handed to a person — never answered autonomously. UDAAP wording review follows in wave 2. Full wave matrix: <b><a class="xref" data-jump="B9">B9</a></b>.</p>
+  <div class="colophon"><span>05 / 15</span></div>
 </section>
 
 <!-- ═══ 06 HOW IT WORKS ═══ -->
@@ -775,7 +856,9 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
   <h2>The thread is the case.</h2>
   <p class="claim">Nine steps. After step 5 the matrix picks one of three roads — auto, one-click, human-only — and only step 8 reaches the customer.</p>
   <div class="chart thread">
-    <svg viewBox="0 0 1128 412" role="img">
+    <!-- flex:1 (from .chart.thread>svg) must keep winning: freezing it with flex:0 0 auto
+         pushed the letter figure past the right edge. Only the max-height clamp is lifted. -->
+    <svg viewBox="0 0 1128 412" role="img" style="max-height:none">
       <!-- row 1 · the nine steps, first five -->
       <rect class="card" x="0" y="0" width="200" height="56" rx="8"/><text class="lgb" x="100" y="28" text-anchor="middle">1 · Ingest</text><text class="lgd" x="100" y="47" text-anchor="middle" style="font-size:15px">arrival timestamp</text>
       <rect class="card" x="232" y="0" width="200" height="56" rx="8"/><text class="lgb" x="332" y="28" text-anchor="middle">2 · Triage</text><text class="lgd" x="332" y="47" text-anchor="middle" style="font-size:15px">split intents</text>
@@ -807,14 +890,14 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       <rect x="0" y="308" width="360" height="62" rx="8" fill="#1A2536" stroke="#3B7DD8"/><text class="lgb" x="18" y="335" fill="#6FA8FF" style="font-size:18px">Regulated disclosure</text><text class="lgd" x="18" y="357" style="font-size:15px">locked template, never generated</text>
       <rect x="384" y="308" width="360" height="62" rx="8" fill="#17322E" stroke="#3F8F4A"/><text class="lgb" x="402" y="335" fill="#7BD88F" style="font-size:18px">Amounts, dates, deadlines</text><text class="lgd" x="402" y="357" style="font-size:15px">system slots, checked field by field</text>
       <rect x="768" y="308" width="360" height="62" rx="8" fill="#241E3A" stroke="#8B5CF6"/><text class="lgb" x="786" y="335" fill="#A78BFA" style="font-size:18px">Connective tissue</text><text class="lgd" x="786" y="357" style="font-size:15px">the only part that goes through a model</text>
-      <text class="lgd" x="0" y="396" style="font-size:15px">Personalization is the name, product, thread history, tone tier and channel — never a disclosure or an amount (CSAT gates graduation, <tspan class="xref" data-jump="B5">B5</tspan>).</text>
+      <text class="lgd" x="0" y="396" style="font-size:15px">Personalization is the name, product, thread history, tone tier and channel — never a disclosure or an amount (CSAT gates graduation, <tspan class="xref" data-jump="B6">B6</tspan>).</text>
     </svg>
     <figure class="zoomshot">
       <img data-src="assets/shots/shot-letter.jpg" alt="The assembled reply, colored by source">
       <figcaption>The assembled reply — click to enlarge</figcaption>
     </figure>
   </div>
-  <div class="colophon"><span>06 / 14</span></div>
+  <div class="colophon"><span>06 / 15</span></div>
 </section>
 
 <!-- ═══ 07 AI AND HUMANS ═══ -->
@@ -873,7 +956,7 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       <rect x="256" y="362" width="820" height="34" rx="6" fill="#3A3320" stroke="#F5B544"/><text class="lgb" x="666" y="384" text-anchor="middle" fill="#F5B544" style="font-size:15px">L0 decides · the AI drafts at L1 and a person signs — permanent, no graduation path</text>
 
       <!-- L0–L3 spelled out: the matrix output, at the weight the concept carries -->
-      <text x="0" y="414" fill="#EAF0F6" font-size="17" font-weight="600">L0–L3 — who acts. Every cell in the matrix returns one of these four levels:</text>
+
 
       <rect x="0" y="426" width="276" height="52" rx="8" fill="#3B2320" stroke="#F2786E"/>
       <text x="16" y="462" fill="#F2786E" font-size="24" font-weight="700">L0</text>
@@ -898,13 +981,111 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       <text class="lgd" x="0" y="500" style="font-size:14.5px">Graduation: backtest → shadow → dual sign-off (compliance + operations) → autonomous · auto-demotion on drift</text>
     </svg>
   </div>
-  <div class="colophon"><span>07 / 14</span></div>
+  <div class="colophon"><span>07 / 15</span></div>
+</section>
+
+<!-- ═══ 07b INTELLIGENCE (v0.3 · review §6.1) ═══
+     Naming: the deck says "intelligence" only — no runtime / design-time split
+     for the audience to learn. "Runtime" stays where it means the platform we
+     borrow (p04, B7, B17), never as the opposite of this page. ═══ -->
+<section class="slide">
+  <p class="eyebrow"><span class="n">07</span> Intelligence</p>
+  <h2>AI nominates, the evidence argues, humans sign the diff.</h2>
+  <div class="chart">
+    <svg viewBox="0 0 1128 176" role="img" style="max-height:none;flex:0 0 auto">
+      <text x="0" y="12" fill="#9BAAB9" font-size="14" font-weight="600" letter-spacing="1.4">A LOOP, NOT A PIPELINE</text>
+
+      <rect x="0" y="22" width="200" height="96" rx="10" fill="#1D2530" stroke="#2E3A46"/>
+      <g stroke="#5FD3BE" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round" transform="translate(83,34)"><path d="M4 8h26v18H4z"/><path d="M4 10l13 10 13-10"/></g>
+      <text x="100" y="94" text-anchor="middle" fill="#EAF0F6" font-size="15" font-weight="600" letter-spacing="1.1">SENSE</text>
+      <text x="100" y="110" text-anchor="middle" fill="#9BAAB9" font-size="12.5">90 days of decisions</text>
+
+      <rect x="228" y="22" width="200" height="96" rx="10" fill="#1D2530" stroke="#2E3A46"/>
+      <g stroke="#5FD3BE" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round" transform="translate(311,34)"><path d="M7 4h12l6 6v20H7z"/><path d="M19 4v6h6"/><path d="M13 20h8M17 16v8"/></g>
+      <text x="328" y="94" text-anchor="middle" fill="#EAF0F6" font-size="15" font-weight="600" letter-spacing="1.1">PROPOSE</text>
+      <text x="328" y="110" text-anchor="middle" fill="#9BAAB9" font-size="12.5">nominations + diffs</text>
+
+      <rect x="456" y="22" width="200" height="96" rx="10" fill="#1D2530" stroke="#2E3A46"/>
+      <g stroke="#5FD3BE" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round" transform="translate(539,34)"><path d="M17 6v23M11 29h12M6 12h22"/><path d="M6 12l-4 8h8zM28 12l-4 8h8z"/></g>
+      <text x="556" y="94" text-anchor="middle" fill="#EAF0F6" font-size="15" font-weight="600" letter-spacing="1.1">PROVE</text>
+      <text x="556" y="110" text-anchor="middle" fill="#9BAAB9" font-size="12.5">backtest · dissent cards</text>
+
+      <rect x="684" y="22" width="200" height="96" rx="10" fill="#1D2530" stroke="#2E3A46"/>
+      <g stroke="#5FD3BE" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round" transform="translate(767,34)"><circle cx="17" cy="17" r="13"/><path d="M11 17.5l4.5 4.5L24 13"/></g>
+      <text x="784" y="94" text-anchor="middle" fill="#EAF0F6" font-size="15" font-weight="600" letter-spacing="1.1">GRANT</text>
+      <text x="784" y="110" text-anchor="middle" fill="#9BAAB9" font-size="12.5">two humans sign</text>
+
+      <rect x="912" y="22" width="200" height="96" rx="10" fill="#1D2530" stroke="#2E3A46"/>
+      <g stroke="#5FD3BE" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round" transform="translate(995,34)"><path d="M2 17h7l4-9 5 18 4-9h10"/></g>
+      <text x="1012" y="94" text-anchor="middle" fill="#EAF0F6" font-size="15" font-weight="600" letter-spacing="1.1">WATCH</text>
+      <text x="1012" y="110" text-anchor="middle" fill="#9BAAB9" font-size="12.5">auto-demotion on drift</text>
+
+      <g stroke="#5FD3BE" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M204 70 h14 m-5 -5 l5 5 l-5 5"/>
+        <path d="M432 70 h14 m-5 -5 l5 5 l-5 5"/>
+        <path d="M660 70 h14 m-5 -5 l5 5 l-5 5"/>
+        <path d="M888 70 h14 m-5 -5 l5 5 l-5 5"/>
+      </g>
+
+      <path d="M1012 118 v18 H100 v-18" fill="none" stroke="#F5B544" stroke-width="2" stroke-dasharray="6 4"/>
+      <path d="M100 118 l-5 7 l10 0 z" fill="#F5B544"/>
+      <text x="556" y="156" text-anchor="middle" fill="#F5B544" font-size="13.5">↺ drift, rate limits and rejected nominations feed back into Sense</text>
+    </svg>
+    <!-- six capabilities as icon cells, one key line each: the page carries the
+         loop diagram plus pictures, not a wall of card prose -->
+    <div class="cap6">
+      <div class="cap">
+        <div class="caph">
+          <svg class="ci" viewBox="0 0 34 34" aria-hidden="true"><path d="M3 29h7v-7h7v-7h7v-7h6"/></svg>
+          <span class="ct">Graduation proposer</span>
+        </div>
+        <div class="cd"><i>Builder</i>Nominates the same-evidence blocks — a human signs the diff</div>
+      </div>
+      <div class="cap">
+        <div class="caph">
+          <svg class="ci" viewBox="0 0 34 34" aria-hidden="true"><path d="M3 13q5-6 10 0t10 0"/><path d="M3 23q5-6 10 0t10 0"/></svg>
+          <span class="ct">Wave board</span>
+        </div>
+        <div class="cd"><i>Supervisor</i>One root cause, one wave — including victims who never wrote in</div>
+      </div>
+      <div class="cap">
+        <div class="caph">
+          <svg class="ci" viewBox="0 0 34 34" aria-hidden="true"><rect x="8" y="4" width="18" height="26" rx="3"/><path d="M13 12h8M13 18h8M13 24h5"/></svg>
+          <span class="ct">Policy compiler</span>
+        </div>
+        <div class="cd"><i>Builder</i>A sentence in, a clause-level diff out — backtested over 90 days</div>
+      </div>
+      <div class="cap">
+        <div class="caph">
+          <svg class="ci" viewBox="0 0 34 34" aria-hidden="true"><path d="M17 4l11 4v8c0 7-4.5 11-11 14C10.5 27 6 23 6 16V8z"/></svg>
+          <span class="ct">Pre-empt tag</span>
+        </div>
+        <div class="cd"><i>Agent</i>Flags the mail an event notice could have prevented</div>
+      </div>
+      <div class="cap">
+        <div class="caph">
+          <svg class="ci" viewBox="0 0 34 34" aria-hidden="true"><path d="M2 17s6.5-9 15-9 15 9 15 9-6.5 9-15 9S2 17 2 17z"/><circle cx="17" cy="17" r="4.5"/></svg>
+          <span class="ct">Consequence preview</span>
+        </div>
+        <div class="cd"><i>Agent</i>Will this reply invite the next one?</div>
+      </div>
+      <div class="cap">
+        <div class="caph">
+          <svg class="ci" viewBox="0 0 34 34" aria-hidden="true"><circle cx="15" cy="15" r="9.5"/><path d="M22 22l8 8"/></svg>
+          <span class="ct">Intent discovery</span>
+        </div>
+        <div class="cd"><i>Builder</i>New intents from the pile that always goes unclassified</div>
+      </div>
+    </div>
+    <p class="note" style="padding-right:76px;font-size:15.5px"><b>The gates already exist.</b> Backtest, shadow, dual sign-off and auto-demotion already ship — what was missing was a nominator, and every output is a configuration diff flowing into those same gates.</p>
+  </div>
+  <div class="colophon"><span>08 / 15</span></div>
 </section>
 
 <!-- ═══ 08 KEY EXPERIENCES & DEMO ═══ -->
 <section class="slide">
-  <p class="eyebrow"><span class="n">07</span> Key experiences <a class="gh" href="https://github.com/wukun2005-gif/mailAutopilotForFS/" target="_blank" rel="noopener" title="Open the source repository on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg><span class="gl">github.com/wukun2005-gif/mailAutopilotForFS</span><span class="ar">↗</span></a></p>
-  <h2>Four screens, three proofs.</h2>
+  <p class="eyebrow"><span class="n">08</span> Key experiences <a class="gh" href="https://github.com/wukun2005-gif/mailAutopilotForFS/" target="_blank" rel="noopener" title="Open the source repository on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg><span class="gl">github.com/wukun2005-gif/mailAutopilotForFS</span><span class="ar">↗</span></a></p>
+  <h2>Four screens, four proofs.</h2>
   <div class="chart merge">
     <div class="screens four">
 
@@ -945,7 +1126,9 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       <text x="868" y="43" fill="#9BAAB9" font-size="13.5">tightens in one click</text>
     </svg>
 
-    <div class="screens three">
+    <div class="filmband">
+      <div class="filmhead"><span>Demo films</span></div>
+      <div class="screens four vids">
 
       <div class="scr">
         <div class="lab"><span class="dot2" style="background:#5FD3BE"></span>Demo 1 · Identity Assurance</div>
@@ -980,14 +1163,26 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
         <a class="ytlink" href="https://youtu.be/iM7YlMgOmbo" target="_blank" rel="noopener">Watch it on YouTube →</a>
         <div class="cap">Unreachable, not merely switched off</div>
       </div>
+      <div class="scr">
+        <div class="lab"><span class="dot2" style="background:#A78BFA"></span>Demo 5 · Intelligence</div>
+        <div class="shot slot">
+          <div class="ph"><span class="tri">▶</span>Video 5 · 6:07</div>
+          <video data-src="assets/clips/demo-5-intelligence.mp4" poster="assets/shots/poster-5.jpg" controls preload="none" playsinline></video>
+          <button class="vplay" type="button" aria-label="Play video 5, 14 MB"></button>
+          <button class="fsbtn" type="button">⛶ Full screen</button>
+        </div>
+        <a class="ytlink" href="https://youtu.be/refkaj5HnGg" target="_blank" rel="noopener">Watch it on YouTube →</a>
+        <div class="cap">Improves itself, under a human signature</div>
+      </div>
+    </div>
     </div>
   </div>
-  <div class="colophon"><span>08 / 14</span></div>
+  <div class="colophon"><span>09 / 15</span></div>
 </section>
 
 <!-- ═══ 09 WHY WE WIN ═══ -->
 <section class="slide">
-  <p class="eyebrow"><span class="n">08</span> Why we win</p>
+  <p class="eyebrow"><span class="n">09</span> Why we win</p>
   <h2>Four groups want this customer. Nobody has the email case.</h2>
   <div class="chart">
     <svg viewBox="0 0 1128 364" role="img">
@@ -1043,13 +1238,13 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       <circle cx="1045" cy="339" r="11" fill="#5FD3BE"/>
     </svg>
   </div>
-  <p class="note"><b>Window: 12–18 months.</b> We spend it on what the platform already ships — CXA Operations Center, Agent Builder, Automation Flows, and core-banking connectors since April 2025. Freshworks has shipped autonomous email since 2025-06; nobody has shipped the <i>case</i>.</p>
-  <div class="colophon"><span>09 / 14</span></div>
+  <p class="note"><b>Window: 12–18 months.</b> We spend it on what the platform already ships — CXA Operations Center, Agent Builder, Automation Flows, and core-banking connectors since April 2025. Freshworks has shipped autonomous email since 2025-06; nobody has shipped the <i>case</i>.<br><b>Most automate the reply; few propose the rules.</b></p>
+  <div class="colophon"><span>10 / 15</span></div>
 </section>
 
 <!-- ═══ 10 VALUE & PRIORITY ═══ -->
 <section class="slide">
-  <p class="eyebrow"><span class="n">09</span> Value &amp; priority</p>
+  <p class="eyebrow"><span class="n">10</span> Value &amp; priority</p>
   <h2>One bank's email book is a $4.8M cost base.</h2>
   <p class="claim">600,000 emails a year at $8 each. What we take out depends on how much we can genuinely finish.</p>
   <div class="chart">
@@ -1084,61 +1279,102 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       <text class="lgx" x="744" y="206" fill="#F5B544" style="font-size:30px">≈ $54M</text>
       <text class="lgd" x="744" y="232" style="font-size:14px">Vendor-side opportunity at full adoption</text>
       <text class="lgd" x="744" y="252" style="font-size:14px" fill="#F5B544">262 × $205k — penetration not assumed</text>
-      <text class="lgd" x="744" y="276" style="font-size:13px">$1.50 per resolution is our price (<tspan class="xref" data-jump="B10">B10</tspan>), not a list price</text>
+      <text class="lgd" x="744" y="276" style="font-size:13px">$1.50 per resolution is our price (<tspan class="xref" data-jump="B11">B11</tspan>), not a list price</text>
     </svg>
   </div>
   <p class="note"><b>Net-new, not cannibalized.</b> Async mail is the safest autonomy proving ground, and 90 days of history is a ready-made eval set: the bank keeps the saving, the vendor's fee sits on top of it.</p>
-  <p class="note" style="font-size:15.5px"><b>Three levers move together</b> across the three cases — failed demand, autonomy, copilot uplift. 35% is measured against email net of failed demand; against all valid inbound it reads ≈30% — both published, both in <a class="xref" data-jump="B1">B1</a>. Inputs come from the customer's own mail: mix and baselines in week one, pricing in four weeks.</p>
-  <div class="colophon"><span>10 / 14</span></div>
+  <p class="note" style="font-size:15.5px"><b>Three levers move together</b> across the three cases — failed demand, autonomy, copilot uplift. 35% is measured against email net of failed demand; against all valid inbound it reads ≈30% — both published, both in <a class="xref" data-jump="B2">B2</a>. Inputs come from the customer's own mail: mix and baselines in week one, pricing in four weeks.</p>
+  <div class="colophon"><span>11 / 15</span></div>
 </section>
 
 <!-- ═══ 11 METRICS ═══ -->
 <section class="slide">
-  <p class="eyebrow"><span class="n">10</span> How we would know</p>
+  <p class="eyebrow"><span class="n">11</span> How we would know</p>
   <h2>Three numbers. One pilot.</h2>
   <div class="chart">
-    <svg viewBox="0 0 1128 314" role="img">
-      <rect class="card" x="0" y="0" width="362" height="176" rx="10"/>
+    <svg viewBox="0 0 1128 388" role="img">
+      <!-- ── VARR: the target as a band on a 0–100% track ── -->
+      <rect class="card" x="0" y="0" width="362" height="212" rx="10"/>
       <text class="lgx" x="24" y="42">VARR</text>
       <text class="lg" x="24" y="68">Verified autonomous resolution rate</text>
       <text class="lgd" x="24" y="96">No human touch · no reopen in 14 days</text>
-      <text class="lgd" x="24" y="120">Survives QA sampling</text>
-      <text class="lgb" x="24" y="156" fill="#5FD3BE">25–35% by six months</text>
-      <rect class="card" x="383" y="0" width="362" height="176" rx="10"/>
+      <text class="lgd" x="24" y="118">Survives QA sampling</text>
+      <text x="24" y="154" fill="#5FD3BE" font-size="18" font-weight="600">25–35% by six months</text>
+      <rect x="24" y="166" width="314" height="14" rx="7" fill="#232D38"/>
+      <rect x="102" y="166" width="32" height="14" rx="7" fill="#5FD3BE"/>
+      <text class="lgd" x="24" y="198" style="font-size:12.5px">0</text>
+      <text x="118" y="198" text-anchor="middle" fill="#5FD3BE" font-size="12.5" font-weight="600">target band</text>
+      <text class="lgd" x="338" y="198" text-anchor="end" style="font-size:12.5px">100%</text>
+
+      <!-- ── Median TTR: the target is the sliver at the far left ── -->
+      <rect class="card" x="383" y="0" width="362" height="212" rx="10"/>
       <text class="lgx" x="407" y="42">Median TTR</text>
       <text class="lg" x="407" y="68">Time to resolution, not to first reply</text>
-      <text class="lgd" x="407" y="96">Measured from the arrival timestamp</text>
-      <text class="lgd" x="407" y="120">Baseline today: 3.2 days <tspan fill="#F5B544">(assumption)</tspan></text>
-      <text class="lgb" x="407" y="146" fill="#5FD3BE">&lt; 15 min autonomous</text>
-      <text class="lgb" x="407" y="167" fill="#5FD3BE">&lt; 1 day, disputes excepted</text>
-      <rect class="card" x="766" y="0" width="362" height="176" rx="10"/>
-      <text class="lgx" x="790" y="42" fill="#F2786E">Trust</text>
+      <text class="lgd" x="407" y="94" style="font-size:16px">Measured from the arrival timestamp</text>
+      <text class="lgd" x="407" y="116" style="font-size:16px">Baseline today: 3.2 days <tspan fill="#F5B544" style="font-weight:600">(assumption)</tspan></text>
+      <rect x="407" y="126" width="314" height="16" rx="4" fill="#3A3320" stroke="#F5B544"/>
+      <rect x="407" y="126" width="5" height="16" rx="2" fill="#5FD3BE"/>
+      <path d="M404 147 l14 0 l-7 9 z" fill="#5FD3BE"/>
+      <text x="407" y="182" fill="#5FD3BE" font-size="16" font-weight="600">&lt; 15 min autonomous</text>
+      <text class="lgd" x="721" y="182" text-anchor="end" style="font-size:13.5px">baseline 3.2 days</text>
+      <text x="407" y="204" fill="#5FD3BE" font-size="16" font-weight="600">&lt; 1 day, disputes excepted</text>
+
+      <!-- ── Trust: the three gates that a veto checks ── -->
+      <rect class="card" x="766" y="0" width="362" height="212" rx="10"/>
+      <text x="790" y="42" fill="#F2786E" font-size="28" font-weight="600">Trust</text>
       <text class="lg" x="790" y="68">Veto — one critical error voids VARR</text>
-      <text class="lgd" x="790" y="94">Key error = wrong action, wrong party,</text>
-      <text class="lgd" x="790" y="116">missed clock or broken promise</text>
-      <text class="lgd" x="790" y="140" style="font-size:16px">0 key errors · clocks 100% · recall ≥99.5%</text>
-      <text class="lgb" x="790" y="166" fill="#F2786E">Non-negotiable</text>
-      <text class="lgb" x="0" y="216">59-day pilot</text>
-      <rect x="0" y="232" width="268" height="52" rx="8" fill="#232D38" stroke="#2E3A46"/><text class="lg" x="134" y="256" text-anchor="middle">Backtest</text><text class="lgd" x="134" y="275" text-anchor="middle" style="font-size:13px">W1–W2</text>
-      <rect x="286" y="232" width="268" height="52" rx="8" fill="#232D38" stroke="#2E3A46"/><text class="lg" x="420" y="256" text-anchor="middle">Shadow</text><text class="lgd" x="420" y="275" text-anchor="middle" style="font-size:13px">W3–W4</text>
-      <rect x="572" y="232" width="268" height="52" rx="8" fill="#3A3320" stroke="#F5B544"/><text class="lg" x="706" y="256" text-anchor="middle" fill="#F5B544">L2 · one-click approval</text><text class="lgd" x="706" y="275" text-anchor="middle" style="font-size:13px">W5–W8 · observe</text>
-      <rect x="858" y="232" width="270" height="52" rx="8" fill="#1B4A44" stroke="#5FD3BE"/><text class="lg" x="993" y="256" text-anchor="middle" fill="#5FD3BE">L3 · first graduations</text><text class="lgd" x="993" y="275" text-anchor="middle" style="font-size:13px">day-59 gate · rollout W9–W14</text>
-      <text class="lgd" x="0" y="300">Eight guardrails run alongside — Backup <tspan class="xref" data-jump="B5">B5</tspan>. The 35% ROI base case is the top of this band, at steady state (<tspan class="xref" data-jump="B1">B1</tspan>).</text>
+      <text class="lgd" x="790" y="94" style="font-size:16px">Key error = wrong action, wrong party,</text>
+      <text class="lgd" x="790" y="116" style="font-size:16px">missed clock or broken promise</text>
+      <rect x="790" y="128" width="314" height="52" rx="8" fill="#1B4A44" stroke="#5FD3BE"/>
+      <text x="947" y="150" text-anchor="middle" fill="#5FD3BE" font-size="14.5" font-weight="600">✓ 0 key errors  ✓ clocks 100%</text>
+      <text x="947" y="171" text-anchor="middle" fill="#5FD3BE" font-size="14.5" font-weight="600">✓ recall ≥99.5%</text>
+      <text x="790" y="204" fill="#F2786E" font-size="18" font-weight="600">Non-negotiable</text>
+
+      <!-- ── 59-day pilot: weeks to scale, one gate ── -->
+      <text class="lgb" x="0" y="256">59-day pilot</text>
+      <rect x="0" y="272" width="153" height="52" rx="8" fill="#232D38" stroke="#2E3A46"/>
+      <text class="lg" x="76" y="296" text-anchor="middle">Backtest</text>
+      <text class="lgd" x="76" y="315" text-anchor="middle" style="font-size:13px">W1–W2</text>
+      <rect x="171" y="272" width="153" height="52" rx="8" fill="#232D38" stroke="#2E3A46"/>
+      <text class="lg" x="247" y="296" text-anchor="middle">Shadow</text>
+      <text class="lgd" x="247" y="315" text-anchor="middle" style="font-size:13px">W3–W4</text>
+      <rect x="343" y="272" width="307" height="52" rx="8" fill="#3A3320" stroke="#F5B544"/>
+      <text x="496" y="296" text-anchor="middle" fill="#F5B544" font-size="18">L2 · one-click approval</text>
+      <text class="lgd" x="496" y="315" text-anchor="middle" style="font-size:13px">W5–W8 · observe</text>
+      <rect x="668" y="272" width="460" height="52" rx="8" fill="#1B4A44" stroke="#5FD3BE"/>
+      <text x="898" y="296" text-anchor="middle" fill="#5FD3BE" font-size="18">L3 · first graduations</text>
+      <text class="lgd" x="898" y="315" text-anchor="middle" style="font-size:13px">rollout W9–W14</text>
+      <path d="M659 262 v74" stroke="#F5B544" stroke-width="1.5" stroke-dasharray="5 4" fill="none"/>
+      <text x="659" y="256" text-anchor="middle" fill="#F5B544" font-size="12.5" font-weight="700" letter-spacing="1.2">DAY-59 GATE</text>
+
+      <!-- ── week axis ── -->
+      <path d="M0 334 H1128" stroke="#2E3A46" stroke-width="1" fill="none"/>
+      <path d="M171 334 v7 M343 334 v7 M668 334 v7" stroke="#2E3A46" stroke-width="1" fill="none"/>
+      <text class="lgd" x="4" y="354" style="font-size:12.5px">W1</text>
+      <text class="lgd" x="175" y="354" style="font-size:12.5px">W3</text>
+      <text class="lgd" x="347" y="354" style="font-size:12.5px">W5</text>
+      <text class="lgd" x="672" y="354" style="font-size:12.5px">W9</text>
+      <text class="lgd" x="1128" y="354" text-anchor="end" style="font-size:12.5px">W14 end</text>
+      <text class="lgd" x="0" y="380">Twelve guardrails run alongside — Backup <tspan class="xref" data-jump="B6">B6</tspan>. The 35% ROI base case is the top of this band, at steady state (<tspan class="xref" data-jump="B2">B2</tspan>).</text>
     </svg>
   </div>
-  <div class="colophon"><span>11 / 14</span></div>
+  <div class="colophon"><span>12 / 15</span></div>
 </section>
 
 <!-- ═══ 12 RISKS ═══ -->
 <section class="slide">
-  <p class="eyebrow"><span class="n">11</span> Risk</p>
+  <p class="eyebrow"><span class="n">12</span> Risk</p>
   <h2>The risks that would end this product.</h2>
   <div class="chart">
     <div class="risks">
       <div class="risk">
         <div class="idx"><span class="d"></span>RISK 01</div>
         <div class="h">Missing a regulated intent</div>
-        <div class="w">Half a sentence is a running clock. 74% of 2025's 136 Reg E violations sat in error resolution.</div>
+        <div class="w">Half a sentence is a running clock.</div>
+        <div class="viz">
+          <span class="ring" aria-hidden="true"></span>
+          <div class="vcap"><b>136 violations</b>74% sat in error resolution (2025)</div>
+        </div>
         <div class="div"></div>
         <div class="k">What we built</div>
         <ul>
@@ -1151,6 +1387,10 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
         <div class="idx"><span class="d"></span>RISK 02</div>
         <div class="h">The email attack surface</div>
         <div class="w">BEC, ATO and attachment injection — under ATO every normal identity signal still passes.</div>
+        <div class="viz col">
+          <div class="frow"><i class="bad">BEC</i><i class="bad">ATO</i><i class="bad">attachment injection</i></div>
+          <div class="frow"><span class="ok">quarantined as data</span><b>⊘</b><span class="off">R3 has no tool</span></div>
+        </div>
         <div class="div"></div>
         <div class="k">What we built</div>
         <ul>
@@ -1163,6 +1403,13 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
         <div class="idx"><span class="d"></span>RISK 03</div>
         <div class="h">Numeric hallucination</div>
         <div class="w">An invented fee or date is a Reg E and UDAAP violation; one wrong write can be unrecoverable.</div>
+        <div class="viz col">
+          <div class="gate">
+            <div class="gr"><em class="yes">✓</em><span>number from a system slot → sent</span></div>
+            <div class="gr"><em class="no">✕</em><span>model-written number → locked template</span></div>
+            <div class="gr"><em class="sig">✎</em><span>money stays R4 · L1 human-signed</span></div>
+          </div>
+        </div>
         <div class="div"></div>
         <div class="k">What we built</div>
         <ul>
@@ -1173,54 +1420,63 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       </div>
     </div>
   </div>
-  <p class="note"><b>Also on the register:</b> tipping-off vs duty to speak (31 CFR 1020.320(e)) · over-disclosure to an unverified sender (GLBA) · third-party risk review · vulnerable-customer fairness · the LLM-as-judge in evaluation flipping verdicts (14%) · L2 approvals turning into rubber-stamping (watch the approve-without-edit rate, sample the approved files) · a step-up link that collides with “never click a link in an email” training. Full list in Backup <a class="xref" data-jump="B10">B10</a>.</p>
-  <div class="colophon"><span>12 / 14</span></div>
+  <p class="note"><b>Also on the register:</b> tipping-off vs duty to speak (31 CFR 1020.320(e)) · over-disclosure to an unverified sender (GLBA) · third-party risk review · vulnerable-customer fairness · the LLM-as-judge flipping verdicts in evaluation (14%) · sign-off fatigue — L2 approvals and AI nominations both drift toward rubber-stamping (watch the approve-without-edit rate, sample the approved files) · a step-up link that collides with “never click a link in an email” training. Full list — seventeen risks — in Backup <a class="xref" data-jump="B11">B11</a>.</p>
+  <div class="colophon"><span>13 / 15</span></div>
 </section>
 
 <!-- ═══ 13 ROADMAP & ASK ═══ -->
 <section class="slide">
-  <p class="eyebrow"><span class="n">12</span> Roadmap &amp; the ask</p>
+  <p class="eyebrow"><span class="n">13</span> Roadmap</p>
   <h2>One governance layer, three waves.</h2>
   <div class="chart">
-    <svg viewBox="0 0 1128 320" role="img">
-      <text x="0" y="14" fill="#9BAAB9" font-size="14" font-weight="600" letter-spacing="1.5">ROADMAP — SAME ENGINE, WIDER SURFACE</text>
+    <svg viewBox="0 0 1128 384" role="img" style="max-height:none;flex:0 0 auto">
+      <text x="0" y="14" fill="#9BAAB9" font-size="16" font-weight="600" letter-spacing="1.5">ROADMAP — SAME ENGINE, WIDER SURFACE</text>
 
       <!-- now -->
       <g>
-        <rect x="0" y="30" width="340" height="190" rx="12" fill="#1D2530" stroke="#5FD3BE"/>
+        <rect x="0" y="30" width="340" height="256" rx="12" fill="#1D2530" stroke="#5FD3BE"/>
         <g stroke="#5FD3BE" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round" transform="translate(18,44)">
           <rect x="0" y="0" width="44" height="30" rx="4"/>
           <path d="M2.5 3.5 L22 18.5 L41.5 3.5"/>
         </g>
-        <text x="18" y="100" fill="#5FD3BE" font-size="13" font-weight="600" letter-spacing="1.6">NOW · WAVE 1</text>
+        <text x="18" y="100" fill="#5FD3BE" font-size="15" font-weight="600" letter-spacing="1.6">NOW · WAVE 1</text>
         <line x1="18" y1="110" x2="322" y2="110" stroke="#2E3A46"/>
-        <text x="18" y="148" fill="#EAF0F6" font-size="27" font-weight="600">Email</text>
-        <text x="18" y="174" fill="#C0CBD6" font-size="15.5">Mid-size US banks and credit unions</text>
-        <text x="18" y="194" fill="#9BAAB9" font-size="14.5">Reg E disputes · refunds · servicing</text>
-        <text x="18" y="213" fill="#5FD3BE" font-size="13.5" font-weight="600">Test set: 90 days of their own mail</text>
+        <text x="18" y="148" fill="#EAF0F6" font-size="30" font-weight="600">Email</text>
+        <text x="18" y="174" fill="#C0CBD6" font-size="17.5">Mid-size US banks and credit unions</text>
+        <text x="18" y="194" fill="#9BAAB9" font-size="16.5">Reg E disputes · refunds · servicing</text>
+        <text x="18" y="210" fill="#5FD3BE" font-size="15.5" font-weight="600">Test set: 90 days of their own mail</text>
+        <!-- the intelligence half of this wave, on the same card -->
+        <rect x="18" y="218" width="304" height="60" rx="8" fill="#17322E" stroke="#2E3A46"/>
+        <text x="32" y="234" fill="#5FD3BE" font-size="12.5" font-weight="600" letter-spacing="1.3">INTELLIGENCE</text>
+        <text x="32" y="253" fill="#C0CBD6" font-size="13.5">R0/R1 nominations · pre-empt tag</text>
+        <text x="32" y="269" fill="#C0CBD6" font-size="13.5">consequence preview</text>
       </g>
       <path d="M358 116 L376 125 L358 134" fill="none" stroke="#4A5A6B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
 
       <!-- next -->
       <g>
-        <rect x="394" y="30" width="340" height="190" rx="12" fill="#1D2530" stroke="#F5B544"/>
+        <rect x="394" y="30" width="340" height="256" rx="12" fill="#1D2530" stroke="#F5B544"/>
         <g stroke="#F5B544" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round" transform="translate(412,44)">
           <path d="M22 1 L42 10 L22 19 L2 10 Z"/>
           <path d="M2 16 L22 25 L42 16"/>
           <path d="M2 23 L22 32 L42 23"/>
         </g>
-        <text x="412" y="100" fill="#F5B544" font-size="13" font-weight="600" letter-spacing="1.6">NEXT · WAVE 2</text>
+        <text x="412" y="100" fill="#F5B544" font-size="15" font-weight="600" letter-spacing="1.6">NEXT · WAVE 2</text>
         <line x1="412" y1="110" x2="716" y2="110" stroke="#2E3A46"/>
-        <text x="412" y="148" fill="#EAF0F6" font-size="27" font-weight="600">More intents</text>
-        <text x="412" y="174" fill="#C0CBD6" font-size="15.5">Payments, payoff, Reg Z, Spanish</text>
-        <text x="412" y="194" fill="#9BAAB9" font-size="14.5">UDAAP wording review for complaints</text>
-        <text x="412" y="213" fill="#F5B544" font-size="13.5" font-weight="600">Same policy pack, second wave</text>
+        <text x="412" y="148" fill="#EAF0F6" font-size="30" font-weight="600">More intents</text>
+        <text x="412" y="174" fill="#C0CBD6" font-size="17.5">Payments, payoff, Reg Z, Spanish</text>
+        <text x="412" y="194" fill="#9BAAB9" font-size="16.5">UDAAP wording review for complaints</text>
+        <text x="412" y="210" fill="#F5B544" font-size="15.5" font-weight="600">Same policy pack, second wave</text>
+        <rect x="412" y="218" width="304" height="60" rx="8" fill="#3A3320" stroke="#2E3A46"/>
+        <text x="426" y="234" fill="#F5B544" font-size="12.5" font-weight="600" letter-spacing="1.3">INTELLIGENCE</text>
+        <text x="426" y="253" fill="#C0CBD6" font-size="13.5">R2 nominations · wave board</text>
+        <text x="426" y="269" fill="#C0CBD6" font-size="13.5">policy compiler</text>
       </g>
       <path d="M752 116 L770 125 L752 134" fill="none" stroke="#4A5A6B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
 
       <!-- later -->
       <g>
-        <rect x="788" y="30" width="340" height="190" rx="12" fill="#17322E" stroke="#5FD3BE" stroke-width="1.5"/>
+        <rect x="788" y="30" width="340" height="256" rx="12" fill="#17322E" stroke="#5FD3BE" stroke-width="1.5"/>
         <g stroke="#5FD3BE" stroke-width="3" stroke-linecap="round" transform="translate(806,46)">
           <path d="M5 9 V26"/>
           <path d="M15 3 V32"/>
@@ -1228,69 +1484,49 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
           <path d="M35 6 V29"/>
           <path d="M45 14 V21"/>
         </g>
-        <text x="806" y="100" fill="#5FD3BE" font-size="13" font-weight="600" letter-spacing="1.6">LATER</text>
+        <text x="806" y="100" fill="#5FD3BE" font-size="15" font-weight="600" letter-spacing="1.6">LATER</text>
         <line x1="806" y1="110" x2="1110" y2="110" stroke="#2E3A46"/>
-        <text x="806" y="148" fill="#EAF0F6" font-size="27" font-weight="600">Voice + Chat</text>
-        <text x="806" y="174" fill="#C0CBD6" font-size="15.5">AI agents built in Agent Builder</text>
-        <text x="806" y="194" fill="#9BAAB9" font-size="14.5">Then the rest of financial services</text>
-        <text x="806" y="213" fill="#5FD3BE" font-size="13.5" font-weight="600">The Voice / Builder strategy</text>
+        <text x="806" y="148" fill="#EAF0F6" font-size="30" font-weight="600">Voice + Chat</text>
+        <text x="806" y="174" fill="#C0CBD6" font-size="17.5">AI agents built in Agent Builder</text>
+        <text x="806" y="194" fill="#9BAAB9" font-size="16.5">Then the rest of financial services</text>
+        <text x="806" y="210" fill="#5FD3BE" font-size="15.5" font-weight="600">The Voice / Builder strategy</text>
+        <rect x="806" y="218" width="304" height="60" rx="8" fill="#14291F" stroke="#2E3A46"/>
+        <text x="820" y="234" fill="#5FD3BE" font-size="12.5" font-weight="600" letter-spacing="1.3">INTELLIGENCE</text>
+        <text x="820" y="253" fill="#C0CBD6" font-size="13.5">batch remediation · intent discovery</text>
+        <text x="820" y="269" fill="#C0CBD6" font-size="13.5">regulatory radar</text>
       </g>
 
       <!-- all three sit on the same layer -->
       <g stroke="#3A4756" stroke-width="2">
-        <line x1="170" y1="220" x2="170" y2="244"/>
-        <line x1="564" y1="220" x2="564" y2="244"/>
-        <line x1="958" y1="220" x2="958" y2="244"/>
+        <line x1="170" y1="286" x2="170" y2="310"/>
+        <line x1="564" y1="286" x2="564" y2="310"/>
+        <line x1="958" y1="286" x2="958" y2="310"/>
       </g>
       <g fill="#3A4756">
-        <path d="M164 242 L170 252 L176 242 Z"/>
-        <path d="M558 242 L564 252 L570 242 Z"/>
-        <path d="M952 242 L958 252 L964 242 Z"/>
+        <path d="M164 308 L170 318 L176 308 Z"/>
+        <path d="M558 308 L564 318 L570 308 Z"/>
+        <path d="M952 308 L958 318 L964 308 Z"/>
       </g>
 
-      <rect x="0" y="262" width="1128" height="56" rx="12" fill="#1B4A44" stroke="#5FD3BE"/>
-      <g stroke="#5FD3BE" stroke-width="2.4" fill="none" stroke-linecap="round" transform="translate(22,270)">
+      <rect x="0" y="324" width="1128" height="56" rx="12" fill="#1B4A44" stroke="#5FD3BE"/>
+      <g stroke="#5FD3BE" stroke-width="2.4" fill="none" stroke-linecap="round" transform="translate(22,332)">
         <circle cx="20" cy="20" r="7.5"/>
         <path d="M20 3 v5 M20 32 v5 M3 20 h5 M32 20 h5 M8.1 8.1 l3.5 3.5 M28.4 28.4 l3.6 3.6 M31.9 8.1 l-3.5 3.5 M11.6 28.4 l-3.6 3.6"/>
       </g>
-      <g stroke="#5FD3BE" stroke-width="2.4" fill="none" stroke-linecap="round" transform="translate(1058,270)">
+      <g stroke="#5FD3BE" stroke-width="2.4" fill="none" stroke-linecap="round" transform="translate(1058,332)">
         <circle cx="20" cy="20" r="17"/>
         <path d="M20 9.5 V21 l8.5 5.5"/>
       </g>
-      <text x="80" y="286" fill="#5FD3BE" font-size="17" font-weight="600">One policy engine (R × I → L) + one clock engine — written once by the bank</text>
-      <text x="80" y="310" fill="#C0CBD6" font-size="15">Applied to every channel: email ships first, then the Voice and Chat AI agents built in Agent Builder.</text>
+      <text x="80" y="348" fill="#5FD3BE" font-size="19.5" font-weight="600">One policy engine (R × I → L) + one clock engine — written once by the bank</text>
+      <text x="80" y="370" fill="#C0CBD6" font-size="17">Applied to every channel: email ships first, then the Voice and Chat AI agents built in Agent Builder.</text>
     </svg>
-  </div>
-  <div class="askstrip">
-    <div class="askhead"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 9.7h17M8 3.4v3.3M16 3.4v3.3M8.6 14.5h3.4"/></svg>The ask — day 0</div>
-    <div class="askchip">
-      <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9.2" cy="8.2" r="3.4"/><path d="M3.2 19.4c0-3.3 2.7-5.6 6-5.6s6 2.3 6 5.6"/><path d="M16.2 5.6a3.4 3.4 0 0 1 0 6.4"/><path d="M17.6 19.4c0-2.5-1-4.4-2.6-5.5"/></svg></span>
-      <div class="tx">
-        <div class="h">1 · Two design partners</div>
-        <div class="d">From the existing voice base — a public mailbox and an off-the-shelf core. Their own mail is the test set from day one.</div>
-      </div>
-    </div>
-    <div class="askchip">
-      <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="4.6" width="7" height="6.4" rx="1.8"/><path d="M5.2 7.8 6.7 9.3 9.4 6.3"/><rect x="3.2" y="13.6" width="7" height="6.4" rx="1.8"/><path d="M5.2 16.8 6.7 18.3 9.4 15.3"/><path d="M13.4 7.8h7.4M13.4 16.8h7.4"/></svg></span>
-      <div class="tx">
-        <div class="h">2 · Two things from the platform</div>
-        <div class="d">An in-thread step-up for email, and dispute intake in the catalogue.</div>
-      </div>
-    </div>
-    <div class="askchip">
-      <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6"/><path d="M12 7.1v9.8"/><path d="M14.5 9.4c0-1.1-1.1-1.9-2.5-1.9s-2.5.8-2.5 1.9 1.1 1.9 2.5 1.9 2.5.8 2.5 1.9-1.1 1.9-2.5 1.9-2.5-.8-2.5-1.9"/></svg></span>
-      <div class="tx">
-        <div class="h">3 · One commercial question</div>
-        <div class="d">A per-resolution price, so the money lands in the layer where the work happens. Packaging · price · motion: <a class="xref" data-jump="B12">B12</a>.</div>
-      </div>
-    </div>
   </div>
   <div class="layerbar">
     <div class="lrow add"><span class="tag">New · we add</span><span class="items">A bank-written limit matrix (R × I → L) · a clock that turns a promise into a deadline · in-thread step-up · dispute intake · email defense</span></div>
     <div class="lrow"><span class="tag">Already ships</span><span class="items">Autopilot (LLM) · Automation Flows · Agent Builder · CXA Ops Center · FS core connectors</span></div>
-    <p class="note"><b>The new part is the layer, not the channel.</b> A thin vertical layer on what already ships — not a new platform, no new runtime. Full stack: <b><a class="xref" data-jump="B16">B16</a></b>.</p>
+    <p class="note"><b>The new part is the layer, not the channel</b> — a thin vertical layer, no new platform or runtime. Full stack: <b><a class="xref" data-jump="B16">B16</a></b> · the day-0 ask, item by item: <b><a class="xref" data-jump="B19">B19</a></b>.</p>
   </div>
-  <div class="colophon"><span>13 / 14</span></div>
+  <div class="colophon"><span>14 / 15</span></div>
 </section>
 
 <!-- ═══ 14 THANK YOU ═══ -->
@@ -1299,9 +1535,9 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
   <p class="sub" style="text-align:center;margin-left:0">Questions</p>
 </section>
 
-<!-- ═══ B13 · OVERVIEW ═══ -->
+<!-- ═══ B1 · OVERVIEW ═══ -->
 <section class="slide backup">
-  <p class="eyebrow"><span class="n">Backup · B13</span> Overview video · 2:11</p>
+  <p class="eyebrow"><span class="n">Backup · B1</span> Overview video · 2:11</p>
   <h2>One thread, three desks, no cold hand-off.</h2>
   <p class="claim">Ninety-nine seconds: three emails — dispute, refund, fraud — and the admin console that sets their limits.</p>
   <div class="fig">
@@ -1329,14 +1565,14 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       </div>
     </div>
   </div>
-  <div class="colophon"><span>B13</span></div>
+  <div class="colophon"><span>B1</span></div>
 </section>
 
-<!-- ═══ B1 ═══ -->
+<!-- ═══ B2 ═══ -->
 <section class="slide backup">
-  <p class="eyebrow"><span class="n">Backup · B1</span> The ROI, line by line</p>
+  <p class="eyebrow"><span class="n">Backup · B2</span> The ROI, line by line</p>
   <h2>Where $2.68M comes from.</h2>
-  <p class="claim">600,000 emails a year at $8 = a $4.8M cost base. Three base-case levers (<a class="xref" data-jump="B11">B11</a>): repeat contacts −15% · resolved autonomously 35% · the rest 30% faster. <b>One price moves all three:</b> $1.50 a resolution, billed only on the 35% the AI resolves — the other two are not billed separately.</p>
+  <p class="claim">600,000 emails a year at $8 = a $4.8M cost base. Three base-case levers (<a class="xref" data-jump="B12">B12</a>): repeat contacts −15% · resolved autonomously 35% · the rest 30% faster. <b>One price moves all three:</b> $1.50 a resolution, billed only on the 35% the AI resolves — the other two are not billed separately.</p>
   <div class="chart">
     <table>
       <tr><th>Line</th><th>Calculation</th><th>Value</th></tr>
@@ -1348,12 +1584,12 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
     </table>
   </div>
   <p class="note"><b>Two denominators, both reported.</b> 35% is measured against email net of failed demand; against all valid inbound it is ≈30%. Both are published side by side, so the denominator is never chosen after the fact.</p>
-  <div class="colophon"><span>B1</span></div>
+  <div class="colophon"><span>B2</span></div>
 </section>
 
-<!-- ═══ B2 ═══ -->
+<!-- ═══ B3 ═══ -->
 <section class="slide backup">
-  <p class="eyebrow"><span class="n">Backup · B2</span> Reg E · Reg Z · retention</p>
+  <p class="eyebrow"><span class="n">Backup · B3</span> Reg E · Reg Z · retention</p>
   <h2>The clocks the product is measured against.</h2>
   <div class="chart">
     <div class="two" style="gap:22px">
@@ -1377,12 +1613,12 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
     </div>
     <p class="note" style="font-size:15px"><b>Terminology guard:</b> Reg E has <b>no</b> explicit acknowledgement duty — the 30-day acknowledgement is a <b>Reg Z</b> requirement. <b>Enforcement anchor:</b> 2019-BCFP-0001 (USAA Federal Savings Bank) cited the bank for “requiring customers to contact the merchant first”, which the CFPB Reg E FAQ (Q4, Q9) prohibits — the product must never require a signed statement or police report before accepting a dispute.</p>
   </div>
-  <div class="colophon"><span>B2</span></div>
+  <div class="colophon"><span>B3</span></div>
 </section>
 
-<!-- ═══ B3 ═══ -->
+<!-- ═══ B4 ═══ -->
 <section class="slide backup">
-  <p class="eyebrow"><span class="n">Backup · B3</span> Questions I expect</p>
+  <p class="eyebrow"><span class="n">Backup · B4</span> Questions I expect</p>
   <h2>Six questions, short answers.</h2>
   <div class="chart">
     <div class="qgrid">
@@ -1413,12 +1649,12 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       
     </div>
   </div>
-  <div class="colophon"><span>B3</span></div>
+  <div class="colophon"><span>B4</span></div>
 </section>
 
-<!-- ═══ B4 ═══ -->
+<!-- ═══ B5 ═══ -->
 <section class="slide backup">
-  <p class="eyebrow"><span class="n">Backup · B4</span> Four more questions I expect</p>
+  <p class="eyebrow"><span class="n">Backup · B5</span> Four more questions I expect</p>
   <h2>Four more questions, short answers.</h2>
   <div class="chart">
     <div class="qgrid">
@@ -1436,20 +1672,20 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       </div>
       <div class="qa">
         <div class="q">“The window is 12–18 months. What holds it after that?”</div>
-        <div class="a">Not a data flywheel — <a class="xref" data-jump="B10">B10</a> rules out cross-customer training. What holds is the <b>policy pack the bank wrote</b>, the clock engine that turns a promise into a deadline, a dossier a regulator can be handed, and 262 institutions already on the voice contract. Leaving means re-writing their own limits somewhere else.</div>
+        <div class="a">Not a data flywheel — <a class="xref" data-jump="B11">B11</a> rules out cross-customer training. What holds is the <b>policy pack the bank wrote</b>, the clock engine that turns a promise into a deadline, a dossier a regulator can be handed, and 262 institutions already on the voice contract. Leaving means re-writing their own limits somewhere else.</div>
       </div>
     </div>
     <p class="note" style="font-size:16px">Four more, because these are the four that decide the follow-up: <b>system of record, unit economics, the team, and what is left after the window.</b></p>
   </div>
-  <div class="colophon"><span>B4</span></div>
+  <div class="colophon"><span>B5</span></div>
 </section>
 
-<!-- ═══ B5 ═══ -->
+<!-- ═══ B6 ═══ -->
 <section class="slide backup">
-  <p class="eyebrow"><span class="n">Backup · B5</span> Guardrails · stage targets</p>
-  <h2>Eight guardrails. Five checkpoints. Three numbers.</h2>
+  <p class="eyebrow"><span class="n">Backup · B6</span> Guardrails · stage targets</p>
+  <h2>Twelve guardrails. Five checkpoints. Three numbers.</h2>
   <div class="chart">
-    <table class="xs">
+    <table class="xs pin">
       <tr><th style="width:30%">Guardrail (monthly)</th><th>Threshold and action</th></tr>
       <tr><td class="k">Regret rate by intent</td><td>Two consecutive weeks &gt; baseline +2pp → auto-downgrade to L2 <i>(assumption)</i></td></tr>
       <tr><td class="k">Two-sided monitoring</td><td>Watch “should have delegated but did not” as well as “delegated but should not have”</td></tr>
@@ -1459,8 +1695,12 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       <tr><td class="k">Drift detection</td><td>PSI shift or new intent clusters → auto-downgrade plus a labeling queue</td></tr>
       <tr><td class="k">Detection latency</td><td>Regulated-intent P99 ≤ 15 min <i>(assumption)</i> → alert on breach</td></tr>
       <tr><td class="k">“Please call us” rate</td><td>Baseline 22% <i>(assumption)</i>, must fall month over month</td></tr>
+      <tr><td class="k">Cohort parity gap</td><td>Approval, TTR and step-up drop-off gaps under 2pp <i>(assumption)</i> across language / 62+ / LMI tract / channel / stated vulnerability — a precondition for any nomination or policy diff</td></tr>
+      <tr><td class="k">Preventable-inbound rate</td><td>Share of mail an event-triggered notice could have prevented; reviewed quarterly, and the rule is withdrawn if that class does not fall</td></tr>
+      <tr><td class="k">Canary-nomination hit rate</td><td>Planted nominations known to be reject-worthy, correctly rejected: <b>must stay 100%</b> — one wrong signature suspends bulk signing</td></tr>
+      <tr><td class="k">Bulk-remediation error rate</td><td>Wrong refunds in post-hoc review: <b>0 is the precondition</b> for the next batch; every batch dual-signed, idempotent and reversible</td></tr>
     </table>
-    <table class="xs" style="margin-top:14px">
+    <table class="xs pin" style="margin-top:12px">
       <tr><th style="width:22%">Checkpoint</th><th style="width:26%">VARR</th><th style="width:26%">TTR</th><th>Trust</th></tr>
       <tr><td class="k">Pilot week 4 · shadow ends</td><td>not published; routing accuracy only</td><td>unchanged</td><td>recall ≥99.5% to enter; zero misses to exit</td></tr>
       <tr><td class="k">Pilot week 6 · L1 / L2</td><td style="color:#F5B544">10–20% band <i>(assumption)</i></td><td>observed only</td><td>zero critical errors · 100% file completeness</td></tr>
@@ -1468,14 +1708,14 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       <tr><td class="k">6 months post-GA</td><td style="color:#5FD3BE">25–35% <i>(assumption)</i></td><td>&lt;1 business day; autonomous &lt;15 min</td><td>sustained zero critical errors</td></tr>
       <tr><td class="k">6–9 months post-GA</td><td style="color:#5FD3BE">20 / 35 / 50% tiers</td><td>&lt;15 min as the norm</td><td>regret rate below the human QA error rate</td></tr>
     </table>
-    <p class="note" style="font-size:15px"><b>The one I would not trade:</b> any promise the AI makes becomes a clock when the letter is sent, cleared only when the fulfillment letter goes out. We do not claim to have redefined the metric — Zendesk has billed on Verified Resolution since 2026-05; ours is the same idea made <b>regulator-grade</b>.</p>
+    <p class="note" style="font-size:15px;max-width:1000px"><b>The one I would not trade:</b> any promise the AI makes becomes a clock the moment the letter is sent, cleared only when the fulfillment letter goes out — Zendesk's Verified Resolution, made <b>regulator-grade</b>.</p>
   </div>
-  <div class="colophon"><span>B5</span></div>
+  <div class="colophon"><span>B6</span></div>
 </section>
 
-<!-- ═══ B6 ═══ -->
+<!-- ═══ B7 ═══ -->
 <section class="slide backup">
-  <p class="eyebrow"><span class="n">Backup · B6</span> Trade-offs</p>
+  <p class="eyebrow"><span class="n">Backup · B7</span> Trade-offs</p>
   <h2>Reversible earns it. Irreversible never does.</h2>
   <div class="chart">
     <div class="colhead"><div class="ha">We choose</div><div></div><div class="hb">The price we accept</div></div>
@@ -1516,12 +1756,12 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
     </div>
     <p class="note" style="font-size:16px"><b>Also given up, on purpose:</b> assembled letters over fluent ones, an in-thread step-up link over in-app, a runtime of our own, and mega-bank deals — they build, and Sierra owns that story.</p>
   </div>
-  <div class="colophon"><span>B6</span></div>
+  <div class="colophon"><span>B7</span></div>
 </section>
 
-<!-- ═══ B7 ═══ -->
+<!-- ═══ B8 ═══ -->
 <section class="slide backup">
-  <p class="eyebrow"><span class="n">Backup · B7</span> Competitor detail · verified 2026-09</p>
+  <p class="eyebrow"><span class="n">Backup · B8</span> Competitor detail · verified 2026-09</p>
   <h2>Everyone has an agent. Nobody has the email case.</h2>
   <div class="chart">
     <table class="tight">
@@ -1541,17 +1781,17 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       <tr><td class="k">Eltropy · interface.ai</td><td>FS specialist</td><td>750+ credit unions and community banks; agentic platform</td><td>Authenticated channels; no email case model. Kasisto: 1,800+ bank intents but in-app and IVR only</td><td>not public</td></tr>
       <tr><td class="k">Amazon Connect · RingCentral</td><td>Other</td><td>Connect: chat and voice self-service, docs 2026-09-21</td><td>Email AI is draft-assist only; RingCentral is healthcare-first</td><td>—</td></tr>
     </table>
-    <p class="note" style="font-size:15px"><b>What the gaps mean:</b> every “missing” cell above is absence in public materials, not absence in the market. <b>Threat ranking:</b> big banks → Sierra × Salesforce+Fin; beachhead → Glia first, Eltropy second.</p>
+    <p class="note" style="font-size:15px"><b>What the gaps mean:</b> every “missing” cell above is absence in public materials, not absence in the market. <b>Threat ranking:</b> big banks → Sierra × Salesforce+Fin; beachhead → Glia first, Eltropy second. <b>On that same public material, everyone here automates the reply and no one proposes the rules</b> — the governance layer these agents run inside is still written by hand.</p>
   </div>
-  <div class="colophon"><span>B7</span></div>
+  <div class="colophon"><span>B8</span></div>
 </section>
 
-<!-- ═══ B8 · HARD NEVER ═══ -->
+<!-- ═══ B9 · HARD NEVER ═══ -->
 <section class="slide backup">
-  <p class="eyebrow"><span class="n">Backup · B8</span> Wave matrix · hard “never” list</p>
+  <p class="eyebrow"><span class="n">Backup · B9</span> Wave matrix · hard “never” list</p>
   <h2>What ships, what waits, and what has no switch.</h2>
   <div class="chart">
-    <div class="two" style="gap:22px">
+    <div class="two" style="gap:22px;flex:0 0 auto">
       <table class="tight">
         <tr><th style="width:30%">Category</th><th style="width:14%">Wave</th><th>Delegation design</th></tr>
         <tr><td class="k">General inquiries · 25%</td><td style="color:#5FD3BE">W1</td><td>L3 direct answers with policy grounding and source citation</td></tr>
@@ -1563,6 +1803,7 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
         <tr><td class="k">Payments / payoff · 15%</td><td style="color:#F5B544">W2</td><td>Letters automatic; changing autopay or payee account is R3 → authenticated channels</td></tr>
         <tr><td class="k">Complaints and vulnerable</td><td style="color:#F5B544">W2 deep</td><td>W1 is detect, warm handoff, clock registration; UDAAP wording review in W2</td></tr>
         <tr><td class="k">Off-brief · 5%</td><td style="color:#F2786E">Route only</td><td>Legal process, POA — recognize and route at L0, closure never automated</td></tr>
+        <tr><td class="k">A2A · cross-institution threads</td><td style="color:#F2786E">Waits · vision</td><td>An agent holds thread state and the evidence pack across institutions; negotiation and settlement stay human — on the “never” list below, not on the roadmap</td></tr>
       </table>
       <div class="panel no dense">
         <div class="ph"><span class="dot"></span>Hard “never” list · no graduation path</div>
@@ -1581,14 +1822,17 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
         </ul>
       </div>
     </div>
+    <div class="layerbar" style="margin-top:10px">
+      <div class="lrow add"><span class="tag">No switch · 8 cut directions</span><span class="items">AI adjudicating or moving money · treating customers differently by value or predicted behaviour · advice, marketing or cross-sell · cross-bank data · changing the form of a regulated document · anthropomorphism and sensitive inference · automated production changes · adjacent products outside the case</span></div>
+    </div>
     <p class="note" style="font-size:15.5px"><b>Sort order:</b> volume × determinability × identity achievability, then gated by regulatory risk. <b>Wave is delivery order, not importance.</b> The configuration layer must not offer a switch for anything on the “never” list — they are not off by default, they are absent.</p>
   </div>
-  <div class="colophon"><span>B8</span></div>
+  <div class="colophon"><span>B9</span></div>
 </section>
 
-<!-- ═══ B9 ═══ -->
+<!-- ═══ B10 ═══ -->
 <section class="slide backup">
-  <p class="eyebrow"><span class="n">Backup · B9</span> Pilot plan · go / no-go</p>
+  <p class="eyebrow"><span class="n">Backup · B10</span> Pilot plan · go / no-go</p>
   <h2>59 days to a signed day-59 report.</h2>
   <div class="chart">
     <svg viewBox="0 0 1128 176" role="img">
@@ -1652,15 +1896,15 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       </div>
     </div>
   </div>
-  <div class="colophon"><span>B9</span></div>
+  <div class="colophon"><span>B10</span></div>
 </section>
 
-<!-- ═══ B10 ═══ -->
+<!-- ═══ B11 ═══ -->
 <section class="slide backup">
-  <p class="eyebrow"><span class="n">Backup · B10</span> Full risk register</p>
-  <h2>Thirteen risks, each with evidence and a countermeasure.</h2>
+  <p class="eyebrow"><span class="n">Backup · B11</span> Full risk register</p>
+  <h2>Seventeen risks, each with evidence and a countermeasure.</h2>
   <div class="chart">
-    <table class="tight">
+    <table class="tight pin">
       <tr><th style="width:22%">Risk</th><th style="width:38%">Evidence</th><th>Countermeasure</th></tr>
       <tr><td class="k">01 · Missing a regulated intent</td><td>FDIC 2025: 136 Reg E violations, <b style="color:#F5B544">74% in error resolution</b>; the clock runs from receipt</td><td>Ingest-time high-recall detection, false positives preferred, backlog prioritized</td></tr>
       <tr><td class="k">02 · Hallucinated policy, fee or deadline</td><td>Reg E, Reg Z and UDAAP exposure; Moffatt v. Air Canada C$650.88</td><td>Locked templates, claim-level gate, amounts, dates and deadlines <b>only from system slots</b></td></tr>
@@ -1675,15 +1919,19 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       <tr><td class="k">11 · An intent stuck at L2</td><td>Graduation needs 90 days of samples — a low-volume intent may never collect them</td><td>Wave 1 selected on sample volume before any build; shadow run labels from day 1; L2 measured on assist rate and handle time, re-tested quarterly</td></tr>
       <tr><td class="k">12 · L2 approvals turn into rubber-stamping</td><td>One-click approvals drift toward auto-yes without reading</td><td>Watch the approve-without-edit rate, sample the approved files, re-test quarterly</td></tr>
       <tr><td class="k">13 · Step-up link collides with no-link training</td><td>Banks train customers to never click a link in an email</td><td>Single-use in-thread link plus an app/OTP path; locked template states both options</td></tr>
+      <tr><td class="k">14 · Sign-off fatigue</td><td>The whole governance claim rests on signers actually reading every diff</td><td>30-day rate limit after a rejection · four-proof evidence bar · three dissent cards · canary nominations — one wrong signature suspends bulk signing</td></tr>
+      <tr><td class="k">15 · A remediation batch refunds the wrong accounts</td><td>One wrong tape signature overpays thousands of accounts at once</td><td>Bank-error confirmation, dual-signed sample and total before each 1% → 10% → 100% batch; idempotent and reversible</td></tr>
+      <tr><td class="k">16 · Proactive outreach widens the phishing surface</td><td>Every outbound the bank sends trains customers to expect its mail</td><td>Locked templates and slots, account facts only, no credential links, on-file addresses, caps, opt-out; not-sending is logged too</td></tr>
+      <tr><td class="k">17 · The no-edit rate gets gamed</td><td>A team can raise approval quality by rubber-stamping rather than editing</td><td>Sampling and critical-miss review run independently of the no-edit rate; never the sole graduation input</td></tr>
     </table>
-    <p class="note" style="font-size:15px"><b>Not immunity:</b> CFPB guidance was withdrawn from 2025-05, but Reg E and Reg Z still stand with a private right of action and state attorneys general are stepping in — hence proactive AI identity disclosure regardless of requirement.</p>
+    <p class="note" style="font-size:14px;max-width:1010px"><b>Not immunity:</b> CFPB guidance was withdrawn in 2025-05, but Reg E and Reg Z still stand — hence proactive AI identity disclosure regardless of requirement.</p>
   </div>
-  <div class="colophon"><span>B10</span></div>
+  <div class="colophon"><span>B11</span></div>
 </section>
 
-<!-- ═══ B11 ═══ -->
+<!-- ═══ B12 ═══ -->
 <section class="slide backup assumptions">
-  <p class="eyebrow"><span class="n">Backup · B11</span> Every assumption in this deck</p>
+  <p class="eyebrow"><span class="n">Backup · B12</span> Every assumption in this deck</p>
   <h2>Seventeen numbers are assumptions. Here they are.</h2>
   <div class="chart">
     <div class="two" style="gap:22px">
@@ -1714,12 +1962,12 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
     </div>
     <p class="note" style="font-size:15px">The brief invites stated assumptions. Putting all seventeen on one page turns the weakest numbers in the deck into something controlled — rather than something to be caught out on.</p>
   </div>
-  <div class="colophon"><span>B11</span></div>
+  <div class="colophon"><span>B12</span></div>
 </section>
 
-<!-- ═══ B12 ═══ -->
+<!-- ═══ B13 ═══ -->
 <section class="slide backup">
-  <p class="eyebrow"><span class="n">Backup · B12</span> Packaging · price · motion</p>
+  <p class="eyebrow"><span class="n">Backup · B13</span> Packaging · price · motion</p>
   <h2>How it is packaged, priced and sold.</h2>
   <div class="chart">
     <div class="qgrid">
@@ -1742,7 +1990,7 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
     </div>
     <p class="note" style="font-size:16px"><b>All four are proposals, not commitments:</b> the price, the platform minimum and the sequencing are the three things a design partner would rewrite first.</p>
   </div>
-  <div class="colophon"><span>B12</span></div>
+  <div class="colophon"><span>B13</span></div>
 </section>
 
 <!-- ═══ B14 · DIFF ═══ -->
@@ -1808,6 +2056,7 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
 <section class="slide backup">
   <p class="eyebrow"><span class="n">Backup · B15</span> Admin walkthrough <a class="gh" href="https://github.com/wukun2005-gif/mailAutopilotForFS/" target="_blank" rel="noopener" title="Open the source repository on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg><span class="gl">github.com/wukun2005-gif/mailAutopilotForFS</span><span class="ar">↗</span></a></p>
   <h2>Admin: the bank writes the limits, not the model.</h2>
+  <p class="claim">The model drafts the diff; the bank signs it. Nominations, wave remediations and policy changes all arrive as configuration diffs — and every one of them has to clear the same gates.</p>
   <div class="fig">
     <div class="vcol">
       <div class="vidslot">
@@ -1903,6 +2152,59 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
   </div>
   <p class="note">If a case is ever lost it will be lost in the flow, not in the reasoning — which is why mid-flow halt rate is a first-line engineering metric, targeted below 0.5%.</p>
   <div class="colophon"><span>B17</span></div>
+</section>
+
+<!-- ═══ B18 · THE SEVEN RULES (review §6.9) ═══ -->
+<section class="slide backup">
+  <p class="eyebrow"><span class="n">Backup · B18</span> The seven rules every feature passes</p>
+  <h2>The AI proposes. The rule engine decides.</h2>
+  <div class="chart">
+    <table class="tight">
+      <tr><th style="width:25%">Rule</th><th>What it means in practice</th></tr>
+      <tr><td class="k">1 · Never in the decision path</td><td>The LLM never sits inside a decision. It advises — drafting, explaining, summarising, suggesting wording — it never judges; the rule engine decides.</td></tr>
+      <tr><td class="k">2 · The ratchet</td><td>Tightening is immediate and time-boxed: a same-day change may only tighten, and must carry an expiry. Any loosening runs backtest → shadow → dual sign. Policy content changes are dual-signed either way.</td></tr>
+      <tr><td class="k">3 · Predictions change wording, never outcomes</td><td>Customer value and churn never enter a decision — otherwise “the squeaky wheel gets the grease”, which is an ECOA and UDAAP problem. A consequence preview may reword a letter; it may not re-decide it.</td></tr>
+      <tr><td class="k">4 · ROI first, evidence decides</td><td>ROI decides who we build for first. Evidence decides whether it can be built at all — 90 days of samples, four proofs, zero critical misses.</td></tr>
+      <tr><td class="k">5 · New things are born in shadow</td><td>Humans set R and I levels. Candidates start shadow-classified and graduate normally. R3 never enters email; R4 stays L0 permanently.</td></tr>
+      <tr><td class="k">6 · Proactive outreach is account facts only</td><td>Locked templates plus slots, frequency caps, opt-out (statutory notices excepted), on-file addresses only, no marketing, no links asking for information or credentials. A decision <i>not</i> to send is logged too.</td></tr>
+      <tr><td class="k">7 · Fairness is a required answer</td><td>Every nomination and policy diff carries cohort impact across language / 62+ / LMI tract / channel / stated vulnerability. Cohort data is monitored only — no protected attributes collected. The engine is deterministic, so unfairness comes from its surroundings: identification error, step-up drop-off, or approver variance at L2.</td></tr>
+    </table>
+    <p class="note" style="font-size:15.5px"><b>Why these seven:</b> they are the difference between a demo and something a bank can put in front of an examiner. Each one is enforced in the prototype, not asserted on a slide — the engine refuses the action, the config layer has no switch, or the metric blocks the graduation.</p>
+  </div>
+  <div class="colophon"><span>B18</span></div>
+</section>
+
+<!-- ═══ B19 · THE ASK, ITEM BY ITEM (restored from the pre-review deck) ═══ -->
+<section class="slide backup">
+  <p class="eyebrow"><span class="n">Backup · B19</span> The ask, item by item</p>
+  <h2>Two partners. Fifty-nine days.</h2>
+  <div class="chart">
+    <div class="asklist">
+      <div class="askrow">
+        <div class="num">1</div>
+        <div>
+          <div class="h">Two design partners from the existing voice base</div>
+          <div class="d">Banks or credit unions with a public mailbox and an off-the-shelf core. Their own mail history is the test set from day one — and day 0 counts from signature, carried by the existing voice vendor approval and the TPRM evidence in <b><a class="xref" data-jump="B11">B11</a></b>.</div>
+        </div>
+      </div>
+      <div class="askrow">
+        <div class="num">2</div>
+        <div>
+          <div class="h">Two things from the platform</div>
+          <div class="d">An in-thread step-up for email, and dispute intake in the catalog.</div>
+        </div>
+      </div>
+      <div class="askrow">
+        <div class="num am">3</div>
+        <div>
+          <div class="h">One commercial question I want help answering</div>
+          <div class="d">A per-resolution price — so the money lands in the layer where the work happens.</div>
+        </div>
+      </div>
+    </div>
+    <p class="note">The commercial question is the one that decides the packaging — see <b><a class="xref" data-jump="B13">B13</a></b>. Everything above is what we would ask a design partner for on day 0.</p>
+  </div>
+  <div class="colophon"><span>B19</span></div>
 </section>
 
 </div>
@@ -2079,6 +2381,8 @@ addEventListener('keydown',function(e){
   const ae=document.activeElement;
   const onBtn=ae&&ae.tagName==='BUTTON';
   if(onBtn&&(e.key===' '||e.key==='Enter'))return;
+  /* a focused slider owns its arrows — they must not flip the deck */
+  if(ae&&ae.tagName==='INPUT')return;
   if(ae&&ae.tagName==='VIDEO'&&[' ','ArrowDown','ArrowUp','ArrowLeft','ArrowRight','Home','End','PageUp','PageDown'].indexOf(e.key)>-1)return;
   if(e.key==='ArrowDown'||e.key==='PageDown'||e.key==='ArrowRight'||e.key===' '){e.preventDefault();show(i+1);}
   if(e.key==='ArrowUp'||e.key==='PageUp'||e.key==='ArrowLeft'){e.preventDefault();show(i-1);}
@@ -2116,15 +2420,26 @@ document.addEventListener('click',function(e){
    always from the current page. Jump anywhere and the tour continues there;
    toggle off and it goes quiet; toggle on and it resumes from the current page. */
 var pvData=null, pvPresent=false, pvPlaying=false, pvPaused=false, pvArmed=false,
-    pvSteps=null, pvStep=-1, pvTimers=[], pvVideo=null, pvStopping=false, pvTurn=0;
+    pvSteps=null, pvStep=-1, pvTimers=[], pvVideo=null, pvStopping=false, pvTurn=0,
+    pvKey=null;   /* which page pvSteps belongs to, so a resume after a jump
+                     cannot play one page's audio against another's caption */
+/* ── per-page seek slider + narration speed ──
+   The slider covers only this page's voice clips, one cumulative timeline;
+   the demo film is not counted (it plays at its own fixed rate and has its
+   own controls) — while the film runs the slider simply stays put. */
+var pvRate=1.25, pvRates=[1,1.25,1.5,1.75,2],
+    pvDurCache={},          /* clip filename → seconds, survives page jumps */
+    pvPageSteps=null, pvPageDurs=[], pvStartAt=0, pvDragging=false;
 var pvAudio=new Audio(); pvAudio.preload='auto';
 /* step data rides in present.js (works on file:// and http); the json file is
    the rebuild source and a fetch fallback for editors who only ship that */
 if(typeof pvPresentData!=='undefined')pvData=pvPresentData;
-else fetch('assets/voice/present.json').then(function(r){return r.json();}).then(function(j){pvData=j;}).catch(function(){pvData=null;});
+else fetch('assets/voice/present.json').then(function(r){return r.json();}).then(function(j){pvData=j;if(typeof pvSliderBind==='function')pvSliderBind();}).catch(function(){pvData=null;});
 function pvColKey(sl){
   const c=sl&&sl.querySelector('.colophon span');
-  const m=c&&c.textContent.match(/(\d+)\s*\/\s*14/);
+  /* denominator read as a wildcard: it moved 14 → 15 with the page count and
+     a pinned "14" made every key null — Present went silent with no error */
+  const m=c&&c.textContent.match(/(\d+)\s*\/\s*\d+/);
   return m?m[1]:null;
 }
 function pvClearTimers(){pvTimers.forEach(clearTimeout);pvTimers=[];}
@@ -2135,6 +2450,84 @@ function pvBtn(){
   const t=document.getElementById('ptoggle');
   t.textContent=pvPresent?'Auto-Present ON':'Auto-Present OFF';
   t.classList.toggle('off',!pvPresent);
+}
+function pvFmt(s){s=Math.max(0,Math.round(s||0));return Math.floor(s/60)+':'+('0'+(s%60)).slice(-2);}
+function pvPageTotal(){let t=0;pvPageDurs.forEach(function(d){if(isFinite(d))t+=d;});return t;}
+/* seconds into the page's narration: full clips before pvStep + within the current one */
+function pvElapsed(){
+  if(!pvPageSteps||pvSteps!==pvPageSteps||pvStep<0||pvStep>pvPageDurs.length)return 0;
+  let acc=0;
+  for(let k=0;k<pvStep;k++){if(isFinite(pvPageDurs[k]))acc+=pvPageDurs[k];}
+  return acc+(pvAudio.currentTime||0);
+}
+function pvSliderSet(v){
+  const sl=document.getElementById('pslider');
+  if(!pvDragging)sl.value=Math.max(0,Math.min(pvPageTotal(),v));
+  document.getElementById('ptime').textContent=pvFmt(v)+' / '+pvFmt(pvPageTotal());
+}
+function pvSliderRefresh(){
+  const sl=document.getElementById('pslider');
+  const total=pvPageTotal();
+  if(!pvPageSteps||!(total>0)){sl.disabled=true;sl.value=0;document.getElementById('ptime').textContent='';return;}
+  sl.disabled=false;sl.max=total;
+  pvSliderSet(pvDragging?parseFloat(sl.value):pvElapsed());
+}
+/* bind the slider to the page being shown — runs whether or not the tour is on */
+function pvSliderBind(){
+  const key=pvColKey(slides[i]);
+  pvPageSteps=(pvData&&key)?(pvData[key]||null):null;
+  pvPageDurs=pvPageSteps?pvPageSteps.map(function(){return NaN;}):[];
+  pvStartAt=0;
+  if(!pvPageSteps){pvSliderRefresh();return;}
+  pvPageSteps.forEach(function(st,k){
+    const c=st.clip;
+    if(pvDurCache[c]!=null){pvPageDurs[k]=pvDurCache[c];return;}
+    const a=new Audio();a.preload='metadata';
+    a.onloadedmetadata=function(){pvDurCache[c]=a.duration;pvPageDurs[k]=a.duration;pvSliderRefresh();};
+    a.onerror=function(){pvPageDurs[k]=0;pvSliderRefresh();};
+    a.src='assets/voice/'+c;
+  });
+  pvSliderRefresh();
+}
+/* page-relative seconds → {step, offset inside that clip} */
+function pvPosToSeg(pos){
+  let acc=0,n=0,off=0;
+  for(;n<pvPageSteps.length;n++){
+    const d=isFinite(pvPageDurs[n])?pvPageDurs[n]:0;
+    if(pos<=acc+d||n===pvPageSteps.length-1){off=Math.max(0,Math.min(d,pos-acc));break;}
+    acc+=d;
+  }
+  return {n:n,off:off};
+}
+/* reschedule the screenshot tour after a seek or a speed change */
+function pvRestep(){
+  if(pvStep<0||!pvSteps||pvStep>=pvSteps.length)return;
+  if(pvVideo||!pvPlaying||pvPaused)return;
+  const st=pvSteps[pvStep];
+  if(st&&st.shots&&st.shots.length){pvClearTimers();pvShotTour(slides[i],st,pvStep,pvAudio.currentTime||0);}
+}
+function pvSeek(pos){
+  pvDragging=false;
+  if(!pvPageSteps||!pvPageSteps.length)return;
+  const total=pvPageTotal();
+  pos=Math.max(0,Math.min(total,pos));
+  if(!pvPlaying){pvStartAt=pos;pvSliderSet(pos);return;}   /* remembered for the next start */
+  const key=pvColKey(slides[i]);
+  if(pvKey!==key||pvSteps!==pvPageSteps){pvKey=key;pvSteps=pvPageSteps;pvStep=-1;}  /* paused jump: rebind */
+  const seg=pvPosToSeg(pos);
+  if(seg.n===pvStep&&!pvVideo){                             /* same clip: seek in place */
+    try{pvAudio.currentTime=seg.off;}catch(e){}
+    pvRestep();
+  }else{
+    pvStepGo(seg.n,seg.off);
+    if(pvPaused)pvAudio.pause();
+  }
+  pvSliderSet(pos);
+}
+/* timeupdate drives the slider; frozen while the demo film owns the screen */
+function pvTick(){
+  if(pvDragging||pvVideo||!pvPageSteps||pvStep<0||pvStep>pvPageDurs.length)return;
+  pvSliderSet(pvElapsed());
 }
 /* stop everything; quiet=true also drops the tour (used by toggle-off) */
 function pvStop(quiet){
@@ -2152,12 +2545,13 @@ function pvStop(quiet){
   pvBtn();
 }
 function pvOnShow(){
+  pvSliderBind();                       /* every page change re-bases the slider */
   if(!pvPresent||!pvPlaying)return;
   pvStop(false);                       /* new page: drop the old audio/film */
   if(pvPaused)return;                  /* jumped while paused: stay quiet */
   pvStartPage();
 }
-/* begin from the current page; outside 02–13 jump to 02/14 first */
+/* begin from the current page; outside the voiced pages 02–14, jump to 02 first */
 function pvBegin(){
   if(!pvData){pvCap('voice files missing');return;}
   if(!pvData[pvColKey(slides[i])]){show(1);return;}
@@ -2166,10 +2560,19 @@ function pvBegin(){
 function pvStartPage(){
   if(!pvPresent||!pvPlaying||pvPaused||!pvData)return;
   const key=pvColKey(slides[i]);
+  pvKey=key;
   pvSteps=pvData[key]||null;
   pvStep=-1;
-  if(!pvSteps){pvCap('');return;}      /* outside 02–13: quiet until re-entry */
-  pvStepGo(0);
+  if(pvPageSteps!==pvSteps)pvSliderBind();   /* data arrived after the last show() */
+  if(!pvSteps){pvCap('');return;}      /* outside 02–14: quiet until re-entry */
+  /* a slider drag while stopped parks a start position for this page */
+  const at=(pvPageSteps===pvSteps)?pvStartAt:0;
+  pvStartAt=0;
+  if(at>0){
+    const seg=pvPosToSeg(at);
+    pvSliderSet(at);
+    pvStepGo(seg.n,seg.off);
+  }else{pvSliderSet(0);pvStepGo(0);}
 }
 function pvShotImg(sl,name){
   if(name==='shot-letter')return sl.querySelector('figure.zoomshot img');
@@ -2179,7 +2582,7 @@ function pvShotImg(sl,name){
   const scr=sl.querySelectorAll('.screens.four .scr')[k];
   return scr?scr.querySelector('img'):null;
 }
-function pvStepGo(n){
+function pvStepGo(n,seek){
   pvClearTimers();
   pvTurn++;
   if(pvVideo){pvVideo.onended=null;pvVideo.pause();pvVideo=null;}
@@ -2188,7 +2591,7 @@ function pvStepGo(n){
   pvStep=n;
   if(!pvSteps||n>=pvSteps.length){     /* page done: next page, or tour ends */
     const key=pvColKey(slides[i]);
-    if(key==='13'){pvPlaying=false;pvPaused=false;pvCap('');pvBtn();return;}
+    if(key==='14'){pvPlaying=false;pvPaused=false;pvCap('');pvBtn();return;}  /* 14 is the last voiced page */
     show(i+1);return;
   }
   const st=pvSteps[n], sl=slides[i];
@@ -2199,14 +2602,25 @@ function pvStepGo(n){
   };
   pvAudio.onerror=function(){if(pvPlaying&&!pvPaused)pvStepGo(n+1);};
   pvAudio.src='assets/voice/'+st.clip;
-  const p=pvAudio.play();
-  if(p&&p.catch)p.catch(function(){pvPaused=true;pvBtn();});
-  if(st.shots&&st.shots.length)pvShotTour(sl,st,n);
+  try{pvAudio.playbackRate=pvRate;}catch(e){}
+  const off=seek>0?seek:0;
+  if(off>0){                           /* the slider dropped us mid-clip */
+    const jump=function(){try{pvAudio.currentTime=off;}catch(e){}};
+    if(pvAudio.readyState>0)jump();
+    else pvAudio.addEventListener('loadedmetadata',jump,{once:true});
+  }
+  if(!pvPaused){                       /* seeking while paused: load + caption only */
+    const p=pvAudio.play();
+    if(p&&p.catch)p.catch(function(){pvPaused=true;pvBtn();});
+    if(st.shots&&st.shots.length)pvShotTour(sl,st,n,off);
+  }
 }
-function pvShotTour(sl,st,n){
-  /* one screenshot at a time, equal shares of the narration; restart-safe.
-     tk pins every timer to this step on this page — without it a timer from
-     the previous page fires under the same step number and opens its shot. */
+function pvShotTour(sl,st,n,off){
+  /* one screenshot at a time, equal shares of the remaining narration;
+     restart-safe. tk pins every timer to this step on this page — without it
+     a timer from the previous page fires under the same step number and opens
+     its shot. off = seconds already consumed by a seek; each delay is divided
+     by playbackRate so a 2× narration walks the tour at 2× too. */
   const tk=pvTurn;
   function alive(){return pvPlaying&&!pvPaused&&pvStep===n&&tk===pvTurn;}
   function imgs(){return st.shots.map(function(s){return pvShotImg(sl,s);}).filter(Boolean);}
@@ -2214,17 +2628,20 @@ function pvShotTour(sl,st,n){
     if(!alive())return;
     const list=imgs();
     if(!list.length||!(dur>0))return;
+    const rem=(dur-Math.min(off||0,dur))*1000;
+    if(!(rem>0))return;
+    const rate=(pvAudio.playbackRate>0)?pvAudio.playbackRate:1;
     /* first shot waits out the intro line instead of popping instantly */
-    const lead=Math.min(4000,(dur*1000)*0.15);
-    const share=(dur*1000-lead)/list.length;
+    const lead=Math.min(4000,rem*0.15);
+    const share=(rem-lead)/list.length;
     list.forEach(function(img,k){
       pvLater(function(){
         if(!alive())return;
         if(lb.classList.contains('on'))closeLb();
         openLb(img,'Click outside the picture or press Esc to close');
-      },lead+k*share);
+      },(lead+k*share)/rate);
     });
-    pvLater(function(){if(pvStep===n&&tk===pvTurn&&lb.classList.contains('on'))closeLb();},dur*1000);
+    pvLater(function(){if(pvStep===n&&tk===pvTurn&&lb.classList.contains('on'))closeLb();},rem/rate);
   }
   if(pvAudio.duration>0)cycle(pvAudio.duration);
   else pvAudio.onloadedmetadata=function(){cycle(pvAudio.duration);};
@@ -2266,12 +2683,20 @@ document.getElementById('pplay').addEventListener('click',function(){
   if(!pvPlaying){pvPlaying=true;pvPaused=false;pvBegin();}
   else if(pvPaused){
     pvPaused=false;
-    if(pvVideo)pvVideo.play();
-    else if(pvAudio.src&&(pvAudio.paused)){ /* shots step: restart it cleanly */
-      const st=pvSteps&&pvSteps[pvStep];
-      if(st&&st.shots&&st.shots.length)pvStepGo(pvStep);
-      else pvAudio.play();
-    } else pvStartPage();
+    if(pvVideo){pvVideo.play();}
+    else{
+      const key=pvColKey(slides[i]);
+      /* a jump while paused ran pvStop, which dropped the caption but left
+         pvSteps pointing at the page it came from. Restart that page if the
+         steps are gone or stale; otherwise restore the caption before audio,
+         or the resume plays with no caption at all. */
+      if(!pvSteps||pvKey!==key){pvStartPage();}
+      else{
+        const st=pvSteps[pvStep];
+        if(st&&st.shots&&st.shots.length)pvStepGo(pvStep,pvAudio.currentTime||0);
+        else{pvCap(st?st.caption:'');pvAudio.play();}
+      }
+    }
   }
   else{pvPaused=true;pvAudio.pause();if(pvVideo)pvVideo.pause();pvClearTimers();}
   pvBtn();
@@ -2282,6 +2707,26 @@ document.getElementById('ptoggle').addEventListener('click',function(){
   else{pvPlaying=true;pvPaused=false;pvBegin();}
   pvBtn();
 });
+/* narration speed: 1 → 1.25 → 1.5 → 1.75 → 2, voice only — the demo film
+   keeps its own fixed rate and controls; a running tour reschedules its
+   screenshot timers so the pictures keep pace with the faster voice */
+document.getElementById('pspeed').addEventListener('click',function(){
+  pvRate=pvRates[(pvRates.indexOf(pvRate)+1)%pvRates.length];
+  try{pvAudio.playbackRate=pvRate;}catch(e){}
+  document.getElementById('pspeed').textContent=pvRate+'×';
+  pvRestep();
+});
+/* the slider: live time readout while dragging, the actual jump on release
+   (input fires per movement, change fires once at the end, arrow keys fire both) */
+document.getElementById('pslider').addEventListener('input',function(e){
+  pvDragging=true;
+  document.getElementById('ptime').textContent=
+    pvFmt(parseFloat(e.target.value))+' / '+pvFmt(pvPageTotal());
+});
+document.getElementById('pslider').addEventListener('change',function(e){
+  pvSeek(parseFloat(e.target.value));
+});
+pvAudio.ontimeupdate=pvTick;
 /* autoplay rules need one gesture: the first click/keypress arms the tour */
 function pvArmOnce(e){
   if(navigator.webdriver)return;      /* automated checks drive clicks; no hijack */
