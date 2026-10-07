@@ -34,8 +34,6 @@ Differentiators (vs. per-topic style reply governance and horizontal Copilots):
 - **Autonomy is earned, not assumed** — per-intent graduation (backtest + sampling + negative relabel + dual sign-off), auto-degradation on drift. Positioning: *"They govern what the AI says, topic by topic. We govern what it says, does, and to whom — inside every email."*
 - **Design-time proposes, runtime stays deterministic** — the LLM never decides a live email; it reads history and config to *nominate* delegation grants, policy diffs, intent candidates, and preventable-inbound finds, each earned through backtest → shadow → Product + Compliance dual sign. Humans sign the diff, not every email. The ratchet: tightening can take effect same-day with auto-expiry; loosening must earn its way.
 
-Explicitly out of scope: dispute/credit/adverse-action adjudication, investment or insurance advice, legal-document responses, autonomous high-impact (R3) writes over email, private customization for large banks.
-
 ## Run it
 
 Requires Node ≥ 22.22.0.
