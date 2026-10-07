@@ -22,7 +22,7 @@ This product targets the intersection of three problems, not just "slow replies"
 
 **Thread = case.** Every email thread is handled as a case with a statutory clock, an identity-assurance level, and a sealed decision dossier. AI does all the determinable work, bank policy draws the boundary through configurable rules, and humans step in only at consequential decision points.
 
-![Email case flow before vs after](public/email-flow-before-after.svg)
+![Email case flow before vs after](public/email-flow-before-after.svg?v=2)
 
 Differentiators (vs. per-topic style reply governance and horizontal Copilots):
 
