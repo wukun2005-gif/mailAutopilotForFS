@@ -51,8 +51,6 @@ npm run e2e:demo # demo-only tests
 npm run eval     # promptfoo safety evals
 ```
 
-No separate backend needed: `server/` is a Vite dev middleware (provider settings + live-LLM proxy) that loads with `npm run dev`.
-
 ## Screens & demo
 
 | # | Screen | What to look at |
