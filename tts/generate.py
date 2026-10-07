@@ -39,10 +39,10 @@ LANGS = ("zh", "en")
 # Kokoro's Mandarin phonemisation is broken (its espeak backend reads 第 as
 # "tˈi"), Piper's Chinese frontend reads it correctly.
 VOICES = {
-    "zh": ("piper", "zh_CN-huayan-medium.onnx", 1.0),
+    "zh": ("piper", "zh_CN-chaowen-medium.onnx", 1.0),
     "en": ("kokoro", "af_heart", 0.95),
 }
-VOICE_NAMES = {"zh": "Piper zh_CN-huayan-medium", "en": "Kokoro af_heart"}
+VOICE_NAMES = {"zh": "Piper zh_CN-chaowen-medium", "en": "Kokoro af_heart"}
 KOKORO_MODELS = {"en": ("kokoro-v1.0.onnx", "voices-v1.0.bin")}
 LANG_CODE = {"zh": "cmn", "en": "en-us"}
 # One ONNX session per language, inference serialised: this Mac has no GPU and
@@ -191,7 +191,7 @@ def _piper(model: str, speed: float):
         from piper.config import SynthesisConfig
 
         _piper_cache[model] = (
-            PiperVoice.load(str(MODELS_DIR / model)),
+            PiperVoice.load(str(MODELS_DIR / model), download_dir=MODELS_DIR),
             SynthesisConfig(length_scale=speed),
         )
     return _piper_cache[model]

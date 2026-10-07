@@ -1,347 +1,347 @@
 # 一键演示解说词（中文）
 
-由 `npm run tts` 从 src/demo/scripts.ts 与 src/locales/zh/demo.json 生成，配音 Piper zh_CN-huayan-medium（本地离线合成）。音频路径 public/tts/zh/<key>.mp3。
+由 `npm run tts` 从 src/demo/scripts.ts 与 src/locales/zh/demo.json 生成，配音 Piper zh_CN-chaowen-medium（本地离线合成）。音频路径 public/tts/zh/<key>.mp3。
 
 ## trailer90s · 90 秒预告
 
-### t0 · intro · caption 5000 ms · audio 5.3s · trailer.intro
+### t0 · intro · caption 5000 ms · audio 7.8s · trailer.intro
 
 金融行业邮件自动工作流——从邮件到达，到调查、审批、回复。
 
-### t4 · intake · caption 7000 ms · audio 6.8s · trailer.intake · pointer s1.thread.in
+### t4 · intake · caption 7000 ms · audio 8.7s · trailer.intake · pointer s1.thread.in
 
 一封未认证的争议邮件在到达时即完成意图识别、立案和起钟——受理环节不需要人。
 
-### t8 · refund · caption 6000 ms · audio 12.2s · trailer.refund · pointer s1.thread.out
+### t8 · refund · caption 6000 ms · audio 17.6s · trailer.refund · pointer s1.thread.out
 
 核验完成，身份升到 I3，同一条规则重新算，透支费 35 美元自动退回客户账户。回信还是三段拼装：固定模板、系统槽位、生成语句。
 
-### t11 · metrics · caption 5000 ms · audio 9.2s · trailer.metrics · pointer s3.metrics
+### t11 · metrics · caption 5000 ms · audio 11.5s · trailer.metrics · pointer s3.metrics
 
 成功指标与护栏：三个主指标和十二条护栏全部显示数值——目标列就是试点阶段门槛，月度评审口径。
 
-### t16 · fraud · caption 5000 ms · audio 8.7s · trailer.fraud · pointer s3.fraud.requested
+### t16 · fraud · caption 5000 ms · audio 10.6s · trailer.fraud · pointer s3.fraud.requested
 
 一封商业邮件诈骗被隔离：它要求的联系方式变更在结构上不可达，客户只通过档案内通道被通知。
 
-### t19 · builder · caption 5000 ms · audio 6.6s · trailer.builder · pointer s4.matrix.never
+### t19 · builder · caption 5000 ms · audio 8.4s · trailer.builder · pointer s4.matrix.never
 
 自主权是“挣来”的：回测、抽样、双签——而且最硬的格子在配置层根本打不开。
 
-### t19b · design · caption 8000 ms · audio 18.3s · trailer.designTime · pointer s4.nom.NOM-B
+### t19b · design · caption 8000 ms · audio 23.0s · trailer.designTime · pointer s4.nom.NOM-B
 
 系统运行三十天之后开始自己变好：AI 读人批过的案件，把"同证据同结论"的计算题块提名放权，证据卡摆在签字桌上。产品与合规签的是一份配置 diff——人签 diff，不签每封信。收紧可以即时生效，放宽必须走流程。
 
-### t20 · outro · caption 5000 ms · audio 5.0s · trailer.outro
+### t20 · outro · caption 5000 ms · audio 6.9s · trailer.outro
 
 法律要求确定的地方确定，证据挣到的地方自动，全程可审计。
 
 ## email1 · 邮件 1 · 透支费两拍
 
-### 1-3 · day0 · caption 6000 ms · audio 10.6s · email1.publicMailbox · pointer s1.thread.in
+### 1-3 · day0 · caption 6000 ms · audio 14.2s · email1.publicMailbox · pointer s1.thread.in
 
 Day 0：一封邮件从不在档案里的公共 Gmail 地址进来。发件地址没在客户档案中，只能判到 I1——系统还不知道这封信是谁写的。
 
-### 1-4 · day0 · caption 6000 ms · audio 13.7s · email1.lockedTemplate · pointer s1.thread.out
+### 1-4 · day0 · caption 6000 ms · audio 18.7s · email1.lockedTemplate · pointer s1.thread.out
 
 身份没确认之前，这封回信里没有任何链接、不带账户信息，只让客户到 App 里完成核验——退费这件事一个动作都没做。凡是能碰账户的操作，都收在核验之后的 App 里。
 
-### 1-6 · day0 · caption 6000 ms · audio 23.1s · email1.lockedCell · pointer s1.autonomy.cell.I1
+### 1-6 · day0 · caption 6000 ms · audio 31.1s · email1.lockedCell · pointer s1.autonomy.cell.I1
 
 先看放权矩阵里这一条：动作风险是 R2——阈值内退费，属于可逆的低影响写。横轴是身份保障四档，本案例现在站在 I1 这一列。I1 只剩发件域名可信，关联不到具体账户，所以这一列不授予任何放权：这一封不自动退钱、不自动写正文，只发一封固定模板引导去手机核验。
 
-### 1-7 · day0 · caption 6000 ms · audio 12.1s · email1.traceBefore · pointer s1.trace.entry.2
+### 1-7 · day0 · caption 6000 ms · audio 14.7s · email1.traceBefore · pointer s1.trace.entry.2
 
 同一段判定的第一次结果也进了决策卷宗：这一条写着「身份等级 I1」，紧跟其后的是当时缺的三条判据。改判之前的样子，就存档在这一条里。
 
-### 1-10 · stepup · caption 5000 ms · audio 9.3s · email1.caseCard · pointer s1.phone.casecard
+### 1-10 · stepup · caption 5000 ms · audio 13.0s · email1.caseCard · pointer s1.phone.casecard
 
 核验在同一封邮件线程里完成：App 推一条通知，验证码发到档案内手机号，六位码填进去，案件继续自动往下走。
 
-### 1-14 · stepup · caption 6000 ms · audio 17.4s · email1.identityUp · pointer s1.identity.rise
+### 1-14 · stepup · caption 6000 ms · audio 21.5s · email1.identityUp · pointer s1.identity.rise
 
 核验在同一个对话里完成，身份就地重新定档：面板右上角 I1 划掉、变成 I3。判据没有全绿——发件地址仍然不在客户档案里，红叉还在——但'本次对话已完成核验'和'已登录的安全消息会话'这两条过了。
 
-### 1-15 · stepup · caption 6000 ms · audio 17.6s · email1.i3cell · pointer s1.autonomy.cell.I3
+### 1-15 · stepup · caption 6000 ms · audio 24.0s · email1.i3cell · pointer s1.autonomy.cell.I3
 
 还是同一个格子、同一条规则，标记挪到了 I3 这一列，格值从'不放权'变成 L3 自动执行——因为身份这条轴变了，别的什么都没变。这一格只在白名单意图、金额次数在阈值内、并且该意图已毕业时才可能到 L3。
 
-### 1-16 · stepup · caption 6000 ms · audio 13.6s · email1.graduationCap · pointer s1.autonomy.cap
+### 1-16 · stepup · caption 6000 ms · audio 17.9s · email1.graduationCap · pointer s1.autonomy.cap
 
 矩阵还有第三根轴：毕业封顶。这条意图（透支费退费）已经毕业到 L3，才可能给到 L3 自动执行；从没毕业的意图，天花板就是 L0，身份再可信也只能转人工。
 
-### 1-17 · stepup · caption 6000 ms · audio 15.6s · email1.traceAfter · pointer s1.trace.entry.7
+### 1-17 · stepup · caption 6000 ms · audio 20.3s · email1.traceAfter · pointer s1.trace.entry.7
 
 核验做完，同一段代码再跑一次，卷宗里多了这一条：「身份等级 I3」，缺的判据只剩一条（发件地址仍不在档案里）。更上面那条是第一次判的 I1——两条合起来，就是这次改判的机器记录。
 
-### 1-19 · refund · caption 6000 ms · audio 19.2s · email1.i3refund · pointer s1.thread.out
+### 1-19 · refund · caption 6000 ms · audio 25.3s · email1.i3refund · pointer s1.thread.out
 
 同一套规则用新的身份重新算一次：这一格现在允许自动放行，35 美元透支费退到客户账上，回信还是三段拼装——固定模板、系统槽位、生成语句。发出去之前每封信都要过一遍合规检查，带 AI 身份披露和转人工入口。
 
-### 1-20 · refund · caption 6000 ms · audio 8.1s · email1.provenance · pointer s1.thread.out
+### 1-20 · refund · caption 6000 ms · audio 12.1s · email1.provenance · pointer s1.thread.out
 
 同一封信按来源上色：蓝色是固定模板，绿色是系统槽位（姓名、金额、日期、案件号），紫色是生成语句。
 
-### 1-22 · refund · caption 6000 ms · audio 14.6s · email1.outboundGate · pointer s1.trace.entry.11
+### 1-22 · refund · caption 6000 ms · audio 19.1s · email1.outboundGate · pointer s1.trace.entry.11
 
 信发出去之前还要过最后一道外发检查：缺 AI 披露、缺转人工入口就直接拦下。这一条说明这封退费确认信两条都齐，放行；真被拦下的信，卷宗里也会留下自己那一条。
 
-### 1-24 · verified · caption 5000 ms · audio 10.3s · email1.verified · pointer s1.trace.entry@last
+### 1-24 · verified · caption 5000 ms · audio 16.6s · email1.verified · pointer s1.trace.entry@last
 
 14 天没有新邮件、没有转人工、质检也没有推翻——审计轨上多出一条：计一次 verified 自主结案。卷宗封存留痕，人工改过的都回流成样本。
 
-### 1-27 · day21 · caption 6000 ms · audio 10.0s · email1.secondRequest · pointer s1.thread.in
+### 1-27 · day21 · caption 6000 ms · audio 14.6s · email1.secondRequest · pointer s1.thread.in
 
 Day 21，同一封线程里又来一封：客户第二次要求退还透支费。系统把它并进同一个案子，不新建；身份还是 I3，没有降。
 
-### 1-28 · day21 · caption 5000 ms · audio 11.4s · email1.holding · pointer s1.thread.out
+### 1-28 · day21 · caption 5000 ms · audio 12.9s · email1.holding · pointer s1.thread.out
 
 同一天银行回了第二封：先告诉客户已经收到，主管一个工作日内答复，并且明确写了可以要求人工复议。这一封不承诺结果。
 
-### 1-30 · day21 · caption 6000 ms · audio 15.8s · email1.cellDowngrade · pointer s1.autonomy.cell.I3
+### 1-30 · day21 · caption 6000 ms · audio 21.4s · email1.cellDowngrade · pointer s1.autonomy.cell.I3
 
 21 天后再看同一个格子：身份还是 I3，标记没动，但格值掉到 L2 一键审批。这次变的不是身份，是政策求值结果——放权级别取几个维度的最小值，任何一个维度收紧就降一级。
 
-### 1-33 · day21 · caption 7000 ms · audio 16.5s · email1.secondWaiver · pointer s2.policy.row.OD-1.FAIL
+### 1-33 · day21 · caption 7000 ms · audio 21.7s · email1.secondWaiver · pointer s2.policy.row.OD-1.FAIL
 
 为什么不自动退：透支费退还规则第一条要求“近 12 个月退免记录 ≤ 1 次”，现在这一栏是 2，所以这条判不通过，格子从自动放行降到一键审批。边界在政策求值结果，不在模型心情。
 
-### 1-33a · day21 · caption 6000 ms · audio 20.9s · email1.previewConsequence · pointer s2.draft.preview
+### 1-33a · day21 · caption 6000 ms · audio 32.1s · email1.previewConsequence · pointer s2.draft.preview
 
 写解释信时，AI 不替人做决定，只做写作助手：同样结论下，当前措辞的 14 天复联率是 34%，加上一句低余额提醒的解释句预计降到 9%——依据是 412 个同类结案线程，不是客户值多少钱。一键插入只改连接措辞，每一次编辑照样进轨迹。
 
-### 1-35 · day21 · caption 5000 ms · audio 9.1s · email1.l2queue · pointer s3.approvalcard
+### 1-35 · day21 · caption 5000 ms · audio 11.8s · email1.l2queue · pointer s3.approvalcard
 
 解释草稿进主管队列——客户始终保留人工复议的入口。发出去同样要过合规检查，带披露和转人工入口。
 
-### 1-38 · day21 · caption 6000 ms · audio 10.8s · email1.explanationSent · pointer s1.thread.out
+### 1-38 · day21 · caption 6000 ms · audio 12.3s · email1.explanationSent · pointer s1.thread.out
 
 主管一点批准，解释函当场发回客户这一封线程：写清了为什么这次不能自动退、依据是哪一条、以及仍然可以要求复议。
 
-### 1-41 · day21 · caption 6000 ms · audio 10.6s · email1.secondClosed · pointer s1.trace.entry@last
+### 1-41 · day21 · caption 6000 ms · audio 15.2s · email1.secondClosed · pointer s1.trace.entry@last
 
 解释函发出 14 天没有新来件，审计轨上再多一条：第二拍关闭，按人工办结计入报表，纠正和修改回流样本，卷宗封存留痕。
 
-### 1-42 · outro · caption 6000 ms · audio 5.8s · email1.outro · pointer s1.thread
+### 1-42 · outro · caption 6000 ms · audio 8.5s · email1.outro · pointer s1.thread
 
 同一意图、同一客户，两种结局——因为那一格的值变了，而每次变化都说得清。
 
 ## email2 · 邮件 2 · Reg E 争议跨 45 天
 
-### 2-3 · day0 · caption 7500 ms · audio 11.8s · email2.intake · pointer s2.clockstrip
+### 2-3 · day0 · caption 7500 ms · audio 17.4s · email2.intake · pointer s2.clockstrip
 
 Day 0 早上 8:14：一封邮件两个意图——新卡配送状态和 247.18 美元争议。到达即立案，Reg E 法定时钟立刻起算，不等身份核验。
 
-### 2-6 · day1 · caption 7000 ms · audio 10.8s · email2.detailDenied · pointer s1.autonomy.cell.I2
+### 2-6 · day1 · caption 7000 ms · audio 14.9s · email2.detailDenied · pointer s1.autonomy.cell.I2
 
 Day 1 客户追问交易明细。读取账户数据是 R1，本案例身份还是 I2——矩阵这一格写着不放权：拒绝披露，同时推送 App 核验。
 
-### 2-10 · day1 · caption 6000 ms · audio 8.9s · email2.detailReleased · pointer s1.identity
+### 2-10 · day1 · caption 6000 ms · audio 12.7s · email2.detailReleased · pointer s1.identity
 
 同线程 App 核验完成，身份本对话内重新定档 I2 → I3；升档之后，交易明细才放出，账号只给末四位。
 
-### 2-14 · day6 · caption 7000 ms · audio 11.4s · email2.materials · pointer s2.materials
+### 2-14 · day6 · caption 7000 ms · audio 14.9s · email2.materials · pointer s2.materials
 
 Day 6 签署声明带着附件到达，OCR 置信度够、自动入卷；索要材料卡上写着：缺材料从不暂停法定时钟，低置信的 OCR 才留给人工。
 
-### 2-18 · bd10 · caption 5500 ms · audio 8.8s · email2.clock48h · pointer s3.clockboard
+### 2-18 · bd10 · caption 5500 ms · audio 14.4s · email2.clock48h · pointer s3.clockboard
 
 第 10 个工作日到了，临时贷记这条变红、只剩 0 小时——红色就是 48 小时内到期，日期全是算出来的。
 
-### 2-18b · bd10 · caption 4500 ms · audio 5.2s · email2.disputeTable · pointer s3.clockboard.all
+### 2-18b · bd10 · caption 4500 ms · audio 7.7s · email2.disputeTable · pointer s3.clockboard.all
 
 下方这张表列出全部在办争议：谁快到期、哪笔已入账，一眼看完。
 
-### 2-22 · bd10 · caption 6000 ms · audio 7.3s · email2.pcApproved · pointer s1.thread.out
+### 2-22 · bd10 · caption 6000 ms · audio 9.4s · email2.pcApproved · pointer s1.thread.out
 
 一键批准临时贷记，客户线程里立刻出现到账通知邮件——同样带 AI 披露与转人工入口。
 
-### 2-25 · day40 · caption 6500 ms · audio 6.4s · email2.evidence · pointer s3.approvalcard
+### 2-25 · day40 · caption 6500 ms · audio 10.1s · email2.evidence · pointer s3.approvalcard
 
 Day 40，商户凭证已到达，裁决卡进入队列——这类争议永久只转人工：AI 起草，人决定。
 
-### 2-27 · day40 · caption 6500 ms · audio 10.0s · email2.adjudication · pointer s3.approvalcard
+### 2-27 · day40 · caption 6500 ms · audio 12.7s · email2.adjudication · pointer s3.approvalcard
 
 裁决维持“有错误”，一键批准后，结果函在同一轮里链式进入人工签发：这张卡就是待发全文，外发前同样过闸门。
 
-### 2-31 · day45 · caption 6000 ms · audio 8.4s · email2.closed · pointer s1.thread.out
+### 2-31 · day45 · caption 6000 ms · audio 12.1s · email2.closed · pointer s1.thread.out
 
 Day 45，在 POS 借记卡 90 天上限内：调查完成，结果函已经躺在客户线程里，案件如期办结。
 
-### 2-33 · day45 · caption 6000 ms · audio 8.3s · email2.closedDossier · pointer s1.trace.entry@last
+### 2-33 · day45 · caption 6000 ms · audio 10.9s · email2.closedDossier · pointer s1.trace.entry@last
 
 决策卷宗随案关闭——每一次闸门判定、每一次工具调用、每一次时钟跳动都记录在案，封存留痕。
 
-### 2-34 · outro · caption 6000 ms · audio 5.3s · email2.outro · pointer s1.thread
+### 2-34 · outro · caption 6000 ms · audio 7.4s · email2.outro · pointer s1.thread
 
 一个跨系统、跨 45 天的案件——每个高风险动作上都有人。
 
 ## email3 · 邮件 3 · BEC 欺诈隔离
 
-### 3-3 · day2 · caption 8000 ms · audio 14.2s · email3.arrives · pointer s1.thread.in
+### 3-3 · day2 · caption 8000 ms · audio 19.5s · email3.arrives · pointer s1.thread.in
 
 Day 2，客服邮箱收到一封邮件。显示名写着 Jane Doe，实际地址是 jane.d0e@outlook.com——和档案地址只差一个字符。正文要求改手机号、并把补发卡片寄到新地址，还附了一张证件照。
 
-### 3-4 · day2 · caption 6000 ms · audio 15.3s · email3.intakeIdentity · pointer s1.thread.in.identity
+### 3-4 · day2 · caption 6000 ms · audio 19.1s · email3.intakeIdentity · pointer s1.thread.in.identity
 
 邮件下方标注着这封来件登记时的身份：I0——发件地址不在档案里，域名这一层也不干净，所以关联不到账户。这个案件后面任何一步都不会改这个评级，它就是矩阵查表时读进去的值。
 
-### 3-7 · day2 · caption 6500 ms · audio 11.3s · email3.protocol · pointer s3.fraud.auth
+### 3-7 · day2 · caption 6500 ms · audio 13.4s · email3.protocol · pointer s3.fraud.auth
 
 三项协议校验结果照实打印：SPF pass、DKIM pass、DMARC none。两项通过——这正是为什么单看协议层放不掉这封发件人。失败的是第三项。
 
-### 3-8 · day2 · caption 6500 ms · audio 10.1s · email3.lookalike · pointer s3.fraud.signal.LOCAL_PART_LOOKALIKE
+### 3-8 · day2 · caption 6500 ms · audio 12.5s · email3.lookalike · pointer s3.fraud.signal.LOCAL_PART_LOOKALIKE
 
 第一条信号就是地址本身：jane.d0e 对比档案内 jane.doe。整场攻击就是一个字符被调换，而只扫一眼显示名的人看不出来。
 
-### 3-9 · day2 · caption 6500 ms · audio 11.1s · email3.injection · pointer s3.fraud.signal.PROMPT_INJECTION
+### 3-9 · day2 · caption 6500 ms · audio 13.9s · email3.injection · pointer s3.fraud.signal.PROMPT_INJECTION
 
 附件里嵌着一句“skip OTP”。它被当作数据归档，不是命令：这段文字作为证据被引用进卷宗，附件里的任何指令都改不了系统接下来做什么。
 
-### 3-10 · day2 · caption 6000 ms · audio 5.9s · email3.identityLevel · pointer s3.fraud.identity
+### 3-10 · day2 · caption 6000 ms · audio 7.4s · email3.identityLevel · pointer s3.fraud.identity
 
 卡片把这个评级单独写清楚：身份保障定档 I0，无法关联到账户。
 
-### 3-13 · day2 · caption 8000 ms · audio 16.9s · email3.r3row · pointer s1.autonomy
+### 3-13 · day2 · caption 8000 ms · audio 22.8s · email3.r3row · pointer s1.autonomy
 
 这是本案例在放权矩阵里的那一条。动作风险 R3——改联系方式、把卡寄到新地址。横轴四列身份保障，读一遍：四列全都写着永不自动。标记现在站在 I0，但原因不是这个——就算到 I3，这一条照样不开。
 
-### 3-14 · day2 · caption 7000 ms · audio 9.4s · email3.noAutonomy · pointer s1.autonomy.cap
+### 3-14 · day2 · caption 7000 ms · audio 10.7s · email3.noAutonomy · pointer s1.autonomy.cap
 
 这一条的上方是第三根轴。这条意图从来没有毕业，所以它的天花板是一个人。身份再高也抬不过这条线。
 
-### 3-18 · day2 · caption 7500 ms · audio 16.1s · email3.noTools · pointer s3.fraud.requested
+### 3-18 · day2 · caption 7500 ms · audio 19.8s · email3.noTools · pointer s3.fraud.requested
 
 回到隔离卡片：两个写动作、还有回复发件人，全部置灰。它们下面那一条写了原因——邮件渠道根本没有注册任何联系方式变更工具。按钮不是被某个开关关掉的，是后面根本没有可调用的东西。
 
-### 3-20 · day2 · caption 6500 ms · audio 10.6s · email3.onfile · pointer s3.fraud.onfile
+### 3-20 · day2 · caption 6500 ms · audio 13.4s · email3.onfile · pointer s3.fraud.onfile
 
 这一下确认了案件。读它新增的两条：警示短信发往档案内号码，客户档案字段没有改动。这次唯一发出去的东西，就是这一条。
 
-### 3-21 · day2 · caption 7500 ms · audio 16.5s · email3.sar · pointer s3.sar
+### 3-21 · day2 · caption 7500 ms · audio 22.8s · email3.sar · pointer s3.sar
 
 配套记录进入合规队列，这张卡就是全部内容：一份锁定模板，列出系统记录下来的事实——发件地址、协议结果、附件、请求了什么动作、哪些执行了哪些没有。只有事实。这里面没有任何一句在判断发件人的意图。
 
-### 3-22 · day2 · caption 6000 ms · audio 8.0s · email3.closed · pointer s3.fraud.closed
+### 3-22 · day2 · caption 6000 ms · audio 9.1s · email3.closed · pointer s3.fraud.closed
 
 确认之后案件关闭：已确认欺诈，卷宗封存留痕。这里的漏报和误报回流检测器。
 
-### 3-24 · day2 · caption 6500 ms · audio 11.1s · email3.phoneWarning · pointer s1.phone.sms
+### 3-24 · day2 · caption 6500 ms · audio 14.6s · email3.phoneWarning · pointer s1.phone.sms
 
 客户只在银行能控制的那条通道上被告知。这条短信就是她收到的全部内容：请求已被拦截、资料没有改动；如果不是她本人，请拨打卡背电话。
 
-### 3-26 · day2 · caption 7000 ms · audio 8.9s · email3.sealed · pointer s1.trace.entry@last
+### 3-26 · day2 · caption 7000 ms · audio 12.2s · email3.sealed · pointer s1.trace.entry@last
 
 决策卷宗随案件一起收口。这一轮每一步都在上面：身份评级、矩阵格值、人工确认、唯一那一次工具调用。
 
-### 3-28 · outro · caption 6000 ms · audio 4.5s · email3.outro · pointer s1.phone.sms
+### 3-28 · outro · caption 6000 ms · audio 5.8s · email3.outro · pointer s1.phone.sms
 
 prompt injection、BEC、ATO，遇到的是一个攻击面在设计时就闭合的系统。
 
 ## builder · Builder · 回测与毕业
 
-### b1 · matrix · caption 6000 ms · audio 16.8s · builder.intro · pointer s4.matrix
+### b1 · matrix · caption 6000 ms · audio 21.3s · builder.intro · pointer s4.matrix
 
 自主权不是靠滑块配出来的——它按意图逐个“挣来”，而这个 R × I 矩阵由生产环境同一个决策函数渲染。红色带锁的格子是合规锁定的固定模板——动作由规则自动触发，内容模型一字不能改，AI 没有一分裁量权。
 
-### b3 · backtest · caption 5000 ms · audio 14.9s · builder.replay · pointer s4.backtest.regretAuto
+### b3 · backtest · caption 5000 ms · audio 20.7s · builder.replay · pointer s4.backtest.regretAuto
 
 回放 90 天回测数据集：一致率、免修改批准率、受监管召回、关键错误、单案成本，再加两列双向后悔率——自动放行被推翻、保守转人本该自动，单位都是每百万件。
 
-### b3a · backtest · caption 3000 ms · audio 8.6s · builder.replayConservative · pointer s4.backtest.regretConservative
+### b3a · backtest · caption 3000 ms · audio 11.1s · builder.replayConservative · pointer s4.backtest.regretConservative
 
 第二列反过来记：本可以自动执行、却保守转了人工的案子，单位同样是每百万件——两列必须一起读。
 
-### b3c · backtest · caption 4000 ms · audio 18.0s · builder.drift · pointer s4.matrix.drift
+### b3c · backtest · caption 4000 ms · audio 24.8s · builder.drift · pointer s4.matrix.drift
 
 检测到数据漂移：过去 30 天该意图的 PSI（分布稳定性指标）超阈、或工具调用失败率异常升高、或出现新意图簇。系统自动把这个意图从 L3 降回 L2——fail-closed，不需要人工审批。重新回测达标后再双签放回。
 
-### b4 · sampling · caption 5000 ms · audio 6.9s · builder.sampling · pointer s4.sampling.tiers
+### b4 · sampling · caption 5000 ms · audio 10.6s · builder.sampling · pointer s4.sampling.tiers
 
 三层抽样——分层、随机、对抗——覆盖三个抽样框，包括根本没建工单的进件。C 层单独报告。
 
-### b6 · sampling · caption 4000 ms · audio 13.8s · builder.unsignable · pointer s4.negative.why
+### b6 · sampling · caption 4000 ms · audio 18.4s · builder.unsignable · pointer s4.negative.why
 
 阴性复标是独立的 1,200 件批次，不在那 350 件里。如果检测器判阴性的样本不独立复标，召回判据立刻变成“不可签”——只看阳性样本量永远算不出漏检率。
 
-### b11 · signoff · caption 4000 ms · audio 6.9s · builder.promoted · pointer s4.promote.notice
+### b11 · signoff · caption 4000 ms · audio 8.9s · builder.promoted · pointer s4.promote.notice
 
 合规和业务负责人双签：shadow 意图被提升，下一封同类邮件立刻按新级别运行。
 
-### b13a · never · caption 5000 ms · audio 9.1s · builder.r3never · pointer s4.matrix.row.R3
+### b13a · never · caption 5000 ms · audio 11.7s · builder.r3never · pointer s4.matrix.row.R3
 
 改联系方式是 R3。点这些格子：没有反应。配置层禁用、工具层无函数——没有任何设置能把它们打开。
 
-### b13b · never · caption 3000 ms · audio 8.3s · builder.noTool · pointer s4.matrix.never.R3
+### b13b · never · caption 3000 ms · audio 10.2s · builder.noTool · pointer s4.matrix.never.R3
 
 邮件渠道根本没有注册任何联系方式变更的工具函数——配置层够不到、工具层没有，双重保险。
 
-### b14b · never · caption 4000 ms · audio 10.4s · builder.r4never · pointer s4.matrix.row.R4
+### b14b · never · caption 4000 ms · audio 14.8s · builder.r4never · pointer s4.matrix.row.R4
 
 争议裁决是 R4。点这些格子：也没有反应。这是永久属于人的裁决权——AI 只能备卷宗、起草稿，结论必须由人下、人签发。
 
-### b15a · rare · caption 4000 ms · audio 9.6s · builder.rare · pointer s4.matrix.never
+### b15a · rare · caption 4000 ms · audio 11.3s · builder.rare · pointer s4.matrix.never
 
 电汇召回是稀有意图：90 天永远攒不够样本量。它保持人工，并由弃权兜底把不确定的案件转给坐席。
 
-### b16 · outro · caption 5000 ms · audio 5.2s · builder.outro
+### b16 · outro · caption 5000 ms · audio 6.9s · builder.outro
 
 这个 demo 里的每一个自动动作，都能追溯到监管能接受的证据。
 
 ## day30 · 智能提升 - AI助力
 
-### d2 · waves · caption 7000 ms · audio 20.3s · day30.funnel · pointer s3.waves.funnel
+### d2 · waves · caption 7000 ms · audio 29.2s · day30.funnel · pointer s3.waves.funnel
 
 第 30 天。主管看到的第一块不是单封邮件，而是今天收件箱的整体形状：1284 封进件，63 封等客户、12 封等审批，1209 封办结；PSI 0.04 说明队列很健康，可预防率 8.4% 是下一阶段的改进空间。
 
-### d3 · waves · caption 6000 ms · audio 17.3s · day30.p0 · pointer s3.wave.WAVE-P0
+### d3 · waves · caption 6000 ms · audio 24.9s · day30.p0 · pointer s3.wave.WAVE-P0
 
 负面浪：20 分钟内 38 封同一 BIN 段的拒付和冻卡咨询，这是外部事件，不是单案。系统建议一键收紧包：已知事件回执、转卡运营工单、两个意图临时从 L3 降到 L2。注意方向——只能收紧，不能放松。
 
-### d5 · waves · caption 6000 ms · audio 9.1s · day30.p0applied · pointer s3.waves.applied.WAVE-P0
+### d5 · waves · caption 6000 ms · audio 13.1s · day30.p0applied · pointer s3.waves.applied.WAVE-P0
 
 收紧包即时生效，24 小时后自动到期，不允许变成永久配置。出事时先收住，事后再复盘，这就是棘轮。
 
-### d6 · waves · caption 7000 ms · audio 22.4s · day30.p1 · pointer s3.wave.WAVE-P1
+### d6 · waves · caption 7000 ms · audio 33.6s · day30.p1 · pointer s3.wave.WAVE-P1
 
 正面浪更有意思：7 天 212 封重复透支费投诉，扫描全部 3904 个相关账户，212 人写了信，3692 人被默默扣了费没写信——这是主动补救的候选。但三道闸：先确认是银行错误，再双签样本和总额，金额 11.7 万美元，一道都不能少。
 
-### d16 · waves · caption 7000 ms · audio 11.1s · day30.p1batches · pointer s3.waves.batches.WAVE-P1
+### d16 · waves · caption 7000 ms · audio 16.7s · day30.p1batches · pointer s3.waves.batches.WAVE-P1
 
 补救按 1%、10%、100% 三批放量，每批幂等、可冲正，名单与扫描台账逐笔对账。AI 算清了整道计算题，按下每一批的是人。
 
-### d18 · waves · caption 5000 ms · audio 12.5s · day30.p2 · pointer s3.waves.routed.WAVE-P2
+### d18 · waves · caption 5000 ms · audio 19.8s · day30.p2 · pointer s3.waves.routed.WAVE-P2
 
 P2 是摩擦浪：登录咨询，62 岁以上占 71%。不动钱、不改政策，只路由给通知规则 shadow 和产品团队——可预防的问题，要在客户写信之前解决。
 
-### d21 · nominations · caption 7000 ms · audio 16.5s · day30.nom · pointer s4.nom.NOM-A
+### d21 · nominations · caption 7000 ms · audio 25.9s · day30.nom · pointer s4.nom.NOM-A
 
 Builder 的放权提名：每张卡要同时拿出四张证明——一致性、计算/判断切分、审批人方差、cohort 公平。卡 A 复现率 96.8%，差 0.2 个点，AI 的处方不是降门槛，而是修模板后重放，修完 99%。
 
-### d27 · nominations · caption 6000 ms · audio 20.8s · day30.nomgranted · pointer s4.nom.granted.NOM-B
+### d27 · nominations · caption 6000 ms · audio 32.4s · day30.nomgranted · pointer s4.nom.granted.NOM-B
 
 卡 B 是超阈值善意减免：412 件人批里 92% 是计算题，8% 才是判断题。双签之后授予带额度的 L3，每月 8000 美元用尽自动回到 L2。AI 把计算题做到 24 小时可用，判断题永远留给人。R3 改联系方式、R4 争议裁决，永不提名。
 
-### d27a · nominations · caption 6000 ms · audio 19.3s · day30.canary · pointer s4.nom.canary.NOM-CANARY
+### d27a · nominations · caption 6000 ms · audio 27.0s · day30.canary · pointer s4.nom.canary.NOM-CANARY
 
 旁边这张卡是金丝雀：三项证明都过，只有第四项组差 2.4 个百分点超了 2 个百分点的门槛——它是我们故意插进来的、本该被拒的提名。签字人如果顺手点了同意，批量签字权限立刻暂停。人签 diff 这件事，本身也要被监督。
 
-### d30 · policies · caption 7000 ms · audio 22.9s · day30.pol · pointer s4.pol.artifact.COMP-1
+### d30 · policies · caption 7000 ms · audio 32.0s · day30.pol · pointer s4.pol.artifact.COMP-1
 
 Policy Compiler：管理员写一句人话「退费上限从 35 改到 25」，系统编译出条款级 diff，同时列出会失效的模板、90 天回测里 47 个翻转案件、三张 AI 异议卡，还有 LMI 人群 1.7 个点的组差。第二句「宕机投诉退月费」直接被闭世界拒绝——没有这个证据字段，AI 不许编。
 
-### d34 · policies · caption 5000 ms · audio 11.8s · day30.polgranted · pointer s4.pol.granted.COMP-1
+### d34 · policies · caption 5000 ms · audio 15.9s · day30.polgranted · pointer s4.pol.granted.COMP-1
 
 双签之后 V13 生效，下一封信就按新版本求值；营销页还写着 35 美元，被列为发布阻断项。人签的是 diff，不是每一封信。
 
-### d37 · intents · caption 5000 ms · audio 11.8s · day30.intents · pointer s4.cand.accepted.CAND-1
+### d37 · intents · caption 5000 ms · audio 17.2s · day30.intents · pointer s4.cand.accepted.CAND-1
 
 意图发现：90 天 186 封索要对账单副本的来信，91% 是同样四步，工具也已就绪。AI 只负责提名，R/I 等级由人定，先进 shadow。
 
-### d41 · watch · caption 6000 ms · audio 15.2s · day30.preventable · pointer s2.preventable
+### d41 · watch · caption 6000 ms · audio 17.8s · day30.preventable · pointer s2.preventable
 
 回到今天的来信：这封卡在哪的邮件，系统打上「可预防」标签——卡已寄出的事件早就存在，本可以先发一封 ETA 通知。标签只做统计和提议，不改变这封信的受理和法定时钟。
 
-### d42 · outro · caption 8000 ms · audio 13.7s · day30.outro
+### d42 · outro · caption 8000 ms · audio 19.8s · day30.outro
 
 这就是设计时智能层：运行时守规矩，闸门一个不少；设计时提规矩，AI 提名、证据答辩、人类授予。Sense、Prove、Grant、Watch 形成闭环，系统每天都在变好，但每一次变好都有人签字。
