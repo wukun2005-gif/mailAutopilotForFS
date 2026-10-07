@@ -1,7 +1,7 @@
 # One-click present — cross-AI notes (2026-10-05, local only, do not push)
 
 ## Voice (locked by user)
-- Piper `en_US-ryan-high` (MIT, offline, no network at build time) — standard American male.
+- Piper `en_US-joe-medium` (MIT code, CC0 dataset — no licence strings attached).
 - Set in `scripts/build-present-voice.sh`: `VOICE_MODEL=` / `VOICE_SPEED=` (env `PV_MODEL`/`PV_SPEED` also works).
 - `VOICE_SPEED` is Piper's length_scale: 1.05 reads ~5% slower.
 - Engine/models installed once by `bash scripts/setup-local-tts.sh` into `tts/.local/` (gitignored).
