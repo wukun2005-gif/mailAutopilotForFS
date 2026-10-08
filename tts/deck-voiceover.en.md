@@ -1,5 +1,5 @@
 # Deck voiceover (English) — pages 02/15–14/15 · DRAFT for review
-Voice: `zh-CN-YunyangNeural`, rate `-15%`. File for TTS input, not deck.
+Voice: Kokoro `am_michael`, speed `0.95`. File for TTS input, not deck.
 Rules agreed: max 3 infos per page; numbers from deck; deck wins, PRD/report only decide depth; screenshots opened one by one then closed; only demo-2 plays full; caption 1 line. Each bullet carries exactly one idea — never read the slide's own labels back, and each caption states that same idea, so the caption and the narration move together.
 
 ---

@@ -18,10 +18,12 @@
 
 ### `deck-html/assets/voice/*.mp3` — deck 配音（41 条）
 
-- 引擎：Piper — https://github.com/rhasspy/piper — MIT License
-- 声音：en_US-joe-medium — https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/joe/medium
-- 声音仓库授权：MIT License
-- Model card 标注的数据集授权：CC0
+- 模型：Kokoro-82M — https://huggingface.co/hexgrad/Kokoro-82M — Apache-2.0
+- 推理库：kokoro-onnx — https://github.com/thewh1teagle/kokoro-onnx — MIT License
+- 声音：am_michael
+- 2026-10-08 由 Piper `en_US-joe-medium` 换为上述声音（原声音基频约 95 Hz，听感偏老）。
+  MeloTTS 曾作为候选评估后排除：其已发布的英文权重全部为女声
+  （myshell-ai/MeloTTS#84）。
 
 ### `public/tts/en/*.mp3` — 英文 demo 配音（88 条）
 
