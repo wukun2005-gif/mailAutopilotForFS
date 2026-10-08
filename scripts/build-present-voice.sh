@@ -1,14 +1,22 @@
 #!/usr/bin/env bash
 # Rebuild one-click-present voice assets from tts/deck-voiceover.en.md:
-#   deck-html/assets/voice/pNNbM.mp3  narration clips (VOICE_MODEL/VOICE_SPEED below)
+#   deck-html/assets/voice/pNNbM.mp3  narration clips (VOICE_NAME/VOICE_SPEED below)
 #   deck-html/assets/voice/present.json + present.js  step config for the player
 # Voice is a build-time setting: voiceover text stays voice-agnostic.
-# Engine: Piper (MIT licence, en_US-joe-medium model, MIT) — synthesised offline,
-# no network call at build time. One-time setup: bash scripts/setup-local-tts.sh
+# Engine: Kokoro-82M (Apache-2.0) — synthesised offline, no network call at build
+# time. One-time setup: bash scripts/setup-local-tts.sh
 # Usage: bash scripts/build-present-voice.sh
-#   PV_MODEL / PV_SPEED env overrides work too, without editing this file.
-VOICE_MODEL="tts/.local/models/en_US-joe-medium.onnx"
-VOICE_SPEED="1.05"   # Piper length_scale: 1.05 reads ~5% slower, the old -5% rate
+#   PV_VOICE / PV_SPEED env overrides work too, without editing this file.
+# Was Piper en_US-joe-medium; swapped 2026-10-08 for am_michael — Piper sat at
+# ~95 Hz, which read as old, and Kokoro is the engine the demo narration already
+# uses. MeloTTS was ruled out first: every released English checkpoint is
+# female-voiced (myshell-ai/MeloTTS#84).
+VOICE_NAME="am_michael"     # Kokoro voice id (voices-v1.0.bin)
+VOICE_SPEED="1.15"          # Kokoro speed, picked by ear off tts/candidates/ ladder.
+                            # NB Kokoro's speed is NOT a linear time-stretch (0.95 -> 1.13
+                            # only bought 10.9%), so never extrapolate a target from it.
+KOKORO_MODEL="tts/.local/models/kokoro-v1.0.onnx"
+KOKORO_VOICES="tts/.local/models/voices-v1.0.bin"
 set -euo pipefail
 cd "$(dirname "$0")/.."
 mkdir -p deck-html/assets/voice /tmp/voice_src
@@ -87,29 +95,36 @@ PYBIN=tts/.local/venv/bin/python
 if [ "${1:-}" = "--conf-only" ]; then
   echo "conf-only: skipping TTS (clips unchanged)"
 else
-if [ ! -x "$PYBIN" ] || [ ! -f "$VOICE_MODEL" ]; then
+if [ ! -x "$PYBIN" ] || [ ! -f "$KOKORO_MODEL" ] || [ ! -f "$KOKORO_VOICES" ]; then
   echo "local TTS not set up — run: bash scripts/setup-local-tts.sh" >&2
   exit 1
 fi
-PV_MODEL="$VOICE_MODEL" PV_SPEED="$VOICE_SPEED" "$PYBIN" - <<'PY'
-import os, pathlib, shutil, subprocess, wave
-from piper import PiperVoice
-from piper.config import SynthesisConfig
+PV_VOICE="$VOICE_NAME" PV_SPEED="$VOICE_SPEED" \
+PV_KOKORO_MODEL="$KOKORO_MODEL" PV_KOKORO_VOICES="$KOKORO_VOICES" "$PYBIN" - <<'PY'
+import io, os, pathlib, shutil, subprocess
+import numpy as np
+import soundfile as sf
+from kokoro_onnx import Kokoro
 ffmpeg = shutil.which("ffmpeg")
 if not ffmpeg:
     raise SystemExit("ffmpeg not found — it writes the mp3 clips")
-voice = PiperVoice.load(os.environ["PV_MODEL"])   # one load covers every clip
-cfg = SynthesisConfig(length_scale=float(os.environ.get("PV_SPEED", "1.05")))
+# One session covers every clip: this Mac has no GPU and parallel sessions only
+# thrash the cores.
+kokoro = Kokoro(os.environ["PV_KOKORO_MODEL"], os.environ["PV_KOKORO_VOICES"])
+voice = os.environ["PV_VOICE"]
+speed = float(os.environ.get("PV_SPEED", "1.15"))
 out_dir = pathlib.Path("deck-html/assets/voice")
 for p in sorted(pathlib.Path("/tmp/voice_src").glob("*.txt")):
     stem = p.name[:-len(".txt")]            # "p02b1.mp3.txt" -> "p02b1.mp3"
-    wav = out_dir / (stem[:-len(".mp3")] + ".wav")
-    with wave.open(str(wav), "wb") as w:
-        voice.synthesize_wav(p.read_text().strip(), w, syn_config=cfg)
-    subprocess.run([ffmpeg, "-y", "-loglevel", "error", "-i", str(wav),
+    samples, sr = kokoro.create(p.read_text().strip(), voice=voice, speed=speed,
+                                lang="en-us")
+    # Pipe the wav to ffmpeg rather than dropping a temp file next to the
+    # published clips: a crash part-way used to leave a stray .wav in assets/voice.
+    buf = io.BytesIO()
+    sf.write(buf, samples.astype(np.float32), sr, format="WAV")
+    subprocess.run([ffmpeg, "-y", "-loglevel", "error", "-i", "pipe:0",
                     "-codec:a", "libmp3lame", "-b:a", "64k", "-ac", "1",
-                    str(out_dir / stem)], check=True)
-    wav.unlink()
+                    str(out_dir / stem)], input=buf.getvalue(), check=True)
     print("ok", out_dir / stem)
 PY
 fi
