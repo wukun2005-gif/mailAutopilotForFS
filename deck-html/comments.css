@@ -120,6 +120,13 @@ body.light .cmt .av{background:#C3CEDA;color:#16202B}
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
 }
 .cmt .bd{font-size:13.5px;line-height:1.5;color:var(--soft);white-space:pre-wrap;word-break:break-word}
+/* citation links — teal, so a source reads as a source and not as a stray
+   underlined word in the middle of a sentence */
+.cmt .bd a.cite{
+  color:var(--teal);font-weight:600;text-decoration:none;cursor:pointer;
+  border-bottom:1px solid rgba(95,211,190,.5);
+}
+.cmt .bd a.cite:hover{border-bottom-color:var(--teal);border-bottom-style:solid}
 .cmt .done{
   display:inline-block;margin-top:6px;font-size:10.5px;font-weight:700;letter-spacing:.05em;
   color:var(--green);text-transform:uppercase;
@@ -214,6 +221,9 @@ body.light #cmtselbtn{background:#FFFFFF;color:#16202B;box-shadow:0 6px 18px rgb
   width:7px;height:7px;border-radius:50%;background:var(--green);flex:0 0 auto;
 }
 #cmtpanel .live.off .dot{background:var(--dim)}
+/* the label can now be a short name list, so let it take the row and ellipsis
+   instead of shoving the dot around */
+#cmtpanel .live #cmtlivetxt{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
 /* ── legal notice: one-line reminder above the composer ── */
 #cmtpanel .discbar{
@@ -253,3 +263,67 @@ body.light #cmtselbtn{background:#FFFFFF;color:#16202B;box-shadow:0 6px 18px rgb
   body.cmt-open #pbar{right:0}
   body.cmt-open .ov{right:16px}
 }
+
+/* ══ AI answers ══ */
+.cmt.ai{border-left:3px solid var(--teal);background:linear-gradient(180deg,rgba(95,211,190,.07),transparent 60%)}
+body.light .cmt.ai{background:linear-gradient(180deg,rgba(11,140,120,.07),transparent 60%)}
+.cmt .av.ai{background:var(--teal);color:#08131F;font-size:9.5px;font-weight:800;letter-spacing:.02em}
+.cmt .nm .ai-badge{
+  display:inline-block;margin-left:6px;padding:1px 6px;border-radius:20px;
+  background:var(--teal);color:#08131F;font:700 9.5px/1.5 var(--sans);
+  letter-spacing:.06em;text-transform:uppercase;vertical-align:1px;
+}
+.cmt .ai-note{
+  margin-top:7px;padding-top:6px;border-top:1px dashed var(--line);
+  font-size:10.5px;line-height:1.45;color:var(--dim);
+}
+
+/* ══ owner gear ══ */
+#cmtgear{
+  /* left/top are set by syncBtnToTheme() to sit right of the Comments button.
+     This is only the fallback for the instant before that runs — it must NOT
+     be a right: offset, or the gear lands inside the 360px comments panel
+     (z-index 941 over 940) and covers the panel's own header. */
+  position:fixed;left:340px;top:6px;z-index:941;
+  width:34px;height:34px;border-radius:50%;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;font-size:16px;
+  background:rgba(31,41,52,.94);border:1px solid #3A4757;color:#EAF0F6;
+  box-shadow:0 6px 20px rgba(0,0,0,.4);backdrop-filter:blur(6px);
+}
+body.light #cmtgear{background:rgba(255,255,255,.96);border-color:#C3CEDA;color:#16202B;
+  box-shadow:0 4px 14px rgba(20,40,60,.16)}
+#cmtgear:hover{border-color:var(--teal);color:var(--teal);transform:rotate(35deg);transition:transform .2s}
+@media (max-width:900px){#cmtgear{display:none}}
+
+/* ══ owner panel ══ */
+#cmtadmin{
+  position:fixed;right:16px;top:48px;z-index:960;width:390px;max-height:76vh;overflow-y:auto;
+  background:var(--panel);border:1px solid var(--line);border-radius:12px;
+  box-shadow:0 18px 50px rgba(0,0,0,.45);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Helvetica,Arial,sans-serif;
+  color:var(--ink);display:none;
+}
+body.light #cmtadmin{box-shadow:0 18px 50px rgba(20,40,60,.22)}
+#cmtadmin.on{display:block}
+#cmtadmin .ah{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line)}
+#cmtadmin .ah h3{margin:0;font-size:14px;font-weight:600;flex:1}
+#cmtadmin .ah .ax{background:none;border:1px solid var(--line);color:var(--dim);border-radius:6px;
+  width:24px;height:24px;cursor:pointer;font-size:12px;line-height:1}
+#cmtadmin .ah .ax:hover{border-color:var(--teal);color:var(--teal)}
+#cmtadmin .abody{padding:12px 14px 14px}
+#cmtadmin .arow{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}
+#cmtadmin .arow .al{font-size:12.5px;color:var(--soft);flex:0 0 132px}
+#cmtadmin .arow .av{font-size:12.5px;color:var(--ink);font-family:var(--mono);flex:1;text-align:right}
+#cmtadmin .asub{font-size:11.5px;color:var(--dim);padding:3px 0 3px 10px;border-left:2px solid var(--line);
+  margin:3px 0;line-height:1.5}
+#cmtadmin .asub.bad{color:var(--red);border-left-color:var(--red)}
+#cmtadmin .atoggle{padding:5px 14px;border-radius:20px;cursor:pointer;font:700 11px/1 var(--sans);
+  letter-spacing:.05em;border:1px solid var(--line);background:none;color:var(--dim)}
+#cmtadmin .atoggle.on{background:var(--green);border-color:var(--green);color:#fff}
+#cmtadmin .aselect{max-width:190px;padding:5px 8px;border-radius:7px;border:1px solid var(--line);
+  background:var(--bg);color:var(--ink);font-size:11.5px}
+#cmtadmin .aload{padding:20px 0;text-align:center;font-size:12.5px;color:var(--dim)}
+#cmtadmin .aload.bad{color:var(--red)}
+#cmtadmin .aout{margin-top:14px;width:100%;padding:8px;border-radius:8px;cursor:pointer;
+  border:1px solid var(--line);background:none;color:var(--dim);font:600 12px/1 var(--sans)}
+#cmtadmin .aout:hover{border-color:var(--red);color:var(--red)}

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>知识库迁移 SiliconFlow · 实测报告 · 2026-10-08</title>
+<style>
+:root{
+  --ink:#16202b; --soft:#3b4957; --faint:#6b7280; --line:#dfe5ec; --bg:#f5f7fa; --paper:#fff;
+  --teal:#0f766e; --teal-s:#e6f4f1; --red:#b42318; --red-s:#fdecea; --amber:#b45309; --amber-s:#fdf3e3;
+  --green:#15803d; --green-s:#e8f5ec;
+  --mono:"JetBrains Mono","SF Mono",ui-monospace,Menlo,Consolas,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans SC",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.65 var(--sans);padding:40px 20px}
+.wrap{max-width:1060px;margin:0 auto}
+header{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:26px 28px;margin-bottom:20px}
+h1{font-size:24px;letter-spacing:-.01em;margin-bottom:6px}
+.sub{color:var(--faint);font-size:13.5px}
+.verdict{margin-top:16px;padding:12px 16px;border-radius:9px;background:var(--amber-s);border-left:4px solid var(--amber);font-weight:600;color:#7c3a06}
+section{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:24px 28px;margin-bottom:20px}
+h2{font-size:17px;margin-bottom:14px;padding-bottom:9px;border-bottom:1px solid var(--line)}
+h3{font-size:14.5px;margin:20px 0 9px}
+h3:first-of-type{margin-top:0}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--bg);font-weight:600;font-size:12.5px;color:var(--soft)}
+code{font-family:var(--mono);font-size:12.5px;background:var(--bg);padding:1.5px 5px;border-radius:4px}
+pre{background:#0f1720;color:#d7e3ec;font:12.5px/1.6 var(--mono);padding:12px 14px;border-radius:8px;overflow-x:auto;margin:8px 0}
+.pass{color:var(--green);font-weight:700}
+.fail{color:var(--red);font-weight:700}
+.ok{color:var(--green)}
+.no{color:var(--red)}
+.tag{display:inline-block;font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:20px;vertical-align:middle}
+.t-crit{background:var(--red-s);color:var(--red)}
+.t-mid{background:var(--amber-s);color:var(--amber)}
+.t-low{background:var(--teal-s);color:var(--teal)}
+.t-ok{background:var(--green-s);color:var(--green)}
+.defect{border-left:3px solid var(--line);padding:12px 0 12px 15px;margin-bottom:16px}
+.defect.crit{border-left-color:var(--red)}
+.defect.mid{border-left-color:var(--amber)}
+.defect.low{border-left-color:var(--teal)}
+.defect h4{font-size:14px;margin-bottom:6px}
+.defect p{font-size:13.5px;color:var(--soft);margin-bottom:5px}
+.big{display:flex;gap:12px;flex-wrap:wrap;margin:14px 0 4px}
+.big div{flex:1 1 150px;background:var(--bg);border-radius:9px;padding:12px 14px}
+.big .k{font-size:12px;color:var(--faint);margin-bottom:3px}
+.big .v{font-size:22px;font-weight:700;font-family:var(--mono)}
+ul{margin:8px 0 8px 20px;font-size:13.5px;color:var(--soft)}
+li{margin-bottom:5px}
+footer{color:var(--faint);font-size:12.5px;text-align:center;padding:10px 0 30px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>知识库迁移 SiliconFlow · 实测报告</h1>
+  <div class="sub">2026-10-08 · 目标：把 embedding 与 reranker 的<b>配置和 pipeline 对齐 patentExaminator</b>（SiliconFlow <code>BAAI/bge-m3</code> + <code>BAAI/bge-reranker-v2-m3</code>），并用实测数据决定 reranker 该不该开</div>
+  <div class="verdict">结论：<b>embedding 迁移是净收益，已于线上生效</b>（777 块全部重算为 bge-m3 向量）；<b>远程 cross-encoder 实测会退化，代码接好但默认关闭</b>，等分块卫生问题修完再复测。另修复 2 个此前未发现的数据卫生缺陷。</div>
+  <div style="margin-top:12px;padding:12px 16px;border-radius:9px;background:var(--amber-s,#fdf3e3);border-left:4px solid var(--amber,#b45309);font-size:13.5px;color:#3b4957"><b>⚠️ 本报告是当时快照，已被后续两轮更新</b>：分块卫生问题已修完（777 → <b>722 块</b>）、复测显示重排"退化"主因是脏数据而非模型，且 owner 已决定<b>开启</b>重排。现状请看 <code>kb-deploy-hygiene-report.html</code> 与 <code>supabase/SETUP.md</code>。本页保留原始数据与判断过程，未作改写。</div>
+</header>
+
+<section>
+  <h2>1. 判据来自哪里</h2>
+  <table>
+    <tr><th>项</th><th>值</th><th>出处</th></tr>
+    <tr><td>embedding</td><td><code>https://api.siliconflow.cn/v1</code> · <code>BAAI/bge-m3</code>（1024 维）</td><td>patentExaminator <code>settings</code> 的 <code>knowledgeProviders</code></td></tr>
+    <tr><td>reranker</td><td>同上 baseUrl · <code>BAAI/bge-reranker-v2-m3</code></td><td>同上</td></tr>
+    <tr><td>二级降级链</td><td>远程 <code>/rerank</code> → 本地 cross-encoder → 启发式五信号</td><td><code>toolExecutor.ts:401-476</code>、<code>reranker.ts</code></td></tr>
+    <tr><td>调用形态</td><td><code>POST {base}/rerank</code> <code>{model, query, documents, top_n}</code>，超时 30s</td><td><code>toolExecutor.ts:409-413</code></td></tr>
+  </table>
+  <p style="font-size:13.5px;color:var(--soft);margin-top:8px">两者共用同一把 SiliconFlow key；<code>bge-m3</code> 是 1024 维，与既有 <code>kb_chunks.embedding vector(1024)</code> 一致 —— <b>表结构、<code>kb_search</code> 函数、HNSW 索引都无需改动</b>。</p>
+</section>
+
+<section>
+  <h2>2. 结果</h2>
+  <div class="big">
+    <div><div class="k">线上知识库</div><div class="v pass">777 块</div></div>
+    <div><div class="k">向量覆盖</div><div class="v pass">777/777</div></div>
+    <div><div class="k">中文向量分</div><div class="v pass">0.41 → 0.60</div></div>
+    <div><div class="k">重排非回归</div><div class="v fail">0/5 → 2/5</div></div>
+    <div><div class="k">顺带修掉的缺陷</div><div class="v">2</div></div>
+  </div>
+
+  <h3>2.1 改动清单</h3>
+  <table>
+    <tr><th>文件</th><th>改动</th><th>状态</th></tr>
+    <tr><td><code>scripts/kb-ingest.mjs</code></td><td>embedding 切 <code>BAAI/bge-m3</code>；key 改为读 <code>SILICONFLOW_API_KEY</code> 环境变量（不再依赖 <code>server-data/settings.json</code>）</td><td class="pass">已生效</td></tr>
+    <tr><td><code>scripts/kb-verify.mjs</code></td><td>同步切 bge-m3；新增远程 rerank 段，打印「融合检索 / 重排后」两段排名</td><td class="pass">已生效</td></tr>
+    <tr><td><code>supabase/functions/answer-comment/index.ts</code></td><td>embedding 切 SiliconFlow；新增 <code>remoteRerank()</code> + <code>rerankStage()</code> 两级降级；远程档 <b>默认关闭</b></td><td class="t-mid">待重新部署</td></tr>
+    <tr><td><code>supabase/SETUP.md</code></td><td>§6 块数与来源同步；新增「关于重排」章节，附实测数据</td><td class="pass">已更新</td></tr>
+  </table>
+
+  <h3>2.2 embedding 迁移：净收益</h3>
+  <table>
+    <tr><th>观测</th><th>迁移前（百炼 qwen）</th><th>迁移后（bge-m3）</th></tr>
+    <tr><td>中文 query 向量相似度（退费窗口题）</td><td>≈0.407</td><td class="pass">≈0.60</td></tr>
+    <tr><td>EN「autonomy matrix」基线 top-1</td><td>—</td><td class="pass">PRD §6.2（权威定义，正确）</td></tr>
+    <tr><td>换模型是否需要改表</td><td>—</td><td class="pass">不需要（同为 1024 维）</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2>3. 关键发现：照搬 reranker 会退化</h2>
+  <p style="font-size:13.5px;color:var(--soft)">patentExaminator 把基础分清零、只信 cross-encoder，是因为它的候选来自 <b>RAG + 联网搜索两条异构通道</b>，分数本来就不可比。而 deck 的候选<b>全部来自同一个混合检索器</b>，RRF 分数是有意义的信号 —— 抹掉它等于扔信息。照搬后实测：</p>
+  <table>
+    <tr><th>#</th><th>读者问题</th><th>基线 top-1（混合检索）</th><th>重排后它排第几</th></tr>
+    <tr><td>1</td><td>How does the autonomy matrix decide…</td><td>PRD §6.2 Autonomy Matrix</td><td class="no">第 9 名（被打 0.0072）</td></tr>
+    <tr><td>2</td><td>When does the Reg E clock start…</td><td>prototype <code>simClock.ts</code></td><td class="no">第 4 名</td></tr>
+    <tr><td>3</td><td>AI 独立行动的边界在哪里</td><td>report 3.2 放权模型</td><td class="ok">第 1 名</td></tr>
+    <tr><td>4</td><td>这四个屏幕分别证明什么</td><td>dev_plan 7.4 屏④ Builder</td><td class="no">第 4 名（top-1 变成 backlog「Demo 建议」）</td></tr>
+    <tr><td>5</td><td>AI 如何避免悄悄放宽自己的权限</td><td>report 11.2 支柱二</td><td class="no">第 13 名（top-1 变成「版本记录」）</td></tr>
+  </table>
+  <p style="font-size:13.5px;color:var(--soft);margin-top:8px">修完数据卫生后复测为 <b>2/5</b> —— 有改善，仍不达标。分数分布 0.05–0.88、无可用标定。试过 6 种喂给 reranker 的文本形态（整块 / 截 512 字 / <code>section+body</code> / 仅标题 / 前 240 字 / <code>section</code>+前 240 字），<b>均无法稳定回到基线之上</b>。</p>
+  <p style="font-size:13.5px;color:var(--soft);margin-top:6px"><b>处置</b>：<code>remoteRerank</code> 代码保留、链路接好，但 <code>SILICONFLOW_RERANK_ENABLED</code> 默认 <code>false</code>。理由与上述数据写进了 <code>rerankStage()</code> 的注释，避免以后被当成"没做完"。</p>
+</section>
+
+<section>
+  <h2>4. 测试顺带暴露的数据卫生缺陷（已修）</h2>
+
+  <div class="defect mid">
+    <h4><span class="tag t-mid">中</span> HTML 注释正文混进 chunk</h4>
+    <p><b>影响</b>：embedding 与 rerank 都在给噪声打分。deck 幻灯片里带构建备注，例如某块正文中混进了 <code>svg) must keep winning: freezing it with flex:0 0 auto…</code>。</p>
+    <p><b>根因</b>：<code>stripTags()</code> 用 <code>&lt;[^&gt;]+&gt;</code> 去标签，<code>&lt;!--</code> 被当成标签吃掉，但注释正文与结尾的 <code>--&gt;</code> 留了下来。</p>
+    <p><b>修复</b>：先剥注释 <code>.replace(/&lt;!--[\s\S]*?--&gt;/g,' ')</code>。<b>复验</b>：该块 1155 → 1013 字，残渣检测通过。</p>
+  </div>
+
+  <div class="defect mid">
+    <h4><span class="tag t-mid">中</span> dev plan 运维章节漏进知识库</h4>
+    <p><b>影响</b>：<code>DEVPLAN_SKIP</code> 想排除内部章节，但只有 <code>评论系统</code> 这一条，匹配不到「16.10 AI 自动回答观众评论」，于是该节<b>作为无关问题的 top-1 浮了出来</b>（实测出现在「AI 如何避免悄悄放宽权限」的重排 top-1）。</p>
+    <p><b>修复</b>：加入 <code>^16[\.\s]</code>，整章跳过。<b>复验</b>：共跳过 17 个内部章节，dev plan 78 → 66 块。</p>
+  </div>
+</section>
+
+<section>
+  <h2>5. 需要 owner 做的三件事</h2>
+  <table>
+    <tr><th>#</th><th>动作</th><th>说明</th></tr>
+    <tr><td>1</td><td><b>撤销本轮临时生成的 Supabase PAT</b></td><td>账号级凭证，能操作你名下所有项目；用完即撤</td></tr>
+    <tr><td>2</td><td>给 <code>answer-comment</code> 加 Secrets 并重新部署</td><td>新增 <code>SILICONFLOW_BASE_URL</code>（<code>https://api.siliconflow.cn/v1</code>）与 <code>SILICONFLOW_API_KEY</code>；然后按 SETUP.md §4b 方式重新粘贴部署</td></tr>
+    <tr><td>3</td><td>决定远程 rerank 是否启用</td><td>默认关闭（推荐，依据见 §3）。要开启就在 Secrets 加 <code>SILICONFLOW_RERANK_ENABLED=true</code>；建议先修完剩余分块卫生问题再复测</td></tr>
+  </table>
+  <p style="font-size:13.5px;color:var(--soft);margin-top:10px"><b>注意</b>：<code>answer-comment</code> 已改为从 <code>SILICONFLOW_*</code> 取检索凭据。<b>在这两个 Secrets 配好之前，函数部署上去会取不到向量</b>，所以"加 Secrets"与"重新部署"要连在一起做。</p>
+</section>
+
+<footer>
+  由 WorkBuddy AI 生成 · 2026-10-08 · 脚本：<code>scripts/kb-ingest.mjs</code> · <code>scripts/kb-verify.mjs</code> · 判据出处：patentExaminator <code>toolExecutor.ts</code> / <code>reranker.ts</code> / <code>knowledge.ts</code>
+</footer>
+
+</div>
+</body>
+</html>

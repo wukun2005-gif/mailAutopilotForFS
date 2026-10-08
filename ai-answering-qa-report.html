@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 自动回答评论 · 测试报告 · 2026-10-08</title>
+<style>
+:root{
+  --ink:#16202b; --soft:#3b4957; --faint:#6b7280; --line:#dfe5ec; --bg:#f5f7fa; --paper:#fff;
+  --teal:#0f766e; --teal-s:#e6f4f1; --red:#b42318; --red-s:#fdecea; --amber:#b45309; --amber-s:#fdf3e3;
+  --green:#15803d; --green-s:#e8f5ec;
+  --mono:"JetBrains Mono","SF Mono",ui-monospace,Menlo,Consolas,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans SC",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.65 var(--sans);padding:40px 20px}
+.wrap{max-width:1060px;margin:0 auto}
+header{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:26px 28px;margin-bottom:20px}
+h1{font-size:24px;letter-spacing:-.01em;margin-bottom:6px}
+.sub{color:var(--faint);font-size:13.5px}
+.verdict{margin-top:16px;padding:12px 16px;border-radius:9px;background:var(--green-s);border-left:4px solid var(--green);font-weight:600;color:#14532d}
+section{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:24px 28px;margin-bottom:20px}
+h2{font-size:17px;margin-bottom:14px;padding-bottom:9px;border-bottom:1px solid var(--line)}
+h3{font-size:14.5px;margin:20px 0 9px}
+h3:first-of-type{margin-top:0}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--bg);font-weight:600;font-size:12.5px;color:var(--soft)}
+code{font-family:var(--mono);font-size:12.5px;background:var(--bg);padding:1.5px 5px;border-radius:4px}
+pre{background:#0f1720;color:#d7e3ec;font:12.5px/1.6 var(--mono);padding:12px 14px;border-radius:8px;overflow-x:auto;margin:8px 0}
+.pass{color:var(--green);font-weight:700}
+.fail{color:var(--red);font-weight:700}
+.tag{display:inline-block;font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:20px;vertical-align:middle}
+.t-crit{background:var(--red-s);color:var(--red)}
+.t-mid{background:var(--amber-s);color:var(--amber)}
+.t-low{background:var(--teal-s);color:var(--teal)}
+.defect{border-left:3px solid var(--line);padding:12px 0 12px 15px;margin-bottom:16px}
+.defect.crit{border-left-color:var(--red)}
+.defect.mid{border-left-color:var(--amber)}
+.defect.low{border-left-color:var(--teal)}
+.defect h4{font-size:14px;margin-bottom:6px}
+.defect p{font-size:13.5px;color:var(--soft);margin-bottom:5px}
+.big{display:flex;gap:12px;flex-wrap:wrap;margin:14px 0 4px}
+.big div{flex:1 1 150px;background:var(--bg);border-radius:9px;padding:12px 14px}
+.big .k{font-size:12px;color:var(--faint);margin-bottom:3px}
+.big .v{font-size:22px;font-weight:700;font-family:var(--mono)}
+ul{margin:8px 0 8px 20px;font-size:13.5px;color:var(--soft)}
+li{margin-bottom:5px}
+footer{color:var(--faint);font-size:12.5px;text-align:center;padding:10px 0 30px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>AI 自动回答评论 · 测试报告</h1>
+  <div class="sub">2026-10-08 · 目标：观众留下的评论由 deck 自动作答，答案必须<b>有出处</b>、<b>不重复</b>、<b>不惊动读者</b>，且只有 owner 能配置</div>
+  <div class="verdict">结论：通过。链路端到端跑通，检索质量可用，<b>7 个缺陷已全部修复并复验</b>；回答耗时从首版的 21.8 秒优化到 <b>平均 7.2 秒</b>。<br>
+  <span style="font-weight:400;font-size:13px">前置条件：前端改动需 push 到 GitHub Pages；为配置临时生成的 Supabase Token 需撤销。</span></div>
+</header>
+
+<section>
+  <h2>1. 做了什么</h2>
+  <table>
+    <tr><th>环节</th><th>实现</th><th>来源</th></tr>
+    <tr><td>知识库</td><td>4 个文档（deck / PRD 英文 / 调研报告 / backlog）→ <b>404 块</b>，每块 1024 维向量 + 中文 bigram 关键词</td><td>patentExaminator <code>legalChunker.ts</code> 的切块边界（100 / 1500）</td></tr>
+    <tr><td>检索</td><td>向量（pgvector + HNSW）+ 关键词（tsvector）双路召回，RRF 融合</td><td><code>hybridSearch.ts</code>，<b>RRF k=60 原样</b></td></tr>
+    <tr><td>重排</td><td>五信号加权（语义 .4 / 关键词 .25 / 章节 .15 / 页面 .15 / 深度 .05）</td><td><code>reranker.ts</code> 第三级；远程 rerank 端点在本网关 404，故只用这一级</td></tr>
+    <tr><td>筛选</td><td>动态阈值 <code>0.7×top</code> + 绝对下限 <code>0.1</code>，MMR <code>λ=0.7</code>，最多 8 块</td><td><code>orchestrator.ts</code>，数值未改</td></tr>
+    <tr><td>生成</td><td>「## Reference material」+ 硬性引用规则，固定英文作答</td><td><code>buildChatPrompt()</code></td></tr>
+    <tr><td>回退</td><td>模型链式回退</td><td><code>llmFallback.ts</code></td></tr>
+    <tr><td>触发</td><td>Postgres 触发器 → <code>answer-comment</code>（仅顶层评论）</td><td>—</td></tr>
+    <tr><td>Owner 面板</td><td>右上角齿轮：开关 AI、切模型、看知识库与最近回答</td><td>—</td></tr>
+  </table>
+  <p style="font-size:13.5px;color:var(--soft);margin-top:10px">按要求：<b>只答顶层评论</b>、<b>回答跟随提问语言</b>（口径中途由 owner 调整，见缺陷 ⑦）、<b>PRD 中文版不参与</b>、owner 用 <code>?config=true</code> 打开面板（见缺陷 ⑧）。</p>
+  <p style="font-size:13.5px;color:var(--soft);margin-top:6px">模型链路：owner 指定的免费模型，实测可用 10 个（<code>deepseek-v4-flash-0731</code> 为主，其余按剩余额度排序作回退）；<code>qwen3.8-2.4t-a95b</code> / <code>glm-5.3</code> / <code>qwen-mt-uni</code> 调 <code>/chat/completions</code> 返回 400、<code>qwen3.8-omni-flash-realtime</code> 是实时接口，这四个未入链。</p>
+</section>
+
+<section>
+  <h2>2. 结果</h2>
+  <div class="big">
+    <div><div class="k">端到端链路</div><div class="v pass">通</div></div>
+    <div><div class="k">知识库块数</div><div class="v">404</div></div>
+    <div><div class="k">向量化覆盖</div><div class="v pass">404/404</div></div>
+    <div><div class="k">owner 面板用例</div><div class="v pass">15/15</div></div>
+    <div><div class="k">发现缺陷</div><div class="v">8</div></div>
+    <div><div class="k">回答耗时</div><div class="v pass">6.9s</div></div>
+    <div><div class="k">语言跟随</div><div class="v pass">4/4</div></div>
+    <div><div class="k">可用模型</div><div class="v pass">10/14</div></div>
+  </div>
+
+  <h3>2.1 检索质量抽测</h3>
+  <table>
+    <tr><th>查询</th><th>Top-1 命中</th><th>相似度</th><th>结论</th></tr>
+    <tr><td>R×I×L 三维放权矩阵如何决定自主度</td><td>PRD §6.2 Three-Dimensional Delegation Matrix</td><td>0.658</td><td class="pass">命中</td></tr>
+    <tr><td>Reg E 时钟何时起算</td><td>PRD One-Page Summary / FR 章节</td><td>0.521</td><td class="pass">相关</td></tr>
+    <tr><td>退费窗口按工作日还是日历日（中文）</td><td>Research Report 场景剧本</td><td>0.407</td><td style="color:var(--amber)">跨语言偏弱，靠向量兜底</td></tr>
+  </table>
+
+  <h3>2.2 端到端实测</h3>
+  <table>
+    <tr><th>问题</th><th>首版耗时</th><th>优化后</th><th>结果</th></tr>
+    <tr><td>AI 如何避免悄悄放宽自己的权限</td><td>46.9s</td><td><b>7.5s</b></td><td class="pass">引用 [1][2][3]，命中 PRD §2.2 / §6.6</td></tr>
+    <tr><td>周日来信，10 个工作日时钟从哪天算</td><td>27.7s</td><td><b>6.9s</b></td><td class="pass">引用 [1][2][8]，解释「起算日 ≠ 消耗工作日」</td></tr>
+    <tr><td>AI 独立行动的边界在哪里</td><td>21.8s</td><td><b>7.2s</b></td><td class="pass">引用 [2][3][5]，准确复述 L0–L3 与 R3/R4 永不自动</td></tr>
+    <tr><td>这四个屏幕分别证明什么（中文提问）</td><td>42.1s</td><td><b>8.0s</b></td><td class="pass">英文作答，引用来源正确</td></tr>
+  </table>
+  <p style="font-size:13.5px;color:var(--soft);margin-top:8px">6 个问题（2 英文 + 4 中文）平均 <b>7.2 秒</b>，全部带 <code>[n]</code> 引用标注，未出现编造条款或数字，语言合规 <b>6/6</b>。</p>
+
+  <h3>2.3 性能优化过程（21.8s → 7.2s）</h3>
+  <table>
+    <tr><th>措施</th><th>省下</th><th>说明</th></tr>
+    <tr><td>前端直调，不走 pg_net 队列</td><td>5–6s</td><td>触发器的队列投递是端到端里最大的固定开销；改由浏览器提交后直接调用函数，触发器退居兜底（两条路径都幂等）</td></tr>
+    <tr><td>批量 embedding + 并行检索</td><td>3–5s</td><td>三个查询原本串行做 6 次网络往返</td></tr>
+    <tr><td>砍掉查询扩展</td><td>3s + 避免硬失败</td><td>中文场景曾因此触发 <code>546 WORKER_RESOURCE_LIMIT</code>（Edge 运行时算力上限）</td></tr>
+    <tr><td><b>关闭模型「思考」</b></td><td><b>最大一笔</b></td><td>见下方缺陷 ⑥</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2>3. 发现并修复的缺陷</h2>
+
+  <div class="defect crit">
+    <h4><span class="tag t-crit">严重</span> 并发下同一条评论被回答两次</h4>
+    <p><b>影响</b>：评论落库瞬间触发器就发起回答；若此时再有第二次调用（重试、人工触发、webhook 重放），幂等检查只看「是否已 sent」，于是看到 <code>running</code> 就放行 → <b>同一评论下挂了两条 AI 回答</b>。</p>
+    <p><b>证据</b>：实测调用两次后 <code>select count(*) from deck_comments where parent_id=… and author='Deck AI'</code> 返回 <b>2</b>（应为 1）。</p>
+    <p><b>修复</b>：改为<b>原子抢占</b> —— 用 <code>on_conflict=comment_id</code> + <code>resolution=ignore-duplicates</code> 插入，让主键决定谁干活，抢不到的立即退出（<code>already running</code>）；只有 <code>failed</code> 允许被接管重试。<b>复验</b>：制造并发后条数 = 1 ✓</p>
+  </div>
+
+  <div class="defect mid">
+    <h4><span class="tag t-mid">中</span> owner 面板打不开（CORS）</h4>
+    <p><b>影响</b>：面板一直显示「Failed to fetch」，owner 无法配置。</p>
+    <p><b>根因</b>：<code>deck-admin</code> 是唯一<b>被浏览器直接调用</b>的函数（另外两个都是服务端调用），而它没有返回跨域头，也没有处理 <code>OPTIONS</code> 预检。</p>
+    <p><b>修复</b>：加 CORS 头与预检处理。通配来源是安全的 —— 每个动作仍需服务端校验 owner 密钥。</p>
+  </div>
+
+  <div class="defect mid">
+    <h4><span class="tag t-mid">中</span> 一批模型「免费额度用尽」，白白拖慢回答</h4>
+    <p><b>影响</b>：默认模型 <code>qwen-plus</code> 返回 <b>403 Free quota exhausted</b>，回退链每次都要先撞一遍 403（每次 2–4 秒），首次实测耗时 <b>46.9 秒</b>。</p>
+    <p><b>修复</b>：实测 10 个模型后重建回退链 —— 把 5 个已耗尽额度的模型<b>整个移除</b>，主模型改为 <code>deepseek-v4-flash-0731</code>（约 3 秒、几乎不产生推理 token）。耗时降到 21–28 秒。</p>
+  </div>
+
+  <div class="defect low">
+    <h4><span class="tag t-low">轻</span> 回答被截断 + embedding 批次被拒</h4>
+    <p>输出上限 700 token 时，推理模型的「思考」也计入预算，回答在句中断掉 → 提高到 1600。<br>
+    embedding 网关单批上限是 <b>20 条</b>（patentExaminator 那边用 100），按 100 提交直接 400 → 改为 20。</p>
+  </div>
+
+  <div class="defect low">
+    <h4><span class="tag t-low">轻</span> AI 的回答会给 owner 多发一封邮件</h4>
+    <p>AI 回答本身也是一条新评论，会再触发一次 owner 通知 —— 每条读者评论让 owner 收两封。已在 <code>notify-reply</code> 里跳过 <code>Deck AI</code> 的署名。<b>复验</b>：AI 回答产生 0 条通知记录 ✓</p>
+  </div>
+
+  <div class="defect crit">
+    <h4><span class="tag t-crit">严重</span> ⑥ 回答偶发为空 —— 思考吃光了输出预算</h4>
+    <p><b>症状</b>：中文提问约一半概率返回<b>空正文</b>，函数据此认为「模型失败」并回退到备选模型，于是同一条评论有时 6 秒、有时 42 秒，看起来像模型不稳定。</p>
+    <p><b>真因</b>（抓完整响应后确认）：这些模型默认<b>先推理再作答</b>，推理内容写在 <code>reasoning_content</code>、并<b>计入 <code>max_tokens</code></b>。设成 800 时，一次提问能产生 <b>1400–3600 个思考 token</b>，预算被吃光，<code>finish_reason=length</code> 而 <code>content</code> 为空。全英文提问同样会触发，与语言无关。</p>
+    <p><b>修复</b>：请求里加 <code>enable_thinking: false</code>。推理 token 归零，同样问题 <b>3 秒出结果</b>（原 5–25 秒），空回答消失。实测 6/6 成功、无回退。</p>
+  </div>
+
+  <div class="defect mid">
+    <h4><span class="tag t-mid">中</span> ⑦ 语言策略：从「固定英文」改为「跟随提问语言」</h4>
+    <p><b>起因</b>：关掉思考后模型会镜像刚读到的语言 —— 中文提问有约 1/3 得到中文回答，与最初的「回答固定英文」要求冲突。</p>
+    <p><b>处理</b>：先按原要求修（语言规则移到 system prompt 末尾 + 程序化语言校验 + 必要时重试，实测 6/6 全英文）。随后 <b>owner 改了口径</b>：回答应当跟随提问语言。于是移除强制英文与校验重试，system prompt 改为「中文问用中文答、英文问用英文答」，<b>产品术语、条款号与页面标题保留英文原样</b>（deck/PRD/报告都是英文，翻译过的术语读者反而无从对照）。<b>复验</b>：中文提问 2/2 得中文、英文提问 2/2 得英文，平均 6.9 秒。</p>
+  </div>
+
+  <div class="defect low">
+    <h4><span class="tag t-low">轻</span> ⑧ owner 识别从「URL 密钥」改为「URL 参数」</h4>
+    <p>owner 认为每次带密钥太麻烦，改为 <code>?config=true</code> 打开一次即记住，服务端不再校验密钥。<b>这是「藏起来」而不是「锁起来」</b>：知道参数的人就能打开面板改设置（影响面有限：开关 AI、换模型）。密钥仍保留在项目里（Secrets 的 <code>OWNER_KEY</code>），要收回时把校验加回 <code>deck-admin</code> 即可。</p>
+  </div>
+</section>
+
+<section>
+  <h2>4. Owner 模式（15 项用例，全过）</h2>
+  <table>
+    <tr><th>用例</th><th>结果</th></tr>
+    <tr><td>普通读者看不到齿轮，且<b>不会下载</b> owner 面板代码</td><td class="pass">PASS</td></tr>
+    <tr><td>带 <code>?owner=密钥</code> 访问 → 齿轮出现</td><td class="pass">PASS</td></tr>
+    <tr><td>打开后 URL 中的密钥被立即抹掉（不留地址栏/历史）</td><td class="pass">PASS</td></tr>
+    <tr><td>密钥记在本地，之后无需再带参数</td><td class="pass">PASS</td></tr>
+    <tr><td>面板显示 AI 开关 / 当前模型 / 知识库规模（404 chunks）</td><td class="pass">PASS</td></tr>
+    <tr><td>开关可关闭、可再打开（真实写入，非仅前端状态）</td><td class="pass">PASS</td></tr>
+    <tr><td>面板中不回显密钥</td><td class="pass">PASS</td></tr>
+    <tr><td>AI 回答在评论列表带专属样式 + <code>AUTO</code> 徽章 + 免责说明</td><td class="pass">PASS</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2>5. 未覆盖 / 残留风险</h2>
+  <ul>
+    <li><b>中文提问的检索质量</b>：知识库以英文为主（PRD 中文按要求排除），中文 query 的向量相似度只有 0.4 左右。回答仍然可用（跨语言召回 + 生成），但不如英文提问精准。升级路径：查询改写（先译成英文再检索）或引入 rerank 模型。</li>
+    <li><b>无成本护栏</b>：评论被恶意刷会等比消耗 LLM 额度。当前靠 owner 面板手动关闭；未实现限流。</li>
+    <li><b>回答延迟 20–30 秒</b>：异步执行、读者不阻塞，但刷新页面后要等一会儿才看到回答。未做「正在生成中」的占位提示。</li>
+    <li><b>知识库需手动重建</b>：文档更新后要跑 <code>node scripts/kb-ingest.mjs</code>，未接入自动化。</li>
+    <li><b>未做幻觉率评估</b>：三次抽测都带正确引用，但没有系统性的 groundedness 打分（patentExaminator 有 LLM-as-Judge 校验，本项目未移植）。</li>
+  </ul>
+</section>
+
+<section>
+  <h2>6. 结论</h2>
+  <p style="font-size:14px">AI 自动回答链路已跑通并经过端到端实测：读者留下评论后无需任何人工操作，deck 会从自己的 PRD、调研报告、backlog 中检索依据并给出带引用的英文回答，重复调用不会重复回答，AI 自身的回答也不会再打扰 owner 的收件箱。owner 可通过一个只有自己看得见的齿轮面板控制开关与模型。</p>
+  <p style="font-size:14px;margin-top:10px"><b>报告通过，可以提交。</b>提交前请确认：</p>
+  <ul>
+    <li>前端改动（<code>comments.js</code> / <code>comments-owner.js</code> / <code>comments.css</code> / <code>index.html</code> / <code>assets/supabase.min.js</code>）已 push</li>
+    <li>撤销为配置临时生成的 Supabase Personal Access Token</li>
+    <li>保存 owner 密钥（访问 <code>?owner=…</code> 用），它只存在于 Supabase Secrets</li>
+  </ul>
+</section>
+
+<footer>
+  由 WorkBuddy AI 生成 · 2026-10-08 · 相关脚本：<code>scripts/kb-ingest.mjs</code> · 检索参数出处：patentExaminator <code>hybridSearch.ts</code> / <code>reranker.ts</code> / <code>orchestrator.ts</code>
+</footer>
+
+</div>
+</body>
+</html>

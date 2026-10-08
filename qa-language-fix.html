@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>英文提问为什么回了中文 · 修复实证 · 2026-10-08</title>
+<style>
+:root{
+  --ink:#16202b; --soft:#3b4957; --faint:#6b7280; --line:#dfe5ec; --bg:#f5f7fa; --paper:#fff;
+  --teal:#0f766e; --teal-s:#e6f4f1; --red:#b42318; --red-s:#fdecea; --amber:#b45309; --amber-s:#fdf3e3;
+  --green:#15803d; --green-s:#e8f5ec;
+  --mono:"JetBrains Mono","SF Mono",ui-monospace,Menlo,Consolas,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans SC",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.65 var(--sans);padding:40px 20px}
+.wrap{max-width:1000px;margin:0 auto}
+header{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:26px 28px;margin-bottom:20px}
+h1{font-size:24px;letter-spacing:-.01em;margin-bottom:6px}
+.sub{color:var(--faint);font-size:13.5px}
+.verdict{margin-top:16px;padding:12px 16px;border-radius:9px;background:var(--green-s);border-left:4px solid var(--green);font-weight:600;color:#14532d}
+.verdict .n{font-weight:400;font-size:13px;color:#166534;display:block;margin-top:6px}
+section{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:24px 28px;margin-bottom:20px}
+h2{font-size:17px;margin-bottom:14px;padding-bottom:9px;border-bottom:1px solid var(--line)}
+h3{font-size:14px;margin:22px 0 8px;color:var(--soft)}
+h3:first-of-type{margin-top:0}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--bg);font-weight:600;font-size:12.5px;color:var(--soft)}
+td.num{font-family:var(--mono);text-align:right;white-space:nowrap}
+code{font-family:var(--mono);font-size:12.5px;background:var(--bg);padding:1.5px 5px;border-radius:4px}
+.pass{color:var(--green);font-weight:700}
+.bad{color:var(--red);font-weight:700}
+.warn{color:var(--amber);font-weight:700}
+.big{display:flex;gap:12px;flex-wrap:wrap;margin:14px 0 4px}
+.big div{flex:1 1 150px;background:var(--bg);border-radius:9px;padding:12px 14px}
+.big .k{font-size:12px;color:var(--faint);margin-bottom:3px}
+.big .v{font-size:21px;font-weight:700;font-family:var(--mono)}
+.ex{border:1px solid var(--line);border-radius:9px;padding:13px 15px;margin:10px 0;background:#fcfdfe}
+.exh{font-size:12.5px;color:var(--faint);margin-bottom:6px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.exh b{color:var(--ink);font-size:13px}
+.exh .dim{font-family:var(--mono);font-size:11.5px}
+.pill{display:inline-block;background:var(--teal-s);color:var(--teal);font-weight:700;font-size:11px;padding:1px 7px;border-radius:20px}
+.q{font-size:13.5px;font-weight:600;margin-bottom:6px}
+.a{font-size:13px;color:var(--soft);white-space:pre-wrap}
+.lg{font-size:12px;color:var(--faint);margin-top:7px;padding-top:7px;border-top:1px dashed var(--line)}
+.lg.neg{color:var(--red)}
+.note{font-size:12.5px;color:var(--soft);margin-top:8px;padding-top:7px;border-top:1px dashed var(--line)}
+ul{margin:8px 0 8px 20px;font-size:13.5px;color:var(--soft)}
+li{margin-bottom:5px}
+footer{color:var(--faint);font-size:12.5px;text-align:center;padding:10px 0 30px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>英文提问为什么回了中文 —— 以及修完之后</h1>
+  <div class="sub">52 题全量测试 · v20 归档 2026-10-08T13:21:34.582Z → v21 复跑 2026-10-08T14:04:29.277Z · 线上 <code>answer-comment</code> 由 <b>v20</b> 部署为 <b>v21</b></div>
+  <div class="verdict">修复生效：中文占多数的回答从 <b>3/52</b> 降到 <b>0/52</b>。
+    <span class="n">同批其余题的引用与 legend 未见回归；但修复本身带出 1 处新缺陷（中文数词换算），在下面单列。</span></div>
+</header>
+
+<section>
+  <h2>1 · 根因：不是措辞不够强，是模型被源文语言带走</h2>
+  <p style="font-size:13.5px;color:var(--soft)">原提示词只说"按评论语言作答"，没有指定是哪种语言。答案主要依据的材料里，<b>《调研报告》是中文</b>，Deck 与 PRD 是英文 —— 于是回答的语言跟着"命中哪份材料"走，而不是跟着提问走。</p>
+  <div class="big">
+    <div><div class="k">中文答案（v20）</div><div class="v" style="color:var(--red)">3 / 52</div></div>
+    <div><div class="k">其中引用了《调研报告》</div><div class="v">3 / 3</div></div>
+    <div><div class="k">引用该报告的答案总数</div><div class="v">12</div></div>
+    <div><div class="k">未引用它的答案</div><div class="v">40 → 全英文</div></div>
+  </div>
+  <p style="font-size:13.5px;color:var(--soft);margin-top:8px">3 条全部落在引用中文报告的那 12 条里，未引用它的 40 条无一例外是英文 —— 这是<b>源文语言镜像</b>，不是随机漂移，所以"再强调一遍语气"不会有用。</p>
+</section>
+
+<section>
+  <h2>2 · 修法：在服务端先判定语言，再把它写进 System 段</h2>
+  <p style="font-size:13.5px;color:var(--soft)">新增 <code>commentScript()</code>：数汉字与拉丁字母，定出 <code>Chinese</code> / <code>English</code>，然后 prompt 里把结论明写出来 —— 不再让模型自己判断"这条评论是什么语言"。</p>
+  <ul>
+    <li>判定规则是 <b>汉字绝对量优先</b>，不是比例：<code>han &gt;= 4</code> → Chinese；<code>han &gt;= 2 且 han/(han+latin) &gt;= 0.5</code> → Chinese；否则 English。</li>
+    <li>纯比例会把「Talkdesk 的 core-bank execution 是什么意思？」这种<b>英文产品名多于汉字</b>的中文提问误判成英文 —— 这正是 30 条单测 <code>check-answer-prompt.mjs</code> 抓到的坑。</li>
+    <li>System 段明写：<code>The comment is written in English. Write the whole answer in English. The reference material above is part English and part Chinese — answer in the comment's language, never in the material's.</code></li>
+  </ul>
+</section>
+
+<section>
+  <h2>3 · 三条错语言的答案，修完逐条对照</h2>
+  <p style="font-size:13.5px;color:var(--soft)">下面每一对都是<b>同一个问题</b>的答案：左为 v20 归档原文，右为 v21 重新生成。计数已剥掉 <code>Sources:</code> 段与所有链接目标 —— 否则内嵌的长 URL 会让一条纯中文答案看起来是拉丁占优。</p>
+  
+  <h3>第 1 页 · Sam Okafor</h3>
+  
+  <div class="ex">
+    <div class="exh"><span class="pill">修复前 · v20</span><b>SPM</b>
+      <span class="dim">第 2 页 · han 199 / latin 15</span></div>
+    <div class="q">Larkspur is fictional but it drives the whole ROI. Which of its four profile numbers would actually change product scope if a real prospect differs?</div>
+    <div class="a">好问题。四个画像数字里，真正会改变产品范围的是**进件量（5万封/月）**和**“请致电”占比（22%）**——前者决定并发与队列设计，后者决定“失败需求下降”这一杠杆的权重；资产规模和坐席数只影响ROI的绝对值，不影响功能范围（见[2]）。如果真实客户进件量差一个量级（比如5千封/月），triage和自动结案的阈值、以及“周一积压”的批处理设计都要重做；若“请致电”占比远低于22%，则“同一线程内完成核验再办结”的优先级会下降，因为主要矛盾不再是二次联系（见[1] §1.3、§3.2）。其余两个数字（资产、FTE）在[2]中已标注为假设，仅用于ROI敏感性，不进入产品决策。</div>
+    <div class="lg">Sources: 2. [Research Report — 9.2 邮件渠道的经济账](https://wukun2005-gif.github.io/mailAutopilotForFS/email-autopilot-research-report-v0.2.html) · 1. [Research Report — 审阅发现：必须纠正或补上的 10 处（按对面试的影响排序）](https://wukun2005-gif.github.io/mailAutopilotForFS/email-autopilot-research-report-v0.2.html)</div>
+    <div class="note">判定：<b class="bad">中文占多数</b> —— 模型被中文源文带走。</div>
+  </div>
+  
+  <div class="ex">
+    <div class="exh"><span class="pill">修复后 · v21</span><b>Sam Okafor</b>
+      <span class="dim">第 1 页 · han 0 / latin 543</span></div>
+    <div class="q">Larkspur is fictional but it drives the whole ROI. Which of its four profile numbers would actually change product scope if a real prospect differs?</div>
+    <div class="a">Good catch — the four profile numbers are all assumptions, but only two would change product scope if a real prospect differed materially. The email volume (60k/month) and the 22% "please call" rate drive the ROI levers (failure demand, VARR, AI-assisted efficiency) [2]; if those move, the savings scale linearly. The asset size ($18B) and FTE count (420) are just context for plausibility — they don't alter what the product must do. The one number that would change scope is the 22% "please call" rate: if a prospect's baseline is lower, the "same-thread verification and resolution" feature (the client-side #1 experience, per [1]) becomes less of a wedge, and we'd lean more on Reg E compliance as the driver instead.</div>
+    <div class="lg">Sources: 2. [Research Report — 9.2 邮件渠道的经济账](https://wukun2005-gif.github.io/mailAutopilotForFS/email-autopilot-research-report-v0.2.html) · 1. [Research Report — 审阅发现：必须纠正或补上的 10 处（按对面试的影响排序）](https://wukun2005-gif.github.io/mailAutopilotForFS/email-autopilot-research-report-v0.2.html)</div>
+    <div class="note">判定：<b class="pass">英文</b>。</div>
+  </div>
+
+  <h3>第 2 页 · Aiko Tanaka</h3>
+  
+  <div class="ex">
+    <div class="exh"><span class="pill">修复前 · v20</span><b>PE</b>
+      <span class="dim">第 3 页 · han 149 / latin 52</span></div>
+    <div class="q">A clock starts when the bank receives the mail, not when an agent opens it. Where does that receipt timestamp come from, and how would we prove it to an examiner?</div>
+    <div class="a">好问题。收件时间戳来自邮件系统本身的接收元数据（SMTP 接收时间），而不是人工打开邮件的时间——这正是“The clock starts at the inbox”主张的核心（见 [1] 主张①）。对 examiner 的证明路径是：系统在进件时即记录该时间戳并启动法定时钟，且 Reg E 1005.11(b)(1) 的官方解释明确“收到”指银行控制该通知之时，而非员工审阅之时（见 [2]）。具体到 Larkspur 的部署，时间戳的存储与审计日志格式属于实施细节，参考材料未覆盖，建议在 POC 阶段与合规团队确认。</div>
+    <div class="lg">Sources: 1. [Research Report — v0.4 新增的 6 个产品主张（差异化从这里来）](https://wukun2005-gif.github.io/mailAutopilotForFS/email-autopilot-research-report-v0.2.html) · 2. [Case Study Deck — The clock starts at the inbox.](https://wukun2005-gif.github.io/mailAutopilotForFS/deck-html/)</div>
+    <div class="note">判定：<b class="bad">中文占多数</b> —— 模型被中文源文带走。</div>
+  </div>
+  
+  <div class="ex">
+    <div class="exh"><span class="pill">修复后 · v21</span><b>Aiko Tanaka</b>
+      <span class="dim">第 2 页 · han 0 / latin 590</span></div>
+    <div class="q">A clock starts when the bank receives the mail, not when an agent opens it. Where does that receipt timestamp come from, and how would we prove it to an examiner?</div>
+    <div class="a">Good question — the receipt timestamp is the moment the email lands in the bank's system, not when an agent opens it, and that's exactly what the deck's "clock starts at the inbox" claim rests on (see [2]). The timestamp comes from the mail server's intake log, which we'd treat as the system-of-record for Reg E purposes; the deck doesn't specify the exact logging mechanism or audit trail format, so I can't point to a concrete implementation detail here. For examiner proof, the argument would be that the intake log is immutable and time-stamped at the point of receipt, but the reference material doesn't cover how we'd present that evidence in an exam — that's a gap we'd need to close in the build phase, not something I can commit to from this deck.</div>
+    <div class="lg">Sources: 2. [Case Study Deck — The clock starts at the inbox.](https://wukun2005-gif.github.io/mailAutopilotForFS/deck-html/)</div>
+    <div class="note">判定：<b class="pass">英文</b>。</div>
+  </div>
+
+  <h3>第 11 页 · Lena Fischer</h3>
+  
+  <div class="ex">
+    <div class="exh"><span class="pill">修复前 · v20</span><b>PPM</b>
+      <span class="dim">第 12 页 · han 157 / latin 12</span></div>
+    <div class="q">The autonomy rate has three conditions attached. Which of the three is most likely to be gamed by a customer who wants the number to look good?</div>
+    <div class="a">最可能被“做数”的是第三个条件——受监管意图的召回门槛（≥99.5%）。因为召回率只统计“检测器抓到的”占“实际应抓的”比例，而“实际应抓”的标签来自人工标注或事后审计，客户可以通过放宽标注口径、延迟审计或只对低风险样本抽检来抬高数字；相比之下，动作白名单和金额阈值是确定性规则，无法被统计口径操纵（见[1] §3.2、§13）。校准样本量（n≥600）虽然也可被“攒样本”稀释，但 rule of three 的上界是数学硬约束，造假成本更高（见[2]）。</div>
+    <div class="lg">Sources: 1. [Research Report — 12.3 v0.4.3 Trade-off 登记册：为控险、合规与可信度主动放弃了什么](https://wukun2005-gif.github.io/mailAutopilotForFS/email-autopilot-research-report-v0.2.html) · 2. [Research Report — 7.1 两个 headline 方向的证据复核](https://wukun2005-gif.github.io/mailAutopilotForFS/email-autopilot-research-report-v0.2.html)</div>
+    <div class="note">判定：<b class="bad">中文占多数</b> —— 模型被中文源文带走。</div>
+  </div>
+  
+  <div class="ex">
+    <div class="exh"><span class="pill">修复后 · v21</span><b>Lena Fischer</b>
+      <span class="dim">第 11 页 · han 7 / latin 538</span></div>
+    <div class="q">The autonomy rate has three conditions attached. Which of the three is most likely to be gamed by a customer who wants the number to look good?</div>
+    <div class="a">The one most exposed to gaming is the **recall threshold on regulated-intent detection** — the ≥99.5% "one miss = one violation" bar. A team could tune the detector to over-flag (high recall, low precision), which inflates the "caught everything" story while quietly depressing the autonomy rate and ROI; the trade-off register explicitly accepts this "宁可误报多升级" to protect the compliance signature [1]. The graduation-sample count (n≥600) is harder to game because it's a statistical artifact of rule of three — you can't fake the sample size, only wait [2]. The action-whitelist restriction (high-impact actions never enter the tool) isn't gameable at all: it's a hard architectural exclusion, not a metric [1].</div>
+    <div class="lg">Sources: 1. [Research Report — 12.3 v0.4.3 Trade-off 登记册：为控险、合规与可信度主动放弃了什么](https://wukun2005-gif.github.io/mailAutopilotForFS/email-autopilot-research-report-v0.2.html) · 2. [Research Report — 7.1 两个 headline 方向的证据复核](https://wukun2005-gif.github.io/mailAutopilotForFS/email-autopilot-research-report-v0.2.html)</div>
+    <div class="note">判定：<b class="pass">英文</b>。</div>
+  </div>
+
+</section>
+
+<section>
+  <h2>4 · 非回归核查</h2>
+  <p style="font-size:13.5px;color:var(--soft)">按<b>问题文本</b>把两轮对齐（不能按 <code>created_at</code>，同一批插入的时间会并列）。52 条可比。</p>
+  <table>
+    <tr><th>检查</th><th class="num">v20</th><th class="num">v21</th><th>判读</th></tr>
+    <tr><td>中文占多数的回答</td><td class="num">3 / 52</td><td class="num">0 / 52</td><td class="pass">这是本次要修的</td></tr>
+    <tr><td>带引用链接</td><td class="num">52 / 52</td><td class="num">51 / 52</td><td><span class="warn">少 1 条 —— 经重复抽样确认是波动</span></td></tr>
+    <tr><td>带 Sources legend</td><td class="num">52 / 52</td><td class="num">51 / 52</td><td><span class="warn">少 1 条（与上同一题）</span></td></tr>
+    <tr><td>裸 <code>[n]</code> 未变成链接</td><td class="num">0</td><td class="num">0</td><td class="pass">两轮都为 0</td></tr>
+  </table>
+
+  <h3>那 1 条"丢了引用"的，是波动不是回归</h3>
+  <p style="font-size:13.5px;color:var(--soft)">第 9 页「Only four demo films are listed…」在 52 题那轮没有带引用，但用 <code>probe-answer-variance.mjs</code> 把<b>同一个问题重复问 3 次</b>，3/3 都带引用与 legend。答案不是算出来的、每次都不一样，所以"上一轮 52/52、这一轮 49/52"这种对比本身不能证明回归。</p>
+
+  <h3>顺带纠正一处我上一轮记错的口径</h3>
+  <p style="font-size:13.5px;color:var(--soft)">"来源 ⊆ 公开材料"那条：报告脚本把<b>代码</b>也算作公开材料之一，而 <code>qa-answer-comments.mjs</code> 的 <code>PUBLISHED</code> 集合<b>不含</b> <code>Prototype Source</code>，所以它报 <b>49/52</b>。两轮都是 3 条引用代码，前后一致 —— 不是回归，是我把两套定义混为一谈。</p>
+</section>
+
+<section>
+  <h2>5 · 修复带出的一处新缺陷（未修）</h2>
+  <p style="font-size:13.5px;color:var(--soft)">同一条题在<b>强制英文作答</b>后，把素材里的邮件量写错了。素材原文是 <code>50,000 emails a month</code> / <code>50K emails/month</code>。</p>
+  <table>
+    <tr><th>轮次</th><th>答案里的写法</th><th>对错</th></tr>
+    <tr><td>v20（中文作答）</td><td><code>5万封/月</code></td><td class="pass">正确</td></tr>
+    <tr><td>v21 那轮</td><td><code>60k/month</code></td><td class="bad">数字错（应为 50k）</td></tr>
+    <tr><td>v21 重复第 1 次</td><td><code>60k/month</code></td><td class="bad">同上</td></tr>
+    <tr><td>v21 重复第 2 次</td><td><code>5万封/月</code></td><td class="pass">正确 —— 唯一一次照抄中文数词</td></tr>
+    <tr><td>v21 重复第 3 次</td><td><code>60k/year</code></td><td class="bad">数字与单位都错</td></tr>
+  </table>
+  <p style="font-size:13.5px;color:var(--soft);margin-top:6px">两次纯英文作答都写成了 <code>60k</code>，唯一正确的一次是把中文数词原样留下 —— 疑因 <b>"5万 → k" 这一步换算出错</b>，属强制英文作答的副作用。修复方向：System 段加一句"数字按素材原文逐字照抄、不要做单位换算"，先补 <code>check-answer-prompt.mjs</code> 的断言再部署。线上 deck 上第 2 页那条种子答案目前也是错的这个数。</p>
+</section>
+
+<footer>
+  数据：<code>qa-answer-comments-52.json</code>（v20）· <code>qa-answer-comments-52-v21.json</code>（v21）<br>
+  重跑：<code>node scripts/qa-answer-comments.mjs --no-clean</code> → <code>node scripts/archive-qa-run.mjs out.json</code>
+</footer>
+
+</div>
+</body>
+</html>

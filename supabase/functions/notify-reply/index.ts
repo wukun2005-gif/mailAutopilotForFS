@@ -279,6 +279,11 @@ Deno.serve(async (req) => {
     const rec = payload?.record ?? payload;
     if (!rec?.id) return json({ ok: false, skipped: "no record" });
 
+    /* The deck's own answers must not mail the owner: every reader comment
+       would otherwise produce two notifications — the comment, then the AI's
+       reply to it. */
+    if ((rec.author ?? "") === "Deck AI") return json({ ok: true, skipped: "ai answer" });
+
     const host = Deno.env.get("SMTP_HOST");
     const user = Deno.env.get("SMTP_USER");
     const pass = Deno.env.get("SMTP_PASS");
