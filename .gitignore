@@ -55,3 +55,7 @@ proposals-review-2026-10-06.md
 scripts/shot-loop.mjs
 tests/unit/repro2.test.ts
 tts/candidates/
+
+# 只保留在本地、不进仓库：本机 agent 的项目记忆与工作日志（2026-10-08）
+# 它是 agent 的运行状态、每次干活都会动，提交进来只会让 diff 变吵
+.workbuddy/
