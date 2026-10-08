@@ -6,6 +6,9 @@ Full demo video: https://youtu.be/FPWNd_wCKxs
 
 Live slide deck: https://wukun2005-gif.github.io/mailAutopilotForFS/deck-html/
 
+Run the deck locally: **`npm run deck`** — serves `deck-html/` and opens http://127.0.0.1:8765 (it picks the next free port if 8765 is taken; `npm run deck -- --no-open` to skip the browser).
+It has to be an `http://` address: opening `deck-html/index.html` straight from disk makes the comment panel silently disappear, because browsers block ES modules over `file://`.
+
 Product spec: [PRD](https://wukun2005-gif.github.io/mailAutopilotForFS/email-autopilot-fs-prd_en.html)
 
 ## Problem
