@@ -14,6 +14,9 @@
 
 const CFG = window.DECK_COMMENT_CONFIG || {};
 const DECK = CFG.deckId || 'default';
+/* the byline the deck's own answers carry — used to badge them and to keep
+   the AI from answering itself */
+const AI_AUTHOR = 'Deck AI';
 const TABLE = 'deck_comments';
 const LS_ID = 'deck-comment-identity';
 const LS_LOCAL = 'deck-comments-local-' + DECK;
@@ -81,6 +84,11 @@ let hotId = null;        // comment to flash (arrived by link / clicked anchor)
 let liveOn = false;
 let presence = {};
 let lastJSON = '';
+/* ?owner=true — set by ownerMode() at the bottom of this file. Owner mode
+   lives in the URL, never in storage, so it is a plain module variable the
+   comment renderer can read: owners get a Delete control on every comment,
+   not just their own. */
+let ownerOn = false;
 /* Ids we rendered optimistically but the server has not handed back yet.
    A refresh that lands before the read catches up must not erase them —
    otherwise a comment flickers out right after sending and the reader
@@ -160,6 +168,21 @@ async function patchRow(id, fields) {
     if (bc) bc.postMessage({ t: 'changed' });
   }
 }
+/* Same as patchRow, but for everything matching a column rather than one id —
+   used to take a comment's replies with it when the comment is deleted. Goes
+   through the view for the same reason patchRow does (anon has no SELECT on
+   the table, and PostgREST checks SELECT before an UPDATE). */
+async function patchWhere(column, value, fields) {
+  if (mode === 'cloud') {
+    const { error } = await sb.from('deck_comments_public').update(fields).eq(column, value);
+    if (error) throw error;
+    return;
+  }
+  const rows = await load();
+  rows.forEach(function (c) { if (c[column] === value) Object.assign(c, fields); });
+  localStorage.setItem(LS_LOCAL, JSON.stringify(rows));
+  if (bc) bc.postMessage({ t: 'changed' });
+}
 function newId() {
   return (crypto && crypto.randomUUID) ? crypto.randomUUID()
     : 'l' + Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
@@ -186,14 +209,39 @@ function trackPresence() {
     presCh.track({ name: me.name || 'Anonymous', page: keys[pageIdx], at: Date.now() });
   } catch (e) {}
 }
-function peopleHere() {
+function peopleStates() {
   const key = keys[pageIdx];
-  let n = 0;
+  const out = [];
   Object.keys(presence).forEach(function (k) {
     const st = presence[k] || [];
-    st.forEach(function (s) { if (s && s.page === key) n++; });
+    st.forEach(function (s) { if (s && s.page === key) out.push(s); });
   });
-  return n;
+  return out;
+}
+
+/* Initials, not full names. The strip is 360px wide, and a presence channel
+   nobody opted into is the wrong place to broadcast a stranger's full name to
+   everyone else looking at the page. One word keeps its first letter
+   ("dana" → "D"); two or more give one letter each ("Dana Whitfield" → "DW").
+   Non-Latin names fall out correctly — "吴坤" has no spaces, so it keeps "吴". */
+function shortName(name) {
+  const s = String(name == null ? '' : name).trim();
+  if (!s || /^anonymous$/i.test(s)) return null;
+  return s.split(/\s+/).filter(Boolean)
+    .map(function (w) { return w[0]; }).join('').toUpperCase().slice(0, 3);
+}
+
+/* Who is here, by name when somebody gave one. Falls back to the plain
+   headcount when every visitor is anonymous: there is then nothing to name,
+   and a placeholder would be worse than a number. Pure on purpose, so the UI
+   regression script can call it without standing up a realtime socket. */
+function presenceLabel(people) {
+  const n = people.length;
+  const named = people.map(function (p) { return shortName(p && p.name); }).filter(Boolean);
+  if (!named.length) return n > 1 ? n + ' people on this page' : 'You are the only one here';
+  const shown = named.slice(0, 4).join(' · ');
+  const extra = n - Math.min(named.length, 4);
+  return shown + (extra > 0 ? ' · +' + extra : '') + (n === 1 ? ' is on this page' : ' on this page');
 }
 
 /* ── DOM ───────────────────────────────────────────────────────────────── */
@@ -214,6 +262,19 @@ function syncBtnToTheme() {
   if (!r.width) return;
   btn.style.top = r.top + 'px';
   btn.style.left = (r.right + 6) + 'px';
+  /* The owner's gear rides in the same row, immediately right of Comments —
+     which is what it always said it did, but it was pinned to right:268px, so
+     it landed *inside* the 360px comments panel and, with a higher z-index,
+     sat on top of the panel's own header. Counting off the button keeps the
+     two together and clear of both panels. The gear is appended later by the
+     lazily imported owner module, so it is looked up on every pass rather than
+     held in a variable. */
+  const g = document.getElementById('cmtgear');
+  if (g) {
+    const b = btn.getBoundingClientRect();
+    g.style.top = b.top + 'px';
+    g.style.left = (b.right + 6) + 'px';
+  }
 }
 syncBtnToTheme();
 new MutationObserver(syncBtnToTheme).observe(document.querySelector('.themebtn') || document.body,
@@ -434,11 +495,7 @@ function ago(ts) {
 
 function renderBadges() {
   const counts = new Array(N).fill(0);
-  all.forEach(function (c) {
-    if (c.deleted) return;
-    const k = resolveIdx(c);
-    if (k >= 0) counts[k]++;
-  });
+  for (let k = 0; k < N; k++) counts[k] = visibleOn(k).rows.length;
   const items = [...document.querySelectorAll('#toclist .tocitem')];
   items.forEach(function (it, k) {
     let b = it.querySelector('.cmtbadge');
@@ -462,24 +519,79 @@ function renderLive() {
     el.liveTxt.textContent = 'Local only — comments are not shared yet';
     return;
   }
-  const n = peopleHere();
   el.live.classList.toggle('off', !liveOn);
-  el.liveTxt.textContent = liveOn
-    ? (n > 1 ? n + ' people on this page' : 'You are the only one here')
-    : 'Reconnecting…';
+  el.liveTxt.textContent = liveOn ? presenceLabel(peopleStates()) : 'Reconnecting…';
 }
 function setLive(on) { liveOn = on; renderLive(); }
 
+/* ── comment body → text, with our own links made clickable ──────────────
+   The answer-comment function writes its citations as markdown links, e.g.
+   "[3](https://wukun2005-gif.github.io/mailAutopilotForFS/…)" — the
+   [3] used to be a dead number, because the numbered list it referred to only
+   ever existed inside the prompt.
+
+   Only hosts we own become anchors. An open comment box would otherwise be a
+   phishing surface: anyone can post "[click here](https://evil.example)" and
+   the deck would render a link that looks like it comes from the author.
+   Anything not ours stays exactly as it was typed.
+
+   Nothing goes through innerHTML — text is set with createTextNode and links
+   are built with createElement — so no comment, from any source, can turn into
+   markup. Newlines need no handling: .bd is white-space:pre-wrap. */
+const OK_HOSTS = [
+  'github.com/wukun2005-gif/mailAutopilotForFS',
+  'wukun2005-gif.github.io/mailAutopilotForFS',
+];
+function okLink(url) {
+  try {
+    const u = new URL(url);
+    if (u.protocol !== 'https:') return false;
+    const target = u.host + u.pathname;
+    return OK_HOSTS.some(function (h) { return target === h || target.indexOf(h + '/') === 0; });
+  } catch (e) { return false; }
+}
+function renderBody(bd, text) {
+  const s = String(text == null ? '' : text);
+  const re = /\[([^\]\n]*)\]\((https:\/\/[^\s)]+)\)/g;
+  let at = 0, m;
+  while ((m = re.exec(s)) !== null) {
+    if (m.index > at) bd.appendChild(document.createTextNode(s.slice(at, m.index)));
+    if (okLink(m[2])) {
+      const a = document.createElement('a');
+      a.className = 'cite';
+      a.href = m[2];
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      a.title = m[2];
+      a.textContent = m[1];
+      bd.appendChild(a);
+    } else {
+      bd.appendChild(document.createTextNode(m[0]));
+    }
+    at = m.index + m[0].length;
+  }
+  if (at < s.length) bd.appendChild(document.createTextNode(s.slice(at)));
+}
+
 function node(comment, isKid) {
+  const isAI = (comment.author || '') === AI_AUTHOR;
   const d = document.createElement('div');
-  d.className = 'cmt' + (comment.resolved ? ' resolved' : '') + (comment.client_id === me.clientId ? ' mine' : '');
+  d.className = 'cmt' + (comment.resolved ? ' resolved' : '')
+    + (comment.client_id === me.clientId ? ' mine' : '') + (isAI ? ' ai' : '');
   d.dataset.id = comment.id;
 
   const top = document.createElement('div'); top.className = 'top';
-  const av = document.createElement('span'); av.className = 'av';
-  av.textContent = ((comment.author || 'A').trim()[0] || '?');
+  const av = document.createElement('span'); av.className = 'av' + (isAI ? ' ai' : '');
+  av.textContent = isAI ? 'AI' : ((comment.author || 'A').trim()[0] || '?');
   const nm = document.createElement('span'); nm.className = 'nm';
   nm.textContent = comment.author || 'Anonymous';
+  if (isAI) {
+    const b = document.createElement('span');
+    b.className = 'ai-badge';
+    b.textContent = 'auto';
+    b.title = 'Answered by the deck itself, grounded in its own PRD, research report and backlog';
+    nm.appendChild(b);
+  }
   const tm = document.createElement('span'); tm.className = 'tm';
   tm.textContent = ago(comment.created_at);
   const acts = document.createElement('span'); acts.className = 'acts';
@@ -493,8 +605,14 @@ function node(comment, isKid) {
   }
 
   const bd = document.createElement('div'); bd.className = 'bd';
-  bd.textContent = comment.body;
+  renderBody(bd, comment.body);
   d.appendChild(bd);
+
+  if (isAI) {
+    const note = document.createElement('div'); note.className = 'ai-note';
+    note.textContent = "Written by the deck from its own PRD, research report and backlog. It can be wrong — ask Wu Kun about anything binding.";
+    d.appendChild(note);
+  }
 
   if (comment.resolved) {
     const dn = document.createElement('span'); dn.className = 'done'; dn.textContent = 'Resolved';
@@ -523,13 +641,30 @@ function node(comment, isKid) {
     });
     acts.appendChild(rs);
   }
-  if (comment.client_id === me.clientId) {
-    const dl = document.createElement('button'); dl.textContent = 'Delete';
+  const mineToDelete = comment.client_id === me.clientId;
+  if (mineToDelete || ownerOn) {
+    const dl = document.createElement('button');
+    dl.textContent = 'Delete';
+    if (!mineToDelete) dl.title = 'Owner: delete any comment';
     dl.addEventListener('click', async function () {
-      if (!confirm('Delete this comment?')) return;
+      /* In owner mode this button also sits on comments that are not yours, so
+         the prompt has to name what is about to disappear — "this comment" is
+         not enough when the comment is somebody else's. Deleting a top-level
+         comment takes its replies with it, and that is worth saying before the
+         click rather than after. */
+      const who = comment.author || 'Anonymous';
+      const msg = mineToDelete ? 'Delete this comment?'
+        : comment.parent_id ? 'Owner: delete this reply by ' + who + '?'
+          : 'Owner: delete ' + who + '\u2019s comment, and any replies under it?';
+      if (!confirm(msg)) return;
       try {
         await patchRow(comment.id, { deleted: true });
         comment.deleted = true;
+        /* Delete the replies too rather than leaving them live-but-unreachable.
+           They used to stay deleted = false, so they were counted on the badge
+           while nothing could render them — the "says 4, shows 0" bug. The
+           confirmation above already promised this. */
+        if (!comment.parent_id) await patchWhere('parent_id', comment.id, { deleted: true });
         renderBadges(); renderList(); highlight();
         await refresh(true);
       } catch (e) { warn('Could not delete that comment.'); }
@@ -539,13 +674,38 @@ function node(comment, isKid) {
   return d;
 }
 
-function renderList() {
-  const mine = all.filter(function (c) { return !c.deleted && resolveIdx(c) === pageIdx; });
+/* ── what a reader can actually see on one page ──────────────────────────
+   Live top-level comments, plus the replies hanging under a live parent.
+
+   The rule has to exist in ONE place. It used to be written out twice and the
+   two copies disagreed: the badge counted every row with deleted = false,
+   while the list only walked replies whose parent was still there. Deleting a
+   top-level comment therefore left its replies counted-but-invisible — the
+   badge said "4" and there was nothing on the page to find. Keeping the
+   predicate here means the count cannot drift from the list again.
+
+   A reply whose parent is gone is deliberately returned to nobody: its
+   context is gone with the parent, and the delete path now marks those
+   replies deleted as well, so this is a backstop rather than the norm. */
+function visibleOn(k) {
+  const mine = all.filter(function (c) { return !c.deleted && resolveIdx(c) === k; });
   const tops = mine.filter(function (c) { return !c.parent_id; });
+  const live = {};
+  tops.forEach(function (t) { live[t.id] = 1; });
   const kids = {};
-  mine.filter(function (c) { return c.parent_id; }).forEach(function (c) {
+  const rows = tops.slice();
+  mine.forEach(function (c) {
+    if (!c.parent_id || !live[c.parent_id]) return;   // orphan — nothing renders it
     (kids[c.parent_id] = kids[c.parent_id] || []).push(c);
+    rows.push(c);
   });
+  return { tops: tops, kids: kids, rows: rows };
+}
+
+function renderList() {
+  const v = visibleOn(pageIdx);
+  const tops = v.tops;
+  const kids = v.kids;
 
   el.list.innerHTML = '';
   if (!tops.length) {
@@ -639,7 +799,9 @@ function highlight() {
      and the text walker deliberately skips mark contents, so the second one
      would silently never render. Group by the quoted phrase instead, and let
      the highlight carry the count. */
-  const here = all.filter(function (c) { return !c.deleted && resolveIdx(c) === pageIdx && c.quote; });
+  /* Only comments the reader can actually see: an orphaned reply would paint a
+     highlight whose count can never be opened. */
+  const here = visibleOn(pageIdx).rows.filter(function (c) { return c.quote; });
   const groups = new Map();
   here.forEach(function (c) {
     if (!groups.has(c.quote)) groups.set(c.quote, []);
@@ -732,6 +894,29 @@ function setQuote(q) {
   el.ta.focus();
 }
 
+/* ── let the deck answer straight away ─────────────────────────────────────
+   The database trigger would get to it anyway, but it goes through pg_net's
+   queue, and that queue alone added 5–6 seconds to every answer. Calling the
+   function directly starts the work immediately. Only the comment's id is
+   sent — the function reads the real row itself, so nothing here can be
+   forged. If this call fails (offline, tab closed, function cold) the trigger
+   still covers it, and both paths are idempotent: one answer per comment. */
+function askDeckToAnswer(row) {
+  if (mode !== 'cloud' || row.parent_id) return;
+  try {
+    fetch(`${(CFG.supabaseUrl || '').replace(/\/+$/, '')}/functions/v1/answer-comment`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${CFG.supabaseAnonKey}`,
+        apikey: CFG.supabaseAnonKey,
+      },
+      body: JSON.stringify({ record: { id: row.id } }),
+      keepalive: true,
+    }).catch(function () { /* the trigger still covers it */ });
+  } catch (e) { /* same */ }
+}
+
 /* ── send ──────────────────────────────────────────────────────────────── */
 async function submit() {
   if (sending) return;
@@ -773,6 +958,7 @@ async function submit() {
     replyTo = null;
     el.hint.textContent = '';
     await refresh(true);
+    askDeckToAnswer(row);
   } catch (e) {
     console.warn('[comments] send failed:', e);
     warn('Could not save that comment (' + (mode === 'cloud' ? 'server' : 'local') + ' error). Try again.');
@@ -836,4 +1022,55 @@ async function refresh(force) {
   }
   if (cid) { hotId = cid; open(); }
   renderLive();
+})();
+
+/* ── owner mode ────────────────────────────────────────────────────────────
+   Owner mode is the URL parameter and nothing else: `?owner=true` adds the
+   gear and the Delete control on every comment; take the parameter away and
+   both are gone. No localStorage, no sticky state.
+
+   That is a deliberate reversal. The flag used to be remembered per origin,
+   which meant one visit put a gear on every page of that origin for good, with
+   no way out except a button hidden *inside* the panel it opened — it read as
+   "the gear appears by default" and looked like a broken gate.
+
+   The parameter is left in the URL rather than stripped, for two reasons: this
+   deck never rewrites its query string (it only reads ?p= and ?c=), so leaving
+   it makes owner mode survive a reload with no storage involved; and it makes
+   "why is the gear here?" answerable by looking at the address bar. The cost
+   is that a screenshot of the address bar shows the flag — an acceptable
+   trade for a deck that is already public, and the owner can drop it by
+   removing the parameter.
+
+   `?config=true` is retired: it is stripped and ignored, and the storage key it
+   used is deleted on every load, so browsers still carrying it stop showing the
+   gear. Anything that is not true/1/on/yes leaves owner mode off.
+
+   Note this is obscurity, not authentication — anyone who types the parameter
+   gets the panel, exactly as before. The owner chose that over carrying a key;
+   OWNER_KEY is still in the project if that trade ever needs to change. */
+(function ownerMode() {
+  const RETIRED_FLAG = 'deck-comment-config';
+  const ON_VALUES = /^(?:true|1|on|yes)$/i;
+  try {
+    const u = new URL(location.href);
+    const params = u.searchParams;
+    ownerOn = ON_VALUES.test(params.get('owner') || '');
+    if (params.get('config') !== null) {
+      params.delete('config');
+      history.replaceState(null, '', u.pathname + (u.search || '') + u.hash);
+      console.warn('[comments] ?config=true is retired — use ?owner=true');
+    }
+  } catch (e) { /* no URL access — stay out of owner mode */ }
+  // drop the retired sticky flag so it cannot bring the gear back
+  try { localStorage.removeItem(RETIRED_FLAG); } catch (e) {}
+  if (!ownerOn) return;
+  /* boot() is async and has not rendered yet, so this is normally a no-op; it
+     is here for the case where a list already exists without the controls */
+  try { renderList(); } catch (e) {}
+  import('./comments-owner.js')
+    /* mount() appends the gear, and the gear is placed with the Comments
+       button — so the row has to be laid out again once it exists. */
+    .then(function (m) { m.mount({ config: CFG, deckId: DECK }); syncBtnToTheme(); })
+    .catch(function (e) { console.warn('[comments] owner panel failed to load:', e); });
 })();

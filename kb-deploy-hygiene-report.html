@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>知识库上线 + 分块卫生 + 三组检索对照 · 2026-10-08</title>
+<style>
+:root{
+  --ink:#16202b; --soft:#3b4957; --faint:#6b7280; --line:#dfe5ec; --bg:#f5f7fa; --paper:#fff;
+  --teal:#0f766e; --teal-s:#e6f4f1; --red:#b42318; --red-s:#fdecea; --amber:#b45309; --amber-s:#fdf3e3;
+  --green:#15803d; --green-s:#e8f5ec;
+  --mono:"JetBrains Mono","SF Mono",ui-monospace,Menlo,Consolas,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans SC",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.65 var(--sans);padding:40px 20px}
+.wrap{max-width:1060px;margin:0 auto}
+header{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:26px 28px;margin-bottom:20px}
+h1{font-size:24px;letter-spacing:-.01em;margin-bottom:6px}
+.sub{color:var(--faint);font-size:13.5px}
+.verdict{margin-top:16px;padding:12px 16px;border-radius:9px;background:var(--green-s);border-left:4px solid var(--green);font-weight:600;color:#14532d}
+section{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:24px 28px;margin-bottom:20px}
+h2{font-size:17px;margin-bottom:14px;padding-bottom:9px;border-bottom:1px solid var(--line)}
+h3{font-size:14.5px;margin:20px 0 9px}
+h3:first-of-type{margin-top:0}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--bg);font-weight:600;font-size:12.5px;color:var(--soft)}
+code{font-family:var(--mono);font-size:12.5px;background:var(--bg);padding:1.5px 5px;border-radius:4px}
+pre{background:#0f1720;color:#d7e3ec;font:12.5px/1.6 var(--mono);padding:12px 14px;border-radius:8px;overflow-x:auto;margin:8px 0}
+.pass{color:var(--green);font-weight:700}
+.fail{color:var(--red);font-weight:700}
+.ok{color:var(--green)}
+.no{color:var(--red)}
+.tag{display:inline-block;font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:20px;vertical-align:middle}
+.t-crit{background:var(--red-s);color:var(--red)}
+.t-mid{background:var(--amber-s);color:var(--amber)}
+.t-low{background:var(--teal-s);color:var(--teal)}
+.t-ok{background:var(--green-s);color:var(--green)}
+.defect{border-left:3px solid var(--line);padding:12px 0 12px 15px;margin-bottom:16px}
+.defect.crit{border-left-color:var(--red)}
+.defect.mid{border-left-color:var(--amber)}
+.defect.low{border-left-color:var(--teal)}
+.defect h4{font-size:14px;margin-bottom:6px}
+.defect p{font-size:13.5px;color:var(--soft);margin-bottom:5px}
+.big{display:flex;gap:12px;flex-wrap:wrap;margin:14px 0 4px}
+.big div{flex:1 1 150px;background:var(--bg);border-radius:9px;padding:12px 14px}
+.big .k{font-size:12px;color:var(--faint);margin-bottom:3px}
+.big .v{font-size:22px;font-weight:700;font-family:var(--mono)}
+ul{margin:8px 0 8px 20px;font-size:13.5px;color:var(--soft)}
+li{margin-bottom:5px}
+footer{color:var(--faint);font-size:12.5px;text-align:center;padding:10px 0 30px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>知识库上线 + 分块卫生 + 三组检索对照</h1>
+  <div class="sub">2026-10-08 · 承接上一轮「embedding/reranker 照搬 patentExaminator」。本轮：把改动<b>真正部署上线</b>，修掉检索暴露出的分块卫生缺陷，再用<b>中文 / demo app / 英文</b>三组问题复测，重新决定 reranker 的开关</div>
+  <div class="verdict">结论：<b>已上线并端到端跑通</b>（SiliconFlow Secret + <code>answer-comment</code>，实测 6.0 秒 / 4 块 / 0 错误）。修掉 3 类分块卫生问题后库从 777 块降到 <b>722 块</b>；<b>重排"退化"的主因其实是脏数据，不是模型</b>——修完后重排不再丢召回，但也没有增益，本轮据此<b>维持关闭</b>。</div>
+  <div style="margin-top:12px;padding:12px 16px;border-radius:9px;background:var(--amber-s);border-left:4px solid var(--amber);font-size:13.5px;color:var(--soft)"><b>⚠️ 后续更新（同日，以本节为准）</b>：owner 接着明确要求"reranker 一定要开"，于是最终改为<b>开启</b>——Secret <code>SILICONFLOW_RERANK_ENABLED=true</code>，<code>answer-comment</code> 部署到 <b>v18</b>（响应新增 <code>rerank</code> 字段，线上实测返回 <code>"remote"</code>）。下文第 4 节的实测数据仍然成立（开启的代价 = 一次网络往返 + 4/12 题的 top-1 位移），只是<b>最终决策从"关"改成了"开"</b>。现状以 <code>supabase/SETUP.md</code> 为准。</div>
+</header>
+
+<section>
+  <h2>1. 线上状态（已核对数据库）</h2>
+  <div class="big">
+    <div><div class="k">知识库块数</div><div class="v">722</div></div>
+    <div><div class="k">带向量</div><div class="v">722</div></div>
+    <div><div class="k">来源数</div><div class="v">7</div></div>
+    <div><div class="k">端到端耗时</div><div class="v">6.0s</div></div>
+  </div>
+  <table>
+    <tr><th>来源</th><th>内容</th><th>块数</th><th>本轮变化</th></tr>
+    <tr><td><code>deck</code></td><td>Case Study Deck</td><td>45</td><td>—</td></tr>
+    <tr><td><code>prd_en</code></td><td>PRD（英文）</td><td>153</td><td><span class="no">169 → 153</span>（剔掉 Review Change Log）</td></tr>
+    <tr><td><code>report</code></td><td>调研报告</td><td>125</td><td><span class="no">164 → 125</span>（版本记录 / 完整参考资料 / 勘误）</td></tr>
+    <tr><td><code>backlog</code></td><td>Review Backlog</td><td>26</td><td>—</td></tr>
+    <tr><td><code>dev_plan</code></td><td>原型 Dev Plan</td><td>66</td><td>—</td></tr>
+    <tr><td><code>readme</code></td><td>Project README</td><td>6</td><td>—</td></tr>
+    <tr><td><code>prototype</code></td><td>原型源码</td><td>301</td><td>—</td></tr>
+  </table>
+  <p style="font-size:13.5px;color:var(--soft)">核对结果：<span class="pass">7 个来源 declared 与 actual 全部一致，0 个孤儿块，0 条残留内部章节</span>。</p>
+
+  <h3>本轮实际执行的部署动作</h3>
+  <ul>
+    <li>写入 Secret <code>SILICONFLOW_BASE_URL</code> 与 <code>SILICONFLOW_API_KEY</code>（<code>POST /v1/projects/&lt;ref&gt;/secrets</code> → <b>201</b>，回读确认存在）。密钥取自 patentExaminator 的 <code>settings</code>，与它同一把（51 字符）。</li>
+    <li>部署 <code>answer-comment</code>：<code>PATCH /v1/projects/&lt;ref&gt;/functions/answer-comment</code> → <b>200，version 16</b>（随后为开启重排并加 <code>rerank</code> 字段又部署了一次 → <b>version 18</b>）。全程 Management API，未装 CLI。</li>
+    <li><b>顺序是关键</b>：新函数从 <code>SILICONFLOW_*</code> 读检索凭据，所以两个 Secret 必须先于部署存在，否则函数能启动但 embedding 必然失败。</li>
+    <li>端到端实测：<code>HTTP 200</code> · <code>ms: 6015</code> · <code>model: deepseek-v4-flash-0731</code> · <code>chunks: 4</code> · <code>fallbackErrors: []</code>，生成的回答带引用编号、语言跟随提问。</li>
+  </ul>
+
+  <h3>一个把脚本卡死的环境坑</h3>
+  <p style="font-size:13.5px;color:var(--soft)">本机出网走 <code>HTTPS_PROXY</code>。<b>Python 的 urllib 和 curl 都会读这个变量，Node 的 <code>fetch</code> 完全不读</b>——<code>api.siliconflow.cn</code> 直连可达，<code>api.supabase.com</code> 不行。表现是：切块全部跑完、然后在第一次 SQL 调用抛 <code>UND_ERR_CONNECT_TIMEOUT</code>，看起来像代码 bug。已在三个脚本里加 <code>import './net-proxy.mjs'</code> 装 <code>ProxyAgent</code>。</p>
+</section>
+
+<section>
+  <h2>2. 分块卫生：修掉 3 类，其中 1 类是我自己的误报</h2>
+  <p style="font-size:13.5px;color:var(--soft)">上一轮加的 <code>--audit</code> 报了 20 处"SVG 残留 + 20 个内部章节 + 16 个过短块"。先让审计<b>打印命中文本</b>再动手——这一步直接改变了结论。</p>
+
+  <div class="defect crit">
+    <h4>① 内部台账章节被当正文检索 <span class="tag t-crit">真实缺陷</span></h4>
+    <p>PRD 的 <code>Review Change Log (v0.3 / v0.2)</code> 16 块、报告的<code>版本记录</code> 20 块、<code>完整参考资料</code> 18 块、<code>勘误</code> 1 块。这些是给文档维护者看的台账，答不了读者的问题，却真的被检索命中——线上实测那条回答的引用来源里就出现了 <code>PRD (English) / Review Change Log</code>。</p>
+    <p><b>修法</b>：新增模块级 <code>INTERNAL_HEADING</code> 过滤器，对所有非代码来源生效（不只针对 PRD/dev plan）。修复后审计口径 <code>internal-only 章节 = 0</code>。</p>
+  </div>
+
+  <div class="defect mid">
+    <h4>② 超长段落硬切留下碎片 <span class="tag t-mid">真实缺陷</span></h4>
+    <p>硬切逻辑按固定 1500 字步进，3013 字的段落被切成 <code>1500 / 1500 / 13</code>——最后一块只有 13 字。这种块嵌入出来是噪声，一旦命中就是一段垃圾上下文，实际命中了 <code>report/2.1b …(13)</code>「到端解决；85% 缺编排；」。</p>
+    <p><b>修法</b>：按 <code>ceil(len / MAX)</code> 均分，每块都在上限内且不产生退化块。过短块 16 → 13，<b>剩下 13 条全部是合理的短章节</b>（如末页 <code>Thank you. Questions</code>、小节导语、矩阵图例），不再动。</p>
+  </div>
+
+  <div class="defect low">
+    <h4>③ "SVG 残留" 是我自己的正则误报 <span class="tag t-low">工具问题</span></h4>
+    <p>原审计正则写了裸词 <code>path|fill</code>，于是把 <code>graduation path</code>、<code>attack path</code> 这类正常英文当成噪声——<b>20 个完全健康的 deck 块被误标</b>。标签本身早在 <code>stripTags</code> 里被剥掉了，真正的残留会是属性（<code>viewBox=</code>、<code>stroke-width=</code>），不会是单词。</p>
+    <p><b>修法</b>：改成只匹配 SVG 属性形态。修正后 <code>inline svg residue = 0</code>，deck 干净。</p>
+  </div>
+
+  <pre>── 分块卫生审计（仅非代码来源）──
+html comment tail       0
+raw html tag            0
+html entity             0
+css declaration         0
+inline svg residue      0
+internal-only 章节      0
+过短 chunk (&lt;120字)   13   （全部为合理短章节）
+
+审计合计命中 0 处噪声 + 0 个内部章节 + 13 个过短块</pre>
+</section>
+
+<section>
+  <h2>3. 三组检索对照（12 题）</h2>
+  <p style="font-size:13.5px;color:var(--soft)">新脚本 <code>scripts/kb-retrieval-compare.mjs</code>，每题打印三种排序的 top-3：<b>融合 RRF</b>（重排关闭时线上走的就是它）、<b>cross-encoder 单独排序</b>（照搬 patentExaminator，基础分清零；<b>重排开启后线上走的是它</b>）、<b>0.6/0.4 混合</b>。判据两条：<code>hit@3</code>（top-3 是否含正确来源）与<b>非回归</b>（融合的 top-1 是否还在重排的 top-3 里）。</p>
+
+  <table>
+    <tr><th>分组</th><th>hit@3 融合</th><th>hit@3 单独重排</th><th>hit@3 混合</th><th>非回归（混合）</th></tr>
+    <tr><td><b>A 中文题</b>（英文语料跨语言）</td><td class="pass">4/4</td><td>3/4</td><td>3/4</td><td>3/4</td></tr>
+    <tr><td><b>B demo app 题</b></td><td class="pass">4/4</td><td class="pass">4/4</td><td class="pass">4/4</td><td>3/4</td></tr>
+    <tr><td><b>C 英文基线</b></td><td>3/4</td><td class="pass">4/4</td><td>3/4</td><td>3/4</td></tr>
+    <tr><th>合计</th><th>11/12</th><th>11/12</th><th>10/12</th><th>9/12（单独 8/12）</th></tr>
+  </table>
+
+  <h3>怎么读这张表</h3>
+  <ul>
+    <li><b>融合已经很好</b>：11/12。唯一没中的是英文 <i>hard "never" list</i>——但那题其实也没错：deck 那张 <i>What ships, what waits, and what has no switch</i> 幻灯片正文里就写着 <code>Hard "never" list</code>，是我的期望来源标注太窄，不是检索失败。</li>
+    <li><b>中文题略弱于英文</b>（3~4/4 vs 4/4），符合跨语言检索的预期；但正确答案仍在 top-3 内，生成阶段取 4 块上下文，够用。</li>
+    <li><b>混合方案更差</b>（10/12）：中文"永不开放清单"那题，混合把 <code>deck</code> 顶到第一，把正确来源挤出前三。这个方案已放弃。</li>
+    <li>检索是<b>确定性的</b>：同向量连跑 3 次结果逐字节一致（embedding 两次最大差 0）。中途一度以为结果不稳定，是我把中文题和英文题当成同一题对比了。</li>
+  </ul>
+</section>
+
+<section>
+  <h2>4. reranker：结论改了，最终开关也开了</h2>
+  <p style="font-size:13.5px;color:var(--soft)">上一轮实测"照搬行为把基线 top-1 挤出前三 5/5"，据此默认关闭。修完分块卫生后复测，这个数字变成 <b>8/12 保住</b>——说明<b>当时那次退化主要是脏数据造成的，不是 cross-encoder 本身不行</b>。<b>owner 随后决定开启</b>，所以线上现在跑的是下表第二行。</p>
+  <table>
+    <tr><th>排序方式</th><th>hit@3</th><th>融合 top-1 保住</th><th>额外成本</th></tr>
+    <tr><td>融合 RRF（重排关闭时线上走的）</td><td>11/12</td><td>12/12（定义上）</td><td>0</td></tr>
+    <tr><td>cross-encoder 单独排序（<b>现在线上实际</b>）</td><td>11/12</td><td class="fail">8/12</td><td>+1 次网络往返</td></tr>
+    <tr><td>cross-encoder 0.6/0.4 混合</td><td class="fail">10/12</td><td>9/12</td><td>+1 次网络往返</td></tr>
+  </table>
+  <p style="font-size:13.5px;color:var(--soft)"><b>结论</b>：开关本来是"<b>安全但无收益</b>"——召回持平、没有质量提升，却把 4/12 题的最优块从第一挤到第二或第三，还要多花一次往返。但 <b>owner 明确要求开启</b>（换取"与 patentExaminator 原始 pipeline 完全一致"），所以最终 <code>SILICONFLOW_RERANK_ENABLED=true</code> 已生效（v18，实测 <code>"remote"</code>）。要回退只需把该 Secret 改成 <code>false</code>，一条 API 调用、不用重部署 —— 这是发现答案变差时最快的 A/B。</p>
+</section>
+
+<section>
+  <h2>5. 附带发现：demo app 源码的跨语言落差</h2>
+  <p style="font-size:13.5px;color:var(--soft)">这轮顺手把最初那个问题（"demo app 的代码要不要做知识文件"）量出来了。原型源码 <code>prototype</code> 是最大的来源（301 块），但<b>中文提问时几乎进不了前三</b>：</p>
+  <table>
+    <tr><th>问法</th><th>prototype 的最高排名</th></tr>
+    <tr><td>原型里的时钟是怎么走的？</td><td>#10</td></tr>
+    <tr><td>演示用的假数据是从哪里来的？</td><td>#23</td></tr>
+    <tr><td>原型的四个核心屏幕分别是什么？</td><td class="no">未进 top-30</td></tr>
+    <tr><td>src/runtime 里信件线程模型是怎么实现的？</td><td>#9</td></tr>
+    <tr><td><b>英文</b>：How is the demo clock advanced, and where do the fake fixtures come from?</td><td class="pass">#1（top-5 占 3 席）</td></tr>
+  </table>
+  <p style="font-size:13.5px;color:var(--soft)">原因是跨语言：源码是英文，中文问题与中文写就的 dev plan / 调研报告更接近。所以<b>中文 demo 问题由 dev plan 作答</b>（它本来就是"回答 demo 问题最对口"的文档），<b>英文 demo 问题才命中真实代码</b>。两边都能答，不需要额外补偿——这也是"要不要收 demo 代码"的实测答案：<b>要收，但它的价值主要体现在英文问法</b>。</p>
+</section>
+
+<section>
+  <h2>6. 已决定 / 待你收尾</h2>
+  <div class="defect low">
+    <h4>① 远程 cross-encoder：已按你的要求打开 ✅</h4>
+    <p>你后来说"reranker 一定要开"，于是已经开了：Secret <code>SILICONFLOW_RERANK_ENABLED=true</code>、<code>answer-comment</code> 部署到 <b>v18</b>、线上实测响应里 <code>"rerank":"remote"</code>。打开是安全的（召回 11/12 不丢），代价是一次网络往返（5.9s → 7.7s）和 4/12 题的 top-1 位移。想回退就把该 Secret 改成 <code>false</code>，一条 API 调用、不用重部署。</p>
+  </div>
+  <div class="defect low">
+    <h4>② owner 身份：已实现 ✅</h4>
+    <p>以 <code>?owner=true</code> 打开 deck 即可：右上角出现设置齿轮、可配置 LLM，并且<b>每条评论都能删</b>（包括别人写的）。旧参数 <code>?config=true</code> 已作废——访问时会被自动从地址栏抹掉，旧的 localStorage 标记也会被清掉，所以不会再"粘"在裸地址上。该参数改成不落盘的设计，关掉标签页即失效。</p>
+  </div>
+  <h3>还需要你收尾的两件小事</h3>
+  <ul>
+    <li>线上 deck 里还留着 <b>3 条早期测试评论</b>（<code>probe</code> / <code>single send probe…</code> / <code>what's this ?</code>，最后一条是这轮端到端实测时 AI 回答的）。现在你可以直接用 <code>?owner=true</code> 在页面上删掉它们（我没动）。</li>
+    <li>这轮用到的 PAT（个人访问令牌，<code>sbp_…</code>）能读写 Secret 和部署函数。这轮用完建议到 https://supabase.com/dashboard/account/tokens 吊销。</li>
+  </ul>
+</section>
+
+<footer>生成于 2026-10-08 · 线上项目 ifiqhyzcklwueqsijtnq · 数据来源：Supabase Management API 实测</footer>
+</div>
+</body>
+</html>
