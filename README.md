@@ -2,7 +2,7 @@
 
 ![Demo preview](public/demo-intro.gif)
 
-Full demo video: https://youtu.be/aJrcyzUdL28
+Full demo video: https://youtu.be/FPWNd_wCKxs
 
 Live slide deck: https://wukun2005-gif.github.io/mailAutopilotForFS/deck-html/
 
