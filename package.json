@@ -8,6 +8,7 @@
     "node": ">=22.22.0"
   },
   "scripts": {
+    "deck": "node scripts/serve-deck.mjs",
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",

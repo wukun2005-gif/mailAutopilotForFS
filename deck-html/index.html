@@ -595,6 +595,7 @@ body.dark svg [fill="#EAF0F6"]{fill:#EAF0F6}
 body.dark svg [fill="#F2786E"]{fill:#F2786E}
 body.dark svg [fill="#F5B544"]{fill:#F5B544}
 </style>
+<link rel="stylesheet" href="comments.css">
 </head>
 <body class="light">
 <div class="bar" id="bar"></div>
@@ -2661,5 +2662,12 @@ document.addEventListener('keydown',pvArmOnce);
 pvBtn();
 fit();addEventListener('resize',fit);show(0);
 </script>
+<!-- shared comments: config first, then the panel (module, so it runs after
+     the deck's own script and can wrap show()/fit()) -->
+<script src="comments.config.js"></script>
+<!-- vendored: pulling supabase-js from a CDN at runtime costs several seconds
+     on some networks, and until it lands the comment count reads 0 -->
+<script src="assets/supabase.min.js"></script>
+<script type="module" src="comments.js"></script>
 </body>
 </html>
