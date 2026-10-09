@@ -13,8 +13,14 @@
  *   snapshot <deck> [out.json]        dump every row + its ledger row
  *   restore  <file> [--into <deck>]   put them back (original ids by default)
  *                          [--remap]  …or fresh ids, for cloning into a test deck
- *   verify   <file> [--into <deck>]   prove a restore reproduced the snapshot
+ *                          [--only <client_id>]  just one batch, replies included
+ *   verify   <file> [--into <deck>] [--only <client_id>]
+ *                                    prove a restore reproduced the snapshot
  *   clear    <deck>  [--dry] [--yes]  snapshot, then delete every row of that deck
+ *
+ * `--only qa-seed` is the one to reach for when you want just the seeded Q&A back
+ * on the page: it takes the matching questions *and everything hanging off them*,
+ * which is how the answers and their ledger rows come along.
  *
  * Notes that cost blood to learn:
  *  · `deck_ai_answers.comment_id` keys on the *question* row, not the answer row.
@@ -39,9 +45,33 @@ import './net-proxy.mjs';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { randomUUID } from 'node:crypto';
 
-const PAT = process.env.SUPABASE_PAT || readPat();
+/* Resolved on first use, not at import time: the guard below must be free to
+   fire on a machine with no PAT — otherwise "you are about to write to the
+   published deck" gets buried under "no SUPABASE_PAT", which is the wrong
+   thing to learn first. */
+let _pat = null;
+function pat() {
+  if (_pat === null) _pat = process.env.SUPABASE_PAT || readPat();
+  return _pat;
+}
 const REF = 'ifiqhyzcklwueqsijtnq';
 const FORMAT = 1;
+
+/* The deck the published page reads. Anything written to it is public the
+   moment it lands, so every write path has to say --live out loud. This is not
+   ceremony: it is the difference between "I was looking at it locally" and
+   "I published 52 test comments to the customer-facing deck". */
+const LIVE_DECK = 'mail-autopilot-fs';
+const ALLOW_LIVE = process.argv.includes('--live');
+
+function guardLiveWrite(deck) {
+  if (deck !== LIVE_DECK || ALLOW_LIVE) return;
+  throw new Error(
+    `'${deck}' is the LIVE deck — anything written there shows up on the published page immediately.\n`
+    + `  · to work on a local test deck instead, pass --into ${LIVE_DECK}-local\n`
+    + `  · if you really mean to publish, add --live`,
+  );
+}
 
 function readPat() {
   const s = readFileSync(new URL(import.meta.url), 'utf8');
@@ -53,7 +83,7 @@ function readPat() {
 async function sql(q) {
   const r = await fetch(`https://api.supabase.com/v1/projects/${REF}/database/query`, {
     method: 'POST',
-    headers: { Authorization: `Bearer ${PAT}`, 'Content-Type': 'application/json' },
+    headers: { Authorization: `Bearer ${pat()}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({ query: q }),
   });
   const t = await r.text();
@@ -86,7 +116,7 @@ async function doSnapshot(deck, out) {
       where a.comment_id in (select id from deck_comments where deck_id='${deck.replace(/'/g, "''")}')`);
 
   const fnRes = await fetch(`https://api.supabase.com/v1/projects/${REF}/functions/answer-comment`,
-    { headers: { Authorization: `Bearer ${PAT}` } });
+    { headers: { Authorization: `Bearer ${pat()}` } });
   const fnInfo = fnRes.ok ? await fnRes.json() : {};
 
   const file = out || `deck-comments-${deck}-${new Date().toISOString().replace(/[:.]/g, '-')}.json`;
@@ -111,13 +141,42 @@ async function doSnapshot(deck, out) {
 /* ── restore ─────────────────────────────────────────────────────────────── */
 const depthOf = (map, id) => { let d = 0; const seen = new Set(); let cur = map.get(id); while (cur) { if (seen.has(cur.id)) throw new Error(`parent cycle at ${cur.id}`); seen.add(cur.id); d++; cur = cur.parent_id ? map.get(cur.parent_id) : null; } return d; };
 
-async function doRestore(file, intoDeck, remap) {
-  const snap = JSON.parse(readFileSync(file, 'utf8'));
-  if (snap.format !== FORMAT) throw new Error(`snapshot format ${snap.format} ≠ ${FORMAT}`);
+/* `--only <client_id>` narrows a snapshot to one batch of comments plus
+   everything hanging off it. Without the descendant walk you would restore the
+   52 questions and none of their answers: the answers are separate rows tagged
+   `deck-ai`, and their whole point is that they belong to the question above
+   them. Ledger rows follow their comment. */
+function selectSubset(snap, only) {
+  if (!only) return snap;
+  const childMap = new Map();
+  for (const c of snap.comments) {
+    if (!c.parent_id) continue;
+    if (!childMap.has(c.parent_id)) childMap.set(c.parent_id, []);
+    childMap.get(c.parent_id).push(c.id);
+  }
+  const keep = new Set(snap.comments.filter((c) => c.client_id === only).map((c) => c.id));
+  const stack = [...keep];
+  while (stack.length) {
+    for (const kid of childMap.get(stack.pop()) || []) {
+      if (!keep.has(kid)) { keep.add(kid); stack.push(kid); }
+    }
+  }
+  const comments = snap.comments.filter((c) => keep.has(c.id));
+  if (!comments.length) throw new Error(`no comments with client_id='${only}' in this snapshot`);
+  const roots = comments.filter((c) => !c.parent_id).length;
+  console.log(`--only ${only}: ${comments.length} of ${snap.comments.length} comments (${roots} matched + ${comments.length - roots} descendants)`);
+  return { ...snap, comments, ledger: snap.ledger.filter((l) => keep.has(l.comment_id)) };
+}
+
+async function doRestore(file, intoDeck, remap, only) {
+  const snapAll = JSON.parse(readFileSync(file, 'utf8'));
+  if (snapAll.format !== FORMAT) throw new Error(`snapshot format ${snapAll.format} ≠ ${FORMAT}`);
+  const snap = selectSubset(snapAll, only);
+  guardLiveWrite(intoDeck || snap.sourceDeck);
 
   const byId = new Map(snap.comments.map((c) => [c.id, c]));
   for (const c of snap.comments) {
-    if (c.parent_id && !byId.has(c.parent_id)) throw new Error(`reply ${c.id} points at a parent outside the snapshot`);
+    if (c.parent_id && !byId.has(c.parent_id)) throw new Error(`reply ${c.id} points at a parent outside the selection`);
   }
 
   const idMap = new Map(snap.comments.map((c) => [c.id, remap ? randomUUID() : c.id]));
@@ -176,8 +235,8 @@ const canon = (c, byId) => {
 const tally = (list) => { const m = new Map(); for (const k of list) m.set(k, (m.get(k) || 0) + 1); return m; };
 const diff = (a, b) => [...new Set([...a.keys(), ...b.keys()])].filter((k) => (a.get(k) || 0) !== (b.get(k) || 0));
 
-async function doVerify(file, intoDeck) {
-  const snap = JSON.parse(readFileSync(file, 'utf8'));
+async function doVerify(file, intoDeck, only) {
+  const snap = selectSubset(JSON.parse(readFileSync(file, 'utf8')), only);
   const deck = intoDeck || snap.sourceDeck;
   const now = await sql(
     `select ${COMMENT_COLS.join(', ')} from deck_comments where deck_id='${deck.replace(/'/g, "''")}'`);
@@ -207,6 +266,7 @@ async function doVerify(file, intoDeck) {
 
 /* ── clear ───────────────────────────────────────────────────────────────── */
 async function doClear(deck, dry, yes) {
+  guardLiveWrite(deck);
   const rows = await sql(
     `select client_id, parent_id is not null as reply, count(*) n
        from deck_comments where deck_id='${deck.replace(/'/g, "''")}' group by 1,2 order by 1,2`);
@@ -248,8 +308,9 @@ async function doClear(deck, dry, yes) {
 /* ── dispatch ────────────────────────────────────────────────────────────── */
 const [cmd, ...rest] = process.argv.slice(2);
 const arg = rest.find((a) => !a.startsWith('--'));
-const intoIx = rest.indexOf('--into');
-const into = intoIx > -1 ? rest[intoIx + 1] : null;
+const flagVal = (name) => { const i = rest.indexOf(name); return i > -1 ? rest[i + 1] : null; };
+const into = flagVal('--into');
+const only = flagVal('--only');
 const flags = new Set(rest.filter((a) => a.startsWith('--')));
 
 try {
@@ -257,20 +318,23 @@ try {
     if (!arg) throw new Error('usage: snapshot <deck> [out.json]');
     await doSnapshot(arg, rest.filter((a) => !a.startsWith('--'))[1] || null);
   } else if (cmd === 'restore') {
-    if (!arg) throw new Error('usage: restore <file> [--into <deck>] [--remap]');
-    await doRestore(arg, into, flags.has('--remap'));
+    if (!arg) throw new Error('usage: restore <file> [--into <deck>] [--remap] [--only <client_id>] [--live]');
+    await doRestore(arg, into, flags.has('--remap'), only);
   } else if (cmd === 'verify') {
-    if (!arg) throw new Error('usage: verify <file> [--into <deck>]');
-    await doVerify(arg, into);
+    if (!arg) throw new Error('usage: verify <file> [--into <deck>] [--only <client_id>]');
+    await doVerify(arg, into, only);
   } else if (cmd === 'clear') {
-    if (!arg) throw new Error('usage: clear <deck> [--dry] [--yes]');
+    if (!arg) throw new Error('usage: clear <deck> [--dry] [--yes] [--live]');
     await doClear(arg, flags.has('--dry'), flags.has('--yes'));
   } else {
     console.log(`usage:
   snapshot <deck> [out.json]
-  restore  <file> [--into <deck>] [--remap]
-  verify   <file> [--into <deck>]
-  clear    <deck> [--dry] [--yes]`);
+  restore  <file> [--into <deck>] [--remap] [--only <client_id>] [--live]
+  verify   <file> [--into <deck>] [--only <client_id>]
+  clear    <deck> [--dry] [--yes] [--live]
+
+'${LIVE_DECK}' is the live deck: writes there need --live.
+Default to --into ${LIVE_DECK}-local for anything you are just looking at.`);
     process.exit(2);
   }
 } catch (e) {

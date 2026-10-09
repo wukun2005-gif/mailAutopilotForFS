@@ -37,7 +37,6 @@ import { readFileSync } from 'node:fs';
 import { randomUUID } from 'node:crypto';
 import { QUESTIONS } from './qa-deck-questions.mjs';
 
-const PAT = process.env.SUPABASE_PAT || readPat();
 const REF = 'ifiqhyzcklwueqsijtnq';
 const DECK = 'mail-autopilot-fs';
 const OWNER_EMAIL = 'wukun2005@gmail.com';
@@ -48,6 +47,27 @@ const AI_MODEL = 'deepseek-v4-flash-0731';
 
 const DRY = process.argv.includes('--dry');
 const REMOVE = process.argv.includes('--remove');
+const ALLOW_LIVE = process.argv.includes('--live');
+
+/* Putting the batch on the deck publishes it to the customer-facing page the
+   moment it lands — a write to the live deck should never be a side effect of
+   "let me see how this looks". `--remove` is the way back out, so it stays
+   available without the flag; `--dry` touches nothing either way.
+
+   Checked before the PAT is resolved: on a machine with no SUPABASE_PAT the
+   useful message is this one, not "no SUPABASE_PAT". */
+if (!ALLOW_LIVE && !REMOVE && !DRY) {
+  console.error(
+    `'${DECK}' is the LIVE deck — running this publishes the 52 test comments to the published page.\n`
+    + `  · just want to look at them locally:\n`
+    + `      node scripts/deck-comments-archive.mjs restore <snapshot> --into ${DECK}-local\n`
+    + `      (the local dev server already points at ${DECK}-local by default)\n`
+    + `  · to publish on purpose: add --live`,
+  );
+  process.exit(2);
+}
+
+const PAT = process.env.SUPABASE_PAT || readPat();
 
 function readPat() {
   const s = readFileSync(new URL(import.meta.url), 'utf8');

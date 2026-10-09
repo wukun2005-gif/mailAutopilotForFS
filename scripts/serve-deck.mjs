@@ -11,20 +11,45 @@
    Zero dependencies: node:http + node:fs. Picks the first free port from
    8765, serves deck-html/, and opens the browser.
 
+   ── local tests must not touch the live deck ──────────────────────────────
+   The page does not carry its comments: comments.config.js names an absolute
+   Supabase project and a hard-coded deckId, and the browser fetches that deck
+   at load. So whatever deck the config names is the deck you are editing when
+   you post a comment — and for the published page that is the live one.
+
+   This server therefore rewrites deckId on the way out. The file on disk is
+   never modified, so nothing here can reach GitHub Pages; the checkbox is
+   purely "which deck does this local page talk to".
+     · default            → mail-autopilot-fs-local   (safe place to make a mess)
+     · --deck <id>        → any deck you name
+     · --live             → mail-autopilot-fs         (the published one; opt in)
+   The banner says which one you got, loudly when it is the live deck.
+
    Usage:
-     npm run deck                  → deck-html/ on the first free port
-     node scripts/serve-deck.mjs <dir> [port]
+     npm run deck                       → deck-html/ on the first free port
+     node scripts/serve-deck.mjs <dir> [port] [--deck <id> | --live]
    ══════════════════════════════════════════════════════════════════════════ */
 
 import { createServer } from 'node:http';
-import { createReadStream, statSync } from 'node:fs';
-import { extname, join, resolve, sep } from 'node:path';
+import { createReadStream, readFileSync, statSync } from 'node:fs';
+import { basename, extname, join, resolve, sep } from 'node:path';
 import { spawn } from 'node:child_process';
 
 const positional = process.argv.slice(2).filter((a) => !a.startsWith('--'));
 const ROOT = resolve(positional[0] || 'deck-html');
 const FIRST_PORT = Number(positional[1] || process.env.PORT || 8765);
 const OPEN = !process.argv.includes('--no-open');
+
+/* the deck the published page reads — the one local work must not disturb */
+const LIVE_DECK = 'mail-autopilot-fs';
+const LOCAL_DECK = 'mail-autopilot-fs-local';
+const deckArgIx = process.argv.indexOf('--deck');
+const SERVING_LIVE = process.argv.includes('--live');
+const DECK = SERVING_LIVE ? LIVE_DECK
+  : deckArgIx > -1 ? process.argv[deckArgIx + 1]
+    : process.env.DECK_ID || LOCAL_DECK;
+const CONFIG_FILE = 'comments.config.js';
+
 
 const MIME = {
   '.html': 'text/html; charset=utf-8',
@@ -81,6 +106,25 @@ const server = createServer((req, res) => {
     'Cache-Control': 'no-store',
   };
 
+  /* Hand the page a config naming the deck this server was told to use. The
+     file on disk is left exactly as it is, so nothing here can end up in a
+     commit or on GitHub Pages — the only thing this changes is which deck the
+     local browser talks to. */
+  if (basename(file) === CONFIG_FILE) {
+    let src;
+    try {
+      src = readFileSync(file, 'utf8');
+    } catch {
+      res.writeHead(500, { 'Content-Type': 'text/plain; charset=utf-8' }).end(`cannot read ${CONFIG_FILE}`);
+      return;
+    }
+    const body = Buffer.from(src.replace(/(\bdeckId\s*:\s*)['"][^'"]*['"]/, `$1'${DECK}'`), 'utf8');
+    res.writeHead(200, { ...headers, 'Content-Type': MIME['.js'], 'Content-Length': body.length, 'X-Deck-Override': DECK });
+    if (req.method === 'HEAD') { res.end(); return; }
+    res.end(body);
+    return;
+  }
+
   // range support so the demo clips can be scrubbed
   const range = req.headers.range;
   if (range) {
@@ -120,6 +164,18 @@ function listen(port, attemptsLeft) {
     const url = `http://127.0.0.1:${port}/index.html`;
     console.log(`\n  deck served from ${ROOT}`);
     console.log(`  → ${url}\n`);
+    if (SERVING_LIVE) {
+      console.log('  ╔══════════════════════════════════════════════════════════════╗');
+      console.log('  ║  !! THIS PAGE IS TALKING TO THE LIVE DECK                    ║');
+      console.log(`  ║  deckId = ${LIVE_DECK.padEnd(52)}║`);
+      console.log('  ║  Comments you post here appear on the published deck at once. ║');
+      console.log('  ║  Use the default (no --live) for anything experimental.       ║');
+      console.log('  ╚══════════════════════════════════════════════════════════════╝\n');
+    } else {
+      console.log(`  comment deck: ${DECK}`);
+      console.log('  (a local test deck — writes here never reach the published page;');
+      console.log('   pass --live to deliberately serve the live deck instead)\n');
+    }
     console.log('  the comment panel needs this http:// address — opening the file');
     console.log('  directly (file://) makes it silently not appear.\n');
     console.log('  Ctrl-C to stop.\n');
