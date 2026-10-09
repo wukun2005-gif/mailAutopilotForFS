@@ -51,6 +51,36 @@ window.DECK_COMMENT_CONFIG = {
 
 > 没填 Supabase 配置时面板底部显示 *Local only — comments are not shared yet*，所有评论只存在自己浏览器里，不会传给 Supabase。填好配置再打开页面即可切到云模式。
 
+### 本地测试不许碰线上 deck（2026-10-09 定，两道闸）
+
+页面本身不带评论：`comments.config.js` 里写着**绝对的** Supabase 地址和一个**写死的 `deckId`**，浏览器打开后去那张表取。所以**配置里写哪个 deck，你在本地发的评论就落在哪个 deck** —— 而公开页面用的正是线上那一个。踩过一次：只为本地看图，把 52 条测试问答写进了 `mail-autopilot-fs`，公开页立刻全显示了。**这是两份 HTML、一份数据**：本地服务工作区那份、线上服务仓库那份，但两者都读同一张表。
+
+**闸一 · 读：本地服务改写 `deckId`，磁盘文件不动。** `serve-deck.mjs` 把 `comments.config.js` 发出去之前换掉 `deckId`（响应头带 `X-Deck-Override` 可确认）：
+
+| 起法 | 这个本地页面读的 deck |
+|---|---|
+| `npm run deck`（默认） | `mail-autopilot-fs-local` —— 本地测试的落脚点，随便造 |
+| `... serve-deck.mjs deck-html 8765 --deck <id>` | 你指定的任意 deck |
+| `... serve-deck.mjs deck-html 8765 --live` | `mail-autopilot-fs` —— 线上那个，会打很响的横幅 |
+
+**`deck-html/comments.config.js` 一个字都不改**（`git status` 干净），所以这个机制不可能被提交、也不可能上线；它只决定"这个本地页面在跟哪个 deck 说话"。
+
+**闸二 · 写：往线上 deck 写入必须显式 `--live`。** `deck-comments-archive.mjs` 的 `restore` / `clear`、`seed-qa-on-deck.mjs`、`regenerate-seeded-answers.mjs` 都加了这道闸；不加就拒绝，并告诉你改用 `--into mail-autopilot-fs-local`。`--dry` 与 `--remove` 例外（前者不写，后者是收回）。
+
+闸门跑在**解析凭据之前**（`PAT` 改成首次用到才取）。没配 `SUPABASE_PAT` 时，先看到的也是那句拒绝，而不是 `no SUPABASE_PAT` —— 随手敲下命令的人应该最先知道自己在碰线上。
+
+自证——三道闸应该全部拒绝，且第一条消息就是拒绝语：
+
+```bash
+env -u SUPABASE_PAT node scripts/deck-comments-archive.mjs clear mail-autopilot-fs --yes   # 退出码 1
+env -u SUPABASE_PAT node scripts/seed-qa-on-deck.mjs                                      # 退出码 2
+env -u SUPABASE_PAT node scripts/regenerate-seeded-answers.mjs --cjk                      # 退出码 1
+```
+
+闸一也可以自证——别看配置，看浏览器**实际发出的那条请求**（`scripts/probe-data-source.mjs`）：两侧都是 `GET .../rest/v1/deck_comments_public?...&deck_id=eq.<deckId>`，本地 `/` 里是 `mail-autopilot-fs-local`，GitHub Pages 上那份是 `mail-autopilot-fs`。同一个 Supabase 项目、不同的 `deck_id` 过滤条件 —— 这就是"两份 HTML、一份数据"的确切含义。
+
+**约定**：`mail-autopilot-fs` = **线上**，只放确认要公开的内容；`mail-autopilot-fs-local` = **本地测试的家**；`mail-autopilot-fs-qa` 是 QA 脚本的临时 deck（每轮开头整表清空），别往里放要留的东西。
+
 ## 4. 配邮件通道（5 分钟）
 
 平台：Supabase Edge Functions（用你的 SMTP 邮箱经端口 **465 + SSL** 发信。587/STARTTLS 在这个环境里不可靠）。
@@ -200,8 +230,9 @@ https://wukun2005-gif.github.io/mailAutopilotForFS/deck-html/?owner=true
 - **网络前提**：本机的出网要经过代理（`HTTPS_PROXY`），而 Node 的 `fetch` 不读这个变量（curl 和 Python 都读）。三个脚本都 `import './net-proxy.mjs'` 装上 `ProxyAgent` —— 不装就会在第一次 SQL 调用时报 `UND_ERR_CONNECT_TIMEOUT`，而切块已经跑完了，看起来像代码 bug。
 - **检索 provider 与 patentExaminator 保持一致**：embedding `BAAI/bge-m3`、rerank `BAAI/bge-reranker-v2-m3`，同为 SiliconFlow 账号（`https://api.siliconflow.cn/v1`）。`bge-m3` 是 1024 维，与 `kb_chunks.embedding vector(1024)` 一致，所以**换模型不用改表**；但换模型必须**整库重灌**，否则新旧向量不在同一空间、检索会静默失准。
 - **Edge Function 需要新增的 Secrets**：`SILICONFLOW_BASE_URL`（`https://api.siliconflow.cn/v1`）与 `SILICONFLOW_API_KEY`（检索用，和 patentExaminator 同一把）；`BAILIAN_*` 仍用于生成，不用动。**两个 Secret 必须在部署 `answer-comment` 之前存在**，否则新函数读不到 key、embedding 直接失败。
-- **部署 `answer-comment`**：`PATCH /v1/projects/<ref>/functions/answer-comment`，body `{slug, name, verify_jwt, body}`，`body` 是 `index.ts` 全文（不带 `index.ts` 的路径）。纯 Management API，不需要装 CLI。当前线上 **version 21**（`deck-admin` 为 **version 7**）。引用链接指向 GitHub Pages 渲染版（github.com 的 HTML 文件页永远显示源码），README 与代码仍指 github.com。
-- **改 prompt 前后跑一次 `check-answer-prompt.mjs`**：`node scripts/check-answer-prompt.mjs`。它用 esbuild 把真实的 `index.ts` 转译出来、stub 一个 `globalThis.Deno`，直接断言 `commentScript()` 与 `buildMessages()` 的产物 —— 30 条，覆盖语言判定边界（含"英文产品名多于汉字"的陷阱）、引用规则、材质内联、以及 `hits` 为空时的兜底。**不联网、不写库**，所以改 prompt 措辞时它是唯一能立刻给反馈的东西。
+- **部署 `answer-comment`**：用 `node scripts/deploy-function.mjs <slug> [--dry]`（先 `--dry` 看差异）。它内部就是 `PATCH /v1/projects/<ref>/functions/<slug>`，body `{slug, name, verify_jwt, body}`，`body` 是 `index.ts` 全文。纯 Management API，不需要装 CLI。脚本会打印**部署前版本 → 部署后版本**，并在部署后**把源码读回来跟本地文件比**（Management API 读回时文件头两个字符会变成 U+FFFD，所以比较时忽略开头那两个字符 —— 别把它当 BOM，也别把 `/body` 当逐字节权威）。当前线上 `answer-comment` 为 **version 23**、`page-view` **version 1**、`deck-admin` **version 7**。引用链接指向 GitHub Pages 渲染版（github.com 的 HTML 文件页永远显示源码），README 与代码仍指 github.com。
+- **改 prompt 前后跑一次 `check-answer-prompt.mjs`**：`node scripts/check-answer-prompt.mjs`。它用 esbuild 把真实的 `index.ts` 转译出来、stub 一个 `globalThis.Deno`，直接断言 `commentScript()` 与 `buildMessages()` 的产物 —— 分三节：语言判定边界（含"英文产品名多于汉字"的陷阱）、引用/诚实性规则与材质内联、以及**数字规则**（第 3 节）。**不联网、不写库**，所以改 prompt 措辞时它是唯一能立刻给反馈的东西。
+- **数字必须照抄素材，不许换算**（2026-10-09，v23）：素材中英混排，同一个数字英文写 `50,000 emails a month`、中文写 `5万`。强制英文作答时模型对中文那个数做了一次单位换算，把 `50,000` 写成了 `60k/month`。修法是在 System 的 Rules 里加一条「Copy figures straight out of the material… Never convert units or recompute」。**验证方式**：`SUPABASE_PAT=... node scripts/probe-answer-variance.mjs --pick 3 --n 3 --expect 50,000 --reject 60k`（`--pick N` 取题库第 N 条，避免手抄题目时把 en-dash 打成连字符）。修复前后实测：v21 归档 `qa-answer-comments-52-v21.json` 里同一条写的是 `60k/month`，v23 下 3/3 都是 `50,000`、0/3 出现 `60k`；另抽查 `--pick 2`（262）与 `--pick 5`（22%）也 PASS，且答案**仍在做合法算术**（`600K × 15% = 90K × $8 ≈ $720K`），说明这条规则没有误伤推导。
 - **抽测单条检索**：`SUPABASE_PAT=... SILICONFLOW_API_KEY=... node scripts/kb-verify.mjs "<问题>"`。
 - **确认重排真的开着**：`answer-comment` 的响应里有 `rerank` 字段（`"remote"` = 远程 cross-encoder 生效，`"heuristic"` = 已降级）。远程那级失败是静默降级的，所以别只看开关，要看这个字段。
 - **owner 门禁回归检查**：`node scripts/check-owner-gate.mjs`（自带 deck 服务，起在 8798 端口，不干扰你正在跑的 8765）。9 个场景：开/关、**不粘性**、别名取值、无法识别取值、旧 `?config` 已作废且旧标记被清。改 `comments.js` 的 owner 分支后跑它。
@@ -222,7 +253,10 @@ https://wukun2005-gif.github.io/mailAutopilotForFS/deck-html/?owner=true
   - 重插时 `email=OWNER_EMAIL`，`notify-reply` 不会给自己发信（实测跑完 60 分钟内 `deck_comment_notifications` 新增 0 条）。
   - 语言判定前必须先**剥掉 `Sources:` 段与所有链接目标**：答案里内嵌好几个完整 URL，那些长拉丁串足以让一条纯中文答案看起来是拉丁占优，`--cjk` 会因此漏掉 2/3。这是踩过的坑，`proseOf()` 里处理了。
   - `deck_ai_answers.comment_id` 指向的是**问题**那行（不是答案行）。想按答案 join 会得到 0 行 —— 第一次就这样误判过一次。
-- **清空页面 / 把评论收起来再放回去**：`SUPABASE_PAT=... node scripts/deck-comments-archive.mjs <子命令>`。四个子命令：`snapshot <deck> [out.json]`、`restore <file> [--into <deck>] [--remap]`、`verify <file> [--into <deck>]`、`clear <deck> [--dry] [--yes]`。
+- **清空页面 / 把评论收起来再放回去**：`SUPABASE_PAT=... node scripts/deck-comments-archive.mjs <子命令>`。四个子命令：`snapshot <deck> [out.json]`、`restore <file> [--into <deck>] [--only <client_id>] [--remap] [--live]`、`verify <file> [--into <deck>] [--only <client_id>]`、`clear <deck> [--dry] [--yes] [--live]`。
+  - **写给线上 deck 必须带 `--live`**，否则直接拒绝（见上面「两道闸」）。只想自己看就 `--into mail-autopilot-fs-local`。
+  - **`--only <client_id>`**：`restore <file> --only qa-seed` 取匹配的行**连同挂在它下面的一切**。这一步的「连同」是关键 —— 答复是 `client_id='deck-ai'` 的独立行，不做后代遍历就会只还原 52 个问题、一个答案都没有。台账跟着自己的评论走。
+  - **`--remap`**：`deck_comments.id` 全表唯一。把同一份存档往**另一个 deck** 放时用它换新 id，否则以后按原 id 还原到网上会撞主键。
   - **顺序是先快照、再删除，且快照行数会和实际行数对账**，对不上就拒绝删。`clear` 不给 `--yes` 就不删。存盘文件名默认带时间戳（`deck-comments-<deck>-<ts>.json`），里面是**全部 16 列 + 该 deck 的全部台账行**，还记下产出它的 `answer-comment` 版本 —— 没有版本的存档以后没法对照。
   - **`restore` 默认沿用原 id**（最忠实，台账的 `comment_id` 不用改写）；`--remap` 生成新 id 并改写 `parent_id` 与台账外键，用于把一个存档克隆到隔离 deck 做演练。还原同理只写一个 deck，`--into` 指定目标。
   - **为什么不能只靠 `qa-answer-comments-52.json`**：那份只有 52 条 QA。手工敲的评论、它们的回复、以及 `deck_ai_answers` 全都不在里面 —— 而台账是**外键级联删除**的，问题行一删就没了。所以清空之前必须先快照。
@@ -231,12 +265,15 @@ https://wukun2005-gif.github.io/mailAutopilotForFS/deck-html/?owner=true
   - **`verify` 是这套东西的底线**：它把存档和库里现存的行都化成规范元组做多重集比对（页号 / 作者 / client_id / resolved / deleted / 正文 / 父正文 + 台账全字段），不一致就非零退出。
   - **实战记录（2026-10-08）**：`clear mail-autopilot-fs --yes` 删掉 116 行评论 + 57 行台账，存档 `deck-comments-mail-autopilot-fs-2026-10-08T14-36-56-077Z.json`（146 KB，58 顶层 + 58 回复，覆盖 1–14 页）。删前删后各验一次：删前用**另一份**快照往返（隔离 deck）确认树形与答案逐行一致，删后又用**这个存档本身**还原到隔离 deck 再 `verify`，两次都是 `YES ✓`；公开视图 `deck_comments_public` 里该 deck 从 116 行变 0 行。想再看就在原 deck 上跑 `restore <那个文件>`。
   - 表里还留着一个 `__probe__` deck（1 行，`author='probe'`，我之前探针留下的），不属于任何页面、不会被渲染。没动它。
+  - **回放记录**：只把 QA 那批摆回页面的命令是 `restore <存档> --only qa-seed`，得 104 行（52 问 + 52 答）+ 52 台账，13 页每页 8 条；跑完 `verify <存档> --only qa-seed` 应报 `YES ✓` 两行。那 6 条手工测试评论与 1 条 cite-probe **不在**这个选择里 —— 要连它们一起就把 `--only` 去掉。
+- **看页面长什么样**：`node scripts/shot-deck-page.mjs [url] [slideIndex] [out.png] [--closed]`。默认打本地 `8765` 的第 2 页、开面板、存到 `_shots/`；`--closed` 拍不打开面板的样子。它复用了探针那三件事（等 REST 响应落地再采样、用 `body.cmt-open` 判面板、点掉首访的法律告知遮罩），所以拍出来就是人眼看到的样子。`_shots/` 已在 `.gitignore` 里。
 - **在线人数那一行的写法**：有人填了名字时显示**首字母列表**（`Dana Whitfield` → `DW`，中文名保留首字，最多 4 个，其余并成 `+N`）；全部匿名时**保持原样**（`3 people on this page` / `You are the only one here`）。逻辑是 `comments.js` 里两个纯函数 `shortName()` / `presenceLabel()`，`check-comments-ui.mjs` 第 5 节直接从源码里取出来断言。它只对**已署名**的访客显示缩写——presence 频道是公开的，把陌生人的全名广播给同页其他人不合适。
 - **"本地怎么看不到评论？"**：`node scripts/probe-local-comments.mjs [url] [页码索引...]`，默认探 1 / 10 / 14 页。它连你正在跑的 8765（只读、不发评论），报出每页的徽章数字与实际渲染条数。三个容易踩的坑，脚本里都处理了：
   - **面板是按页过滤的**，且 `pageIdx` **只由 deck 的 `window.show(n)` 驱动**（`comments.js` 包装了它）。deck 没有滚动翻页，所以「滚动到某页」测到的永远是第 1 页——要翻页就调 `window.show(n)` 或按方向键，**不能靠 `scrollIntoView`**。
   - **面板不是 `display:none` 关闭的**，而是靠 `body.cmt-open` + transform 移出屏幕。判断开没开要问 `body.cmt-open`，问 `display` 永远得到 `flex`。
   - **首访有法律告知遮罩**：`#cmtdiscmodal` 盖住列表，点 `I understand` 后把 `localStorage['deck-comment-terms-ack']='1'`。在无痕/新 profile 里或清了站点数据后，每次刷新都会重新出现——这也是"刷新后看不到评论"的一个常见来源。读者列表其实已经在 DOM 里了（遮罩只是盖住），但人眼看不到。
   - 另外 REST 返回后渲染有一拍延迟，**要让探针等 REST 响应落地再采样**（等 `rest/v1/deck_comments_public`），而不是等固定秒数；早了会读到 TOC 徽章全空、看起来像 bug。种子回填后每页 8 条，用固定 3 秒已经不够了。
+- **"这个页面的评论到底从哪来？"**：`node scripts/probe-data-source.mjs <url> [url2]`。它打印页面里的 `DECK_COMMENT_CONFIG`（`supabaseUrl` / `deckId`）**以及浏览器实际发出的 supabase 请求**。用途：本地与线上是**两份 HTML**（工作区一份、仓库推上去的一份），但两份都从**同一个 Supabase 项目**取评论。注意两侧请求**并不相同** —— 本地是 `...&deck_id=eq.mail-autopilot-fs-local`，线上是 `...&deck_id=eq.mail-autopilot-fs`（曾经把这件事说成"逐字节相同"，是错的，别再说）。所以往 `deck_id='mail-autopilot-fs'` 写评论 = **对全网发布**，没有"只写本地"这回事。**这类断言要直接把请求打出来给人看，别让人信推理。**
 - **改引用指向**：`SOURCE_PATH` 在 `answer-comment/index.ts` 里，和 `kb-ingest.mjs` 的 `SOURCES` 是**手工对应**的两张表，加来源时两边都要改。
 - **owner 模式没有密钥要换**：它就是一个 URL 参数。想让"删除任何评论"这件事真正受控，才需要把 `OWNER_KEY` 校验加回 `deck-admin`（密钥仍在 Secrets 里）。
 - **速度与成本**：一条回答约 **6–8 秒**（开重排后实测 7.7s，关掉约 5.9s；52 题全量抽测 p50 **6.7s** · p90 **7.9s** · max 11.7s），异步执行、读者不阻塞。每条评论一次 embedding + 一次生成；想省钱就在面板里关掉。
