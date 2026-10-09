@@ -60,8 +60,6 @@ npm run dev      # http://localhost:5173
 
 ## Documents
 
-Live slide deck: https://wukun2005-gif.github.io/mailAutopilotForFS/deck-html/
-
 Run the deck locally: **`npm run deck`** — serves `deck-html/` and opens http://127.0.0.1:8765 (it picks the next free port if 8765 is taken; `npm run deck -- --no-open` to skip the browser).
 It has to be an `http://` address: opening `deck-html/index.html` straight from disk makes the comment panel silently disappear, because browsers block ES modules over `file://`.
 
@@ -72,3 +70,5 @@ not render HTML there, there is no setting for it):
 - Research report (调研报告): https://wukun2005-gif.github.io/mailAutopilotForFS/email-autopilot-research-report-v0.2.html
 - Product spec (PRD): [EN](https://wukun2005-gif.github.io/mailAutopilotForFS/email-autopilot-fs-prd_en.html) · [中文](https://wukun2005-gif.github.io/mailAutopilotForFS/email-autopilot-fs-prd.html)
 - Backlog: https://wukun2005-gif.github.io/mailAutopilotForFS/backlog.html
+
+Live slide deck: https://wukun2005-gif.github.io/mailAutopilotForFS/deck-html/
