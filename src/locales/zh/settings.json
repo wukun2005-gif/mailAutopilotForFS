@@ -37,6 +37,8 @@
   "verifyFailedTitle": "验证失败",
   "verifyingTitle": "验证中",
   "loadFailed": "加载设置失败：{{error}}",
+  "hostedTitle": "在线 Demo 不含此功能",
+  "hostedDesc": "本页配置的是真实大模型 API Key，需要本地启动（npm run dev）。线上版本是无后端的静态站点。四个演示页面完全不依赖模型，跑的是录制好的 fixtures。",
   "probeTitle": "Live LLM 试探（只读彩蛋）",
   "probeDesc": "基于预制 FAQ 资料回答并标注来源；只读，不触发任何案件动作，不携带客户数据。未配置 key 或调用失败时显示录制回答。",
   "probePlaceholder": "例如：你们的网点营业时间是？",

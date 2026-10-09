@@ -37,6 +37,8 @@
   "verifyFailedTitle": "Verification failed",
   "verifyingTitle": "Verifying",
   "loadFailed": "Failed to load settings: {{error}}",
+  "hostedTitle": "Not available in the hosted demo",
+  "hostedDesc": "This screen configures real LLM API keys, which needs the local dev server (npm run dev). The hosted build is a static site with no backend. The four demo screens need no model at all — they run on recorded fixtures.",
   "probeTitle": "Live LLM probe (read-only easter egg)",
   "probeDesc": "Answers from a built-in FAQ library with sources cited. Read-only: no case actions, no customer data. Shows a recorded answer when no key is configured or the call fails.",
   "probePlaceholder": "e.g. What are your branch hours?",
