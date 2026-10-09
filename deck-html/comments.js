@@ -1002,6 +1002,35 @@ async function refresh(force) {
   panel.addEventListener(type, function (e) { e.stopPropagation(); });
 });
 
+/* ── one row per page load ────────────────────────────────────────────────
+   Who opened the deck, from where, when. The browser only sends the deck's
+   own identity key and the URL — the IP and the country are read off the
+   request headers by the page-view function, because a browser cannot be
+   asked for its own address.
+
+   Fire-and-forget: `keepalive` so it survives a navigation, a `.catch` so a
+   failure is silent, and never awaited — the deck must not wait on a log
+   line, and nothing here is allowed to surface as an error. */
+function logPageView() {
+  if (mode !== 'cloud' || !CFG.supabaseUrl || !CFG.supabaseAnonKey) return;
+  try {
+    fetch(`${String(CFG.supabaseUrl).replace(/\/+$/, '')}/functions/v1/page-view`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${CFG.supabaseAnonKey}`,
+        apikey: CFG.supabaseAnonKey,
+      },
+      body: JSON.stringify({
+        deckId: DECK,
+        clientId: me.clientId,
+        path: location.pathname + location.search,
+      }),
+      keepalive: true,
+    }).catch(function () { /* a missed log is still not worth a warning */ });
+  } catch (e) { /* same */ }
+}
+
 /* ── boot ──────────────────────────────────────────────────────────────── */
 (async function boot() {
   renderIdentity();
@@ -1010,6 +1039,8 @@ async function refresh(force) {
   document.addEventListener('visibilitychange', function () { if (!document.hidden) refresh(false); });
 
   await initBackend();
+  /* the visit is logged before anything else can delay it — see logPageView */
+  logPageView();
   subscribe();
   await refresh(true);
 
