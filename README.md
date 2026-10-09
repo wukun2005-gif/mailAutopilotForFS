@@ -58,6 +58,8 @@ npm run dev      # http://localhost:5173
 | 3 | Supervisor | Approval queue (one-click / chained), statutory clock board, BEC/ATO quarantine |
 | 4 | Admin | R×I autonomy matrix, 90-day backtest, sampling tiers, readiness report + dual sign-off; intelligence nominations (graduation proposer, wave board, policy compiler) feeding the same gates |
 
+## Documents
+
 Live slide deck: https://wukun2005-gif.github.io/mailAutopilotForFS/deck-html/
 
 Run the deck locally: **`npm run deck`** — serves `deck-html/` and opens http://127.0.0.1:8765 (it picks the next free port if 8765 is taken; `npm run deck -- --no-open` to skip the browser).
