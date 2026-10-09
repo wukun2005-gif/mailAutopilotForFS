@@ -152,53 +152,100 @@ Deno.serve(async (req) => {
     if (action === "views") {
       const CAP = 2000;              // newest first; enough for a deck this size
       const rows = (await rest(
-        `deck_page_views?select=ip,country,country_code,created_at,path,client_id&order=created_at.desc&limit=${CAP}`
+        `deck_page_views?select=ip,country,country_code,created_at,path,client_id,owner&order=created_at.desc&limit=${CAP}`
       )) ?? [];
       /* The owner reads CST (+08); a UTC day boundary would move a late-night
          visit into the wrong row, so the day is cut here, once. */
       const dayOf = (iso: string) =>
         new Date(Date.parse(iso) + 8 * 3600 * 1000).toISOString().slice(0, 10);
-      const ips = new Set<string>();
-      const browsers = new Set<string>();
-      const countries = new Map<string, { loads: number; ips: Set<string> }>();
-      const days = new Map<string, { loads: number; ips: Set<string> }>();
-      const byIp = new Map<string, { loads: number; browsers: Set<string>; country: string; first: string; last: string }>();
+      /* Every group carries both counts — how many were mine and how many were
+         not — so the panel can hide my own visits and bring them back with a
+         click, without asking for the numbers a second time. */
+      const track = () => ({ loads: 0, mine: 0, ips: new Set<string>() });
+      const ips = new Set<string>(), mineIps = new Set<string>();
+      const browsers = new Set<string>(), mineBrowsers = new Set<string>();
+      const countries = new Map<string, ReturnType<typeof track>>();
+      const days = new Map<string, ReturnType<typeof track>>();
+      const byIp = new Map<string, {
+        loads: number; mine: number; browsers: Set<string>; country: string; first: string; last: string;
+      }>();
       for (const r of rows) {
         const c = r.country || r.country_code || "unknown";
         const d = dayOf(r.created_at);
         const ip = r.ip || "unknown";
-        if (r.ip) ips.add(r.ip);
-        if (r.client_id) browsers.add(r.client_id);
+        const mine = !!r.owner;
+        if (r.ip) (mine ? mineIps : ips).add(r.ip);
+        if (r.client_id) (mine ? mineBrowsers : browsers).add(r.client_id);
         for (const [m, k] of [[countries, c], [days, d]] as const) {
-          const cur = m.get(k) ?? { loads: 0, ips: new Set<string>() };
+          const cur = m.get(k) ?? track();
           cur.loads++;
+          if (mine) cur.mine++;
           if (r.ip) cur.ips.add(r.ip);
           m.set(k, cur);
         }
-        const e = byIp.get(ip) ?? { loads: 0, browsers: new Set<string>(), country: c, first: r.created_at, last: r.created_at };
+        const e = byIp.get(ip) ??
+          { loads: 0, mine: 0, browsers: new Set<string>(), country: c, first: r.created_at, last: r.created_at };
         e.loads++;
+        if (mine) e.mine++;
         if (r.client_id) e.browsers.add(r.client_id);
         if (r.created_at < e.first) e.first = r.created_at;
         if (r.created_at > e.last) e.last = r.created_at;
         byIp.set(ip, e);
       }
       const sorted = <T>(m: Map<string, T>) => [...m.entries()].sort((a, b) => b[1].loads - a[1].loads || a[0].localeCompare(b[0]));
+      const mine = rows.filter((r) => r.owner);
+      const group = ([key, v]: [string, { loads: number; mine: number }]) => ({
+        key, loads: v.loads, mine: v.mine, others: v.loads - v.mine,
+      });
       return json({
         ok: true,
         views: {
           total: rows.length,
+          mine: mine.length,
+          visitors: rows.length - mine.length,
           addresses: ips.size,
+          mineAddresses: mineIps.size,
           browsers: browsers.size,
+          mineBrowsers: mineBrowsers.size,
           first: rows.length ? rows[rows.length - 1].created_at : null,
           last: rows.length ? rows[0].created_at : null,
           capped: rows.length >= CAP,
-          countries: sorted(countries).map(([k, v]) => ({ key: k, loads: v.loads, ips: v.ips.size })),
-          days: sorted(days).map(([k, v]) => ({ key: k, loads: v.loads, ips: v.ips.size })),
+          countries: sorted(countries).map(group),
+          days: sorted(days).map(group),
           ips: sorted(byIp).map(([k, v]) => ({
-            key: k, loads: v.loads, browsers: v.browsers.size, country: v.country, first: v.first, last: v.last,
+            key: k, loads: v.loads, mine: v.mine, others: v.loads - v.mine,
+            yours: v.loads > 0 && v.mine === v.loads,
+            browsers: v.browsers.size, country: v.country, first: v.first, last: v.last,
           })),
         },
       });
+    }
+
+    /* Telling one address apart from another: `patch: { ip, mine }` marks an
+       address as the owner's (or takes it back). Both the address list and
+       every visit already recorded under it move at once, so a tag never has
+       to be applied twice. */
+    if (action === "views-tag") {
+      const p = (body.patch ?? {}) as Record<string, unknown>;
+      const ip = String(p.ip ?? "").trim();
+      const mine = !!p.mine;
+      if (!ip || ip === "unknown") return json({ error: "an ip is required" }, 400);
+      const where = `deck_owner_ips?ip=eq.${encodeURIComponent(ip)}`;
+      if (mine) {
+        await rest(where, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Prefer: "resolution=ignore-duplicates" },
+          body: JSON.stringify({ ip }),
+        });
+      } else {
+        await rest(where, { method: "DELETE" });
+      }
+      await rest(`deck_page_views?ip=eq.${encodeURIComponent(ip)}`, {
+        method: "PATCH",
+        headers: { Prefer: "return=minimal" },
+        body: JSON.stringify({ owner: mine }),
+      });
+      return json({ ok: true, ip, mine });
     }
 
     return json({ error: `unknown action: ${action}` }, 400);

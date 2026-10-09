@@ -28,6 +28,7 @@ create table if not exists public.deck_page_views (
   client_id   text,             -- the deck's own identity key: same browser = same id
   user_agent  text,
   hdr         jsonb,            -- the handful of request headers it came from (debug)
+  owner       boolean not null default false,  -- the owner's own visit
   created_at  timestamptz not null default now()
 );
 
@@ -36,34 +37,60 @@ alter table public.deck_page_views enable row level security;
 revoke all on public.deck_page_views from anon, authenticated;
 grant all on public.deck_page_views to service_role;
 
+-- `if not exists` on CREATE only covers a first run; a table created before
+-- `owner` existed still needs it added, and CREATE IF NOT EXISTS will not
+-- touch an existing table at all.
+alter table public.deck_page_views
+  add column if not exists owner boolean not null default false;
+
+-- ── which addresses are mine ──────────────────────────────────────────────
+-- Two ways a visit gets marked as the owner's: opening the deck with
+-- ?owner=true (the browser says so itself), or this list — the owner clicks
+-- an address in the panel once and every visit from it counts as theirs from
+-- then on, including visits where the URL carried no flag.
+create table if not exists public.deck_owner_ips (
+  ip        text primary key,
+  tagged_at timestamptz not null default now()
+);
+
+alter table public.deck_owner_ips enable row level security;
+revoke all on public.deck_owner_ips from anon, authenticated;
+grant all on public.deck_owner_ips to service_role;
+
 -- Daily roll-up. Kept as a view rather than a table so it can never drift
--- from the rows it counts.
-create or replace view public.deck_page_view_stats as
+-- from the rows it counts. `owner` is a column of the grouping so "my own
+-- visits" can be filtered out wherever the numbers are read. Dropped first:
+-- CREATE OR REPLACE may only keep the columns it already has, in order, so a
+-- new one in the middle needs a fresh view.
+drop view if exists public.deck_page_view_stats;
+create view public.deck_page_view_stats as
 select
   date_trunc('day', created_at)        as day,
   country_code,
   country,
+  owner,
   count(*)                             as views,
   count(distinct ip)                   as ips,
-  count(distinct client_id)            as browsers,
-  count(distinct date_trunc('day', created_at)) as days
+  count(distinct client_id)            as browsers
 from public.deck_page_views
-group by 1, 2, 3;
+group by 1, 2, 3, 4;
 
 revoke all on public.deck_page_view_stats from anon, authenticated;
 
 -- One row per address: how many times, first and last time seen.
-create or replace view public.deck_page_view_by_ip as
+drop view if exists public.deck_page_view_by_ip;
+create view public.deck_page_view_by_ip as
 select
   ip,
   country,
+  owner,
   count(*)            as views,
   count(distinct path) as pages,
   min(created_at)     as first_seen,
   max(created_at)     as last_seen,
   count(distinct client_id) as browsers
 from public.deck_page_views
-group by 1, 2;
+group by 1, 2, 3;
 
 revoke all on public.deck_page_view_by_ip from anon, authenticated;
 

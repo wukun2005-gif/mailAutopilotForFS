@@ -13,7 +13,7 @@
      · see the knowledge base and the last few answers, with latency and model
    ══════════════════════════════════════════════════════════════════════════ */
 
-const STATE = { config: {}, models: [], sources: [], knowledge: null, answers: null, views: null };
+const STATE = { config: {}, models: [], sources: [], knowledge: null, answers: null, views: null, showMine: false };
 
 /* Timestamps arrive as UTC; the owner reads them in CST (+08), so the shift
    lives here rather than in three places. */
@@ -139,40 +139,81 @@ export function mount({ config, deckId }) {
       body.appendChild(r);
     });
 
-    /* ── page views: who opened the deck, from where, how often ── */
+    /* ── page views: who opened the deck, from where, how often ──
+       My own visits are counted apart and hidden by default, so what is left
+       reads as "somebody else opened it". The pill brings mine back into the
+       numbers, and clicking an address claims it for me (or gives it back) —
+       which is how a visit with no flag in the URL still lands on my side. */
     const v = STATE.views;
+    const sec = (t) => {
+      const d = document.createElement('div');
+      d.className = 'asec';
+      d.textContent = t;
+      body.appendChild(d);
+    };
+    const sub = (t) => {
+      const d = document.createElement('div');
+      d.className = 'asub';
+      d.textContent = t;
+      body.appendChild(d);
+      return d;
+    };
     if (!v) {
       body.appendChild(row('Page views', 'loading…'));
     } else {
-      body.appendChild(row('Page views', `${v.total} loads · ${v.addresses} addr · ${v.browsers} browsers`));
-      const span = document.createElement('div');
-      span.className = 'asub';
-      span.textContent = `${cst(v.first)} → ${cst(v.last)} CST${v.capped ? ' · newest 2,000 rows' : ''}`;
-      body.appendChild(span);
+      const showMine = !!STATE.showMine;
 
-      /* countries in the order they occur, then the days newest-first (the
-         server hands them over by size, which is wrong for a timeline), then
-         the busiest addresses. Ten lines each is what fits the panel. */
-      (v.countries || []).slice(0, 8).forEach((c) => {
-        const line = document.createElement('div');
-        line.className = 'asub';
-        line.textContent = `${c.key} — ${c.loads} loads · ${c.ips} addr`;
-        body.appendChild(line);
-      });
+      const pill = document.createElement('button');
+      pill.className = 'atoggle' + (showMine ? ' on' : '');
+      pill.type = 'button';
+      pill.textContent = showMine ? 'MINE SHOWN' : 'MINE HIDDEN';
+      pill.title = showMine
+        ? 'Put my own visits back into the numbers'
+        : 'Keep my own visits out of the numbers';
+      pill.addEventListener('click', () => { STATE.showMine = !showMine; render(); });
+      body.appendChild(row('My visits', '', pill));
 
-      [...(v.days || [])].sort((a, b) => b.key.localeCompare(a.key)).slice(0, 7).forEach((d) => {
-        const line = document.createElement('div');
-        line.className = 'asub';
-        line.textContent = `${d.key} — ${d.loads} loads · ${d.ips} addr`;
-        body.appendChild(line);
-      });
+      sub(`visitors ${v.visitors} visits · ${v.addresses} addr`);
+      sub(`mine ${v.mine} visits · ${v.mineAddresses} addr`);
+      sub(`period ${cst(v.first).slice(5)} → ${cst(v.last).slice(5)} CST${v.capped ? ' · newest 2,000 rows' : ''}`);
 
+      /* one number per line: what the toggle leaves visible, plus the mine
+         split only when it would say something */
+      const shown = (g) => (showMine ? g.loads : g.others);
+      const label = (g) => {
+        const n = shown(g);
+        if (!showMine || !g.mine) return `${n} visits`;
+        return g.mine === g.loads ? `${n} visits · all mine` : `${n} visits · ${g.mine} mine`;
+      };
+
+      sec('by day');
+      [...(v.days || [])].sort((a, b) => b.key.localeCompare(a.key)).slice(0, 7)
+        .forEach((g) => { if (shown(g)) body.appendChild(row(g.key, label(g))); });
+
+      sec('by country');
+      (v.countries || []).forEach((g) => { if (shown(g)) body.appendChild(row(g.key, label(g))); });
+
+      sec('by address — click to claim');
       (v.ips || []).slice(0, 10).forEach((p) => {
-        const line = document.createElement('div');
-        line.className = 'asub';
-        line.textContent = `${p.key} — ${p.loads}× · ${p.browsers} browser · ${p.country} · last ${cst(p.last)}`;
-        line.title = `first ${cst(p.first)}`;
-        body.appendChild(line);
+        if (!shown(p)) return;
+        const r = row(p.key, label(p));
+        if (p.yours) r.classList.add('yours');
+        r.classList.add('aptag');
+        r.title = (p.yours
+          ? 'Counted as mine — click to count it as a visitor instead'
+          : 'Click: this address is mine') +
+          ` · ${p.country || 'unknown'} · ${p.browsers} browsers`;
+        r.addEventListener('click', async () => {
+          try {
+            await admin('views-tag', { ip: p.key, mine: !p.yours });
+            STATE.views = null;
+            await refresh();
+          } catch (e) {
+            alert('Could not change that: ' + (e.message || e));
+          }
+        });
+        body.appendChild(r);
+        sub(`${p.country || 'unknown'} · ${p.browsers} browsers · ${cst(p.first).slice(5)} → ${cst(p.last).slice(5)}`);
       });
     }
 
