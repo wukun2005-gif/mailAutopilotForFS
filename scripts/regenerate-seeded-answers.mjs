@@ -15,7 +15,8 @@
  *   SUPABASE_PAT=... node scripts/regenerate-seeded-answers.mjs --cjk      # the wrong-language ones
  *   SUPABASE_PAT=... node scripts/regenerate-seeded-answers.mjs --all      # every seeded question
  *   SUPABASE_PAT=... node scripts/regenerate-seeded-answers.mjs --page 3   # one page
- *   ...add --dry to see the list without touching anything
+ *   ...add --dry to see the list without touching anything (no --live needed)
+ *   ...add --live to actually re-ask them — this writes the published deck
  */
 
 import './net-proxy.mjs';
@@ -23,7 +24,14 @@ import { readFileSync } from 'node:fs';
 import { randomUUID } from 'node:crypto';
 import { QUESTIONS } from './qa-deck-questions.mjs';
 
-const PAT = process.env.SUPABASE_PAT || readPat();
+/* Resolved on first use, not at import time: the guard below must be free to
+   fire on a machine with no PAT — otherwise "you are about to write to the
+   published deck" gets buried under "no SUPABASE_PAT". */
+let _pat = null;
+function pat() {
+  if (_pat === null) _pat = process.env.SUPABASE_PAT || readPat();
+  return _pat;
+}
 const REF = 'ifiqhyzcklwueqsijtnq';
 const DECK = 'mail-autopilot-fs';
 const OWNER_EMAIL = 'wukun2005@gmail.com';
@@ -44,7 +52,7 @@ function readPat() {
 async function sql(q) {
   const r = await fetch(`https://api.supabase.com/v1/projects/${REF}/database/query`, {
     method: 'POST',
-    headers: { Authorization: `Bearer ${PAT}`, 'Content-Type': 'application/json' },
+    headers: { Authorization: `Bearer ${pat()}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({ query: q }),
   });
   const t = await r.text();
@@ -58,6 +66,18 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 if (!ALL && !CJK && PAGE === null) {
   console.error('pick a scope: --cjk | --all | --page N');
   process.exit(2);
+}
+
+/* The deck this rewrites is the published one: it deletes the rows and calls
+   the deployed function again, so the new answers are on the customer-facing
+   page. --dry stays free — it only reads, so it can still show you the plan. */
+if (!process.argv.includes('--live') && !DRY) {
+  throw new Error(
+    `'${DECK}' is the LIVE deck — this re-answers on the published page.\n`
+    + `  · to rehearse against a local deck: restore the snapshot with --into ${DECK}-local\n`
+    + `  · to see what it would touch: add --dry\n`
+    + `  · to do it on purpose: add --live`,
+  );
 }
 
 /* ── who is in scope ──────────────────────────────────────────────────── */
