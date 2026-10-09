@@ -13,7 +13,16 @@
      · see the knowledge base and the last few answers, with latency and model
    ══════════════════════════════════════════════════════════════════════════ */
 
-const STATE = { config: {}, models: [], sources: [], knowledge: null, answers: null };
+const STATE = { config: {}, models: [], sources: [], knowledge: null, answers: null, views: null };
+
+/* Timestamps arrive as UTC; the owner reads them in CST (+08), so the shift
+   lives here rather than in three places. */
+const cst = (iso) => {
+  if (!iso) return '—';
+  const t = new Date(iso).getTime() + 8 * 3600 * 1000;
+  if (Number.isNaN(t)) return String(iso);
+  return new Date(t).toISOString().replace('T', ' ').slice(0, 16);
+};
 
 /* The panel is opened by ?owner=true in the URL, so no key travels with these
    calls — see the note in comments.js: this is obscurity, not authentication,
@@ -130,6 +139,43 @@ export function mount({ config, deckId }) {
       body.appendChild(r);
     });
 
+    /* ── page views: who opened the deck, from where, how often ── */
+    const v = STATE.views;
+    if (!v) {
+      body.appendChild(row('Page views', 'loading…'));
+    } else {
+      body.appendChild(row('Page views', `${v.total} loads · ${v.addresses} addr · ${v.browsers} browsers`));
+      const span = document.createElement('div');
+      span.className = 'asub';
+      span.textContent = `${cst(v.first)} → ${cst(v.last)} CST${v.capped ? ' · newest 2,000 rows' : ''}`;
+      body.appendChild(span);
+
+      /* countries in the order they occur, then the days newest-first (the
+         server hands them over by size, which is wrong for a timeline), then
+         the busiest addresses. Ten lines each is what fits the panel. */
+      (v.countries || []).slice(0, 8).forEach((c) => {
+        const line = document.createElement('div');
+        line.className = 'asub';
+        line.textContent = `${c.key} — ${c.loads} loads · ${c.ips} addr`;
+        body.appendChild(line);
+      });
+
+      [...(v.days || [])].sort((a, b) => b.key.localeCompare(a.key)).slice(0, 7).forEach((d) => {
+        const line = document.createElement('div');
+        line.className = 'asub';
+        line.textContent = `${d.key} — ${d.loads} loads · ${d.ips} addr`;
+        body.appendChild(line);
+      });
+
+      (v.ips || []).slice(0, 10).forEach((p) => {
+        const line = document.createElement('div');
+        line.className = 'asub';
+        line.textContent = `${p.key} — ${p.loads}× · ${p.browsers} browser · ${p.country} · last ${cst(p.last)}`;
+        line.title = `first ${cst(p.first)}`;
+        body.appendChild(line);
+      });
+    }
+
     /* ── recent answers ── */
     const a = STATE.answers || {};
     const stat = Object.entries(a.byStatus || {}).map(([k2, v]) => `${k2} ${v}`).join(' · ') || 'none yet';
@@ -172,6 +218,14 @@ export function mount({ config, deckId }) {
       STATE.knowledge = d.knowledge || null;
       STATE.answers = d.answers || null;
       render();
+
+      /* Page views come second, on purpose: a slow log query must not hold the
+         whole panel at "Loading…". A failure stays a single "loading…" line —
+         the rest of the panel is still worth reading. */
+      admin('views').then((res) => {
+        STATE.views = res.views || null;
+        render();
+      }).catch(() => { /* keep the placeholder line */ });
     } catch (e) {
       body.innerHTML = `<div class="aload bad">${String(e.message || e)}</div>`;
     }
