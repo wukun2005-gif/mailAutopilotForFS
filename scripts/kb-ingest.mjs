@@ -52,7 +52,11 @@ const EMBED_KEY = process.env.SILICONFLOW_API_KEY || '';
 const SOURCES = [
   { key: 'deck',    label: 'Case Study Deck',      file: 'deck-html/index.html',                    kind: 'deck' },
   { key: 'prd_en',  label: 'PRD (English)',        file: 'email-autopilot-fs-prd_en.html',           kind: 'doc' },
-  { key: 'report',  label: 'Research Report',      file: 'email-autopilot-research-report-v0.2.html', kind: 'doc' },
+  /* The English edition replaced the Chinese one here on 2026-10-09: the deck
+     answers in the reader's language by translating what it retrieved, so the
+     Chinese source was a second translation step for nothing. The Chinese
+     file stays in the repo and on Pages, just not in the knowledge base. */
+  { key: 'report',  label: 'Research Report',      file: 'email-autopilot-research-report-v0.2_en.html', kind: 'doc' },
   { key: 'backlog', label: 'Review Backlog',       file: 'backlog.html',                            kind: 'doc' },
   /* Readers also ask about the demo app itself ("how does that clock work?",
      "where do those numbers come from?"). Three more sources answer that: the
@@ -84,7 +88,10 @@ const DEVPLAN_SKIP = /里程碑|风险与备选|开工纪律|评论系统|依赖
    and the report's "版本记录" both came back as cited sources, and a reference
    list answers nothing. Applied to every non-code source, because the same
    chapter type recurs in more than one document. */
-const INTERNAL_HEADING = /版本记录|变更记录|更新记录|changelog|change log|勘误|完整参考资料|里程碑|待办|开工纪律|风险与备选|运维与交接/i;
+/* The last two alternatives are the English report's own words for 版本记录 and
+   完整参考资料 — the report is ingested from its English edition now, and
+   without them §17/§18 of it would answer reader questions again. */
+const INTERNAL_HEADING = /版本记录|变更记录|更新记录|changelog|change log|勘误|完整参考资料|version history|full references|里程碑|待办|开工纪律|风险与备选|运维与交接/i;
 
 /* ── text extraction ───────────────────────────────────────────────────── */
 

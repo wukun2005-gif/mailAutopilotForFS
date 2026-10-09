@@ -378,7 +378,7 @@ const PAGES = "https://wukun2005-gif.github.io/mailAutopilotForFS";
 const SOURCE_PATH: Record<string, string | null> = {
   deck: `${PAGES}/deck-html/`,
   prd_en: `${PAGES}/email-autopilot-fs-prd_en.html`,
-  report: `${PAGES}/email-autopilot-research-report-v0.2.html`,
+  report: `${PAGES}/email-autopilot-research-report-v0.2_en.html`,
   backlog: `${PAGES}/backlog.html`,
   readme: "README.md",
   dev_plan: null,
