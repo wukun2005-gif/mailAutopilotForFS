@@ -16,7 +16,9 @@
      5. no console errors other than expected static-host noise
 
    Usage:
-     node scripts/verify-static-demo.mjs [port]
+     node scripts/verify-static-demo.mjs                       # serve dist/ locally
+     node scripts/verify-static-demo.mjs [port]                # local, on a chosen port
+     node scripts/verify-static-demo.mjs https://app.vercel.app  # verify a live deploy
    ══════════════════════════════════════════════════════════════════════════ */
 
 import { chromium } from 'playwright-core';
@@ -29,8 +31,12 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(HERE, '..');
 const DIST = resolve(ROOT, 'dist');
 const SHOTS = resolve(ROOT, '_shots');
+
+// Either serve dist/ locally (default — good for pre-deploy sanity checks),
+// or point at an existing URL to verify a live deploy.
+const REMOTE = process.argv[2] && /^https?:\/\//.test(process.argv[2]) ? process.argv[2].replace(/\/$/, '') : null;
 const PORT = Number(process.argv[2] || 8790);
-const BASE = `http://127.0.0.1:${PORT}`;
+const BASE = REMOTE || `http://127.0.0.1:${PORT}`;
 
 const results = [];
 function check(name, ok, detail = '') {
@@ -38,25 +44,31 @@ function check(name, ok, detail = '') {
   console.log(`  ${ok ? 'PASS' : 'FAIL'}  ${name}${detail ? ` — ${detail}` : ''}`);
 }
 
-/* ── 1. serve dist/ over http (file:// would break the service worker) ───── */
-const server = spawn(process.execPath, [resolve(HERE, 'serve-deck.mjs'), DIST, String(PORT), '--no-open'], {
-  cwd: ROOT,
-  stdio: ['ignore', 'pipe', 'pipe'],
-});
+/* ── 1. serve dist/ over http when verifying locally (file:// would break
+      the service worker). When REMOTE is set, assume the deploy is already
+      live and skip the local server. */
+let server = null;
 let serverLog = '';
-server.stdout.on('data', (d) => { serverLog += d; });
-server.stderr.on('data', (d) => { serverLog += d; });
-
-const stop = () => { try { server.kill('SIGKILL'); } catch { /* already gone */ } };
+const stop = () => { if (server) try { server.kill('SIGKILL'); } catch { /* already gone */ } };
 process.on('exit', stop);
 
 async function waitForServer(timeoutMs = 15_000) {
+  if (REMOTE) {
+    const t0 = Date.now();
+    while (Date.now() - t0 < timeoutMs) {
+      try { if ((await fetch(`${BASE}/index.html`)).ok) return true; } catch {}
+      await new Promise((r) => setTimeout(r, 300));
+    }
+    return false;
+  }
+  server = spawn(process.execPath, [resolve(HERE, 'serve-deck.mjs'), DIST, String(PORT), '--no-open'], {
+    cwd: ROOT, stdio: ['ignore', 'pipe', 'pipe'],
+  });
+  server.stdout.on('data', (d) => { serverLog += d; });
+  server.stderr.on('data', (d) => { serverLog += d; });
   const t0 = Date.now();
   while (Date.now() - t0 < timeoutMs) {
-    try {
-      const r = await fetch(`${BASE}/index.html`);
-      if (r.ok) return true;
-    } catch { /* not up yet */ }
+    try { if ((await fetch(`${BASE}/index.html`)).ok) return true; } catch {}
     await new Promise((r) => setTimeout(r, 150));
   }
   return false;
@@ -67,8 +79,8 @@ try {
   mkdirSync(SHOTS, { recursive: true });
 
   const up = await waitForServer();
-  if (!up) throw new Error(`static server never came up on ${BASE}\n${serverLog}`);
-  console.log(`\nserving ${DIST} at ${BASE}\n`);
+  if (!up) throw new Error(`target never responded on ${BASE}\n${serverLog}`);
+  console.log(`\nverifying ${REMOTE ? `remote deploy ${BASE}` : `${DIST} on ${BASE}`}\n`);
 
   /* ── 2. drive it with the real browser ────────────────────────────────── */
   // This mac has no downloaded headless shell; use the installed Chrome.
