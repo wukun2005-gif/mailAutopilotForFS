@@ -1025,6 +1025,10 @@ function logPageView() {
         deckId: DECK,
         clientId: me.clientId,
         path: location.pathname + location.search,
+        /* "this is me" — true whenever the deck was opened with ?owner=true.
+           The address can be claimed separately, in the panel, so a visit with
+           no flag in the URL still ends up on the owner's side of the count. */
+        owner: ownerOn,
       }),
       keepalive: true,
     }).catch(function () { /* a missed log is still not worth a warning */ });

@@ -50,6 +50,20 @@ const json = (body: unknown, status = 200) =>
     headers: { "Content-Type": "application/json", ...CORS },
   });
 
+async function rest(path: string) {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
+    headers: {
+      apikey: SERVICE_KEY,
+      Authorization: `Bearer ${SERVICE_KEY}`,
+      "Content-Type": "application/json",
+    },
+    signal: AbortSignal.timeout(2500),
+  });
+  const text = await res.text();
+  if (!res.ok) throw new Error(`${res.status} ${text.slice(0, 200)}`);
+  return text ? JSON.parse(text) : null;
+}
+
 /* Every name the client address has ever arrived under, in the order they
    are worth trying. `x-forwarded-for` is a list — the visitor is the first
    entry, the proxies come after. */
@@ -102,6 +116,18 @@ Deno.serve(async (req) => {
     } catch (_) { /* the row still gets written, country left blank */ }
   }
 
+  /* Whose visit this is. Two answers, and either one is enough: the page
+     admits it when it was opened with ?owner=true, and the address is one the
+     owner marked as theirs by clicking it in the panel — which covers the
+     ordinary case, where the owner browses the deck with no flag in the URL. */
+  let owner = body.owner === true;
+  if (ip && !owner) {
+    try {
+      const mine = await rest(`deck_owner_ips?ip=eq.${encodeURIComponent(ip)}&select=ip&limit=1`);
+      owner = Array.isArray(mine) && mine.length > 0;
+    } catch (_) { /* logged unmarked rather than not logged */ }
+  }
+
   const row = {
     deck_id: String(body.deckId ?? "default").slice(0, 120),
     path: typeof body.path === "string" ? body.path.slice(0, 300) : null,
@@ -110,6 +136,7 @@ Deno.serve(async (req) => {
     country: country.slice(0, 80) || null,
     client_id: typeof body.clientId === "string" ? body.clientId.slice(0, 80) : null,
     user_agent: (req.headers.get("user-agent") ?? "").slice(0, 300) || null,
+    owner,
     hdr: {
       ip: ipFrom.name || null,
       cc: ccFrom.name || null,
