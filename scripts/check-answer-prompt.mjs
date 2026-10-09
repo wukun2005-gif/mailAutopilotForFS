@@ -13,6 +13,11 @@
  * stub, so the assertions run against the shipped source, not a copy of it.
  * Nothing here calls the network.
  *
+ * Section 3 covers the figures rule, added 2026-10-09 after the language fix
+ * made the model restate the slide's "50,000 emails a month" as "60k/month" —
+ * the material is part Chinese, and the Chinese side spells the same figure
+ * "5万", so an English instruction was triggering a unit conversion.
+ *
  * Usage:  node scripts/check-answer-prompt.mjs
  */
 
@@ -124,6 +129,24 @@ check('the citation rules are intact',
   en.includes('Cite the sources you use inline as [1], [2]') && en.includes('only cite a number that really supports the claim'));
 check('the honesty rule is intact', en.includes('If it does not cover the question, say so plainly'));
 check('the language section still exists once', (en.match(/## Language/g) || []).length === 1);
+
+/* ── 3. figures must be quoted, not recomputed ────────────────────────────
+   Observed once the language fix was live: asked in English, the model turned
+   the slide's "50,000 emails a month" into "60k/month" and "60k/year". The
+   material is part English and part Chinese, and the Chinese side writes the
+   same figure as "5万" — so under an English instruction the model was doing a
+   unit conversion of a number sitting right there in words. The rule below
+   forbids that; these checks keep it from being tidied away. */
+console.log('\n── 3 · figures ──');
+check('the figures rule is stated',
+  /Copy figures straight out of the material/.test(en));
+check('it forbids conversion rather than asking for care',
+  /Never convert units or recompute/.test(en));
+check('and it names the figure pair that actually went wrong',
+  en.includes('50,000 emails a month') && en.includes('60k/month') && en.includes('60k/year'),
+  en.split('\n').find((l) => l.includes('Copy figures')) || '(rule line not found)');
+check('it is in every language variant, not just the English one',
+  [en, zh, noLetters].every((s) => /Copy figures straight out of the material/.test(s)));
 
 const msgs = buildMessages({
   comment: 'Where does the clock start?', author: 'Dana', pageTitle: 'The clock starts at the inbox.',

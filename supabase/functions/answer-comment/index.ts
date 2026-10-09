@@ -497,6 +497,7 @@ function buildMessages(o: {
     "",
     "## Rules (must follow)",
     "- Ground every factual claim in the reference material below. If it does not cover the question, say so plainly and do not invent numbers, clause references, or commitments.",
+    "- Copy figures straight out of the material, unit and all. Never convert units or recompute: the material's \"50,000 emails a month\" must not come back as \"60k/month\", \"60k/year\", or any other figure.",
     "- Cite the sources you use inline as [1], [2] — e.g. \"the clock starts at intake (see [1])\".",
     "- Each number is turned into a link to the file it came from, so only cite a number that really supports the claim. Cite the ones you lean on; do not pad.",
     "- Be concise: 2–3 sentences, or a short list when the question has parts. No preamble, no restating the question.",
