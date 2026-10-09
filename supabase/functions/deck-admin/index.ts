@@ -144,6 +144,63 @@ Deno.serve(async (req) => {
       return json({ ok: true, config: rows?.[0] ?? null });
     }
 
+    /* Who opened the deck. Not a "status" field — a log table of its own,
+       read here because deck_page_views has no policy and therefore no API
+       surface: this function is the only door, and it is the owner's panel
+       that knocks. Aggregated here rather than in the browser so the raw
+       addresses never travel further than they already have to. */
+    if (action === "views") {
+      const CAP = 2000;              // newest first; enough for a deck this size
+      const rows = (await rest(
+        `deck_page_views?select=ip,country,country_code,created_at,path,client_id&order=created_at.desc&limit=${CAP}`
+      )) ?? [];
+      /* The owner reads CST (+08); a UTC day boundary would move a late-night
+         visit into the wrong row, so the day is cut here, once. */
+      const dayOf = (iso: string) =>
+        new Date(Date.parse(iso) + 8 * 3600 * 1000).toISOString().slice(0, 10);
+      const ips = new Set<string>();
+      const browsers = new Set<string>();
+      const countries = new Map<string, { loads: number; ips: Set<string> }>();
+      const days = new Map<string, { loads: number; ips: Set<string> }>();
+      const byIp = new Map<string, { loads: number; browsers: Set<string>; country: string; first: string; last: string }>();
+      for (const r of rows) {
+        const c = r.country || r.country_code || "unknown";
+        const d = dayOf(r.created_at);
+        const ip = r.ip || "unknown";
+        if (r.ip) ips.add(r.ip);
+        if (r.client_id) browsers.add(r.client_id);
+        for (const [m, k] of [[countries, c], [days, d]] as const) {
+          const cur = m.get(k) ?? { loads: 0, ips: new Set<string>() };
+          cur.loads++;
+          if (r.ip) cur.ips.add(r.ip);
+          m.set(k, cur);
+        }
+        const e = byIp.get(ip) ?? { loads: 0, browsers: new Set<string>(), country: c, first: r.created_at, last: r.created_at };
+        e.loads++;
+        if (r.client_id) e.browsers.add(r.client_id);
+        if (r.created_at < e.first) e.first = r.created_at;
+        if (r.created_at > e.last) e.last = r.created_at;
+        byIp.set(ip, e);
+      }
+      const sorted = <T>(m: Map<string, T>) => [...m.entries()].sort((a, b) => b[1].loads - a[1].loads || a[0].localeCompare(b[0]));
+      return json({
+        ok: true,
+        views: {
+          total: rows.length,
+          addresses: ips.size,
+          browsers: browsers.size,
+          first: rows.length ? rows[rows.length - 1].created_at : null,
+          last: rows.length ? rows[0].created_at : null,
+          capped: rows.length >= CAP,
+          countries: sorted(countries).map(([k, v]) => ({ key: k, loads: v.loads, ips: v.ips.size })),
+          days: sorted(days).map(([k, v]) => ({ key: k, loads: v.loads, ips: v.ips.size })),
+          ips: sorted(byIp).map(([k, v]) => ({
+            key: k, loads: v.loads, browsers: v.browsers.size, country: v.country, first: v.first, last: v.last,
+          })),
+        },
+      });
+    }
+
     return json({ error: `unknown action: ${action}` }, 400);
   } catch (e) {
     return json({ error: String(e) }, 500);
