@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>数字换算缺陷 · 修复证据（answer-comment v23）</title>
+<style>
+  :root {
+    --ink: #10161c;
+    --muted: #5b6b78;
+    --line: #dfe5ea;
+    --bg: #f6f8f9;
+    --card: #ffffff;
+    --accent: #0f8f78;
+    --bad: #b4232a;
+    --good: #0f8f78;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 40px 24px 72px;
+    background: var(--bg); color: var(--ink);
+    font: 15px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; }
+  h1 { font-size: 26px; line-height: 1.3; margin: 0 0 6px; letter-spacing: -.2px; }
+  .sub { color: var(--muted); font-size: 13.5px; margin-bottom: 32px; }
+  .sub code { background: #e8edf0; padding: 1px 5px; border-radius: 4px; font-family: var(--mono); font-size: 12.5px; }
+  h2 {
+    font-size: 15px; margin: 34px 0 14px; letter-spacing: .02em;
+    text-transform: uppercase; color: var(--muted); font-weight: 600;
+  }
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+    padding: 20px 22px; margin-bottom: 14px;
+  }
+  .verdict {
+    display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: .04em;
+    padding: 3px 9px; border-radius: 999px; vertical-align: 2px;
+  }
+  .v-pass { background: #e3f4f0; color: var(--good); }
+  .v-fail { background: #fbe9e9; color: var(--bad); }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-weight: 600; color: var(--muted); font-size: 12.5px; text-transform: uppercase; letter-spacing: .03em; }
+  tr:last-child td { border-bottom: none; }
+  .num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .wrong { color: var(--bad); font-weight: 600; }
+  .right { color: var(--good); font-weight: 600; }
+  pre {
+    margin: 0; padding: 13px 15px; background: #f0f4f6; border: 1px solid var(--line);
+    border-radius: 8px; overflow-x: auto; font-family: var(--mono); font-size: 12.5px; line-height: 1.6;
+  }
+  .quote { border-left: 3px solid var(--line); padding-left: 14px; color: #24313b; }
+  .quote .who { display: block; font-size: 12.5px; color: var(--muted); margin-bottom: 3px; }
+  ul { margin: 8px 0 0; padding-left: 20px; }
+  li { margin-bottom: 6px; }
+  .muted { color: var(--muted); }
+  .why { font-size: 14px; color: #2c3a45; margin-top: 12px; }
+  .why b { color: var(--ink); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>数字换算缺陷 · 修复证据</h1>
+  <div class="sub">
+    <code>answer-comment</code> v22 → <b>v23</b> ｜ 2026-10-09 ｜ 提交 <code>0c2bfff</code>
+  </div>
+
+  <h2>缺陷</h2>
+  <div class="card">
+    <p style="margin:0 0 12px">
+      p2 幻灯片上写着 <b>50,000 emails a month</b>。在用英文作答时，模型把它写成了
+      <span class="wrong">60k/month</span> 和 <span class="wrong">60k/year</span>。
+    </p>
+    <p class="why" style="margin:0">
+      <b>原因。</b>知识库是中英混排的，同一个数字英文写 <code>50,000 emails a month</code>、中文写 <code>5万</code>。
+      强制英文作答后，模型对中文那一侧的写法做了一次单位换算，把 <code>5万</code> 换成了 <code>60k</code> —— 算错了。
+      素材里本来就有的英文数字，它反而没用。
+    </p>
+  </div>
+
+  <h2>修复前后（同一条问题，逐字对照）</h2>
+  <div class="card">
+    <table>
+      <tr>
+        <th>版本</th><th>那条答案里关于邮件量的写法</th>
+      </tr>
+      <tr>
+        <td class="num">v20（中文）</td>
+        <td class="right">5 万封/月 <span class="muted">— 正确</span></td>
+      </tr>
+      <tr>
+        <td class="num">v21</td>
+        <td class="wrong">The email volume (60k/month) <span class="muted">— 缺陷</span></td>
+      </tr>
+      <tr>
+        <td class="num">v23</td>
+        <td class="right">mail volume (50,000 emails/month) <span class="muted">— 正确，3/3 次</span></td>
+      </tr>
+    </table>
+    <p class="muted" style="font-size:13.5px;margin:12px 0 0">
+      v21 那句取自归档 <code>qa-answer-comments-52-v21.json</code>，可复查。
+    </p>
+  </div>
+
+  <h2>改了什么</h2>
+  <div class="card">
+    <p style="margin:0 0 10px;font-size:14px">System 的 Rules 段新增一条（挨着原有的「不要编造数字」，是它的精确化）：</p>
+    <pre>Copy figures straight out of the material, unit and all. Never convert
+units or recompute: the material's "50,000 emails a month" must not come
+back as "60k/month", "60k/year", or any other figure.</pre>
+    <p class="why">
+      <b>为什么措辞是「照抄、不换算」而不是「不要算数」。</b>
+      这条规则只该禁止改写素材里的数字，不该禁止合法推导 —— 否则会误伤那些本来就需要算一笔的答案。
+    </p>
+  </div>
+
+  <h2>验证 <span class="verdict v-pass">全部 PASS</span></h2>
+  <div class="card">
+    <table>
+      <tr><th>检查</th><th>命令</th><th>结果</th></tr>
+      <tr>
+        <td>目标题</td>
+        <td><code>--pick 3 --n 3 --expect 50,000 --reject 60k</code></td>
+        <td class="right num">3/3 含 50,000 · 0/3 含 60k</td>
+      </tr>
+      <tr>
+        <td>非回归 · 262</td>
+        <td><code>--pick 2 --n 1 --expect 262</code></td>
+        <td class="right num">1/1</td>
+      </tr>
+      <tr>
+        <td>非回归 · 22%</td>
+        <td><code>--pick 5 --n 1 --expect 22%</code></td>
+        <td class="right num">1/1</td>
+      </tr>
+      <tr>
+        <td>prompt 单测</td>
+        <td><code>check-answer-prompt.mjs</code></td>
+        <td class="right">全绿（含新增第 3 节 4 条）</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <p style="margin:0 0 10px;font-size:14px"><b>关键的非回归证据：答案仍然会做算术。</b>第 5 题（27-hour / 22%）的 v23 答案：</p>
+    <div class="quote">
+      <span class="who">answer-comment v23 · p3</span>
+      The 22% "please call us" rate breaks the business case first. It feeds the failed-demand reduction
+      in the base-tier math: <b>600K × 15% = 90K items × $8 ≈ $720K</b> [1]. If that rate drops, the
+      90K-item reduction shrinks proportionally…
+    </div>
+    <p class="why" style="margin-bottom:0">
+      新规则没有把推导一起禁掉 —— 这是加这条规则最需要确认的一点。
+    </p>
+  </div>
+
+  <h2>怎么再验一次</h2>
+  <div class="card" style="padding-top:16px">
+    <pre>node scripts/probe-answer-variance.mjs --pick 3 --n 3 --expect 50,000 --reject 60k</pre>
+    <ul class="muted" style="font-size:13.5px">
+      <li>只写 <code>deck_id='mail-autopilot-fs-qa'</code>，跑完自清，不碰线上 deck。</li>
+      <li><code>--pick N</code> 取题库第 N 条，不用手抄题目（手抄容易把 en-dash 打成连字符）。</li>
+      <li>数字出错不属于「抽样波动」，所以给的是 PASS/FAIL，而不是一段供人阅读的散文。</li>
+    </ul>
+  </div>
+
+</div>
+</body>
+</html>
