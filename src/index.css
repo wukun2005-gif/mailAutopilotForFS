@@ -1,4 +1,9 @@
-@import "tailwindcss";
+/* Tailwind scans the whole repo root by default. This root also holds the
+   deck, the PRD and the QA artifacts, so every one of those writes regenerated
+   this stylesheet and pushed an HMR update into the running demo. All app
+   markup lives in src/, so scan only src/. */
+@import "tailwindcss" source(none);
+@source "./**/*.{ts,tsx}";
 
 /* ── Design tokens — mirrors PRD/Dev Plan palette ───────────────────── */
 @theme {
