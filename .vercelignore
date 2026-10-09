@@ -1,0 +1,42 @@
+# 只上传构建 demo 真正需要的东西。这个仓库同时是文档工作区：deck、PRD、
+# 调研报告、QA 报告和几百张截图都躺在根目录，全传上去只会拖慢每次部署。
+#
+# 必须保留（构建依赖）：package.json / package-lock.json / index.html /
+# vite.config.ts / tsconfig*.json / src / public / shared / server
+#   —— server/ 看着像后端，但 vite.config.ts 会 import 里面的 llmBffPlugin，
+#      少了它 dev server 起不来（生产构建本身不跑它）。
+#
+# 说明：Vercel 走 Git 导入时用的是 git clone，不读这个文件；它只影响 CLI 上传。
+
+_shots/
+_backup/
+_backup-prd-v0.2.html
+deck/
+deck-html/
+dist/
+node_modules/
+tests/
+evals/
+scripts/
+supabase/
+server-data/
+tts/.venv/
+tts/.local/
+tts/candidates/
+
+# 文档与报告（根目录的 HTML 是给人看的文档，不是 app 的一部分）
+*.md
+email-autopilot-fs-prd.html
+email-autopilot-fs-prd_en.html
+email-autopilot-research-report-v0.2.html
+email-autopilot-research-report-v0.2_en.html
+email-autopilot-prototype-dev-plan-v0.1.html
+backlog.html
+*-qa-report.html
+qa-*.html
+qa-*.json
+deck-comments-*.json
+
+# 只给本地/评测用的配置
+playwright.config.ts
+promptfoo.config.ts

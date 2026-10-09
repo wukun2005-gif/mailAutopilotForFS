@@ -2,6 +2,9 @@
 
 ![Demo preview](public/demo-intro.gif)
 
+**Try the running prototype in your browser — no install, no clone:**
+https://mail-autopilot-fs-demo.vercel.app
+
 Full demo video: https://youtu.be/FPWNd_wCKxs
 
 Live slide deck: https://wukun2005-gif.github.io/mailAutopilotForFS/deck-html/
@@ -51,6 +54,35 @@ Requires Node ≥ 22.22.0.
 npm install      # first time
 npm run dev      # http://localhost:5173
 ```
+
+> Prefer not to install anything? Use the hosted build instead —
+> **https://mail-autopilot-fs-demo.vercel.app**. It is the same prototype,
+> served as a static site: the whole mock backend runs in your browser via
+> MSW, so nothing is sent to a server. Everything works there except the
+> Settings screen (which configures real LLM API keys and needs a local
+> `npm run dev`); the four demo screens never touch a model.
+
+### How the hosted demo is deployed
+
+Vercel, Hobby (free). `vercel.json` builds it as a plain Vite static site
+(`npm run build` → `dist/`), and the project is connected to this repo, so
+**every push to `main` redeploys automatically**. Nothing server-side is
+deployed — there is no API to protect, and `server-data/settings.json`
+(which would hold API keys) is git-ignored and never uploaded.
+
+After changing anything that affects the production build, confirm the hosted
+copy still runs before pushing:
+
+```bash
+node scripts/verify-static-demo.mjs                                   # serve dist/ locally
+node scripts/verify-static-demo.mjs https://mail-autopilot-fs-demo.vercel.app  # check the live URL
+```
+
+It drives a real browser through: app mounts → MSW service worker registered
+**and controlling the page** → `/mock/*` intercepted → a scripted demo plays
+to completion → no console errors. The service-worker check is the one that
+matters: MSW used to start only under `import.meta.env.DEV`, so a production
+build could silently ship with a dead backend and still "succeed".
 
 ```bash
 npm run build    # type-check + production build

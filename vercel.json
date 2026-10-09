@@ -1,7 +1,5 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "_doc": "Vercel config for the Email Autopilot prototype. The app is a pure static SPA — MSW runs the entire mock backend in the browser, so no server / API is deployed here. `npm run dev` for the Dev BFF stays a local-only feature.",
-
   "framework": "vite",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
