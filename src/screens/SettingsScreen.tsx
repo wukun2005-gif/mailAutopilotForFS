@@ -50,6 +50,9 @@ export function SettingsScreen() {
   const [enableFallback, setEnableFallback] = useState(true);
   const [toast, setToast] = useState<{ type: "success" | "error"; msg: string } | null>(null);
   const [probe, setProbe] = useState<{ q: string; a: string; busy: boolean; recorded: boolean }>({ q: "", a: "", busy: false, recorded: false });
+  // The hosted build is a static site: there is no /api backend to configure.
+  // Say so plainly instead of surfacing a bare network error.
+  const [bffMissing, setBffMissing] = useState(false);
   const dragProviderItem = useRef<{ index: number } | null>(null);
   const dragProviderOver = useRef<{ index: number } | null>(null);
 
@@ -90,8 +93,10 @@ export function SettingsScreen() {
         };
       }
       setForms(map);
-    } catch (e) {
-      notify("error", t("loadFailed", { error: e instanceof Error ? e.message : String(e) }));
+    } catch {
+      // No /api backend (hosted static build) — or it is down. Either way the
+      // provider forms cannot be loaded, so explain it in the page body.
+      setBffMissing(true);
     }
   }, [t]);
 
@@ -177,6 +182,16 @@ export function SettingsScreen() {
           <h1 className="text-[22px] font-semibold text-navy">{t("title")}</h1>
           <p className="text-[16px] text-faint">{t("desc")}</p>
         </div>
+
+        {bffMissing && (
+          <div
+            data-id="settings.hosted-notice"
+            className="rounded-md border border-amber-300 bg-amber-50 px-4 py-3 text-[16px] text-amber-900"
+          >
+            <div className="font-semibold">{t("hostedTitle")}</div>
+            <div className="mt-1 leading-relaxed">{t("hostedDesc")}</div>
+          </div>
+        )}
 
         {toast && (
           <div
