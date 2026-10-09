@@ -7,19 +7,6 @@ https://mail-autopilot-fs-demo.vercel.app
 
 Full demo video: https://youtu.be/FPWNd_wCKxs
 
-Live slide deck: https://wukun2005-gif.github.io/mailAutopilotForFS/deck-html/
-
-Run the deck locally: **`npm run deck`** — serves `deck-html/` and opens http://127.0.0.1:8765 (it picks the next free port if 8765 is taken; `npm run deck -- --no-open` to skip the browser).
-It has to be an `http://` address: opening `deck-html/index.html` straight from disk makes the comment panel silently disappear, because browsers block ES modules over `file://`.
-
-Documents — open them through GitHub Pages, they render in the browser. The
-`github.com/.../blob/...` view always shows HTML as source code (GitHub does
-not render HTML there, there is no setting for it):
-
-- Research report (调研报告): https://wukun2005-gif.github.io/mailAutopilotForFS/email-autopilot-research-report-v0.2.html
-- Product spec (PRD): [EN](https://wukun2005-gif.github.io/mailAutopilotForFS/email-autopilot-fs-prd_en.html) · [中文](https://wukun2005-gif.github.io/mailAutopilotForFS/email-autopilot-fs-prd.html)
-- Backlog: https://wukun2005-gif.github.io/mailAutopilotForFS/backlog.html
-
 ## Problem
 
 The public support mailbox is the slowest but  expensive, and least automated service channel:
@@ -62,36 +49,6 @@ npm run dev      # http://localhost:5173
 > Settings screen (which configures real LLM API keys and needs a local
 > `npm run dev`); the four demo screens never touch a model.
 
-### How the hosted demo is deployed
-
-Vercel, Hobby (free). `vercel.json` builds it as a plain Vite static site
-(`npm run build` → `dist/`), and the project is connected to this repo, so
-**every push to `main` redeploys automatically**. Nothing server-side is
-deployed — there is no API to protect, and `server-data/settings.json`
-(which would hold API keys) is git-ignored and never uploaded.
-
-After changing anything that affects the production build, confirm the hosted
-copy still runs before pushing:
-
-```bash
-node scripts/verify-static-demo.mjs                                   # serve dist/ locally
-node scripts/verify-static-demo.mjs https://mail-autopilot-fs-demo.vercel.app  # check the live URL
-```
-
-It drives a real browser through: app mounts → MSW service worker registered
-**and controlling the page** → `/mock/*` intercepted → a scripted demo plays
-to completion → no console errors. The service-worker check is the one that
-matters: MSW used to start only under `import.meta.env.DEV`, so a production
-build could silently ship with a dead backend and still "succeed".
-
-```bash
-npm run build    # type-check + production build
-npm test         # unit tests
-npm run e2e      # Playwright e2e
-npm run e2e:demo # demo-only tests
-npm run eval     # promptfoo safety evals
-```
-
 ## Screens & demo
 
 | # | Screen | What to look at |
@@ -100,3 +57,16 @@ npm run eval     # promptfoo safety evals
 | 2 | Agent Handoff | Case dossier: intent evidence, policy evaluation, missing materials, editable L2 draft |
 | 3 | Supervisor | Approval queue (one-click / chained), statutory clock board, BEC/ATO quarantine |
 | 4 | Admin | R×I autonomy matrix, 90-day backtest, sampling tiers, readiness report + dual sign-off; intelligence nominations (graduation proposer, wave board, policy compiler) feeding the same gates |
+
+Live slide deck: https://wukun2005-gif.github.io/mailAutopilotForFS/deck-html/
+
+Run the deck locally: **`npm run deck`** — serves `deck-html/` and opens http://127.0.0.1:8765 (it picks the next free port if 8765 is taken; `npm run deck -- --no-open` to skip the browser).
+It has to be an `http://` address: opening `deck-html/index.html` straight from disk makes the comment panel silently disappear, because browsers block ES modules over `file://`.
+
+Documents — open them through GitHub Pages, they render in the browser. The
+`github.com/.../blob/...` view always shows HTML as source code (GitHub does
+not render HTML there, there is no setting for it):
+
+- Research report (调研报告): https://wukun2005-gif.github.io/mailAutopilotForFS/email-autopilot-research-report-v0.2.html
+- Product spec (PRD): [EN](https://wukun2005-gif.github.io/mailAutopilotForFS/email-autopilot-fs-prd_en.html) · [中文](https://wukun2005-gif.github.io/mailAutopilotForFS/email-autopilot-fs-prd.html)
+- Backlog: https://wukun2005-gif.github.io/mailAutopilotForFS/backlog.html
