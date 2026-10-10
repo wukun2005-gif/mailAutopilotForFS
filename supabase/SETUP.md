@@ -215,12 +215,18 @@ https://wukun2005-gif.github.io/mailAutopilotForFS/deck-html/?owner=true
 
 - **删除任何评论**：owner 模式下每条评论都有 Delete（不只是自己发的）。删的是**软删除**（`deleted=true`，读者立刻看不到）。删**顶层**评论会**连带软删除它下面的回复** —— 见下面「计数与可见性」。确认框会写明作者是谁、以及回复会一起走。
 - **开关 AI 自动回答**（下一次评论立即生效，不用重新部署）
-- **切换模型**：下拉里是实测可用的 10 个免费模型，默认 `deepseek-v4-flash-0731`（约 3 秒）
+- **切换模型**：下拉里是账号下 8 个能调通的免费模型，顺序与 `answer-comment` 的兜底链一致，默认 `qwen3.8-2.4t-a95b`
 - 查看知识库规模、最近回答的状态/模型/耗时
 
 > **删除为什么是"软"的、且不放在 Edge Function 里**：软删除走的是 `deck_comments_public` 视图上的 UPDATE，和"Resolve"按钮用的是同一条策略（见 `schema.sql`），所以没有新增任何暴露面，也不会真的丢数据。反过来，如果在 `deck-admin` 里加一个用 service role 的**硬删除**，任何读过 JS 的人都能清空整个 deck —— 那是比它解决的问题大得多的洞。真要硬删除，先把 `OWNER_KEY` 校验加回来。
 
-> 模型可用性（2026-10-08 实测，需带 `enable_thinking: false`）：`qwen3.8-2.4t-a95b` / `glm-5.3` / `qwen-mt-uni` 调 `/chat/completions` 返回 400，`qwen3.8-omni-flash-realtime` 是实时接口、返回空 —— 这四个没进链路。其余 10 个都可用，多数约 3 秒。
+> **模型与顺序（2026-10-10 实测 + owner 给的清单，线上 `answer-comment` v24 / `deck-admin` v10）**：`qwen3.8-2.4t-a95b`（默认）→ `deepseek-v4-pro-0813` → `qwen3.8-27b` → `kimi-k3` → `glm-5.3` → `qwen3.8-flash` → `qwen3.8-max-0902` → `deepseek-v4.1-flash`。八个都是免费额度（各 1M token，用完即停），到期日 2026/11/12 ~ 2026/12/21。
+>
+> **owner 清单里另外两个调不通，已去掉**：`qwen-mt-uni` → `url error, please check url`；`qwen3.8-omni-flash-realtime` → HTTP 200 但正文为空。这两个每次尝试要白等 1.5–2 秒，放进链子纯亏。
+>
+> **三个模型不吃全部参数，靠 `chatOnce` 补救**：owner 清单里 `kimi-k3` 报 `temperature is not supported`，`qwen3.8-2.4t-a95b` 与 `glm-5.3` 报 `enable_thinking is restricted to True`。所以 `chatOnce` 收到 400 时按报错里提到的参数名把它从 body 里删掉再发一次（最多三轮：全参 → 删一个 → 两个都删）。这三个额度最足，不值得为它们放弃整个模型。
+>
+> 2026-10-08 那版结论（`qwen3.8-2.4t-a95b` / `glm-5.3` / `qwen-mt-uni` 一律 400）已被今天这次覆盖 —— 400 的原因不是模型不能调，是参数。
 
 ### 维护
 
@@ -230,7 +236,7 @@ https://wukun2005-gif.github.io/mailAutopilotForFS/deck-html/?owner=true
 - **网络前提**：本机的出网要经过代理（`HTTPS_PROXY`），而 Node 的 `fetch` 不读这个变量（curl 和 Python 都读）。三个脚本都 `import './net-proxy.mjs'` 装上 `ProxyAgent` —— 不装就会在第一次 SQL 调用时报 `UND_ERR_CONNECT_TIMEOUT`，而切块已经跑完了，看起来像代码 bug。
 - **检索 provider 与 patentExaminator 保持一致**：embedding `BAAI/bge-m3`、rerank `BAAI/bge-reranker-v2-m3`，同为 SiliconFlow 账号（`https://api.siliconflow.cn/v1`）。`bge-m3` 是 1024 维，与 `kb_chunks.embedding vector(1024)` 一致，所以**换模型不用改表**；但换模型必须**整库重灌**，否则新旧向量不在同一空间、检索会静默失准。
 - **Edge Function 需要新增的 Secrets**：`SILICONFLOW_BASE_URL`（`https://api.siliconflow.cn/v1`）与 `SILICONFLOW_API_KEY`（检索用，和 patentExaminator 同一把）；`BAILIAN_*` 仍用于生成，不用动。**两个 Secret 必须在部署 `answer-comment` 之前存在**，否则新函数读不到 key、embedding 直接失败。
-- **部署 `answer-comment`**：用 `node scripts/deploy-function.mjs <slug> [--dry]`（先 `--dry` 看差异）。它内部就是 `PATCH /v1/projects/<ref>/functions/<slug>`，body `{slug, name, verify_jwt, body}`，`body` 是 `index.ts` 全文。纯 Management API，不需要装 CLI。脚本会打印**部署前版本 → 部署后版本**，并在部署后**把源码读回来跟本地文件比**（Management API 读回时文件头两个字符会变成 U+FFFD，所以比较时忽略开头那两个字符 —— 别把它当 BOM，也别把 `/body` 当逐字节权威）。当前线上 `answer-comment` 为 **version 23**、`page-view` **version 1**、`deck-admin` **version 7**。引用链接指向 GitHub Pages 渲染版（github.com 的 HTML 文件页永远显示源码），README 与代码仍指 github.com。
+- **部署 `answer-comment`**：用 `node scripts/deploy-function.mjs <slug> [--dry]`（先 `--dry` 看差异）。它内部就是 `PATCH /v1/projects/<ref>/functions/<slug>`，body `{slug, name, verify_jwt, body}`，`body` 是 `index.ts` 全文。纯 Management API，不需要装 CLI。脚本会打印**部署前版本 → 部署后版本**，并在部署后**把源码读回来跟本地文件比**（Management API 读回时文件头两个字符会变成 U+FFFD，所以比较时忽略开头那两个字符 —— 别把它当 BOM，也别把 `/body` 当逐字节权威）。当前线上 `answer-comment` 为 **version 24**、`page-view` **version 1**、`deck-admin` **version 10**。引用链接指向 GitHub Pages 渲染版（github.com 的 HTML 文件页永远显示源码），README 与代码仍指 github.com。
 - **改 prompt 前后跑一次 `check-answer-prompt.mjs`**：`node scripts/check-answer-prompt.mjs`。它用 esbuild 把真实的 `index.ts` 转译出来、stub 一个 `globalThis.Deno`，直接断言 `commentScript()` 与 `buildMessages()` 的产物 —— 分三节：语言判定边界（含"英文产品名多于汉字"的陷阱）、引用/诚实性规则与材质内联、以及**数字规则**（第 3 节）。**不联网、不写库**，所以改 prompt 措辞时它是唯一能立刻给反馈的东西。
 - **数字必须照抄素材，不许换算**（2026-10-09，v23）：素材中英混排，同一个数字英文写 `50,000 emails a month`、中文写 `5万`。强制英文作答时模型对中文那个数做了一次单位换算，把 `50,000` 写成了 `60k/month`。修法是在 System 的 Rules 里加一条「Copy figures straight out of the material… Never convert units or recompute」。**验证方式**：`SUPABASE_PAT=... node scripts/probe-answer-variance.mjs --pick 3 --n 3 --expect 50,000 --reject 60k`（`--pick N` 取题库第 N 条，避免手抄题目时把 en-dash 打成连字符）。修复前后实测：v21 归档 `qa-answer-comments-52-v21.json` 里同一条写的是 `60k/month`，v23 下 3/3 都是 `50,000`、0/3 出现 `60k`；另抽查 `--pick 2`（262）与 `--pick 5`（22%）也 PASS，且答案**仍在做合法算术**（`600K × 15% = 90K × $8 ≈ $720K`），说明这条规则没有误伤推导。
 - **抽测单条检索**：`SUPABASE_PAT=... SILICONFLOW_API_KEY=... node scripts/kb-verify.mjs "<问题>"`。
