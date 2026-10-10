@@ -64,22 +64,21 @@ async function rest(path: string, init: RequestInit = {}) {
   return text ? JSON.parse(text) : null;
 }
 
-/* Same set as the fallback chain in answer-comment, and measured the same way
-   (2026-10-08, thinking disabled). The owner's other four models are excluded
-   because they cannot be called this way: qwen3.8-2.4t-a95b / glm-5.3 /
-   qwen-mt-uni answer HTTP 400, and qwen3.8-omni-flash-realtime is a realtime
-   endpoint that returns nothing here. */
+/* Same set and same order as the fallback chain in answer-comment, all measured
+   on 2026-10-10 with thinking disabled: these eight answer, the owner's other
+   two (qwen-mt-uni, qwen3.8-omni-flash-realtime) cannot be reached from this
+   endpoint at all, so they are not offered. Each row's note is the owner's
+   console on that day — remaining quota and expiry (1M each, free tier, stops
+   when spent), not a latency measurement. */
 const MODELS = [
-  { id: "deepseek-v4-flash-0731", note: "默认 · 约 3 秒，最省" },
-  { id: "qwen3.7-flash-2026-07-15", note: "约 3 秒 · 额度最少，先用它" },
-  { id: "qwen3.8-max", note: "约 3 秒" },
-  { id: "qwen3.8-flash", note: "约 3 秒" },
-  { id: "qwen3.8-max-0902", note: "约 3 秒" },
-  { id: "qwen3.8-omni-flash", note: "约 3 秒 · 多模态" },
-  { id: "kimi-k3", note: "约 3 秒" },
-  { id: "deepseek-v4.1-flash", note: "约 3 秒" },
-  { id: "deepseek-v4-pro-0813", note: "约 3 秒" },
-  { id: "qwen3.8-27b", note: "约 10 秒 · 较慢" },
+  { id: "qwen3.8-2.4t-a95b", note: "默认 · 剩 999.71K / 1M · 11/12 到期" },
+  { id: "deepseek-v4-pro-0813", note: "剩 944.36K / 1M · 11/13 到期" },
+  { id: "qwen3.8-27b", note: "剩 560.48K / 1M · 11/18 到期" },
+  { id: "kimi-k3", note: "剩 984.34K / 1M · 11/18 到期" },
+  { id: "glm-5.3", note: "剩 999.96K / 1M · 11/23 到期" },
+  { id: "qwen3.8-flash", note: "剩 49.81K / 1M · 11/25 到期" },
+  { id: "qwen3.8-max-0902", note: "剩 999.65K / 1M · 12/01 到期" },
+  { id: "deepseek-v4.1-flash", note: "剩 999.87K / 1M · 12/13 到期" },
 ];
 
 Deno.serve(async (req) => {
@@ -119,7 +118,7 @@ Deno.serve(async (req) => {
         ok: true,
         config: {
           enabled: cfg.enabled ?? true,
-          model: cfg.model ?? Deno.env.get("BAILIAN_CHAT_MODEL") ?? "deepseek-v4-flash-0731",
+          model: cfg.model ?? Deno.env.get("BAILIAN_CHAT_MODEL") ?? "qwen3.8-2.4t-a95b",
           updatedAt: cfg.updated_at ?? null,
         },
         models: MODELS,

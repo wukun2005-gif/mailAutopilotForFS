@@ -64,34 +64,26 @@ const RERANK_ENABLED = (Deno.env.get("SILICONFLOW_RERANK_ENABLED") ?? "false") =
    moved to SiliconFlow. */
 const BAILIAN_BASE = (Deno.env.get("BAILIAN_BASE_URL") ?? "").replace(/\/+$/, "");
 const BAILIAN_KEY = Deno.env.get("BAILIAN_API_KEY") ?? "";
-const CHAT_MODEL = Deno.env.get("BAILIAN_CHAT_MODEL") ?? "qwen-plus";
+const CHAT_MODEL = Deno.env.get("BAILIAN_CHAT_MODEL") ?? "qwen3.8-2.4t-a95b";
 
 /* Model fallback chain, in the spirit of llmFallback.ts: first model that
    answers wins, the rest are safety nets.
-   Order was measured against this account (2026-10-08): qwen-plus / qwen-flash
-   / qwen-turbo / qwen3.7-flash / deepseek-v4-flash all return 403 "free quota
-   exhausted" and each failed attempt costs 2–4s, so they are not in the chain
-   at all. deepseek-v4-flash-0731 answers in ~3s with almost no reasoning
-   tokens; qwen3.7-flash works but spends ~160 reasoning tokens on a one-word
-   reply, so it is kept only as the last resort. */
-/* The owner's chain: free LLM and multimodal models, in the order they gave
-   (least remaining quota first, so nothing expires unused).
-   Four of their fourteen are not in it, each for a measured reason:
-     · qwen3.8-2.4t-a95b, glm-5.3, qwen-mt-uni → HTTP 400 on
-       /chat/completions (not callable this way)
-     · qwen3.8-omni-flash-realtime → realtime endpoint, returns empty here
-   Leaving them in would cost 2–4 seconds of dead time per attempt. */
+   The owner's list as given on 2026-10-10, minus the two that cannot be called
+   from here at all (both measured the same day):
+     · qwen-mt-uni → "url error, please check url" on /chat/completions
+     · qwen3.8-omni-flash-realtime → HTTP 200 "Success." with no content
+   The eight below all answer. Their remaining quota and expiry (1M each,
+   free tier, stops when spent, 2026-11-12 ~ 2026-12-21) are in the gear
+   panel's dropdown (deck-admin MODELS). qwen3.8-2.4t-a95b is first and is
+   also the default. */
 const FALLBACK_MODELS = [
-  "qwen3.7-flash-2026-07-15",
-  "deepseek-v4-flash-0731",
-  "qwen3.8-max",
   "deepseek-v4-pro-0813",
   "qwen3.8-27b",
   "kimi-k3",
+  "glm-5.3",
   "qwen3.8-flash",
   "qwen3.8-max-0902",
   "deepseek-v4.1-flash",
-  "qwen3.8-omni-flash",
 ];
 
 /* The owner can switch models from the gear panel (deck_ai_config); whatever
@@ -163,30 +155,50 @@ async function embed(texts: string[]): Promise<number[][]> {
 
 /* ── Bailian: generation only ──────────────────────────────────────────── */
 async function chatOnce(model: string, messages: unknown[], maxTokens: number): Promise<string> {
-  const r = await fetch(`${BAILIAN_BASE}/chat/completions`, {
-    method: "POST",
-    headers: { Authorization: `Bearer ${BAILIAN_KEY}`, "Content-Type": "application/json" },
-    body: JSON.stringify({
-      model,
-      messages,
-      max_tokens: maxTokens,
-      temperature: 0.2,
-      /* Turn the thinking off. These models reason before answering by
-         default, and the thinking is billed against max_tokens: with a 800
-         ceiling a question could burn 1400–3600 reasoning tokens, hit
-         finish_reason=length, and return an EMPTY answer — which looked like
-         a flaky model and cost a fallback to a slower one. With thinking
-         disabled the same questions answer in ~3s instead of 5–25s, with
-         nothing lost: the deck's questions are about its own documents, not
-         puzzles. */
-      enable_thinking: false,
-    }),
-  });
-  if (!r.ok) throw new Error(`chat ${r.status} ${(await r.text()).slice(0, 200)}`);
-  const d = await r.json();
-  const text = (d.choices?.[0]?.message?.content ?? "").trim();
-  if (!text) throw new Error("empty completion");
-  return text;
+  /* Two knobs, and not every model on the free tier takes both (measured
+     2026-10-10): kimi-k3 answers 400 "temperature is not supported", and
+     qwen3.8-2.4t-a95b / glm-5.3 answer 400 "enable_thinking is restricted to
+     True". Those three are the ones with the most quota left, so instead of
+     dropping them from the chain the body is rebuilt without whichever knob
+     the error names and sent once more. Everything else in the body is
+     untouched, and a model that is fine with both knobs never pays for it. */
+  const body: Record<string, unknown> = {
+    model,
+    messages,
+    max_tokens: maxTokens,
+    temperature: 0.2,
+    /* Turn the thinking off. These models reason before answering by
+       default, and the thinking is billed against max_tokens: with a 800
+       ceiling a question could burn 1400–3600 reasoning tokens, hit
+       finish_reason=length, and return an EMPTY answer — which looked like
+       a flaky model and cost a fallback to a slower one. With thinking
+       disabled the same questions answer in ~3s instead of 5–25s, with
+       nothing lost: the deck's questions are about its own documents, not
+       puzzles. */
+    enable_thinking: false,
+  };
+
+  /* At most two retries: drop the named knob, then drop the other one too if
+     the model rejects both. Three requests is the ceiling per model. */
+  for (let round = 0; ; round++) {
+    const r = await fetch(`${BAILIAN_BASE}/chat/completions`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${BAILIAN_KEY}`, "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    if (r.ok) {
+      const d = await r.json();
+      const text = (d.choices?.[0]?.message?.content ?? "").trim();
+      if (!text) throw new Error("empty completion");
+      return text;
+    }
+    const err = (await r.text()).slice(0, 200);
+    const drop = /enable_thinking/.test(err) ? "enable_thinking"
+      : /temperature/.test(err) ? "temperature"
+      : null;
+    if (!drop || round >= 2) throw new Error(`chat ${r.status} ${err}`);
+    delete body[drop];
+  }
 }
 
 /** Walk the chain like llmFallback.ts: first model that answers wins. */
