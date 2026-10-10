@@ -690,15 +690,28 @@ function node(comment, isKid) {
 function visibleOn(k) {
   const mine = all.filter(function (c) { return !c.deleted && resolveIdx(c) === k; });
   const tops = mine.filter(function (c) { return !c.parent_id; });
-  const live = {};
-  tops.forEach(function (t) { live[t.id] = 1; });
+  const byParent = {};
+  mine.forEach(function (c) {
+    if (!c.parent_id) return;
+    (byParent[c.parent_id] = byParent[c.parent_id] || []).push(c);
+  });
+  /* Walk down from each live top-level comment, not one level out from them.
+     A flat pass required live[c.parent_id], and only top-level comments were
+     live — so anything a level deeper was thrown away as an orphan. That is
+     where the deck's answer to a follow-up goes, so follow-up threads lost
+     exactly the reply that answered them. The depth cap is a cycle guard: a
+     parent_id chain cannot loop in practice, but this renders whatever the
+     table holds. */
   const kids = {};
   const rows = tops.slice();
-  mine.forEach(function (c) {
-    if (!c.parent_id || !live[c.parent_id]) return;   // orphan — nothing renders it
-    (kids[c.parent_id] = kids[c.parent_id] || []).push(c);
-    rows.push(c);
-  });
+  var walk = function (parent, depth) {
+    if (depth > 20) return;
+    var list = byParent[parent.id];
+    if (!list || !list.length) return;
+    kids[parent.id] = list;
+    list.forEach(function (c) { rows.push(c); walk(c, depth + 1); });
+  };
+  tops.forEach(function (t) { walk(t, 1); });
   return { tops: tops, kids: kids, rows: rows };
 }
 
@@ -719,15 +732,26 @@ function renderList() {
   };
   tops.sort(order).forEach(function (c) {
     const d = node(c, false);
-    (kids[c.id] || []).sort(function (a, b) { return new Date(a.created_at) - new Date(b.created_at); })
-      .forEach(function (k) {
-        const box = d.querySelector('.kids') || (function () {
-          const b = document.createElement('div'); b.className = 'kids'; d.appendChild(b); return b;
-        })();
-        box.appendChild(node(k, true));
-      });
     el.list.appendChild(d);
+    appendKids(d, c);
   });
+
+  /* Any depth, not just one. The deck answers follow-ups now, so an answer can
+     hang under a reply rather than directly under the top-level comment; the
+     old flat loop put it in a .kids box beside its parent instead of inside
+     it, where it read as a second answer to the wrong comment. */
+  function appendKids(box, parent) {
+    const list = (kids[parent.id] || []).slice().sort(order);
+    if (!list.length) return;
+    const holder = document.createElement('div');
+    holder.className = 'kids';
+    box.appendChild(holder);
+    list.forEach(function (k) {
+      const kd = node(k, true);
+      holder.appendChild(kd);
+      appendKids(kd, k);
+    });
+  }
 
   if (hotId) {
     const target = el.list.querySelector('[data-id="' + hotId + '"]');
@@ -900,9 +924,14 @@ function setQuote(q) {
    function directly starts the work immediately. Only the comment's id is
    sent — the function reads the real row itself, so nothing here can be
    forged. If this call fails (offline, tab closed, function cold) the trigger
-   still covers it, and both paths are idempotent: one answer per comment. */
+   still covers it, and both paths are idempotent: one answer per comment.
+
+   Follow-ups included: the reply path used to be excluded here to match the
+   function's own "top-level only" rule, and both were lifted together
+   (2026-10-10) — a follow-up otherwise waited 5–6 extra seconds in pg_net's
+   queue while the direct call could have started it immediately. */
 function askDeckToAnswer(row) {
-  if (mode !== 'cloud' || row.parent_id) return;
+  if (mode !== 'cloud') return;
   try {
     fetch(`${(CFG.supabaseUrl || '').replace(/\/+$/, '')}/functions/v1/answer-comment`, {
       method: 'POST',

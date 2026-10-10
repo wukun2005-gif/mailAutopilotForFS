@@ -490,6 +490,7 @@ function commentScript(text: string): "Chinese" | "English" | null {
 
 function buildMessages(o: {
   comment: string; author: string; pageTitle: string; quote: string | null; hits: any[];
+  thread?: { asked: string; answered: string } | null;
 }) {
   const refs = o.hits.map((h, i) =>
     `[${i + 1}] ${h.label}${h.section ? " — " + h.section : ""}${h.page_key ? ` (deck page: ${h.page_key})` : ""}\n${h.body}`
@@ -515,6 +516,13 @@ function buildMessages(o: {
     "- Be concise: 2–3 sentences, or a short list when the question has parts. No preamble, no restating the question.",
     "- This is a case study, not a bank: never promise anything on a real institution's behalf.",
     "- If the comment is praise or chit-chat rather than a question, reply briefly and warmly (one sentence).",
+    /* Two more rules, but only when the comment is a follow-up — a top-level
+       comment has no thread and must not be told about one. */
+    ...(o.thread ? [
+      "- This comment is a follow-up. The question it follows, and the answer already given there, are in the thread below — read them first: words like \"it\" or \"this\" point back into that thread.",
+      "- Answer only what the follow-up adds. Do not restate the earlier answer; if the earlier answer already settles it, say so in one line and add only what is new.",
+      "- The follow-up is written in the language of the comment itself, which may differ from the language of the thread above.",
+    ] : []),
     "",
     "## Reference material",
     refs || "(no matching material was retrieved — say that you could not find it in the deck's sources)",
@@ -529,6 +537,10 @@ function buildMessages(o: {
   const context = [
     `Slide: ${o.pageTitle}`,
     o.quote ? `Phrase the comment is attached to: "${o.quote}"` : "",
+    ...(o.thread ? [
+      o.thread.asked ? `Earlier in this thread, a reviewer asked: ${o.thread.asked}` : "",
+      o.thread.answered ? `The deck already replied there: ${o.thread.answered}` : "",
+    ].filter(Boolean) : []),
     `Reviewer (${o.author}) wrote: ${o.comment}`,
   ].filter(Boolean).join("\n");
 
@@ -536,6 +548,24 @@ function buildMessages(o: {
     { role: "system", content: system },
     { role: "user", content: context },
   ];
+}
+
+/* ── the thread a follow-up belongs to ────────────────────────────────────
+   A follow-up only means something against what it follows: "Is it the typical
+   for the beachhead?" is unanswerable on its own. So the question above it goes
+   into the retrieval query as well as the prompt, and so does what the deck
+   already replied there — the second one is what stops the answer repeating
+   itself instead of building on it. */
+async function threadOf(parentId: string): Promise<{ asked: string; answered: string }> {
+  const [parent, said] = await Promise.all([
+    rest(`deck_comments?id=eq.${parentId}&select=body,author`).catch(() => []),
+    rest(`deck_comments?parent_id=eq.${parentId}&author=eq.Deck%20AI&select=body&order=created_at`)
+      .catch(() => []),
+  ]);
+  return {
+    asked: String(parent?.[0]?.body ?? ""),
+    answered: String(said?.[0]?.body ?? ""),
+  };
 }
 
 /* ── handler ───────────────────────────────────────────────────────────── */
@@ -582,8 +612,11 @@ Deno.serve(async (req) => {
     }
 
     if (!rec.body) return json({ ok: false, skipped: "no body" });
-    // only top-level comments, and never answer our own answers
-    if (rec.parent_id) return json({ ok: true, skipped: "reply, not a top-level comment" });
+    /* Answer anything that reads as a question, wherever it sits (owner's call,
+       2026-10-10). Replies used to be dropped right here — "Is it the typical
+       for the beachhead?" sat under an answered comment and drew silence. The
+       only exclusions left are the deck's own reply and a second answer to the
+       same comment, which the claim below settles. */
     if ((rec.author ?? "") === "Deck AI") return json({ ok: true, skipped: "own comment" });
 
     /* ── idempotency: exactly one answer per comment ──
@@ -619,7 +652,13 @@ Deno.serve(async (req) => {
        of the 20-odd seconds went. Now the expansion runs alongside the first
        retrieval, embeddings for a batch of queries go out in ONE request, and
        the searches themselves run in parallel. */
-    const baseQuery = [rec.quote, rec.body].filter(Boolean).join(" — ");
+    /* The thread this comment sits in, if any. Fetched before retrieval so the
+       parent's wording can widen the search — a follow-up carries almost no
+       retrievable words of its own ("and this one?"). */
+    const thread = rec.parent_id ? await threadOf(String(rec.parent_id)) : null;
+    const asked = thread?.asked ? String(thread.asked).slice(0, 400) : "";
+
+    const baseQuery = [rec.quote, rec.body, asked].filter(Boolean).join(" — ");
     const pageKey = rec.page_key ?? null;
 
     const retrieve = async (queries: string[]): Promise<Hit[]> => {
@@ -659,6 +698,7 @@ Deno.serve(async (req) => {
       pageTitle: String(rec.page_title ?? "the deck"),
       quote: rec.quote ?? null,
       hits: picked,
+      thread: thread && (thread.asked || thread.answered) ? thread : null,
     });
     const answer = await chat(messages);
 

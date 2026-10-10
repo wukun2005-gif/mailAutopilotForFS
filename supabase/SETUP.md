@@ -155,7 +155,13 @@ env -u SUPABASE_PAT node scripts/regenerate-seeded-answers.mjs --cjk            
 
 ## 6. AI 自动回答（已配置完成 ✅ 2026-10-08）
 
-观众在 deck 上留的**顶层评论**，deck 会自己用百炼（Bailian）生成一条回答挂在该评论下，署名 `Deck AI`，带 `AUTO` 徽章和免责说明。回复不会触发自动回答（避免 AI 自问自答）。
+观众在 deck 上留的**任何评论**（顶层或回复），只要读起来是问题，deck 就自己用百炼（Bailian）生成一条回答挂在**该条评论**下，署名 `Deck AI`，带 `AUTO` 徽章和免责说明。只有 deck 自己的回答不触发回答（避免 AI 自问自答）。
+
+> **设计变更（2026-10-10，owner 定）**：原设计只回答顶层评论，回复一律不答。实际用起来的第一天就卡住了 —— "what is it? is it real?" 答了，追问 "Is it the typical for the beachhead?" 一声不吭。现在**凡是问题就答**，不论它在第几层。代价与配套：
+>
+> - 触发器 `deck_comment_answer` 里的 `if new.parent_id is not null then return new` 一并去掉。只去掉函数里的跳过是不够的 —— 触发器根本不调，追问照样没人管（这个坑踩过一次）。
+> - 追问本身信息量太少（"那这个呢？"），所以 `threadOf()` 把**上一条评论**和**deck 已经答过什么**一起取出来：前者的措辞进检索 query 让召回更准，后者和"上一条问了什么"一起进 prompt，并加规则「只答追问新增的部分，不要重述上一条答案」。
+> - 回答挂在**追问**下面，所以线程深度变成 3 层。`comments.js` 的 `visibleOn()` / `renderList()` 原来只渲染一层子回复（`live[c.parent_id]` 只装顶层评论），第 3 层会被当孤儿丢掉 —— 已改成从顶层往下递归走。
 
 > **线上状态（2026-10-08 复核）**：检索已迁到 SiliconFlow（`bge-m3`），`SILICONFLOW_BASE_URL` / `SILICONFLOW_API_KEY` / `SILICONFLOW_RERANK_ENABLED=true` 三个 Secret 已写入，`answer-comment` 已通过 Management API 部署为 **version 19**（`deck-admin` = **version 7**）。端到端实测：一条提问走完「embedding → 混合检索 → 重排 → 生成」共 **7.7 秒**（重排关闭时 5.9 秒），返回 3–4 个上下文块、0 个 fallback 错误，回答带引用且语言跟随提问，响应里 `rerank` 字段为 `"remote"`。库内 **722 块 / 722 条带向量**。
 
@@ -168,7 +174,7 @@ env -u SUPABASE_PAT node scripts/regenerate-seeded-answers.mjs --cjk            
 | 重排 | 两级链：**远程 cross-encoder**（SiliconFlow `BAAI/bge-reranker-v2-m3`，按 patentExaminator `toolExecutor.ts:401-476` 接入）→ **五信号启发式**（`reranker.ts` 第三级，兜底）。**已开启**（`SILICONFLOW_RERANK_ENABLED=true`，owner 决定，见下方「关于重排」）。patentExaminator 的第二级是本地 ONNX 模型，Edge 运行时载不了，所以链路只有两级 |
 | 回答函数 | `answer-comment`：混合检索 → 重排（见上）→ 动态阈值 0.7 + 绝对下限 0.1 → MMR λ=0.7 → 带引用规则的 prompt → 生成 |
 | 回答语言 | **跟随提问语言**：中文提问得中文回答、英文提问得英文回答；产品术语、条款号、页面标题保持英文原样（否则读者无从对照） |
-| 触发 | 触发器 `deck_comment_answer`（AFTER INSERT，仅顶层评论）；前端提交后也会直接调用一次，触发器作兜底 |
+| 触发 | 触发器 `deck_comment_answer`（AFTER INSERT，**顶层与回复都触发**，只跳过 `author = 'Deck AI'`）；前端提交后也会直接调用一次（追问也直接调），触发器作兜底 |
 | 幂等 | `deck_ai_answers` 表按评论记状态，重放不会重复回答 |
 | Owner 面板 | `deck-admin` 函数 + deck 右上角齿轮 |
 
