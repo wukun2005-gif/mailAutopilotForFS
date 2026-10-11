@@ -150,9 +150,16 @@ Deno.serve(async (req) => {
        addresses never travel further than they already have to. */
     if (action === "views") {
       const CAP = 2000;              // newest first; enough for a deck this size
+      /* Rows arrive newest-first, and each address's visit log is built in that
+         same order, so it needs no sort of its own. */
       const rows = (await rest(
         `deck_page_views?select=ip,country,country_code,created_at,path,client_id,owner&order=created_at.desc&limit=${CAP}`
       )) ?? [];
+      /* Per address, the visit log is capped well below the row cap: the panel
+         prints a fixed number of lines per address, and this rides along every
+         time the gear is opened. visitsTotal keeps the real count so the panel
+         can say how many it left off. */
+      const VISIT_CAP = 30;
       /* The owner reads CST (+08); a UTC day boundary would move a late-night
          visit into the wrong row, so the day is cut here, once. */
       const dayOf = (iso: string) =>
@@ -167,6 +174,7 @@ Deno.serve(async (req) => {
       const days = new Map<string, ReturnType<typeof track>>();
       const byIp = new Map<string, {
         loads: number; mine: number; browsers: Set<string>; country: string; first: string; last: string;
+        visits: { at: string; mine: boolean; path: string }[]; visitsTotal: number;
       }>();
       for (const r of rows) {
         const c = r.country || r.country_code || "unknown";
@@ -183,12 +191,17 @@ Deno.serve(async (req) => {
           m.set(k, cur);
         }
         const e = byIp.get(ip) ??
-          { loads: 0, mine: 0, browsers: new Set<string>(), country: c, first: r.created_at, last: r.created_at };
+          { loads: 0, mine: 0, browsers: new Set<string>(), country: c, first: r.created_at, last: r.created_at,
+            visits: [], visitsTotal: 0 };
         e.loads++;
         if (mine) e.mine++;
         if (r.client_id) e.browsers.add(r.client_id);
         if (r.created_at < e.first) e.first = r.created_at;
         if (r.created_at > e.last) e.last = r.created_at;
+        e.visitsTotal++;
+        if (e.visits.length < VISIT_CAP) {
+          e.visits.push({ at: r.created_at, mine, path: r.path || "" });
+        }
         byIp.set(ip, e);
       }
       const sorted = <T>(m: Map<string, T>) => [...m.entries()].sort((a, b) => b[1].loads - a[1].loads || a[0].localeCompare(b[0]));
@@ -215,6 +228,7 @@ Deno.serve(async (req) => {
             key: k, loads: v.loads, mine: v.mine, others: v.loads - v.mine,
             yours: v.loads > 0 && v.mine === v.loads,
             browsers: v.browsers.size, country: v.country, first: v.first, last: v.last,
+            visits: v.visits, visitsTotal: v.visitsTotal, visitsCapped: v.visitsTotal > v.visits.length,
           })),
         },
       });

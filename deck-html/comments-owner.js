@@ -17,12 +17,18 @@ const STATE = { config: {}, models: [], sources: [], knowledge: null, answers: n
 
 /* Timestamps arrive as UTC; the owner reads them in CST (+08), so the shift
    lives here rather than in three places. */
-const cst = (iso) => {
+const cstFmt = (iso, len) => {
   if (!iso) return '—';
   const t = new Date(iso).getTime() + 8 * 3600 * 1000;
   if (Number.isNaN(t)) return String(iso);
-  return new Date(t).toISOString().replace('T', ' ').slice(0, 16);
+  return new Date(t).toISOString().replace('T', ' ').slice(0, len);
 };
+
+/* One visit carries the seconds. Several loads land inside the same minute
+   (the owner opening ?owner= and the bare page at once), and to the minute
+   those lines read as copies of each other. The range lines stay on the minute
+   — they are a span, not a list. */
+const cst = (iso) => cstFmt(iso, 16);
 
 /* The panel is opened by ?owner=true in the URL, so no key travels with these
    calls — see the note in comments.js: this is obscurity, not authentication,
@@ -213,7 +219,29 @@ export function mount({ config, deckId }) {
           }
         });
         body.appendChild(r);
-        sub(`${p.country || 'unknown'} · ${p.browsers} browsers · ${cst(p.first).slice(5)} → ${cst(p.last).slice(5)}`);
+        sub(`${p.country || 'unknown'} · ${p.browsers} browsers`);
+
+        /* Every visit gets its own line with the date and the clock, in place
+           of the first→last range it used to show: two visits five minutes
+           apart read as a single number that way, and the list already ends on
+           the first visit and starts on the last, so the range said nothing the
+           lines do not. The list obeys the same MINE toggle as the counts
+           above, so what is left reads as "somebody else opened it" by the
+           same rule the totals use. */
+        const shown_ = (p.visits || []).filter((t) => showMine || !t.mine);
+        const VISIT_LINES = 12;
+        shown_.slice(0, VISIT_LINES).forEach((t) => {
+          const d = document.createElement('div');
+          d.className = 'asub avisit';
+          d.textContent = cstFmt(t.at, 19);
+          d.title = `${t.mine ? 'my visit' : 'visitor'} · ${t.path || '/'}`;
+          body.appendChild(d);
+        });
+        const cut = shown_.length - VISIT_LINES;
+        if (cut > 0) sub(`…and ${cut} more`);
+        /* Older visits the server never sent. How many of them were mine is
+           unknown when my own visits are hidden, so this stays a bare note. */
+        else if (p.visitsCapped) sub(`…older visits not listed`);
       });
     }
 
