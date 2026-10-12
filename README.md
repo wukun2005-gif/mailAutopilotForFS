@@ -62,7 +62,6 @@ npm run dev      # http://localhost:5173
 
 - Live slide deck: https://wukun2005-gif.github.io/mailAutopilotForFS/deck-html/
 - Product spec (PRD): [EN](https://wukun2005-gif.github.io/mailAutopilotForFS/email-autopilot-fs-prd_en.html) · [中文](https://wukun2005-gif.github.io/mailAutopilotForFS/email-autopilot-fs-prd.html)
-- Backlog: https://wukun2005-gif.github.io/mailAutopilotForFS/backlog.html
 - Research report: https://wukun2005-gif.github.io/mailAutopilotForFS/email-autopilot-research-report-v0.2.html
 
 Run the deck locally: **`npm run deck`** — serves `deck-html/` and opens http://127.0.0.1:8765 (it picks the next free port if 8765 is taken; `npm run deck -- --no-open` to skip the browser).
