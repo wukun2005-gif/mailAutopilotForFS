@@ -110,9 +110,9 @@ tr:last-child td{border-bottom:none}
 .two>div,.two>table{min-width:0}
 
 table.sm{font-size:15px}
-table.sm th{font-size:13.5px;letter-spacing:.06em;padding:0 10px 7px}
+table.sm th{font-size:14px;letter-spacing:.06em;padding:0 10px 7px}
 table.sm td{padding:4px 10px;line-height:1.35}
-table.xs{font-size:13.5px}
+table.xs{font-size:14px}
 table.xs th{font-size:12.5px;letter-spacing:.05em;padding:0 9px 6px}
 table.xs td{padding:5px 9px;line-height:1.3}
 table.tight{font-size:12.5px;table-layout:fixed}
@@ -161,7 +161,7 @@ section.assumptions table.sm td{padding:4px 10px;line-height:1.3}
   background:conic-gradient(var(--red) 0 74%,var(--line) 74% 100%)}
 .risk .ring::after{content:"74%";position:absolute;inset:11px;border-radius:50%;background:var(--panel);
   display:grid;place-items:center;font-size:15.5px;font-weight:700;color:var(--red)}
-.risk .vcap{font-size:13.5px;line-height:1.36;color:var(--soft)}
+.risk .vcap{font-size:14px;line-height:1.36;color:var(--soft)}
 .risk .vcap b{display:block;font-size:16.5px;color:var(--ink);font-weight:600;margin-bottom:3px}
 .risk .frow{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
 .risk .frow i,.risk .frow span{font-style:normal;font-size:12.5px;font-weight:600;padding:4px 9px;
@@ -171,7 +171,7 @@ section.assumptions table.sm td{padding:4px 10px;line-height:1.3}
 .risk .frow .off{border:1px dashed var(--line);color:var(--dim)}
 .risk .frow b{color:var(--red);font-size:15px;font-weight:700}
 .risk .gate{display:flex;flex-direction:column;gap:7px}
-.risk .gr{display:flex;gap:9px;align-items:center;font-size:13.5px;line-height:1.3;color:var(--soft)}
+.risk .gr{display:flex;gap:9px;align-items:center;font-size:14px;line-height:1.3;color:var(--soft)}
 .risk .gr em{font-style:normal;font-weight:700;font-size:15px;width:17px;text-align:center;flex:0 0 17px}
 .risk .gr .yes{color:var(--teal)}
 .risk .gr .no{color:var(--red)}
@@ -233,7 +233,7 @@ section.assumptions table.sm td{padding:4px 10px;line-height:1.3}
 .chart.merge .screens.four.vids .shot.slot{height:104px;cursor:default}
 .chart.merge .screens.four.vids .shot.slot video{object-fit:cover}
 .chart.merge .screens.four.vids .shot:hover{border-color:var(--line)}
-.chart.merge .screens.four.vids .lab{font-size:13.5px}
+.chart.merge .screens.four.vids .lab{font-size:14px}
 .chart.merge .screens.four.vids .cap{font-size:12px}
 /* The films get their own band: four screens above and four films below are not
    a 1:1 mapping, but two bare 4-up grids read as one. The band insets the films
@@ -242,24 +242,36 @@ section.assumptions table.sm td{padding:4px 10px;line-height:1.3}
   padding:8px 14px 12px;display:flex;flex-direction:column;gap:8px;flex:0 0 auto}
 .filmhead{display:flex;align-items:baseline;gap:16px;
   font-size:12.5px;letter-spacing:.15em;text-transform:uppercase;font-weight:600;color:var(--ink)}
-/* page 06: the nine-step diagram beside the reply screenshot, click it to enlarge */
+/* page 05: the pipeline beside the reply it produces, with the colour key to
+   the screenshot underneath. Click the letter to read it full size. */
 .chart.thread{flex-direction:row;align-items:center;gap:18px}
 .chart.thread>svg{flex:1;width:auto;min-width:0}
-.zoomshot{margin:0;flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:7px;cursor:zoom-in}
-.zoomshot img{width:212px;height:auto;display:block;border:1px solid var(--line);border-radius:8px;background:#0F161D}
+.proof{flex:0 0 auto;display:flex;flex-direction:column;gap:10px;width:280px}
+.zoomshot{margin:0;display:flex;flex-direction:column;gap:7px;cursor:zoom-in}
+.zoomshot img{width:280px;height:auto;display:block;border:1px solid var(--line);border-radius:8px;background:#0F161D}
 .zoomshot:hover img{border-color:var(--teal)}
-.zoomshot figcaption{font-size:13px;line-height:1.35;color:var(--dim);text-align:center;max-width:230px}
+.zoomshot figcaption{font-size:12.5px;line-height:1.35;color:var(--dim)}
+.zoomshot figcaption b{color:var(--ink);font-weight:600}
+/* the key to the screenshot's paragraph rules — the picture's own colours,
+   kept out of the diagram so nothing competes with L3's teal */
+.srcl{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
+.srcl li{display:flex;gap:9px;align-items:stretch;font-size:12.5px;line-height:1.35;color:var(--dim)}
+.srcl li i{flex:0 0 4px;border-radius:2px}
+.srcl li b{color:var(--ink);font-weight:600}
+.srcl .ct i{background:#894BF8}
+.srcl .ss i{background:#00B775}
+.srcl .lt i{background:#4A9DFB}
 .scr .shot img{width:100%;height:100%;object-fit:cover;display:block}
 /* reserved slot — the video is dropped in on top of this frame, so keep it empty */
 .scr .shot.slot{border-style:dashed;border-color:#3A4756;background:#10161D}
 .scr .shot.slot img{width:auto;height:auto}
 .scr .shot .ph{display:flex;align-items:center;gap:9px;font-size:14px;color:#8FA0B0;letter-spacing:.05em}
 .scr .shot .ph .tri{color:#5FD3BE;font-size:13px}
-.scr .cap{font-size:13.5px;color:var(--dim)}
+.scr .cap{font-size:14px;color:var(--dim)}
 
 /* ── why-email-first comparison (mainline page 04) ── facts per opportunity, plus billing and time-to-value */
 table.score{font-size:15px}
-table.score th{font-size:13.5px;letter-spacing:.06em;vertical-align:top}
+table.score th{font-size:14px;letter-spacing:.06em;vertical-align:top}
 table.score th .def{display:block;font-size:12.5px;letter-spacing:0;text-transform:none;
   font-weight:400;color:var(--dim);margin-top:3px}
 table.score td{padding:3px 10px;line-height:1.3;vertical-align:top}
@@ -347,7 +359,7 @@ body.light a.xref:hover{color:#0B8055}
 .layerbar .tag{flex:0 0 auto;font-size:11.5px;font-weight:700;letter-spacing:.12em;
   text-transform:uppercase;color:var(--dim)}
 .layerbar .lrow.add .tag{color:var(--teal)}
-.layerbar .items{font-size:13.5px;line-height:1.35;color:var(--soft);min-width:0}
+.layerbar .items{font-size:14px;line-height:1.35;color:var(--soft);min-width:0}
 .layerbar .note{margin-top:8px;font-size:16.5px}
 
 /* the three reasons email, as cards — the argument before the table */
@@ -628,17 +640,17 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
   <p class="sig">Wu Kun, wukun2005@gmail.com, October 2026</p>
   <div class="outline">
     <b>Why</b><span>— Problem &amp; motivation</span>
-    <b>What</b><span>— Scope &amp; UX demo</span>
-    <b>Metrics</b><span>— Define success</span>
-    <b>Roadmap</b><span>— Future work</span>
+    <b>What</b><span>— Scope, how it works &amp; the matrix</span>
+    <b>Demo</b><span>— UX demo, four proofs</span>
+    <b>Backup</b><span>— Metrics, risk &amp; roadmap on request</span>
   </div>
 </section>
 
 <!-- ═══ 02 ASSUMPTIONS & BEACHHEAD ═══ -->
 <section class="slide">
-  <p class="eyebrow"><span class="n">01</span> Assumptions &amp; beachhead</p>
-  <h2>Mid-size banks are the beachhead.</h2>
-  <p class="claim">Of 8,445 insured US institutions, 262 banks sit in the band we may serve — big enough to run Reg E, small enough to buy rather than build.</p>
+  <p class="eyebrow"><span class="n">01</span> Beachhead</p>
+  <h2>Mid-size banks and credit unions are the beachhead.</h2>
+  <p class="claim">Of 8,445 insured US institutions, 262 banks sit in the band we may serve — big enough to carry the full regulatory load, small enough to buy rather than build.</p>
   <div class="chart">
     <svg viewBox="0 0 1128 326" role="img">
       <rect x="0" y="96" width="430" height="62" rx="10" fill="#232D38" stroke="#2E3A46"/>
@@ -647,32 +659,32 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       <text class="lgb" x="24" y="80">&lt; $5B</text>
       <text class="lg" x="24" y="184">8,100+ community banks</text>
       <text class="lgd" x="24" y="206">and credit unions</text>
-      <text class="lgb" x="452" y="80" fill="#5FD3BE">$5B – $150B · 262 banks</text>
+      <text class="lgb" x="452" y="80" fill="#5FD3BE">$5B–$150B total assets · 262 banks</text>
       <text class="lgb" x="452" y="184">Our beachhead</text>
-      <text class="lgd" x="452" y="206">Public mailbox · off-the-shelf core · Reg E applies</text>
+      <text class="lgd" x="452" y="206">Public mailbox · off-the-shelf core · regulation applies</text>
       <text class="lgb" x="1128" y="80" text-anchor="end">&gt; $150B</text>
       <text class="lg" x="1128" y="184" text-anchor="end">~20 — they build</text>
       <text class="lgd" x="1128" y="206" text-anchor="end">in-house</text>
       <line x1="900" y1="96" x2="900" y2="62" stroke="#F5B544" stroke-width="2"/>
       <circle cx="900" cy="56" r="7" fill="#F5B544"/>
       <text class="lg" x="900" y="34" text-anchor="middle" fill="#F5B544" font-weight="600">Larkspur Bank · $18B (fictional)</text>
-      <text class="lg" x="24" y="264">Larkspur: 1.1M customers · 420-seat contact center · Fiserv DNA + Q2 · 50,000 emails a month</text>
-      <text class="lgd" x="24" y="290" style="font-size:14px">Every Larkspur figure is an assumption — replaced by the customer's own mail: 4 weeks to re-price the ROI, 90 days to backtest.</text>
+      <text class="lg" x="24" y="264">Larkspur: 1.1M customers · 420-seat contact center · 50,000 emails a month</text>
+      <text class="lgd" x="24" y="290" style="font-size:14px">Every Larkspur figure is fictional — replaced by the customer's own mail: 4 weeks to re-price the ROI, 90 days to backtest.</text>
       <text class="lgd" x="24" y="314" style="font-size:14px">Bands not to scale · 262 = FDIC BankFind, 2026-09-25, FDIC-insured only. NCUA stopped publishing asset bands in 2025Q4, so in-band credit unions are not counted.</text>
     </svg>
   </div>
-  <div class="colophon"><span>02 / 15</span></div>
+  <div class="colophon"><span>02 / 08</span></div>
 </section>
 
 <!-- ═══ 03 WHY FS CARES ═══ -->
 <section class="slide">
   <p class="eyebrow"><span class="n">02</span> Why they care</p>
-  <h2>The clock starts at the inbox.</h2>
-  <p class="claim">An email is a written error notice under Reg E — and email is still the slowest channel the bank runs.</p>
+  <h2>Email is on the clock, costly and slow.</h2>
+  <p class="claim">Three pains in one inbox: a legal clock starts at receipt, each email costs $6–12 with a 27-hour wait, and agents lose 28% of time re-typing.</p>
   <div class="chart">
     <svg viewBox="0 0 1128 440" role="img">
       <!-- ── the clock ── -->
-      <text x="0" y="14" fill="#9BAAB9" font-size="14" font-weight="600" letter-spacing="1.4">REG E · THE CLOCK STARTS WHEN THE BANK RECEIVES IT</text>
+      <text x="0" y="14" fill="#9BAAB9" font-size="14" font-weight="600" letter-spacing="1.4">THE CLOCK STARTS WHEN THE BANK RECEIVES IT</text>
       <rect x="0" y="76" width="720" height="8" rx="4" fill="#2E3A46"/>
       <circle cx="40" cy="80" r="15" fill="#F2786E"/>
       <text class="lgb" x="40" y="52" fill="#F2786E">Day 0</text>
@@ -685,18 +697,13 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       <text class="lg" x="620" y="114" style="font-size:17px">Resolution deadline</text>
       <text class="lgd" x="0" y="142" style="font-size:14px">12 CFR 1005.11 · a half-sentence inside a friendly email still counts as notice</text>
       <text class="lgd" x="560" y="142" style="font-size:14px">90 days for POS, foreign, or first-30-day</text>
-      <rect x="850" y="26" width="278" height="124" rx="10" fill="#1D2530" stroke="#2E3A46"/>
-      <text class="lg" x="866" y="54" style="font-size:15px" fill="#EAF0F6" font-weight="600">FDIC, March 2026:</text>
-      <text class="lg" x="866" y="78" style="font-size:15px">136 Reg E violations in 2025 —</text>
-      <text class="lg" x="866" y="100" style="font-size:15px">74% of them in error resolution.</text>
-      <text class="lgd" x="866" y="132" style="font-size:14px">An unread inbox is a liability.</text>
 
-      <!-- ── the channel: two Larkspur assumptions, labelled as such ── -->
+      <!-- ── the channel: two Larkspur figures ── -->
       <text x="0" y="190" fill="#9BAAB9" font-size="14" font-weight="600" letter-spacing="1.4">LOADED COST PER CONTACT · US$ — SLOWEST CHANNEL</text>
       <rect x="560" y="172" width="272" height="28" rx="6" fill="#1D2530" stroke="#3A3320"/>
-      <text x="574" y="191" font-size="14" fill="#F5B544">27h · median to a first reply · assumption</text>
+      <text x="574" y="191" font-size="14" fill="#F5B544">27h · median to a first reply</text>
       <rect x="846" y="172" width="282" height="28" rx="6" fill="#1D2530" stroke="#3A3320"/>
-      <text x="860" y="191" font-size="14" fill="#F5B544">22% · end “please call us” · assumption</text>
+      <text x="860" y="191" font-size="14" fill="#F5B544">22% · end “please call us”</text>
 
       <g stroke="#2E3A46">
         <line x1="240" y1="208" x2="240" y2="330"/>
@@ -727,107 +734,27 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
 
       <line x1="0" y1="370" x2="1128" y2="370" stroke="#2E3A46"/>
       <text class="lg" x="0" y="396" fill="#F5B544" font-weight="600">28%</text>
-      <text class="lg" x="64" y="396" style="font-size:17px">of agent time lost to switching systems and re-keying</text>
-      <text class="lgd" x="0" y="424" style="font-size:13px">Loaded cost: Gartner / ICMI / Forrester ranges (2026) · 28%: Talkdesk 2026, NewtonX n=252 · 27h and 22%: Larkspur profile, assumption — replaced in week one</text>
+      <text class="lg" x="64" y="396" style="font-size:17px">of agent time lost to switching systems and re-typing</text>
+      <text class="lgd" x="0" y="424" style="font-size:13px">Loaded cost: Gartner / ICMI / Forrester ranges (2026) · 28%: Talkdesk 2026, NewtonX n=252 · 27h and 22%: Larkspur profile — replaced in week one</text>
     </svg>
   </div>
-  <div class="colophon"><span>03 / 15</span></div>
+  <div class="colophon"><span>03 / 08</span></div>
 </section>
 
-<!-- ═══ 04 WHY WE PRIORITIZE EMAIL ═══ -->
-<section class="slide">
-  <p class="eyebrow"><span class="n">03</span> Why we prioritize email</p>
-  <h2>Same base, no live caller, same runtime.</h2>
-  <div class="whygrid">
-    <div class="wg"><span class="wi"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9.6 12 4.2l9 5.4"/><path d="M5.2 9.9V19.4h13.6V9.9"/><path d="M9.6 19.4v-5.1h4.8v5.1"/></svg></span><span class="wt"><b>Same base.</b> Voice is the existing base — email rides it as an add-on, not new-customer acquisition.</span></div>
-    <div class="wg"><span class="wi"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12.4" r="8.2"/><path d="M12 7.6v5.1l3.4 2.1"/><path d="M9.2 2.9h5.6"/></svg></span><span class="wt"><b>No live caller.</b> Async mail carries no interruption risk — the lowest-risk way to graduate the matrix.</span></div>
-    <div class="wg"><span class="wi"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.4 20.8 7.9 12 12.4 3.2 7.9 12 3.4Z"/><path d="M3.2 12.3 12 16.8l8.8-4.5"/><path d="M3.2 16.5 12 21l8.8-4.5"/></svg></span><span class="wt"><b>Same runtime.</b> It reuses the runtime we ship, so the marginal build is the vertical layer alone.</span></div>
-  </div>
-  <div class="chart">
-    <table class="score">
-      <tr>
-        <th style="width:24%">Opportunity<span class="def">the one decisive fact</span></th>
-        <th style="width:16.5%">Left to build<span class="def">on the runtime that already ships</span></th>
-        <th style="width:18%">No live interruption<span class="def">async — the clock runs on a mailbox</span></th>
-        <th style="width:17%">Same base<span class="def">add-on on contracts that already exist</span></th>
-        <th style="width:13%">Time to value<span class="def">to a number we can audit</span></th>
-        <th style="width:11.5%">Revenue<span class="def">what it can bill</span></th>
-      </tr>
-        <tr class="pick">
-          <td class="k"><span class="oi"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2.5 6.5 12 13l9.5-6.5"/></svg></span>Email · this proposal<span class="why">add-on on the 262-bank install base</span></td>
-          <td class="f hi"><i class="g">✓</i>the vertical layer alone</td>
-          <td class="f hi"><i class="g">✓</i>mailbox clock, nobody on hold</td>
-          <td class="f hi"><i class="g">✓</i>add-on, no new logos</td>
-          <td class="s lo" title="slow — 90 days to build and sign the metric stack"><span class="bars"><i class="f"></i><i></i><i></i></span></td>
-          <td class="s md" title="medium — price is an assumption"><span class="bars"><i class="f"></i><i class="f"></i><i></i></span></td>
-        </tr>
-        <tr>
-          <td class="k"><span class="oi"><svg viewBox="0 0 24 24"><rect x="9" y="2.5" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3.5"/></svg></span>Voice AI agent<span class="why">our core market — every rival is live</span></td>
-          <td class="f md"><i class="g">–</i>a parity build — rivals are live</td>
-          <td class="f bad"><i class="g">✗</i>live caller on the line</td>
-          <td class="f lo"><i class="g">·</i>it is the base</td>
-          <td class="s hi" title="fast — after-call work, first response, per hour, already reported"><span class="bars"><i class="f"></i><i class="f"></i><i class="f"></i></span></td>
-          <td class="s hi" title="strong"><span class="bars"><i class="f"></i><i class="f"></i><i class="f"></i></span></td>
-        </tr>
-        <tr>
-          <td class="k"><span class="oi"><svg viewBox="0 0 24 24"><rect x="2" y="3.5" width="20" height="14" rx="3"/><path d="M7 17.5v5l5-5"/><path d="M7 8h10M7 12h6"/></svg></span>Chat AI agent<span class="why">same buyers as voice, smaller surface</span></td>
-          <td class="f md"><i class="g">–</i>a parity build — smaller surface</td>
-          <td class="f hi"><i class="g">✓</i>threads wait their turn</td>
-          <td class="f lo"><i class="g">·</i>same buyers</td>
-          <td class="s hi" title="fast — chat logs carry disposition and first response"><span class="bars"><i class="f"></i><i class="f"></i><i class="f"></i></span></td>
-          <td class="s md" title="medium"><span class="bars"><i class="f"></i><i class="f"></i><i></i></span></td>
-        </tr>
-        <tr>
-          <td class="k"><span class="oi"><svg viewBox="0 0 24 24"><path d="M4 13v-1a8 8 0 0 1 16 0v1"/><rect x="2" y="13" width="5" height="7.5" rx="2"/><rect x="17" y="13" width="5" height="7.5" rx="2"/></svg></span>Voice agent-assist<span class="why">we already ship it, person stays on</span></td>
-          <td class="f lo"><i class="g">·</i>nothing — it already ships</td>
-          <td class="f bad"><i class="g">✗</i>live call, person present</td>
-          <td class="f lo"><i class="g">·</i>already on those accounts</td>
-          <td class="s hi" title="strong"><span class="bars"><i class="f"></i><i class="f"></i><i class="f"></i></span></td>
-          <td class="s md" title="medium"><span class="bars"><i class="f"></i><i class="f"></i><i></i></span></td>
-        </tr>
-        <tr>
-          <td class="k"><span class="oi"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2.5"/><path d="M8 9.5 10 11.5 14 7.5"/><path d="M8 16h8"/></svg></span>QA automation<span class="why">adjacent product, thin revenue line</span></td>
-          <td class="f lo"><i class="g">·</i>nothing — it already ships</td>
-          <td class="f hi"><i class="g">✓</i>offline review</td>
-          <td class="f lo"><i class="g">·</i>same accounts</td>
-          <td class="s hi" title="strong"><span class="bars"><i class="f"></i><i class="f"></i><i class="f"></i></span></td>
-          <td class="s lo" title="weak"><span class="bars"><i class="f"></i><i></i><i></i></span></td>
-        </tr>
-        <tr>
-          <td class="k"><span class="oi"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 6.5v11"/><path d="M15 9.2c0-1.3-1.4-2.2-3-2.2s-3 .9-3 2.2 1.4 2.3 3 2.3 3 1 3 2.3-1.4 2.2-3 2.2-3-.9-3-2.2"/></svg></span>Collections<span class="why">money moves — R4, permanent L1</span></td>
-          <td class="f lo"><i class="g">·</i>nothing — money stays R4 / L1</td>
-          <td class="f md"><i class="g">–</i>async intake, money still moves</td>
-          <td class="f lo"><i class="g">·</i>same base</td>
-          <td class="s lo" title="slow — cure rate only shows after a full cohort"><span class="bars"><i class="f"></i><i></i><i></i></span></td>
-          <td class="s md" title="medium"><span class="bars"><i class="f"></i><i class="f"></i><i></i></span></td>
-        </tr>
-    </table>
-  </div>
-  <p class="note" style="font-size:16.5px"><b>What email still costs us:</b> pricing is our own $1.50 assumption (<a class="xref" data-jump="B12">B12</a>: no public price), and an auditable number takes 90 days to build — where nobody has done it, the blank is also the opportunity. Bars: length = how much, colour = good or bad.</p>
-  <div class="colophon"><span>04 / 15</span></div>
-</section>
+
 
 <!-- ═══ 05 WHERE WE START · PRIORITIES ═══ -->
 <section class="slide">
   <p class="eyebrow"><span class="n">04</span> Scope</p>
-  <h2>We automate the work, not the decision.</h2>
-  <p class="claim">Sort order first — volume × determinability × identity achievability, gated by regulatory risk. Then one line: everything reversible goes to the machine, everything consequential stays with a person.</p>
+  <h2>Sort by category first, then automate.</h2>
+  <p class="claim">Sort order first — volume × determinability × who they are, gated by penalty risk. Then one line: everything reversible goes to AI, everything consequential stays with a human.</p>
   <div class="chart">
     <svg viewBox="0 0 1128 356" role="img" style="max-height:none;flex:0 0 auto">
-      <text x="0" y="18" fill="#9BAAB9" font-size="15" font-weight="600" letter-spacing="1.4">SHARE OF INBOUND INTAKE · WAVE ASSIGNMENT</text>
+      <text x="0" y="18" fill="#9BAAB9" font-size="15" font-weight="600" letter-spacing="1.4">SHARE OF INBOUND INTAKE · PHASE ASSIGNMENT</text>
       <g font-size="14">
-        <rect x="700" y="5" width="13" height="13" rx="3" fill="#5FD3BE"/><text x="720" y="17" fill="#9BAAB9">Wave 1</text>
-        <rect x="812" y="5" width="13" height="13" rx="3" fill="#F5B544"/><text x="832" y="17" fill="#9BAAB9">Wave 2</text>
-        <rect x="924" y="5" width="13" height="13" rx="3" fill="#F2786E"/><text x="944" y="17" fill="#9BAAB9">Route only</text>
-      </g>
-
-      <g stroke="#2E3A46">
-        <line x1="300" y1="44" x2="300" y2="330"/>
-        <line x1="560" y1="44" x2="560" y2="330"/>
-        <line x1="820" y1="44" x2="820" y2="330"/>
-      </g>
-      <g fill="#9BAAB9" font-size="14" text-anchor="middle">
-        <text x="300" y="350">0%</text><text x="560" y="350">10%</text><text x="820" y="350">20%</text>
+        <rect x="700" y="5" width="13" height="13" rx="3" fill="#5FD3BE"/><text x="720" y="17" fill="#9BAAB9">Phase 1</text>
+        <rect x="812" y="5" width="13" height="13" rx="3" fill="#F5B544"/><text x="832" y="17" fill="#9BAAB9">Phase 2</text>
+        <rect x="924" y="5" width="13" height="13" rx="3" fill="#F2786E"/><text x="944" y="17" fill="#9BAAB9">Human only</text>
       </g>
 
       <text class="lg" x="284" y="92" text-anchor="end">General inquiries</text>
@@ -852,73 +779,138 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
 
       <text class="lg" x="284" y="312" text-anchor="end">Complaints &amp; fraud</text>
       <rect x="300" y="296" width="130" height="20" rx="4" fill="#F2786E"/>
-      <text class="lgb" x="444" y="313" fill="#F2786E">5% · route only</text>
+      <text class="lgb" x="444" y="313" fill="#F2786E">5% · human only</text>
 
       <rect x="0" y="360" width="1128" height="34" rx="8" fill="#1B4A44" stroke="#5FD3BE"/>
-      <text class="lg" x="20" y="383" fill="#5FD3BE">Dispute intake is Wave 1; adjudication is permanently L1 — humans decide and sign.</text>
+      <text class="lg" x="20" y="383" fill="#5FD3BE">Dispute intake is Phase 1; adjudication is permanently L1 — humans decide and sign.</text>
     </svg>
   </div>
-  <p class="note" style="font-size:16.5px"><b>Route-only in wave 1:</b> complaints, fraud and off-brief mail are detected, clocked and handed to a person — never answered autonomously. UDAAP wording review follows in wave 2. Full wave matrix: <b><a class="xref" data-jump="B9">B9</a></b>.</p>
-  <div class="colophon"><span>05 / 15</span></div>
+  <p class="note" style="font-size:16.5px"><b>Human-only in phase 1:</b> complaints, fraud (the customer says they were defrauded) and off-brief mail are detected, clocked and handed to a person — never answered autonomously. UDAAP wording review follows in phase 2. Mix from Larkspur history mail — recalculated per bank. Spam is filtered before intake. Full matrix: <b><a class="xref" data-jump="B9">B9</a></b>.</p>
+  <div class="colophon"><span>04 / 08</span></div>
 </section>
 
-<!-- ═══ 06 HOW IT WORKS ═══ -->
+<!-- ═══ 05 HOW IT WORKS · 5-STEP ═══
+     What the 2026-10-14 review asked this page to do:
+     ① carry page 04's categories over so the two pages visibly connect. They sit
+        ABOVE the pipeline and feed step 2, with an arrow that says so. One flat
+        tray of chips, no badge and no header line — the arrow label is what names
+        the provenance ("from 04"), so the row stays as flat as possible.
+     ② carry the other half of the same idea: where each row lands. Every chip is
+        tagged with the road its row can reach (→ L3, → L2–L3, → L1–L3, → no road,
+        → L1), read off page 06's matrix. The tags stay neutral ink on purpose —
+        the only colour-coded boxes on the page are L1/L2/L3 themselves.
+     ③ L3 "auto" is teal (#5FD3BE) — the same colour page 06 gives L3, and the
+        deck's one colour for "acts alone". Nothing else on this page is teal.
+     The reply screenshot and its colour key live in .proof on the right; the key
+     repeats the picture's own paragraph colours, which is why they are not in
+     the diagram. -->
 <section class="slide">
-  <p class="eyebrow"><span class="n">05</span> How it works</p>
-  <h2>The thread is the case.</h2>
-  <p class="claim">Nine steps. Steps 2–3 classify the case (category → R) and grade identity (I); step 5 reads the matrix (<a class="xref" data-jump="06">06</a>) and picks one of three roads — auto, one-click, human-only. Only step 8 reaches the customer, and it is assembled, not written.</p>
+  <p class="eyebrow"><span class="n">05</span> How it works · 5-step</p>
+  <h2>One pipeline. The category decides who acts.</h2>
+  <p class="claim">Every email runs the same five steps. Step 2 stamps the row from <a class="xref" data-jump="04">04</a> and who is writing; step 3 reads the matrix (<a class="xref" data-jump="06">06</a>) and picks one of three roads; only step 4 sends — and it is assembled, not written.</p>
   <div class="chart thread">
-    <!-- flex:1 (from .chart.thread>svg) must keep winning: freezing it with flex:0 0 auto
-         pushed the letter figure past the right edge. Only the max-height clamp is lifted. -->
-    <svg viewBox="0 0 1128 424" role="img" style="max-height:none">
-      <!-- row 1 · the nine steps, first five -->
-      <rect class="card" x="0" y="0" width="200" height="56" rx="8"/><text class="lgb" x="100" y="28" text-anchor="middle">1 · Ingest</text><text class="lgd" x="100" y="47" text-anchor="middle" style="font-size:15px">arrival timestamp</text>
-      <rect class="card" x="232" y="0" width="200" height="56" rx="8"/><text class="lgb" x="332" y="28" text-anchor="middle">2 · Triage</text><text class="lgd" x="332" y="47" text-anchor="middle" style="font-size:15px">classify · sets R</text>
-      <rect class="card" x="464" y="0" width="200" height="56" rx="8"/><text class="lgb" x="564" y="28" text-anchor="middle">3 · Identity</text><text class="lgd" x="564" y="47" text-anchor="middle" style="font-size:15px">grade I0–I3 · sets I</text>
-      <rect class="card" x="696" y="0" width="200" height="56" rx="8"/><text class="lgb" x="796" y="28" text-anchor="middle">4 · Policy</text><text class="lgd" x="796" y="47" text-anchor="middle" style="font-size:15px">bank playbook</text>
-      <rect x="928" y="0" width="200" height="56" rx="8" fill="#1B4A44" stroke="#5FD3BE"/><text class="lgb" x="1028" y="28" text-anchor="middle" fill="#5FD3BE">5 · Autonomy</text><text class="lgd" x="1028" y="47" text-anchor="middle" fill="#5FD3BE" style="font-size:15px">R × I → L</text>
+    <svg viewBox="0 0 860 444" role="img">
+      <!-- ── 1 · what step 2 sorts: the 04 categories, carried straight over,
+           each one already tagged with the road its row can reach.
+           No "04" badge and no header line — the arrow label below carries the
+           provenance ("from 04"), so the row stays one flat tray of chips. ── -->
+      <rect class="card" x="0" y="0" width="860" height="66" rx="10"/>
+
+      <rect class="card2" x="16" y="10" width="159" height="46" rx="8"/>
+      <text class="lgd" x="27" y="29" style="font-size:11px;font-weight:600;letter-spacing:.06em">R0 · 25%</text>
+      <text class="lgb" x="164" y="29" text-anchor="end" style="font-size:12px;font-weight:700">→ L3</text>
+      <text class="lgb" x="27" y="47" style="font-size:12.5px">General inquiries</text>
+
+      <rect class="card2" x="183" y="10" width="159" height="46" rx="8"/>
+      <text class="lgd" x="194" y="29" style="font-size:11px;font-weight:600;letter-spacing:.06em">R1 · 25%</text>
+      <text class="lgb" x="331" y="29" text-anchor="end" style="font-size:12px;font-weight:700">→ L2–L3</text>
+      <text class="lgb" x="194" y="47" style="font-size:12.5px">Account servicing</text>
+
+      <rect class="card2" x="350" y="10" width="159" height="46" rx="8"/>
+      <text class="lgd" x="361" y="29" style="font-size:11px;font-weight:600;letter-spacing:.06em">R2 · 20%</text>
+      <text class="lgb" x="498" y="29" text-anchor="end" style="font-size:12px;font-weight:700">→ L1–L3</text>
+      <text class="lgb" x="361" y="47" style="font-size:12.5px">Transactions</text>
+
+      <rect class="card2" x="517" y="10" width="159" height="46" rx="8"/>
+      <text class="lgd" x="528" y="29" style="font-size:11px;font-weight:600;letter-spacing:.06em">R3 · 5%</text>
+      <text class="lgb" x="665" y="29" text-anchor="end" style="font-size:12px;font-weight:700">→ no road</text>
+      <text class="lgb" x="528" y="47" style="font-size:12.5px">Complaints &amp; fraud</text>
+
+      <rect class="card2" x="684" y="10" width="159" height="46" rx="8"/>
+      <text class="lgd" x="695" y="29" style="font-size:11px;font-weight:600;letter-spacing:.06em">R4 · 10%</text>
+      <text class="lgb" x="832" y="29" text-anchor="end" style="font-size:12px;font-weight:700">→ L1</text>
+      <text class="lgb" x="695" y="47" style="font-size:12.5px">Disputes</text>
+
+      <!-- ── 2 · the pipeline every email runs, whoever is writing ── -->
+      <rect class="card" x="0" y="134" width="160" height="84" rx="8"/>
+      <text class="lgb" x="80" y="172" text-anchor="middle" style="font-size:18px">1 · Ingest</text>
+      <text class="lgd" x="80" y="198" text-anchor="middle" style="font-size:13px">arrival timestamp</text>
+
+      <rect class="card2" x="175" y="134" width="160" height="84" rx="8" style="stroke:var(--ink);stroke-width:2"/>
+      <text class="lgb" x="255" y="172" text-anchor="middle" style="font-size:18px">2 · Sort</text>
+      <text class="lgd" x="255" y="198" text-anchor="middle" style="font-size:13px">category R · sender I</text>
+
+      <rect class="card2" x="350" y="134" width="160" height="84" rx="8" style="stroke:var(--ink);stroke-width:2"/>
+      <text class="lgb" x="430" y="172" text-anchor="middle" style="font-size:18px">3 · Decide</text>
+      <text class="lgd" x="430" y="198" text-anchor="middle" style="font-size:13px">matrix → road L</text>
+
+      <rect class="card" x="525" y="134" width="160" height="84" rx="8"/>
+      <text class="lgb" x="605" y="172" text-anchor="middle" style="font-size:18px">4 · Resolve</text>
+      <text class="lgd" x="605" y="198" text-anchor="middle" style="font-size:13px">act, or draft + reply</text>
+
+      <rect class="card" x="700" y="134" width="160" height="84" rx="8"/>
+      <text class="lgb" x="780" y="172" text-anchor="middle" style="font-size:18px">5 · Verify</text>
+      <text class="lgd" x="780" y="198" text-anchor="middle" style="font-size:13px">14-day window</text>
+
       <g stroke="#4A5A6B" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M210 23 L218 28 L210 33"/><path d="M442 23 L450 28 L442 33"/><path d="M674 23 L682 28 L674 33"/><path d="M906 23 L914 28 L906 33"/>
+        <path d="M164 168 L172 176 L164 184"/><path d="M339 168 L347 176 L339 184"/>
+        <path d="M514 168 L522 176 L514 184"/><path d="M689 168 L697 176 L689 184"/>
       </g>
 
-      <!-- the branch: step 5 hands the case to one of three roads -->
-      <path d="M1028 56 L1028 70 L60 70 L60 208" fill="none" stroke="#4A5A6B" stroke-width="2"/>
-      <g stroke="#4A5A6B" stroke-width="2"><path d="M60 99 L90 99"/><path d="M60 147 L90 147"/><path d="M60 195 L90 195"/></g>
-      <text class="lgd" x="90" y="62" style="font-size:13px">matrix returns</text>
+      <!-- the two decisions the rest of the deck hangs on: the row in, the road out -->
+      <g stroke="#4A5A6B" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M255 66 L255 116"/><path d="M247 108 L255 118 L263 108"/>
+      </g>
+      <text class="lg" x="269" y="112" style="font-size:13px">the row (R) <tspan font-weight="700">from 04</tspan> is stamped on the case</text>
 
-      <rect x="90" y="80" width="420" height="38" rx="8" fill="#1B4A44" stroke="#5FD3BE"/><text class="lg" x="106" y="104" fill="#5FD3BE" font-weight="600" style="font-size:16px">L3 · auto — 6 · Act: tools, idempotent</text>
-      <rect x="90" y="128" width="420" height="38" rx="8" fill="#3A3320" stroke="#F5B544"/><text class="lg" x="106" y="152" fill="#F5B544" font-weight="600" style="font-size:16px">L2 · one click — 7 · approve, then it runs</text>
-      <rect x="90" y="176" width="420" height="38" rx="8" fill="#3B2320" stroke="#F2786E"/><text class="lg" x="106" y="200" fill="#F2786E" font-weight="600" style="font-size:16px">L1 · human — 7 · a person decides or signs</text>
+      <g stroke="#4A5A6B" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M430 218 L430 256"/>
+        <path d="M139 256 L719 256"/>
+        <path d="M139 256 L139 266"/><path d="M131 258 L139 268 L147 258"/>
+        <path d="M429 256 L429 266"/><path d="M421 258 L429 268 L437 258"/>
+        <path d="M719 256 L719 266"/><path d="M711 258 L719 268 L727 258"/>
+      </g>
+      <text class="lgd" x="444" y="250" style="font-size:12.5px">step 3 reads the matrix (06) — row × identity → one road</text>
 
-      <!-- and they converge back into the one reply -->
-      <g stroke="#4A5A6B" stroke-width="2"><path d="M510 99 L560 99"/><path d="M510 147 L560 147"/><path d="M510 195 L560 195"/><path d="M560 99 L560 195"/></g>
-      <path d="M560 147 L582 147" fill="none" stroke="#4A5A6B" stroke-width="2"/><path d="M576 141 L584 147 L576 153" fill="none" stroke="#4A5A6B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      <rect x="584" y="120" width="272" height="54" rx="8" fill="#1B4A44" stroke="#5FD3BE"/><text class="lgb" x="720" y="144" text-anchor="middle" fill="#5FD3BE">8 · Reply</text><text class="lgd" x="720" y="166" text-anchor="middle" style="font-size:15px">locked template · assembled</text>
-      <path d="M856 141 L864 147 L856 153" fill="none" stroke="#4A5A6B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      <rect class="card" x="892" y="120" width="236" height="54" rx="8"/><text class="lgb" x="1010" y="144" text-anchor="middle">9 · Verify</text><text class="lgd" x="1010" y="166" text-anchor="middle" style="font-size:15px">14-day window</text>
+      <!-- ── 3 · the road: L3 teal is the deck's one colour for "acts alone" ── -->
+      <rect x="0" y="290" width="278" height="94" rx="10" fill="#35251C" stroke="#F0925A"/>
+      <text x="18" y="332" fill="#F0925A" font-size="24" font-weight="700">L1 · human</text>
+      <text class="lgd" x="18" y="362" style="font-size="13.5px">a person decides and sends</text>
 
-      <!-- carry-over from slide 04: the category is what the matrix reads -->
-      <rect x="0" y="222" width="1128" height="82" rx="10" fill="#1D2530" stroke="#2E3A46"/>
-      <text x="14" y="244" fill="#9BAAB9" font-size="12.5" font-weight="600" letter-spacing="1.1">STEP 2 TRIAGE → CATEGORY SETS THE ROW (R) · STEP 3 IDENTITY SETS THE COLUMN (I) · STEP 5 READS THE MATRIX (06) → THE ROAD</text>
-      <circle cx="16" cy="265" r="5" fill="#5FD3BE"/><text x="28" y="270" fill="#5FD3BE" font-size="14" font-weight="600">General inquiry · R0 → L3 full-auto</text>
-      <circle cx="330" cy="265" r="5" fill="#F5B544"/><text x="342" y="270" fill="#F5B544" font-size="14" font-weight="600">Account servicing · R1 → L2/L3 at I2/I3</text>
-      <circle cx="680" cy="265" r="5" fill="#F5B544"/><text x="692" y="270" fill="#F5B544" font-size="14" font-weight="600">Transaction / refund · R2 → L2/L3 at I2/I3</text>
-      <circle cx="16" cy="289" r="5" fill="#F2786E"/><text x="28" y="294" fill="#F2786E" font-size="14" font-weight="600">Complaints &amp; fraud · R3 → route-only to a human</text>
-      <circle cx="450" cy="289" r="5" fill="#F2786E"/><text x="462" y="294" fill="#F2786E" font-size="14" font-weight="600">Dispute adjudication · R4 → L1, permanent</text>
+      <rect x="290" y="290" width="278" height="94" rx="10" fill="#3A3320" stroke="#F5B544"/>
+      <text x="308" y="332" fill="#F5B544" font-size="24" font-weight="700">L2 · one click</text>
+      <text class="lgd" x="308" y="362" style="font-size="13.5px">a person approves, it runs</text>
 
-      <!-- step 8 in detail: deterministic by construction — the anti-hallucination point -->
-      <text class="lg" x="0" y="326" style="font-size:16px">Step 8 — the category picks a locked template; the reply is <tspan fill="#5FD3BE" font-weight="600">assembled, not written</tspan>, so the answer stays deterministic.</text>
-      <rect x="0" y="338" width="360" height="54" rx="8" fill="#1A2536" stroke="#3B7DD8"/><text class="lgb" x="18" y="364" fill="#6FA8FF" style="font-size:18px">Locked template</text><text class="lgd" x="18" y="384" style="font-size:15px">regulated disclosures · fixed wording</text>
-      <rect x="384" y="338" width="360" height="54" rx="8" fill="#17322E" stroke="#3F8F4A"/><text class="lgb" x="402" y="364" fill="#7BD88F" style="font-size:18px">System slots</text><text class="lgd" x="402" y="384" style="font-size:15px">amounts and dates — checked field by field</text>
-      <rect x="768" y="338" width="360" height="54" rx="8" fill="#241E3A" stroke="#8B5CF6"/><text class="lgb" x="786" y="364" fill="#A78BFA" style="font-size:18px">Connective tissue</text><text class="lgd" x="786" y="384" style="font-size:15px">the only text a model touches</text>
-      <text class="lgd" x="0" y="416" style="font-size:15px">Personalization is the name, product, thread history, tone tier and channel — never a disclosure or an amount (CSAT gates graduation, <tspan class="xref" data-jump="B6">B6</tspan>).</text>
+      <rect x="580" y="290" width="278" height="94" rx="10" fill="#1B4A44" stroke="#5FD3BE" stroke-width="2"/>
+      <text x="598" y="332" fill="#5FD3BE" font-size="24" font-weight="700">L3 · auto</text>
+      <text class="lgd" x="598" y="362" style="font-size="13.5px">acts alone, then replies</text>
+
+      <rect x="0" y="402" width="860" height="42" rx="8" fill="#3B2320" stroke="#F2786E"/>
+      <text x="16" y="429" fill="#F2786E" font-size="13.5" font-weight="600">R3 complaints &amp; fraud: no road at all. R4 disputes: L1 for good — a person decides and signs, always.</text>
     </svg>
-    <figure class="zoomshot">
-      <img data-src="assets/shots/shot-letter.jpg" alt="The assembled reply, colored by source">
-      <figcaption>The assembled reply — click to enlarge</figcaption>
-    </figure>
+    <div class="proof">
+      <figure class="zoomshot">
+        <img data-src="assets/shots/shot-letter.jpg" alt="The reply the customer receives, each paragraph ruled in the colour of its source">
+        <figcaption><b>Assembled, not written.</b> Click to enlarge.</figcaption>
+      </figure>
+      <ul class="srcl">
+        <li class="ct"><i></i><span><b>Connective tissue</b> — 1 line in 5</span></li>
+        <li class="ss"><i></i><span><b>System slots</b> — account data, filled in</span></li>
+        <li class="lt"><i></i><span><b>Locked template</b> — compliance wording</span></li>
+      </ul>
+    </div>
   </div>
-  <div class="colophon"><span>06 / 15</span></div>
+  <div class="colophon"><span>05 / 08</span></div>
 </section>
 
 <!-- ═══ 07 AI AND HUMANS ═══ -->
@@ -926,178 +918,71 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
   <p class="eyebrow"><span class="n">06</span> AI and humans</p>
   <h2>Autonomy is earned, intent by intent.</h2>
   <div class="chart">
-    <svg viewBox="0 0 1128 508" role="img">
-      <!-- ── 1 · what is governed inside every email ── -->
-      <text x="0" y="12" fill="#9BAAB9" font-size="14" font-weight="600" letter-spacing="1.4">SAYS · DOES · TO WHOM — WHAT GOVERNS EVERY REPLY</text>
-      <rect x="0" y="24" width="368" height="96" rx="10" fill="#1D2530" stroke="#2E3A46"/>
-      <text x="18" y="50" fill="#EAF0F6" font-size="15" font-weight="600" letter-spacing="1.2">SAYS</text>
-      <text x="18" y="76" fill="#9BAAB9" font-size="14">They: one generator, three modes, per topic</text>
-      <text x="18" y="102" fill="#5FD3BE" font-size="14.5">We: three sources assembled per email</text>
+    <svg viewBox="0 0 1128 418" role="img">
+      <!-- ── where the human sits ── -->
+      <text x="0" y="26" fill="#EAF0F6" font-size="15.5" font-weight="600">The <tspan class="xref" data-jump="04">category</tspan> sets the ROW (R) · step-2 identity sets the COLUMN (I) · the cell is the ROAD step 3 takes — <tspan fill="#5FD3BE">R × I = L, where the human sits</tspan></text>
 
-      <rect x="380" y="24" width="368" height="96" rx="10" fill="#1D2530" stroke="#2E3A46"/>
-      <text x="398" y="50" fill="#EAF0F6" font-size="15" font-weight="600" letter-spacing="1.2">DOES</text>
-      <text x="398" y="76" fill="#9BAAB9" font-size="14">They: not governed in public materials</text>
-      <text x="398" y="102" fill="#5FD3BE" font-size="14.5">We: R0–R4 action risk — may it act at all?</text>
+      <rect class="card2" x="256" y="38" width="196" height="48" rx="6"/><text class="lgb" x="354" y="58" text-anchor="middle" style="font-size:15px">I0 · identity unconfirmed</text><text class="lgd" x="354" y="79" text-anchor="middle" style="font-size:11.5px">e.g. look-alike address</text>
+      <rect class="card2" x="464" y="38" width="196" height="48" rx="6"/><text class="lgb" x="562" y="58" text-anchor="middle" style="font-size:15px">I1 · sender domain only</text><text class="lgd" x="562" y="79" text-anchor="middle" style="font-size:11.5px">e.g. stranger, domain OK</text>
+      <rect class="card2" x="672" y="38" width="196" height="48" rx="6"/><text class="lgb" x="770" y="58" text-anchor="middle" style="font-size:15px">I2 · on-file address</text><text class="lgd" x="770" y="79" text-anchor="middle" style="font-size:11.5px">e.g. matches on-file email</text>
+      <rect class="card2" x="880" y="38" width="196" height="48" rx="6"/><text class="lgb" x="978" y="58" text-anchor="middle" style="font-size:15px">I3 · verified in app</text><text class="lgd" x="978" y="79" text-anchor="middle" style="font-size:11.5px">e.g. OTP-verified in thread</text>
 
-      <rect x="760" y="24" width="368" height="96" rx="10" fill="#1D2530" stroke="#2E3A46"/>
-      <text x="778" y="50" fill="#EAF0F6" font-size="15" font-weight="600" letter-spacing="1.2">TO WHOM</text>
-      <text x="778" y="76" fill="#9BAAB9" font-size="14">They: not governed in public materials</text>
-      <text x="778" y="102" fill="#5FD3BE" font-size="14.5">We: I0–I3 identity — what may be disclosed</text>
+      <rect class="card2" x="36" y="94" width="196" height="34" rx="6"/><text class="lgb" x="134" y="110" text-anchor="middle" style="font-size:14px">R0 · General inquiries</text><text class="lgd" x="134" y="127" text-anchor="middle" style="font-size:11.5px">public info</text>
+      <rect x="256" y="94" width="196" height="34" rx="6" fill="#1B4A44" stroke="#5FD3BE"/><text class="lgb" x="354" y="116" text-anchor="middle" fill="#5FD3BE" style="font-size:15px">L3</text>
+      <rect x="464" y="94" width="196" height="34" rx="6" fill="#1B4A44" stroke="#5FD3BE"/><text class="lgb" x="562" y="116" text-anchor="middle" fill="#5FD3BE" style="font-size:15px">L3</text>
+      <rect x="672" y="94" width="196" height="34" rx="6" fill="#1B4A44" stroke="#5FD3BE"/><text class="lgb" x="770" y="116" text-anchor="middle" fill="#5FD3BE" style="font-size:15px">L3</text>
+      <rect x="880" y="94" width="196" height="34" rx="6" fill="#1B4A44" stroke="#5FD3BE"/><text class="lgb" x="978" y="116" text-anchor="middle" fill="#5FD3BE" style="font-size:15px">L3</text>
 
-      <!-- ── 2 · where the human sits ── -->
-      <text x="0" y="156" fill="#EAF0F6" font-size="15.5" font-weight="600">The slide-04 category sets the ROW (R) · step-3 identity sets the COLUMN (I) · the cell is the ROAD step 5 takes — <tspan fill="#5FD3BE">R × I = L, where the human sits</tspan></text>
+      <rect class="card2" x="36" y="133" width="196" height="34" rx="6"/><text class="lgb" x="134" y="149" text-anchor="middle" style="font-size:14px">R1 · Account servicing</text><text class="lgd" x="134" y="166" text-anchor="middle" style="font-size:11.5px">reads account data</text>
+      <rect x="256" y="133" width="196" height="34" rx="6" fill="#232D38" stroke="#2E3A46"/><text class="lg" x="354" y="155" text-anchor="middle" style="font-size:15px">locked · step-up</text>
+      <rect x="464" y="133" width="196" height="34" rx="6" fill="#232D38" stroke="#2E3A46"/><text class="lg" x="562" y="155" text-anchor="middle" style="font-size:15px">locked · step-up</text>
+      <!-- L2 → L3 cells: the fill is split down the middle — left half in L2's
+           panel colour, right half in L3's. Both must stay the DECK'S SOURCE
+           hexes (#3A3320 / #1B4A44, and #F5B544 / #5FD3BE for the label), never
+           the light-theme values they map to. Hardcoding #FBF3DF / #D6F2EC
+           breaks both themes: body.light remaps #D6F2EC → #04674F (dark green),
+           and in dark mode nothing remaps them, so the halves go pale. -->
+      <clipPath id="cR1I2"><rect x="672" y="133" width="196" height="34" rx="6"/></clipPath><g clip-path="url(#cR1I2)"><rect x="672" y="133" width="98" height="34" fill="#3A3320"/><rect x="770" y="133" width="98" height="34" fill="#1B4A44"/></g><rect x="672" y="133" width="196" height="34" rx="6" fill="none" stroke="#4A5A6B"/><text class="lgb" x="770" y="155" text-anchor="middle" style="font-size:15px"><tspan fill="#F5B544">L2 → </tspan><tspan fill="#5FD3BE">L3</tspan></text>
+      <clipPath id="cR1I3"><rect x="880" y="133" width="196" height="34" rx="6"/></clipPath><g clip-path="url(#cR1I3)"><rect x="880" y="133" width="98" height="34" fill="#3A3320"/><rect x="978" y="133" width="98" height="34" fill="#1B4A44"/></g><rect x="880" y="133" width="196" height="34" rx="6" fill="none" stroke="#4A5A6B"/><text class="lgb" x="978" y="155" text-anchor="middle" style="font-size:15px"><tspan fill="#F5B544">L2 → </tspan><tspan fill="#5FD3BE">L3</tspan></text>
 
-      <rect class="card2" x="256" y="168" width="196" height="30" rx="6"/><text class="lgb" x="354" y="188" text-anchor="middle" style="font-size:15px">I0 · identity unconfirmed</text>
-      <rect class="card2" x="464" y="168" width="196" height="30" rx="6"/><text class="lgb" x="562" y="188" text-anchor="middle" style="font-size:15px">I1 · sender domain only</text>
-      <rect class="card2" x="672" y="168" width="196" height="30" rx="6"/><text class="lgb" x="770" y="188" text-anchor="middle" style="font-size:15px">I2 · on-file address</text>
-      <rect class="card2" x="880" y="168" width="196" height="30" rx="6"/><text class="lgb" x="978" y="188" text-anchor="middle" style="font-size:15px">I3 · verified in app</text>
+      <rect class="card2" x="36" y="172" width="196" height="34" rx="6"/><text class="lgb" x="134" y="188" text-anchor="middle" style="font-size:14px">R2 · Transactions / refunds</text><text class="lgd" x="134" y="205" text-anchor="middle" style="font-size:11.5px">reversible writes</text>
+      <rect x="256" y="172" width="196" height="34" rx="6" fill="#3B2320" stroke="#F2786E"/><text class="lgb" x="354" y="194" text-anchor="middle" fill="#F2786E" style="font-size:15px">L1 · intake + clock</text>
+      <rect x="464" y="172" width="196" height="34" rx="6" fill="#232D38" stroke="#2E3A46"/><text class="lg" x="562" y="194" text-anchor="middle" style="font-size:15px">locked · step-up</text>
+      <clipPath id="cR2I2"><rect x="672" y="172" width="196" height="34" rx="6"/></clipPath><g clip-path="url(#cR2I2)"><rect x="672" y="172" width="98" height="34" fill="#3A3320"/><rect x="770" y="172" width="98" height="34" fill="#1B4A44"/></g><rect x="672" y="172" width="196" height="34" rx="6" fill="none" stroke="#4A5A6B"/><text class="lgb" x="770" y="194" text-anchor="middle" style="font-size:15px"><tspan fill="#F5B544">L2 → </tspan><tspan fill="#5FD3BE">L3</tspan></text>
+      <clipPath id="cR2I3"><rect x="880" y="172" width="196" height="34" rx="6"/></clipPath><g clip-path="url(#cR2I3)"><rect x="880" y="172" width="98" height="34" fill="#3A3320"/><rect x="978" y="172" width="98" height="34" fill="#1B4A44"/></g><rect x="880" y="172" width="196" height="34" rx="6" fill="none" stroke="#4A5A6B"/><text class="lgb" x="978" y="194" text-anchor="middle" style="font-size:15px"><tspan fill="#F5B544">L2 → </tspan><tspan fill="#5FD3BE">L3</tspan></text>
 
-      <rect class="card2" x="36" y="206" width="196" height="34" rx="6"/><text class="lgb" x="134" y="222" text-anchor="middle" style="font-size:13.5px">R0 · General inquiries</text><text class="lgd" x="134" y="239" text-anchor="middle" style="font-size:11.5px">public info</text>
-      <rect x="256" y="206" width="196" height="34" rx="6" fill="#1B4A44" stroke="#5FD3BE"/><text class="lgb" x="354" y="228" text-anchor="middle" fill="#5FD3BE" style="font-size:15px">L3</text>
-      <rect x="464" y="206" width="196" height="34" rx="6" fill="#1B4A44" stroke="#5FD3BE"/><text class="lgb" x="562" y="228" text-anchor="middle" fill="#5FD3BE" style="font-size:15px">L3</text>
-      <rect x="672" y="206" width="196" height="34" rx="6" fill="#1B4A44" stroke="#5FD3BE"/><text class="lgb" x="770" y="228" text-anchor="middle" fill="#5FD3BE" style="font-size:15px">L3</text>
-      <rect x="880" y="206" width="196" height="34" rx="6" fill="#1B4A44" stroke="#5FD3BE"/><text class="lgb" x="978" y="228" text-anchor="middle" fill="#5FD3BE" style="font-size:15px">L3</text>
+      <rect class="card2" x="36" y="211" width="196" height="34" rx="6"/><text class="lgb" x="134" y="227" text-anchor="middle" fill="#F2786E" style="font-size:14px">R3 · Complaints &amp; fraud</text><text class="lgd" x="134" y="244" text-anchor="middle" style="font-size:11.5px">high-impact changes</text>
+      <rect x="256" y="211" width="820" height="34" rx="6" fill="#3B2320" stroke="#F2786E"/><text class="lgb" x="666" y="233" text-anchor="middle" fill="#F2786E" style="font-size:15px">Never autonomous over email — the tool functions do not exist on this channel</text>
 
-      <rect class="card2" x="36" y="245" width="196" height="34" rx="6"/><text class="lgb" x="134" y="261" text-anchor="middle" style="font-size:13.5px">R1 · Account servicing</text><text class="lgd" x="134" y="278" text-anchor="middle" style="font-size:11.5px">reads account data</text>
-      <rect x="256" y="245" width="196" height="34" rx="6" fill="#232D38" stroke="#2E3A46"/><text class="lg" x="354" y="267" text-anchor="middle" style="font-size:15px">locked · step-up</text>
-      <rect x="464" y="245" width="196" height="34" rx="6" fill="#232D38" stroke="#2E3A46"/><text class="lg" x="562" y="267" text-anchor="middle" style="font-size:15px">locked · step-up</text>
-      <rect x="672" y="245" width="196" height="34" rx="6" fill="#3A3320" stroke="#F5B544"/><text class="lgb" x="770" y="267" text-anchor="middle" fill="#F5B544" style="font-size:15px">L2 → L3</text>
-      <rect x="880" y="245" width="196" height="34" rx="6" fill="#3A3320" stroke="#F5B544"/><text class="lgb" x="978" y="267" text-anchor="middle" fill="#F5B544" style="font-size:15px">L2 → L3</text>
-
-      <rect class="card2" x="36" y="284" width="196" height="34" rx="6"/><text class="lgb" x="134" y="300" text-anchor="middle" style="font-size:13.5px">R2 · Transactions / refunds</text><text class="lgd" x="134" y="317" text-anchor="middle" style="font-size:11.5px">reversible writes</text>
-      <rect x="256" y="284" width="196" height="34" rx="6" fill="#3B2320" stroke="#F2786E"/><text class="lgb" x="354" y="306" text-anchor="middle" fill="#F2786E" style="font-size:15px">L1 · intake + clock</text>
-      <rect x="464" y="284" width="196" height="34" rx="6" fill="#232D38" stroke="#2E3A46"/><text class="lg" x="562" y="306" text-anchor="middle" style="font-size:15px">locked · step-up</text>
-      <rect x="672" y="284" width="196" height="34" rx="6" fill="#3A3320" stroke="#F5B544"/><text class="lgb" x="770" y="306" text-anchor="middle" fill="#F5B544" style="font-size:15px">L2 one-click</text>
-      <rect x="880" y="284" width="196" height="34" rx="6" fill="#1B4A44" stroke="#5FD3BE"/><text class="lgb" x="978" y="306" text-anchor="middle" fill="#5FD3BE" style="font-size:15px">L3 in policy</text>
-
-      <rect class="card2" x="36" y="323" width="196" height="34" rx="6"/><text class="lgb" x="134" y="339" text-anchor="middle" fill="#F2786E" style="font-size:13.5px">R3 · Complaints</text><text class="lgd" x="134" y="356" text-anchor="middle" style="font-size:11.5px">high-impact changes</text>
-      <rect x="256" y="323" width="820" height="34" rx="6" fill="#3B2320" stroke="#F2786E"/><text class="lgb" x="666" y="345" text-anchor="middle" fill="#F2786E" style="font-size:15px">Never autonomous over email — the tool functions do not exist on this channel</text>
-
-      <rect class="card2" x="36" y="362" width="196" height="34" rx="6"/><text class="lgb" x="134" y="378" text-anchor="middle" fill="#F2786E" style="font-size:13.5px">R4 · Disputes</text><text class="lgd" x="134" y="395" text-anchor="middle" style="font-size:11.5px">adjudication / money movement</text>
-      <rect x="256" y="362" width="820" height="34" rx="6" fill="#3B2320" stroke="#F2786E"/><text class="lgb" x="666" y="384" text-anchor="middle" fill="#F2786E" style="font-size:15px">L1 · a person decides and signs; AI drafts — permanent, no graduation path</text>
+      <rect class="card2" x="36" y="250" width="196" height="34" rx="6"/><text class="lgb" x="134" y="266" text-anchor="middle" fill="#F2786E" style="font-size:14px">R4 · Disputes</text><text class="lgd" x="134" y="283" text-anchor="middle" style="font-size:11.5px">adjudication / money movement</text>
+      <rect x="256" y="250" width="820" height="34" rx="6" fill="#3B2320" stroke="#F2786E"/><text class="lgb" x="666" y="272" text-anchor="middle" fill="#F2786E" style="font-size:15px">L1 · a person decides and signs; AI drafts — permanent, no graduation path</text>
 
       <!-- L1–L3 spelled out: the matrix output, at the weight the concept carries -->
 
 
-      <rect x="0" y="426" width="364" height="52" rx="8" fill="#35251C" stroke="#F0925A"/>
-      <text x="16" y="462" fill="#F0925A" font-size="24" font-weight="700">L1</text>
-      <text x="66" y="449" fill="#EAF0F6" font-size="15.5" font-weight="600">human-signed: decides and sends</text>
-      <text x="66" y="469" fill="#9BAAB9" font-size="14">AI triages, drafts; a human signs</text>
+      <rect x="0" y="314" width="364" height="52" rx="8" fill="#3B2320" stroke="#F2786E"/>
+      <text x="16" y="350" fill="#F2786E" font-size="24" font-weight="700">L1</text>
+      <text x="66" y="337" fill="#EAF0F6" font-size="15.5" font-weight="600">human-signed: decides and sends</text>
+      <text x="66" y="357" fill="#9BAAB9" font-size="14">AI triages, drafts; a human signs</text>
 
-      <rect x="382" y="426" width="364" height="52" rx="8" fill="#3A3320" stroke="#F5B544"/>
-      <text x="398" y="462" fill="#F5B544" font-size="24" font-weight="700">L2</text>
-      <text x="448" y="449" fill="#EAF0F6" font-size="15.5" font-weight="600">one-click approval</text>
-      <text x="448" y="469" fill="#9BAAB9" font-size="14">a person approves, it runs</text>
+      <rect x="382" y="314" width="364" height="52" rx="8" fill="#3A3320" stroke="#F5B544"/>
+      <text x="398" y="350" fill="#F5B544" font-size="24" font-weight="700">L2</text>
+      <text x="448" y="337" fill="#EAF0F6" font-size="15.5" font-weight="600">one-click approval</text>
+      <text x="448" y="357" fill="#9BAAB9" font-size="14">a person approves, it runs</text>
 
-      <rect x="764" y="426" width="364" height="52" rx="8" fill="#1B4A44" stroke="#5FD3BE"/>
-      <text x="780" y="462" fill="#5FD3BE" font-size="24" font-weight="700">L3</text>
-      <text x="830" y="449" fill="#EAF0F6" font-size="15.5" font-weight="600">auto-execute</text>
-      <text x="830" y="469" fill="#9BAAB9" font-size="14">acts alone, no one clicks</text>
+      <rect x="764" y="314" width="364" height="52" rx="8" fill="#1B4A44" stroke="#5FD3BE"/>
+      <text x="780" y="350" fill="#5FD3BE" font-size="24" font-weight="700">L3</text>
+      <text x="830" y="337" fill="#EAF0F6" font-size="15.5" font-weight="600">auto-execute</text>
+      <text x="830" y="357" fill="#9BAAB9" font-size="14">acts alone, no one clicks</text>
 
-      <text class="lgd" x="0" y="500" style="font-size:14.5px">Graduation: backtest → shadow → dual sign-off (compliance + operations) → autonomous · auto-demotion on drift</text>
+      <text class="lgd" x="0" y="388" style="font-size:14.5px">Graduation: backtest → shadow → dual sign-off (compliance + operations) → autonomous · auto-demotion on drift</text>
+      <text class="lgd" x="0" y="408" style="font-size:14.5px">Locked = locked-template reply now (no account data), step-up unlocks the rest — hard constraint, graduation never changes it</text>
     </svg>
   </div>
-  <div class="colophon"><span>07 / 15</span></div>
+  <div class="colophon"><span>06 / 08</span></div>
 </section>
 
-<!-- ═══ 07b INTELLIGENCE (v0.3 · review §6.1) ═══
-     Naming: the deck says "intelligence" only — no runtime / design-time split
-     for the audience to learn. "Runtime" stays where it means the platform we
-     borrow (p04, B7), never as the opposite of this page. ═══ -->
-<section class="slide">
-  <p class="eyebrow"><span class="n">07</span> Intelligence</p>
-  <h2>AI nominates, the evidence argues, humans sign the diff.</h2>
-  <p class="claim" style="margin-bottom:8px">This is the post-launch loop on top of slides 04–06, not a second engine: the deterministic matrix still decides every reply. AI only proposes changes to the same categories and limits, and two humans sign every diff.</p>
-  <div class="chart">
-    <svg viewBox="0 0 1128 176" role="img" style="max-height:none;flex:0 0 auto">
-      <text x="0" y="12" fill="#9BAAB9" font-size="14" font-weight="600" letter-spacing="1.4">A LOOP, NOT A PIPELINE</text>
 
-      <rect x="0" y="22" width="200" height="96" rx="10" fill="#1D2530" stroke="#2E3A46"/>
-      <g stroke="#5FD3BE" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round" transform="translate(83,34)"><path d="M4 8h26v18H4z"/><path d="M4 10l13 10 13-10"/></g>
-      <text x="100" y="94" text-anchor="middle" fill="#EAF0F6" font-size="15" font-weight="600" letter-spacing="1.1">SENSE</text>
-      <text x="100" y="110" text-anchor="middle" fill="#9BAAB9" font-size="12.5">90 days of decisions</text>
-
-      <rect x="228" y="22" width="200" height="96" rx="10" fill="#1D2530" stroke="#2E3A46"/>
-      <g stroke="#5FD3BE" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round" transform="translate(311,34)"><path d="M7 4h12l6 6v20H7z"/><path d="M19 4v6h6"/><path d="M13 20h8M17 16v8"/></g>
-      <text x="328" y="94" text-anchor="middle" fill="#EAF0F6" font-size="15" font-weight="600" letter-spacing="1.1">PROPOSE</text>
-      <text x="328" y="110" text-anchor="middle" fill="#9BAAB9" font-size="12.5">nominations + diffs</text>
-
-      <rect x="456" y="22" width="200" height="96" rx="10" fill="#1D2530" stroke="#2E3A46"/>
-      <g stroke="#5FD3BE" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round" transform="translate(539,34)"><path d="M17 6v23M11 29h12M6 12h22"/><path d="M6 12l-4 8h8zM28 12l-4 8h8z"/></g>
-      <text x="556" y="94" text-anchor="middle" fill="#EAF0F6" font-size="15" font-weight="600" letter-spacing="1.1">PROVE</text>
-      <text x="556" y="110" text-anchor="middle" fill="#9BAAB9" font-size="12.5">backtest · dissent cards</text>
-
-      <rect x="684" y="22" width="200" height="96" rx="10" fill="#1D2530" stroke="#2E3A46"/>
-      <g stroke="#5FD3BE" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round" transform="translate(767,34)"><circle cx="17" cy="17" r="13"/><path d="M11 17.5l4.5 4.5L24 13"/></g>
-      <text x="784" y="94" text-anchor="middle" fill="#EAF0F6" font-size="15" font-weight="600" letter-spacing="1.1">GRANT</text>
-      <text x="784" y="110" text-anchor="middle" fill="#9BAAB9" font-size="12.5">two humans sign</text>
-
-      <rect x="912" y="22" width="200" height="96" rx="10" fill="#1D2530" stroke="#2E3A46"/>
-      <g stroke="#5FD3BE" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round" transform="translate(995,34)"><path d="M2 17h7l4-9 5 18 4-9h10"/></g>
-      <text x="1012" y="94" text-anchor="middle" fill="#EAF0F6" font-size="15" font-weight="600" letter-spacing="1.1">WATCH</text>
-      <text x="1012" y="110" text-anchor="middle" fill="#9BAAB9" font-size="12.5">auto-demotion on drift</text>
-
-      <g stroke="#5FD3BE" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M204 70 h14 m-5 -5 l5 5 l-5 5"/>
-        <path d="M432 70 h14 m-5 -5 l5 5 l-5 5"/>
-        <path d="M660 70 h14 m-5 -5 l5 5 l-5 5"/>
-        <path d="M888 70 h14 m-5 -5 l5 5 l-5 5"/>
-      </g>
-
-      <path d="M1012 118 v18 H100 v-18" fill="none" stroke="#F5B544" stroke-width="2" stroke-dasharray="6 4"/>
-      <path d="M100 118 l-5 7 l10 0 z" fill="#F5B544"/>
-      <text x="556" y="156" text-anchor="middle" fill="#F5B544" font-size="13.5">↺ drift, rate limits and rejected nominations feed back into Sense</text>
-    </svg>
-    <!-- six capabilities as icon cells, one key line each: the page carries the
-         loop diagram plus pictures, not a wall of card prose -->
-    <div class="cap6">
-      <div class="cap">
-        <div class="caph">
-          <svg class="ci" viewBox="0 0 34 34" aria-hidden="true"><path d="M3 29h7v-7h7v-7h7v-7h6"/></svg>
-          <span class="ct">Graduation proposer</span>
-        </div>
-        <div class="cd"><i>Builder</i>Nominates the same-evidence blocks — a human signs the diff</div>
-      </div>
-      <div class="cap">
-        <div class="caph">
-          <svg class="ci" viewBox="0 0 34 34" aria-hidden="true"><path d="M3 13q5-6 10 0t10 0"/><path d="M3 23q5-6 10 0t10 0"/></svg>
-          <span class="ct">Wave board</span>
-        </div>
-        <div class="cd"><i>Supervisor</i>One root cause, one wave — including victims who never wrote in</div>
-      </div>
-      <div class="cap">
-        <div class="caph">
-          <svg class="ci" viewBox="0 0 34 34" aria-hidden="true"><rect x="8" y="4" width="18" height="26" rx="3"/><path d="M13 12h8M13 18h8M13 24h5"/></svg>
-          <span class="ct">Policy compiler</span>
-        </div>
-        <div class="cd"><i>Builder</i>A sentence in, a clause-level diff out — backtested over 90 days</div>
-      </div>
-      <div class="cap">
-        <div class="caph">
-          <svg class="ci" viewBox="0 0 34 34" aria-hidden="true"><path d="M17 4l11 4v8c0 7-4.5 11-11 14C10.5 27 6 23 6 16V8z"/></svg>
-          <span class="ct">Pre-empt tag</span>
-        </div>
-        <div class="cd"><i>Agent</i>Flags the mail an event notice could have prevented</div>
-      </div>
-      <div class="cap">
-        <div class="caph">
-          <svg class="ci" viewBox="0 0 34 34" aria-hidden="true"><path d="M2 17s6.5-9 15-9 15 9 15 9-6.5 9-15 9S2 17 2 17z"/><circle cx="17" cy="17" r="4.5"/></svg>
-          <span class="ct">Consequence preview</span>
-        </div>
-        <div class="cd"><i>Agent</i>Will this reply invite the next one?</div>
-      </div>
-      <div class="cap">
-        <div class="caph">
-          <svg class="ci" viewBox="0 0 34 34" aria-hidden="true"><circle cx="15" cy="15" r="9.5"/><path d="M22 22l8 8"/></svg>
-          <span class="ct">Intent discovery</span>
-        </div>
-        <div class="cd"><i>Builder</i>New intents from the pile that always goes unclassified</div>
-      </div>
-    </div>
-    <p class="note" style="padding-right:76px;font-size:15.5px"><b>The gates already exist.</b> Backtest, shadow, dual sign-off and auto-demotion already ship — what was missing was a nominator, and every output is a configuration diff flowing into those same gates.</p>
-  </div>
-  <div class="colophon"><span>08 / 15</span></div>
-</section>
 
 <!-- ═══ 08 KEY EXPERIENCES & DEMO ═══ -->
 <section class="slide">
@@ -1194,357 +1079,18 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
     </div>
     </div>
   </div>
-  <div class="colophon"><span>09 / 15</span></div>
+  <div class="colophon"><span>07 / 08</span></div>
 </section>
 
-<!-- ═══ 09 WHY WE WIN ═══ -->
-<section class="slide">
-  <p class="eyebrow"><span class="n">09</span> Why we win</p>
-  <h2>Four groups want this customer. Nobody has the email case.</h2>
-  <div class="chart">
-    <svg viewBox="0 0 1128 364" role="img">
-      <g font-size="14" fill="#9BAAB9">
-        <circle cx="8" cy="10" r="6" fill="#5FD3BE"/><text x="22" y="15">ships</text>
-        <circle cx="92" cy="10" r="6" fill="#F5B544"/><text x="106" y="15">partial</text>
-        <circle cx="188" cy="10" r="6" fill="none" stroke="#4C5C6C" stroke-width="2.5"/><text x="202" y="15">not in public materials</text>
-        <circle cx="372" cy="10" r="7" fill="none" stroke="#5FD3BE" stroke-width="2.5"/><text x="388" y="15" fill="#5FD3BE">designed · prototyped</text>
-      </g>
 
-      <g fill="#9BAAB9" font-size="13.5" font-weight="600" text-anchor="middle" letter-spacing=".6">
-        <text x="460" y="50">EMAIL-NATIVE</text><text x="460" y="68">CASE MODEL</text>
-        <text x="655" y="50">STATUTORY</text><text x="655" y="68">CLOCK ENGINE</text>
-        <text x="850" y="50">CORE-BANKING</text><text x="850" y="68">EXECUTION</text>
-        <text x="1045" y="50">VOICE +</text><text x="1045" y="68">REAL-TIME OPS</text>
-      </g>
-      <line x1="0" y1="82" x2="1128" y2="82" stroke="#2E3A46"/>
 
-      <text class="lgb" x="0" y="108">CCaaS</text>
-      <text class="lgd" x="0" y="128" style="font-size:15px">Talkdesk · NICE · Genesys · Five9 · Amazon Connect</text>
-      <circle cx="460" cy="110" r="11" fill="#F5B544"/>
-      <circle cx="655" cy="110" r="11" fill="none" stroke="#4C5C6C" stroke-width="2.5"/>
-      <circle cx="850" cy="110" r="11" fill="#5FD3BE"/>
-      <circle cx="1045" cy="110" r="11" fill="#5FD3BE"/>
 
-      <text class="lgb" x="0" y="166">CRM + AI agent</text>
-      <text class="lgd" x="0" y="186" style="font-size:15px">Salesforce + Fin · Zendesk · Intercom</text>
-      <circle cx="460" cy="168" r="11" fill="#F5B544"/>
-      <circle cx="655" cy="168" r="11" fill="none" stroke="#4C5C6C" stroke-width="2.5"/>
-      <circle cx="850" cy="168" r="11" fill="none" stroke="#4C5C6C" stroke-width="2.5"/>
-      <circle cx="1045" cy="168" r="11" fill="none" stroke="#4C5C6C" stroke-width="2.5"/>
 
-      <text class="lgb" x="0" y="224">AI startups</text>
-      <text class="lgd" x="0" y="244" style="font-size:15px">Sierra · Decagon · Aide · Lorikeet</text>
-      <circle cx="460" cy="226" r="11" fill="#F5B544"/>
-      <circle cx="655" cy="226" r="11" fill="none" stroke="#4C5C6C" stroke-width="2.5"/>
-      <circle cx="850" cy="226" r="11" fill="#F5B544"/>
-      <circle cx="1045" cy="226" r="11" fill="none" stroke="#4C5C6C" stroke-width="2.5"/>
 
-      <text class="lgb" x="0" y="282">FS specialists</text>
-      <text class="lgd" x="0" y="302" style="font-size:15px">Glia · Eltropy · interface.ai</text>
-      <circle cx="460" cy="284" r="11" fill="#F5B544"/>
-      <circle cx="655" cy="284" r="11" fill="none" stroke="#4C5C6C" stroke-width="2.5"/>
-      <circle cx="850" cy="284" r="11" fill="#F5B544"/>
-      <circle cx="1045" cy="284" r="11" fill="#5FD3BE"/>
 
-      <line x1="0" y1="314" x2="1128" y2="314" stroke="#2E3A46"/>
-      <rect x="0" y="322" width="1128" height="34" rx="8" fill="#1B4A44" stroke="#5FD3BE"/>
-      <text class="lgb" x="20" y="345" fill="#5FD3BE">Email Autopilot on CXA<tspan fill="#9BAAB9" font-weight="400" font-size="17"> — target state</tspan></text>
-      <circle cx="460" cy="339" r="11" fill="none" stroke="#5FD3BE" stroke-width="2.5"/>
-      <circle cx="655" cy="339" r="11" fill="none" stroke="#5FD3BE" stroke-width="2.5"/>
-      <circle cx="850" cy="339" r="11" fill="none" stroke="#5FD3BE" stroke-width="2.5"/>
-      <circle cx="1045" cy="339" r="11" fill="#5FD3BE"/>
-    </svg>
-  </div>
-  <p class="note"><b>Window: 12–18 months.</b> We spend it on what the platform already ships — CXA Operations Center, Agent Builder, Automation Flows, and core-banking connectors since April 2025. Freshworks has shipped autonomous email since 2025-06; nobody has shipped the <i>case</i>.<br><b>Most automate the reply; few propose the rules.</b></p>
-  <div class="colophon"><span>10 / 15</span></div>
-</section>
 
-<!-- ═══ 10 VALUE & PRIORITY ═══ -->
-<section class="slide">
-  <p class="eyebrow"><span class="n">10</span> Value &amp; priority</p>
-  <h2>One bank's email book is a $4.8M cost base.</h2>
-  <p class="claim">600,000 emails a year at $8 each. What we take out depends on how much we can genuinely finish.</p>
-  <div class="chart">
-    <svg viewBox="0 0 1128 300" role="img">
-      <!-- the bank's side -->
-      <text x="0" y="14" fill="#9BAAB9" font-size="14" font-weight="600" letter-spacing="1.4">NET ANNUAL SAVING PER BANK · 600,000 EMAILS AT $8</text>
-      <line x1="70" y1="250" x2="700" y2="250" stroke="#2E3A46"/>
-      <rect x="90" y="145" width="150" height="105" rx="8" fill="#2E3A46"/>
-      <text class="lgx" x="165" y="133" text-anchor="middle" style="font-size:23px">$1.87M</text>
-      <text class="lg" x="165" y="272" text-anchor="middle" style="font-size:16px">20% resolved</text>
-      <text class="lgd" x="165" y="292" text-anchor="middle" style="font-size:14px">39% of cost base</text>
-      <rect x="290" y="100" width="150" height="150" rx="8" fill="#5FD3BE"/>
-      <text class="lgx" x="365" y="88" text-anchor="middle" fill="#5FD3BE" style="font-size:23px">$2.68M</text>
-      <text class="lg" x="365" y="272" text-anchor="middle" fill="#EAF0F6" font-weight="600" style="font-size:16px">35% · base case</text>
-      <text class="lgd" x="365" y="292" text-anchor="middle" style="font-size:14px">56% of cost base · ≈32 FTE</text>
-      <rect x="490" y="71" width="150" height="179" rx="8" fill="#2E3A46"/>
-      <text class="lgx" x="565" y="59" text-anchor="middle" style="font-size:23px">$3.19M</text>
-      <text class="lg" x="565" y="272" text-anchor="middle" style="font-size:16px">50% resolved</text>
-      <text class="lgd" x="565" y="292" text-anchor="middle" style="font-size:14px">66% of cost base</text>
 
-      <!-- the vendor's side, kept separate -->
-      <line x1="716" y1="8" x2="716" y2="292" stroke="#2E3A46"/>
-      <text x="744" y="14" fill="#9BAAB9" font-size="14" font-weight="600" letter-spacing="1.4">WHO GETS WHAT · PER BEACHHEAD BANK</text>
-      <rect x="744" y="28" width="384" height="24" rx="6" fill="#5FD3BE"/>
-      <text x="754" y="45" font-size="14" font-weight="600" fill="#151B22">Bank keeps ≈ $2.68M</text>
-      <rect x="744" y="62" width="29" height="24" rx="4" fill="#F5B544"/>
-      <text x="786" y="79" font-size="14" font-weight="600" fill="#F5B544">Vendor ≈ +$0.21M</text>
-      <text class="lgd" x="744" y="106" style="font-size:14px">Fees ≈ $268k − seats replaced ≈ $63k</text>
-      <text class="lgd" x="744" y="126" style="font-size:14px">= ≈ +$205k, net-new, not cannibalized</text>
-      <line x1="744" y1="144" x2="1128" y2="144" stroke="#2E3A46"/>
-      <text x="744" y="170" fill="#F5B544" font-size="13.5" font-weight="600" letter-spacing="1.3">× 262 BEACHHEAD BANKS</text>
-      <text class="lgx" x="744" y="206" fill="#F5B544" style="font-size:30px">≈ $54M</text>
-      <text class="lgd" x="744" y="232" style="font-size:14px">Vendor-side opportunity at full adoption</text>
-      <text class="lgd" x="744" y="252" style="font-size:14px" fill="#F5B544">262 × $205k — penetration not assumed</text>
-      <text class="lgd" x="744" y="276" style="font-size:13px">$1.50 per resolution is our price (<tspan class="xref" data-jump="B11">B11</tspan>), not a list price</text>
-    </svg>
-  </div>
-  <p class="note"><b>Net-new, not cannibalized.</b> Async mail is the safest autonomy proving ground, and 90 days of history is a ready-made eval set: the bank keeps the saving, the vendor's fee sits on top of it.</p>
-  <p class="note" style="font-size:15.5px"><b>Three levers move together</b> across the three cases — failed demand, autonomy, copilot uplift. 35% is measured against email net of failed demand; against all valid inbound it reads ≈30% — both published, both in <a class="xref" data-jump="B2">B2</a>. Inputs come from the customer's own mail: mix and baselines in week one, pricing in four weeks.</p>
-  <div class="colophon"><span>11 / 15</span></div>
-</section>
 
-<!-- ═══ 11 METRICS ═══ -->
-<section class="slide">
-  <p class="eyebrow"><span class="n">11</span> How we would know</p>
-  <h2>Three numbers. One pilot.</h2>
-  <div class="chart">
-    <svg viewBox="0 0 1128 388" role="img">
-      <!-- ── VARR: the target as a band on a 0–100% track ── -->
-      <rect class="card" x="0" y="0" width="362" height="212" rx="10"/>
-      <text class="lgx" x="24" y="42">VARR</text>
-      <text class="lg" x="24" y="68">Verified autonomous resolution rate</text>
-      <text class="lgd" x="24" y="96">No human touch · no reopen in 14 days</text>
-      <text class="lgd" x="24" y="118">Survives QA sampling</text>
-      <text x="24" y="154" fill="#5FD3BE" font-size="18" font-weight="600">25–35% by six months</text>
-      <rect x="24" y="166" width="314" height="14" rx="7" fill="#232D38"/>
-      <rect x="102" y="166" width="32" height="14" rx="7" fill="#5FD3BE"/>
-      <text class="lgd" x="24" y="198" style="font-size:12.5px">0</text>
-      <text x="118" y="198" text-anchor="middle" fill="#5FD3BE" font-size="12.5" font-weight="600">target band</text>
-      <text class="lgd" x="338" y="198" text-anchor="end" style="font-size:12.5px">100%</text>
-
-      <!-- ── Median TTR: the target is the sliver at the far left ── -->
-      <rect class="card" x="383" y="0" width="362" height="212" rx="10"/>
-      <text class="lgx" x="407" y="42">Median TTR</text>
-      <text class="lg" x="407" y="68">Time to resolution, not to first reply</text>
-      <text class="lgd" x="407" y="94" style="font-size:16px">Measured from the arrival timestamp</text>
-      <text class="lgd" x="407" y="116" style="font-size:16px">Baseline today: 3.2 days <tspan fill="#F5B544" style="font-weight:600">(assumption)</tspan></text>
-      <rect x="407" y="126" width="314" height="16" rx="4" fill="#3A3320" stroke="#F5B544"/>
-      <rect x="407" y="126" width="5" height="16" rx="2" fill="#5FD3BE"/>
-      <path d="M404 147 l14 0 l-7 9 z" fill="#5FD3BE"/>
-      <text x="407" y="182" fill="#5FD3BE" font-size="16" font-weight="600">&lt; 15 min autonomous</text>
-      <text class="lgd" x="721" y="182" text-anchor="end" style="font-size:13.5px">baseline 3.2 days</text>
-      <text x="407" y="204" fill="#5FD3BE" font-size="16" font-weight="600">&lt; 1 day, disputes excepted</text>
-
-      <!-- ── Trust: the three gates that a veto checks ── -->
-      <rect class="card" x="766" y="0" width="362" height="212" rx="10"/>
-      <text x="790" y="42" fill="#F2786E" font-size="28" font-weight="600">Trust</text>
-      <text class="lg" x="790" y="68">Veto — one critical error voids VARR</text>
-      <text class="lgd" x="790" y="94" style="font-size:16px">Key error = wrong action, wrong party,</text>
-      <text class="lgd" x="790" y="116" style="font-size:16px">missed clock or broken promise</text>
-      <rect x="790" y="128" width="314" height="52" rx="8" fill="#1B4A44" stroke="#5FD3BE"/>
-      <text x="947" y="150" text-anchor="middle" fill="#5FD3BE" font-size="14.5" font-weight="600">✓ 0 key errors  ✓ clocks 100%</text>
-      <text x="947" y="171" text-anchor="middle" fill="#5FD3BE" font-size="14.5" font-weight="600">✓ recall ≥99.5%</text>
-      <text x="790" y="204" fill="#F2786E" font-size="18" font-weight="600">Non-negotiable</text>
-
-      <!-- ── 59-day pilot: weeks to scale, one gate ── -->
-      <text class="lgb" x="0" y="256">59-day pilot</text>
-      <rect x="0" y="272" width="153" height="52" rx="8" fill="#232D38" stroke="#2E3A46"/>
-      <text class="lg" x="76" y="296" text-anchor="middle">Backtest</text>
-      <text class="lgd" x="76" y="315" text-anchor="middle" style="font-size:13px">W1–W2</text>
-      <rect x="171" y="272" width="153" height="52" rx="8" fill="#232D38" stroke="#2E3A46"/>
-      <text class="lg" x="247" y="296" text-anchor="middle">Shadow</text>
-      <text class="lgd" x="247" y="315" text-anchor="middle" style="font-size:13px">W3–W4</text>
-      <rect x="343" y="272" width="307" height="52" rx="8" fill="#3A3320" stroke="#F5B544"/>
-      <text x="496" y="296" text-anchor="middle" fill="#F5B544" font-size="18">L2 · one-click approval</text>
-      <text class="lgd" x="496" y="315" text-anchor="middle" style="font-size:13px">W5–W8 · observe</text>
-      <rect x="668" y="272" width="460" height="52" rx="8" fill="#1B4A44" stroke="#5FD3BE"/>
-      <text x="898" y="296" text-anchor="middle" fill="#5FD3BE" font-size="18">L3 · first graduations</text>
-      <text class="lgd" x="898" y="315" text-anchor="middle" style="font-size:13px">rollout W9–W14</text>
-      <path d="M659 262 v74" stroke="#F5B544" stroke-width="1.5" stroke-dasharray="5 4" fill="none"/>
-      <text x="659" y="256" text-anchor="middle" fill="#F5B544" font-size="12.5" font-weight="700" letter-spacing="1.2">DAY-59 GATE</text>
-
-      <!-- ── week axis ── -->
-      <path d="M0 334 H1128" stroke="#2E3A46" stroke-width="1" fill="none"/>
-      <path d="M171 334 v7 M343 334 v7 M668 334 v7" stroke="#2E3A46" stroke-width="1" fill="none"/>
-      <text class="lgd" x="4" y="354" style="font-size:12.5px">W1</text>
-      <text class="lgd" x="175" y="354" style="font-size:12.5px">W3</text>
-      <text class="lgd" x="347" y="354" style="font-size:12.5px">W5</text>
-      <text class="lgd" x="672" y="354" style="font-size:12.5px">W9</text>
-      <text class="lgd" x="1128" y="354" text-anchor="end" style="font-size:12.5px">W14 end</text>
-      <text class="lgd" x="0" y="380">Twelve guardrails run alongside — Backup <tspan class="xref" data-jump="B6">B6</tspan>. The 35% ROI base case is the top of this band, at steady state (<tspan class="xref" data-jump="B2">B2</tspan>).</text>
-    </svg>
-  </div>
-  <div class="colophon"><span>12 / 15</span></div>
-</section>
-
-<!-- ═══ 12 RISKS ═══ -->
-<section class="slide">
-  <p class="eyebrow"><span class="n">12</span> Risk</p>
-  <h2>The risks that would end this product.</h2>
-  <div class="chart">
-    <div class="risks">
-      <div class="risk">
-        <div class="idx"><span class="d"></span>RISK 01</div>
-        <div class="h">Missing a regulated intent</div>
-        <div class="w">Half a sentence is a running clock.</div>
-        <div class="viz">
-          <span class="ring" aria-hidden="true"></span>
-          <div class="vcap"><b>136 violations</b>74% sat in error resolution (2025)</div>
-        </div>
-        <div class="div"></div>
-        <div class="k">What we built</div>
-        <ul>
-          <li>High-recall detection at ingest, <b>before an agent opens the mail</b></li>
-          <li><b>False positives preferred</b> — recall ≥99.5% gates all autonomy</li>
-          <li>No samples in 90 days means <b>no L3</b></li>
-        </ul>
-      </div>
-      <div class="risk">
-        <div class="idx"><span class="d"></span>RISK 02</div>
-        <div class="h">The email attack surface</div>
-        <div class="w">BEC, ATO and attachment injection — under ATO every normal identity signal still passes.</div>
-        <div class="viz col">
-          <div class="frow"><i class="bad">BEC</i><i class="bad">ATO</i><i class="bad">attachment injection</i></div>
-          <div class="frow"><span class="ok">quarantined as data</span><b>⊘</b><span class="off">R3 has no tool</span></div>
-        </div>
-        <div class="div"></div>
-        <div class="k">What we built</div>
-        <ul>
-          <li>Injected text is quarantined <b>as data, never as instruction</b></li>
-          <li>R3 combinations have <b>no callable function</b> on this channel</li>
-          <li>Confirmation goes only to <b>on-file contacts</b></li>
-        </ul>
-      </div>
-      <div class="risk">
-        <div class="idx"><span class="d"></span>RISK 03</div>
-        <div class="h">Numeric hallucination</div>
-        <div class="w">An invented fee or date is a Reg E and UDAAP violation; one wrong write can be unrecoverable.</div>
-        <div class="viz col">
-          <div class="gate">
-            <div class="gr"><em class="yes">✓</em><span>number from a system slot → sent</span></div>
-            <div class="gr"><em class="no">✕</em><span>model-written number → locked template</span></div>
-            <div class="gr"><em class="sig">✎</em><span>money stays R4 · L1 human-signed</span></div>
-          </div>
-        </div>
-        <div class="div"></div>
-        <div class="k">What we built</div>
-        <ul>
-          <li><b>Numbers only from system slots</b> — never written by the model</li>
-          <li>Failed claim check → <b>the locked template</b></li>
-          <li>Money stays R4: <b>L1 human-signed</b></li>
-        </ul>
-      </div>
-    </div>
-  </div>
-  <p class="note"><b>Also on the register:</b> tipping-off vs duty to speak (31 CFR 1020.320(e)) · over-disclosure to an unverified sender (GLBA) · third-party risk review · vulnerable-customer fairness · the LLM-as-judge flipping verdicts in evaluation (14%) · sign-off fatigue — L2 approvals and AI nominations both drift toward rubber-stamping (watch the approve-without-edit rate, sample the approved files) · a step-up link that collides with “never click a link in an email” training. Full list — seventeen risks — in Backup <a class="xref" data-jump="B11">B11</a>.</p>
-  <div class="colophon"><span>13 / 15</span></div>
-</section>
-
-<!-- ═══ 13 ROADMAP & ASK ═══ -->
-<section class="slide">
-  <p class="eyebrow"><span class="n">13</span> Roadmap</p>
-  <h2>One governance layer, three waves.</h2>
-  <div class="chart">
-    <svg viewBox="0 0 1128 384" role="img" style="max-height:none;flex:0 0 auto">
-      <text x="0" y="14" fill="#9BAAB9" font-size="16" font-weight="600" letter-spacing="1.5">ROADMAP — SAME ENGINE, WIDER SURFACE</text>
-
-      <!-- now -->
-      <g>
-        <rect x="0" y="30" width="340" height="256" rx="12" fill="#1D2530" stroke="#5FD3BE"/>
-        <g stroke="#5FD3BE" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round" transform="translate(18,44)">
-          <rect x="0" y="0" width="44" height="30" rx="4"/>
-          <path d="M2.5 3.5 L22 18.5 L41.5 3.5"/>
-        </g>
-        <text x="18" y="100" fill="#5FD3BE" font-size="15" font-weight="600" letter-spacing="1.6">NOW · WAVE 1</text>
-        <line x1="18" y1="110" x2="322" y2="110" stroke="#2E3A46"/>
-        <text x="18" y="148" fill="#EAF0F6" font-size="30" font-weight="600">Email</text>
-        <text x="18" y="174" fill="#C0CBD6" font-size="17.5">Mid-size US banks and credit unions</text>
-        <text x="18" y="194" fill="#9BAAB9" font-size="16.5">Reg E disputes · refunds · servicing</text>
-        <text x="18" y="210" fill="#5FD3BE" font-size="15.5" font-weight="600">Test set: 90 days of their own mail</text>
-        <!-- the intelligence half of this wave, on the same card -->
-        <rect x="18" y="218" width="304" height="60" rx="8" fill="#17322E" stroke="#2E3A46"/>
-        <text x="32" y="234" fill="#5FD3BE" font-size="12.5" font-weight="600" letter-spacing="1.3">INTELLIGENCE</text>
-        <text x="32" y="253" fill="#C0CBD6" font-size="13.5">R0/R1 nominations · pre-empt tag</text>
-        <text x="32" y="269" fill="#C0CBD6" font-size="13.5">consequence preview</text>
-      </g>
-      <path d="M358 116 L376 125 L358 134" fill="none" stroke="#4A5A6B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-
-      <!-- next -->
-      <g>
-        <rect x="394" y="30" width="340" height="256" rx="12" fill="#1D2530" stroke="#F5B544"/>
-        <g stroke="#F5B544" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round" transform="translate(412,44)">
-          <path d="M22 1 L42 10 L22 19 L2 10 Z"/>
-          <path d="M2 16 L22 25 L42 16"/>
-          <path d="M2 23 L22 32 L42 23"/>
-        </g>
-        <text x="412" y="100" fill="#F5B544" font-size="15" font-weight="600" letter-spacing="1.6">NEXT · WAVE 2</text>
-        <line x1="412" y1="110" x2="716" y2="110" stroke="#2E3A46"/>
-        <text x="412" y="148" fill="#EAF0F6" font-size="30" font-weight="600">More intents</text>
-        <text x="412" y="174" fill="#C0CBD6" font-size="17.5">Payments, payoff, Reg Z, Spanish</text>
-        <text x="412" y="194" fill="#9BAAB9" font-size="16.5">UDAAP wording review for complaints</text>
-        <text x="412" y="210" fill="#F5B544" font-size="15.5" font-weight="600">Same policy pack, second wave</text>
-        <rect x="412" y="218" width="304" height="60" rx="8" fill="#3A3320" stroke="#2E3A46"/>
-        <text x="426" y="234" fill="#F5B544" font-size="12.5" font-weight="600" letter-spacing="1.3">INTELLIGENCE</text>
-        <text x="426" y="253" fill="#C0CBD6" font-size="13.5">R2 nominations · wave board</text>
-        <text x="426" y="269" fill="#C0CBD6" font-size="13.5">policy compiler</text>
-      </g>
-      <path d="M752 116 L770 125 L752 134" fill="none" stroke="#4A5A6B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-
-      <!-- later -->
-      <g>
-        <rect x="788" y="30" width="340" height="256" rx="12" fill="#17322E" stroke="#5FD3BE" stroke-width="1.5"/>
-        <g stroke="#5FD3BE" stroke-width="3" stroke-linecap="round" transform="translate(806,46)">
-          <path d="M5 9 V26"/>
-          <path d="M15 3 V32"/>
-          <path d="M25 12 V23"/>
-          <path d="M35 6 V29"/>
-          <path d="M45 14 V21"/>
-        </g>
-        <text x="806" y="100" fill="#5FD3BE" font-size="15" font-weight="600" letter-spacing="1.6">LATER</text>
-        <line x1="806" y1="110" x2="1110" y2="110" stroke="#2E3A46"/>
-        <text x="806" y="148" fill="#EAF0F6" font-size="30" font-weight="600">Voice + Chat</text>
-        <text x="806" y="174" fill="#C0CBD6" font-size="17.5">AI agents built in Agent Builder</text>
-        <text x="806" y="194" fill="#9BAAB9" font-size="16.5">Then the rest of financial services</text>
-        <text x="806" y="210" fill="#5FD3BE" font-size="15.5" font-weight="600">The Voice / Builder strategy</text>
-        <rect x="806" y="218" width="304" height="60" rx="8" fill="#14291F" stroke="#2E3A46"/>
-        <text x="820" y="234" fill="#5FD3BE" font-size="12.5" font-weight="600" letter-spacing="1.3">INTELLIGENCE</text>
-        <text x="820" y="253" fill="#C0CBD6" font-size="13.5">batch remediation · intent discovery</text>
-        <text x="820" y="269" fill="#C0CBD6" font-size="13.5">regulatory radar</text>
-      </g>
-
-      <!-- all three sit on the same layer -->
-      <g stroke="#3A4756" stroke-width="2">
-        <line x1="170" y1="286" x2="170" y2="310"/>
-        <line x1="564" y1="286" x2="564" y2="310"/>
-        <line x1="958" y1="286" x2="958" y2="310"/>
-      </g>
-      <g fill="#3A4756">
-        <path d="M164 308 L170 318 L176 308 Z"/>
-        <path d="M558 308 L564 318 L570 308 Z"/>
-        <path d="M952 308 L958 318 L964 308 Z"/>
-      </g>
-
-      <rect x="0" y="324" width="1128" height="56" rx="12" fill="#1B4A44" stroke="#5FD3BE"/>
-      <g stroke="#5FD3BE" stroke-width="2.4" fill="none" stroke-linecap="round" transform="translate(22,332)">
-        <circle cx="20" cy="20" r="7.5"/>
-        <path d="M20 3 v5 M20 32 v5 M3 20 h5 M32 20 h5 M8.1 8.1 l3.5 3.5 M28.4 28.4 l3.6 3.6 M31.9 8.1 l-3.5 3.5 M11.6 28.4 l-3.6 3.6"/>
-      </g>
-      <g stroke="#5FD3BE" stroke-width="2.4" fill="none" stroke-linecap="round" transform="translate(1058,332)">
-        <circle cx="20" cy="20" r="17"/>
-        <path d="M20 9.5 V21 l8.5 5.5"/>
-      </g>
-      <text x="80" y="348" fill="#5FD3BE" font-size="19.5" font-weight="600">One policy engine (R × I → L) + one clock engine — written once by the bank</text>
-      <text x="80" y="370" fill="#C0CBD6" font-size="17">Applied to every channel: email ships first, then the Voice and Chat AI agents built in Agent Builder.</text>
-    </svg>
-  </div>
-  <div class="layerbar">
-    <div class="lrow add"><span class="tag">New · we add</span><span class="items">A bank-written limit matrix (R × I → L) · a clock that turns a promise into a deadline · in-thread step-up · dispute intake · email defense</span></div>
-    <div class="lrow"><span class="tag">Already ships</span><span class="items">Autopilot (LLM) · Automation Flows · Agent Builder · CXA Ops Center · FS core connectors</span></div>
-    <p class="note"><b>The new part is the layer, not the channel</b> — a thin vertical layer, no new platform or runtime. Full stack: <b><a class="xref" data-jump="B16">B16</a></b> · the day-0 ask, item by item: <b><a class="xref" data-jump="B19">B19</a></b>.</p>
-  </div>
-  <div class="colophon"><span>14 / 15</span></div>
-</section>
 
 <!-- ═══ 14 THANK YOU ═══ -->
 <section class="slide title" style="padding-left:200px">
@@ -1954,7 +1500,7 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
     <div class="two" style="gap:22px">
       <table class="sm">
         <tr><th style="width:46%">Assumption</th><th>Value used</th></tr>
-        <tr><td class="k">01 · Customer profile “Larkspur Bank”</td><td>$18B assets · 1.1M customers · 420 FTE · 50k emails a month · Fiserv DNA + Q2</td></tr>
+        <tr><td class="k">01 · Customer profile “Larkspur Bank”</td><td>$18B assets · 1.1M customers · 420 FTE · 50k emails a month</td></tr>
         <tr><td class="k">02 · Loaded cost per email</td><td>$8 (aggregate estimate; ranges on p.04)</td></tr>
         <tr><td class="k">03 · Annual email volume</td><td>600,000</td></tr>
         <tr><td class="k">04 · Baseline response metrics</td><td>27h first reply · 3.2 days to resolution · 22% “please call us”</td></tr>
@@ -2145,6 +1691,555 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
     <p class="note">The commercial question is the one that decides the packaging — see <b><a class="xref" data-jump="B13">B13</a></b>. Everything above is what we would ask a design partner for on day 0.</p>
   </div>
   <div class="colophon"><span>B19</span></div>
+</section>
+
+<!-- ═══ B20 · WHY EMAIL (moved from main 03) ═══ -->
+<section class="slide backup">
+  <p class="eyebrow"><span class="n">Backup · B20</span> Why we prioritize email</p>
+  <h2>Same base, no live caller, same runtime.</h2>
+  <div class="whygrid">
+    <div class="wg"><span class="wi"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9.6 12 4.2l9 5.4"/><path d="M5.2 9.9V19.4h13.6V9.9"/><path d="M9.6 19.4v-5.1h4.8v5.1"/></svg></span><span class="wt"><b>Same base.</b> Voice is the existing base — email rides it as an add-on, not new-customer acquisition.</span></div>
+    <div class="wg"><span class="wi"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12.4" r="8.2"/><path d="M12 7.6v5.1l3.4 2.1"/><path d="M9.2 2.9h5.6"/></svg></span><span class="wt"><b>No live caller.</b> Async mail carries no interruption risk — the lowest-risk way to graduate the matrix.</span></div>
+    <div class="wg"><span class="wi"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.4 20.8 7.9 12 12.4 3.2 7.9 12 3.4Z"/><path d="M3.2 12.3 12 16.8l8.8-4.5"/><path d="M3.2 16.5 12 21l8.8-4.5"/></svg></span><span class="wt"><b>Same runtime.</b> It reuses the runtime we ship, so the marginal build is the vertical layer alone.</span></div>
+  </div>
+  <div class="chart">
+    <table class="score">
+      <tr>
+        <th style="width:24%">Opportunity<span class="def">the one decisive fact</span></th>
+        <th style="width:16.5%">Left to build<span class="def">on the runtime that already ships</span></th>
+        <th style="width:18%">No live interruption<span class="def">async — the clock runs on a mailbox</span></th>
+        <th style="width:17%">Same base<span class="def">add-on on contracts that already exist</span></th>
+        <th style="width:13%">Time to value<span class="def">to a number we can audit</span></th>
+        <th style="width:11.5%">Revenue<span class="def">what it can bill</span></th>
+      </tr>
+        <tr class="pick">
+          <td class="k"><span class="oi"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2.5 6.5 12 13l9.5-6.5"/></svg></span>Email · this proposal<span class="why">add-on on the 262-bank install base</span></td>
+          <td class="f hi"><i class="g">✓</i>the vertical layer alone</td>
+          <td class="f hi"><i class="g">✓</i>mailbox clock, nobody on hold</td>
+          <td class="f hi"><i class="g">✓</i>add-on, no new logos</td>
+          <td class="s lo" title="slow — 90 days to build and sign the metric stack"><span class="bars"><i class="f"></i><i></i><i></i></span></td>
+          <td class="s md" title="medium — price is an assumption"><span class="bars"><i class="f"></i><i class="f"></i><i></i></span></td>
+        </tr>
+        <tr>
+          <td class="k"><span class="oi"><svg viewBox="0 0 24 24"><rect x="9" y="2.5" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3.5"/></svg></span>Voice AI agent<span class="why">our core market — every rival is live</span></td>
+          <td class="f md"><i class="g">–</i>a parity build — rivals are live</td>
+          <td class="f bad"><i class="g">✗</i>live caller on the line</td>
+          <td class="f lo"><i class="g">·</i>it is the base</td>
+          <td class="s hi" title="fast — after-call work, first response, per hour, already reported"><span class="bars"><i class="f"></i><i class="f"></i><i class="f"></i></span></td>
+          <td class="s hi" title="strong"><span class="bars"><i class="f"></i><i class="f"></i><i class="f"></i></span></td>
+        </tr>
+        <tr>
+          <td class="k"><span class="oi"><svg viewBox="0 0 24 24"><rect x="2" y="3.5" width="20" height="14" rx="3"/><path d="M7 17.5v5l5-5"/><path d="M7 8h10M7 12h6"/></svg></span>Chat AI agent<span class="why">same buyers as voice, smaller surface</span></td>
+          <td class="f md"><i class="g">–</i>a parity build — smaller surface</td>
+          <td class="f hi"><i class="g">✓</i>threads wait their turn</td>
+          <td class="f lo"><i class="g">·</i>same buyers</td>
+          <td class="s hi" title="fast — chat logs carry disposition and first response"><span class="bars"><i class="f"></i><i class="f"></i><i class="f"></i></span></td>
+          <td class="s md" title="medium"><span class="bars"><i class="f"></i><i class="f"></i><i></i></span></td>
+        </tr>
+        <tr>
+          <td class="k"><span class="oi"><svg viewBox="0 0 24 24"><path d="M4 13v-1a8 8 0 0 1 16 0v1"/><rect x="2" y="13" width="5" height="7.5" rx="2"/><rect x="17" y="13" width="5" height="7.5" rx="2"/></svg></span>Voice agent-assist<span class="why">we already ship it, person stays on</span></td>
+          <td class="f lo"><i class="g">·</i>nothing — it already ships</td>
+          <td class="f bad"><i class="g">✗</i>live call, person present</td>
+          <td class="f lo"><i class="g">·</i>already on those accounts</td>
+          <td class="s hi" title="strong"><span class="bars"><i class="f"></i><i class="f"></i><i class="f"></i></span></td>
+          <td class="s md" title="medium"><span class="bars"><i class="f"></i><i class="f"></i><i></i></span></td>
+        </tr>
+        <tr>
+          <td class="k"><span class="oi"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2.5"/><path d="M8 9.5 10 11.5 14 7.5"/><path d="M8 16h8"/></svg></span>QA automation<span class="why">adjacent product, thin revenue line</span></td>
+          <td class="f lo"><i class="g">·</i>nothing — it already ships</td>
+          <td class="f hi"><i class="g">✓</i>offline review</td>
+          <td class="f lo"><i class="g">·</i>same accounts</td>
+          <td class="s hi" title="strong"><span class="bars"><i class="f"></i><i class="f"></i><i class="f"></i></span></td>
+          <td class="s lo" title="weak"><span class="bars"><i class="f"></i><i></i><i></i></span></td>
+        </tr>
+        <tr>
+          <td class="k"><span class="oi"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 6.5v11"/><path d="M15 9.2c0-1.3-1.4-2.2-3-2.2s-3 .9-3 2.2 1.4 2.3 3 2.3 3 1 3 2.3-1.4 2.2-3 2.2-3-.9-3-2.2"/></svg></span>Collections<span class="why">money moves — R4, permanent L1</span></td>
+          <td class="f lo"><i class="g">·</i>nothing — money stays R4 / L1</td>
+          <td class="f md"><i class="g">–</i>async intake, money still moves</td>
+          <td class="f lo"><i class="g">·</i>same base</td>
+          <td class="s lo" title="slow — cure rate only shows after a full cohort"><span class="bars"><i class="f"></i><i></i><i></i></span></td>
+          <td class="s md" title="medium"><span class="bars"><i class="f"></i><i class="f"></i><i></i></span></td>
+        </tr>
+    </table>
+  </div>
+  <p class="note" style="font-size:16.5px"><b>What email still costs us:</b> pricing is our own $1.50 assumption (<a class="xref" data-jump="B12">B12</a>: no public price), and an auditable number takes 90 days to build — where nobody has done it, the blank is also the opportunity. Bars: length = how much, colour = good or bad.</p>
+  <div class="colophon"><span>B20</span></div>
+</section>
+
+<!-- ═══ 07b INTELLIGENCE (v0.3 · review §6.1) ═══
+     Naming: the deck says "intelligence" only — no runtime / design-time split
+     for the audience to learn. "Runtime" stays where it means the platform we
+     borrow (p04, B7), never as the opposite of this page. ═══ -->
+<section class="slide backup">
+  <p class="eyebrow"><span class="n">Backup · B21</span> Intelligence</p>
+  <h2>AI nominates, the evidence argues, humans sign the diff.</h2>
+  <p class="claim" style="margin-bottom:8px">This is the post-launch loop on top of slides 04–06, not a second engine: the deterministic matrix still decides every reply. AI only proposes changes to the same categories and limits, and two humans sign every diff.</p>
+  <div class="chart">
+    <svg viewBox="0 0 1128 176" role="img" style="max-height:none;flex:0 0 auto">
+      <text x="0" y="12" fill="#9BAAB9" font-size="14" font-weight="600" letter-spacing="1.4">A LOOP, NOT A PIPELINE</text>
+
+      <rect x="0" y="22" width="200" height="96" rx="10" fill="#1D2530" stroke="#2E3A46"/>
+      <g stroke="#5FD3BE" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round" transform="translate(83,34)"><path d="M4 8h26v18H4z"/><path d="M4 10l13 10 13-10"/></g>
+      <text x="100" y="94" text-anchor="middle" fill="#EAF0F6" font-size="15" font-weight="600" letter-spacing="1.1">SENSE</text>
+      <text x="100" y="110" text-anchor="middle" fill="#9BAAB9" font-size="12.5">90 days of decisions</text>
+
+      <rect x="228" y="22" width="200" height="96" rx="10" fill="#1D2530" stroke="#2E3A46"/>
+      <g stroke="#5FD3BE" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round" transform="translate(311,34)"><path d="M7 4h12l6 6v20H7z"/><path d="M19 4v6h6"/><path d="M13 20h8M17 16v8"/></g>
+      <text x="328" y="94" text-anchor="middle" fill="#EAF0F6" font-size="15" font-weight="600" letter-spacing="1.1">PROPOSE</text>
+      <text x="328" y="110" text-anchor="middle" fill="#9BAAB9" font-size="12.5">nominations + diffs</text>
+
+      <rect x="456" y="22" width="200" height="96" rx="10" fill="#1D2530" stroke="#2E3A46"/>
+      <g stroke="#5FD3BE" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round" transform="translate(539,34)"><path d="M17 6v23M11 29h12M6 12h22"/><path d="M6 12l-4 8h8zM28 12l-4 8h8z"/></g>
+      <text x="556" y="94" text-anchor="middle" fill="#EAF0F6" font-size="15" font-weight="600" letter-spacing="1.1">PROVE</text>
+      <text x="556" y="110" text-anchor="middle" fill="#9BAAB9" font-size="12.5">backtest · dissent cards</text>
+
+      <rect x="684" y="22" width="200" height="96" rx="10" fill="#1D2530" stroke="#2E3A46"/>
+      <g stroke="#5FD3BE" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round" transform="translate(767,34)"><circle cx="17" cy="17" r="13"/><path d="M11 17.5l4.5 4.5L24 13"/></g>
+      <text x="784" y="94" text-anchor="middle" fill="#EAF0F6" font-size="15" font-weight="600" letter-spacing="1.1">GRANT</text>
+      <text x="784" y="110" text-anchor="middle" fill="#9BAAB9" font-size="12.5">two humans sign</text>
+
+      <rect x="912" y="22" width="200" height="96" rx="10" fill="#1D2530" stroke="#2E3A46"/>
+      <g stroke="#5FD3BE" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round" transform="translate(995,34)"><path d="M2 17h7l4-9 5 18 4-9h10"/></g>
+      <text x="1012" y="94" text-anchor="middle" fill="#EAF0F6" font-size="15" font-weight="600" letter-spacing="1.1">WATCH</text>
+      <text x="1012" y="110" text-anchor="middle" fill="#9BAAB9" font-size="12.5">auto-demotion on drift</text>
+
+      <g stroke="#5FD3BE" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M204 70 h14 m-5 -5 l5 5 l-5 5"/>
+        <path d="M432 70 h14 m-5 -5 l5 5 l-5 5"/>
+        <path d="M660 70 h14 m-5 -5 l5 5 l-5 5"/>
+        <path d="M888 70 h14 m-5 -5 l5 5 l-5 5"/>
+      </g>
+
+      <path d="M1012 118 v18 H100 v-18" fill="none" stroke="#F5B544" stroke-width="2" stroke-dasharray="6 4"/>
+      <path d="M100 118 l-5 7 l10 0 z" fill="#F5B544"/>
+      <text x="556" y="156" text-anchor="middle" fill="#F5B544" font-size="13.5">↺ drift, rate limits and rejected nominations feed back into Sense</text>
+    </svg>
+    <!-- six capabilities as icon cells, one key line each: the page carries the
+         loop diagram plus pictures, not a wall of card prose -->
+    <div class="cap6">
+      <div class="cap">
+        <div class="caph">
+          <svg class="ci" viewBox="0 0 34 34" aria-hidden="true"><path d="M3 29h7v-7h7v-7h7v-7h6"/></svg>
+          <span class="ct">Graduation proposer</span>
+        </div>
+        <div class="cd"><i>Builder</i>Nominates the same-evidence blocks — a human signs the diff</div>
+      </div>
+      <div class="cap">
+        <div class="caph">
+          <svg class="ci" viewBox="0 0 34 34" aria-hidden="true"><path d="M3 13q5-6 10 0t10 0"/><path d="M3 23q5-6 10 0t10 0"/></svg>
+          <span class="ct">Wave board</span>
+        </div>
+        <div class="cd"><i>Supervisor</i>One root cause, one wave — including victims who never wrote in</div>
+      </div>
+      <div class="cap">
+        <div class="caph">
+          <svg class="ci" viewBox="0 0 34 34" aria-hidden="true"><rect x="8" y="4" width="18" height="26" rx="3"/><path d="M13 12h8M13 18h8M13 24h5"/></svg>
+          <span class="ct">Policy compiler</span>
+        </div>
+        <div class="cd"><i>Builder</i>A sentence in, a clause-level diff out — backtested over 90 days</div>
+      </div>
+      <div class="cap">
+        <div class="caph">
+          <svg class="ci" viewBox="0 0 34 34" aria-hidden="true"><path d="M17 4l11 4v8c0 7-4.5 11-11 14C10.5 27 6 23 6 16V8z"/></svg>
+          <span class="ct">Pre-empt tag</span>
+        </div>
+        <div class="cd"><i>Agent</i>Flags the mail an event notice could have prevented</div>
+      </div>
+      <div class="cap">
+        <div class="caph">
+          <svg class="ci" viewBox="0 0 34 34" aria-hidden="true"><path d="M2 17s6.5-9 15-9 15 9 15 9-6.5 9-15 9S2 17 2 17z"/><circle cx="17" cy="17" r="4.5"/></svg>
+          <span class="ct">Consequence preview</span>
+        </div>
+        <div class="cd"><i>Agent</i>Will this reply invite the next one?</div>
+      </div>
+      <div class="cap">
+        <div class="caph">
+          <svg class="ci" viewBox="0 0 34 34" aria-hidden="true"><circle cx="15" cy="15" r="9.5"/><path d="M22 22l8 8"/></svg>
+          <span class="ct">Intent discovery</span>
+        </div>
+        <div class="cd"><i>Builder</i>New intents from the pile that always goes unclassified</div>
+      </div>
+    </div>
+    <p class="note" style="padding-right:76px;font-size:15.5px"><b>The gates already exist.</b> Backtest, shadow, dual sign-off and auto-demotion already ship — what was missing was a nominator, and every output is a configuration diff flowing into those same gates.</p>
+  </div>
+  <div class="colophon"><span>B21</span></div>
+</section>
+
+<!-- ═══ B22 · WHY WE WIN (moved from main 09) ═══ -->
+<section class="slide backup">
+  <p class="eyebrow"><span class="n">Backup · B22</span> Why we win</p>
+  <h2>Four groups want this customer. Nobody has the email case.</h2>
+  <div class="chart">
+    <svg viewBox="0 0 1128 364" role="img">
+      <g font-size="14" fill="#9BAAB9">
+        <circle cx="8" cy="10" r="6" fill="#5FD3BE"/><text x="22" y="15">ships</text>
+        <circle cx="92" cy="10" r="6" fill="#F5B544"/><text x="106" y="15">partial</text>
+        <circle cx="188" cy="10" r="6" fill="none" stroke="#4C5C6C" stroke-width="2.5"/><text x="202" y="15">not in public materials</text>
+        <circle cx="372" cy="10" r="7" fill="none" stroke="#5FD3BE" stroke-width="2.5"/><text x="388" y="15" fill="#5FD3BE">designed · prototyped</text>
+      </g>
+
+      <g fill="#9BAAB9" font-size="13.5" font-weight="600" text-anchor="middle" letter-spacing=".6">
+        <text x="460" y="50">EMAIL-NATIVE</text><text x="460" y="68">CASE MODEL</text>
+        <text x="655" y="50">STATUTORY</text><text x="655" y="68">CLOCK ENGINE</text>
+        <text x="850" y="50">CORE-BANKING</text><text x="850" y="68">EXECUTION</text>
+        <text x="1045" y="50">VOICE +</text><text x="1045" y="68">REAL-TIME OPS</text>
+      </g>
+      <line x1="0" y1="82" x2="1128" y2="82" stroke="#2E3A46"/>
+
+      <text class="lgb" x="0" y="108">CCaaS</text>
+      <text class="lgd" x="0" y="128" style="font-size:15px">Talkdesk · NICE · Genesys · Five9 · Amazon Connect</text>
+      <circle cx="460" cy="110" r="11" fill="#F5B544"/>
+      <circle cx="655" cy="110" r="11" fill="none" stroke="#4C5C6C" stroke-width="2.5"/>
+      <circle cx="850" cy="110" r="11" fill="#5FD3BE"/>
+      <circle cx="1045" cy="110" r="11" fill="#5FD3BE"/>
+
+      <text class="lgb" x="0" y="166">CRM + AI agent</text>
+      <text class="lgd" x="0" y="186" style="font-size:15px">Salesforce + Fin · Zendesk · Intercom</text>
+      <circle cx="460" cy="168" r="11" fill="#F5B544"/>
+      <circle cx="655" cy="168" r="11" fill="none" stroke="#4C5C6C" stroke-width="2.5"/>
+      <circle cx="850" cy="168" r="11" fill="none" stroke="#4C5C6C" stroke-width="2.5"/>
+      <circle cx="1045" cy="168" r="11" fill="none" stroke="#4C5C6C" stroke-width="2.5"/>
+
+      <text class="lgb" x="0" y="224">AI startups</text>
+      <text class="lgd" x="0" y="244" style="font-size:15px">Sierra · Decagon · Aide · Lorikeet</text>
+      <circle cx="460" cy="226" r="11" fill="#F5B544"/>
+      <circle cx="655" cy="226" r="11" fill="none" stroke="#4C5C6C" stroke-width="2.5"/>
+      <circle cx="850" cy="226" r="11" fill="#F5B544"/>
+      <circle cx="1045" cy="226" r="11" fill="none" stroke="#4C5C6C" stroke-width="2.5"/>
+
+      <text class="lgb" x="0" y="282">FS specialists</text>
+      <text class="lgd" x="0" y="302" style="font-size:15px">Glia · Eltropy · interface.ai</text>
+      <circle cx="460" cy="284" r="11" fill="#F5B544"/>
+      <circle cx="655" cy="284" r="11" fill="none" stroke="#4C5C6C" stroke-width="2.5"/>
+      <circle cx="850" cy="284" r="11" fill="#F5B544"/>
+      <circle cx="1045" cy="284" r="11" fill="#5FD3BE"/>
+
+      <line x1="0" y1="314" x2="1128" y2="314" stroke="#2E3A46"/>
+      <rect x="0" y="322" width="1128" height="34" rx="8" fill="#1B4A44" stroke="#5FD3BE"/>
+      <text class="lgb" x="20" y="345" fill="#5FD3BE">Email Autopilot on CXA<tspan fill="#9BAAB9" font-weight="400" font-size="17"> — target state</tspan></text>
+      <circle cx="460" cy="339" r="11" fill="none" stroke="#5FD3BE" stroke-width="2.5"/>
+      <circle cx="655" cy="339" r="11" fill="none" stroke="#5FD3BE" stroke-width="2.5"/>
+      <circle cx="850" cy="339" r="11" fill="none" stroke="#5FD3BE" stroke-width="2.5"/>
+      <circle cx="1045" cy="339" r="11" fill="#5FD3BE"/>
+    </svg>
+  </div>
+  <p class="note"><b>Window: 12–18 months.</b> We spend it on what the platform already ships — CXA Operations Center, Agent Builder, Automation Flows, and core-banking connectors since April 2025. Freshworks has shipped autonomous email since 2025-06; nobody has shipped the <i>case</i>.<br><b>Most automate the reply; few propose the rules.</b></p>
+  <div class="colophon"><span>B22</span></div>
+</section>
+
+<!-- ═══ B23 · VALUE (moved from main 10) ═══ -->
+<section class="slide backup">
+  <p class="eyebrow"><span class="n">Backup · B23</span> Value &amp; priority</p>
+  <h2>One bank's email book is a $4.8M cost base.</h2>
+  <p class="claim">600,000 emails a year at $8 each. What we take out depends on how much we can genuinely finish.</p>
+  <div class="chart">
+    <svg viewBox="0 0 1128 300" role="img">
+      <!-- the bank's side -->
+      <text x="0" y="14" fill="#9BAAB9" font-size="14" font-weight="600" letter-spacing="1.4">NET ANNUAL SAVING PER BANK · 600,000 EMAILS AT $8</text>
+      <line x1="70" y1="250" x2="700" y2="250" stroke="#2E3A46"/>
+      <rect x="90" y="145" width="150" height="105" rx="8" fill="#2E3A46"/>
+      <text class="lgx" x="165" y="133" text-anchor="middle" style="font-size:23px">$1.87M</text>
+      <text class="lg" x="165" y="272" text-anchor="middle" style="font-size:16px">20% resolved</text>
+      <text class="lgd" x="165" y="292" text-anchor="middle" style="font-size:14px">39% of cost base</text>
+      <rect x="290" y="100" width="150" height="150" rx="8" fill="#5FD3BE"/>
+      <text class="lgx" x="365" y="88" text-anchor="middle" fill="#5FD3BE" style="font-size:23px">$2.68M</text>
+      <text class="lg" x="365" y="272" text-anchor="middle" fill="#EAF0F6" font-weight="600" style="font-size:16px">35% · base case</text>
+      <text class="lgd" x="365" y="292" text-anchor="middle" style="font-size:14px">56% of cost base · ≈32 FTE</text>
+      <rect x="490" y="71" width="150" height="179" rx="8" fill="#2E3A46"/>
+      <text class="lgx" x="565" y="59" text-anchor="middle" style="font-size:23px">$3.19M</text>
+      <text class="lg" x="565" y="272" text-anchor="middle" style="font-size:16px">50% resolved</text>
+      <text class="lgd" x="565" y="292" text-anchor="middle" style="font-size:14px">66% of cost base</text>
+
+      <!-- the vendor's side, kept separate -->
+      <line x1="716" y1="8" x2="716" y2="292" stroke="#2E3A46"/>
+      <text x="744" y="14" fill="#9BAAB9" font-size="14" font-weight="600" letter-spacing="1.4">WHO GETS WHAT · PER BEACHHEAD BANK</text>
+      <rect x="744" y="28" width="384" height="24" rx="6" fill="#5FD3BE"/>
+      <text x="754" y="45" font-size="14" font-weight="600" fill="#151B22">Bank keeps ≈ $2.68M</text>
+      <rect x="744" y="62" width="29" height="24" rx="4" fill="#F5B544"/>
+      <text x="786" y="79" font-size="14" font-weight="600" fill="#F5B544">Vendor ≈ +$0.21M</text>
+      <text class="lgd" x="744" y="106" style="font-size:14px">Fees ≈ $268k − seats replaced ≈ $63k</text>
+      <text class="lgd" x="744" y="126" style="font-size:14px">= ≈ +$205k, net-new, not cannibalized</text>
+      <line x1="744" y1="144" x2="1128" y2="144" stroke="#2E3A46"/>
+      <text x="744" y="170" fill="#F5B544" font-size="13.5" font-weight="600" letter-spacing="1.3">× 262 BEACHHEAD BANKS</text>
+      <text class="lgx" x="744" y="206" fill="#F5B544" style="font-size:30px">≈ $54M</text>
+      <text class="lgd" x="744" y="232" style="font-size:14px">Vendor-side opportunity at full adoption</text>
+      <text class="lgd" x="744" y="252" style="font-size:14px" fill="#F5B544">262 × $205k — penetration not assumed</text>
+      <text class="lgd" x="744" y="276" style="font-size:13px">$1.50 per resolution is our price (<tspan class="xref" data-jump="B11">B11</tspan>), not a list price</text>
+    </svg>
+  </div>
+  <p class="note"><b>Net-new, not cannibalized.</b> Async mail is the safest autonomy proving ground, and 90 days of history is a ready-made eval set: the bank keeps the saving, the vendor's fee sits on top of it.</p>
+  <p class="note" style="font-size:15.5px"><b>Three levers move together</b> across the three cases — failed demand, autonomy, copilot uplift. 35% is measured against email net of failed demand; against all valid inbound it reads ≈30% — both published, both in <a class="xref" data-jump="B2">B2</a>. Inputs come from the customer's own mail: mix and baselines in week one, pricing in four weeks.</p>
+  <div class="colophon"><span>B23</span></div>
+</section>
+
+<!-- ═══ B24 · METRICS (moved from main 11) ═══ -->
+<section class="slide backup">
+  <p class="eyebrow"><span class="n">Backup · B24</span> How we would know</p>
+  <h2>Three numbers. One pilot.</h2>
+  <div class="chart">
+    <svg viewBox="0 0 1128 388" role="img">
+      <!-- ── VARR: the target as a band on a 0–100% track ── -->
+      <rect class="card" x="0" y="0" width="362" height="212" rx="10"/>
+      <text class="lgx" x="24" y="42">VARR</text>
+      <text class="lg" x="24" y="68">Verified autonomous resolution rate</text>
+      <text class="lgd" x="24" y="96">No human touch · no reopen in 14 days</text>
+      <text class="lgd" x="24" y="118">Survives QA sampling</text>
+      <text x="24" y="154" fill="#5FD3BE" font-size="18" font-weight="600">25–35% by six months</text>
+      <rect x="24" y="166" width="314" height="14" rx="7" fill="#232D38"/>
+      <rect x="102" y="166" width="32" height="14" rx="7" fill="#5FD3BE"/>
+      <text class="lgd" x="24" y="198" style="font-size:12.5px">0</text>
+      <text x="118" y="198" text-anchor="middle" fill="#5FD3BE" font-size="12.5" font-weight="600">target band</text>
+      <text class="lgd" x="338" y="198" text-anchor="end" style="font-size:12.5px">100%</text>
+
+      <!-- ── Median TTR: the target is the sliver at the far left ── -->
+      <rect class="card" x="383" y="0" width="362" height="212" rx="10"/>
+      <text class="lgx" x="407" y="42">Median TTR</text>
+      <text class="lg" x="407" y="68">Time to resolution, not to first reply</text>
+      <text class="lgd" x="407" y="94" style="font-size:16px">Measured from the arrival timestamp</text>
+      <text class="lgd" x="407" y="116" style="font-size:16px">Baseline today: 3.2 days <tspan fill="#F5B544" style="font-weight:600">(assumption)</tspan></text>
+      <rect x="407" y="126" width="314" height="16" rx="4" fill="#3A3320" stroke="#F5B544"/>
+      <rect x="407" y="126" width="5" height="16" rx="2" fill="#5FD3BE"/>
+      <path d="M404 147 l14 0 l-7 9 z" fill="#5FD3BE"/>
+      <text x="407" y="182" fill="#5FD3BE" font-size="16" font-weight="600">&lt; 15 min autonomous</text>
+      <text class="lgd" x="721" y="182" text-anchor="end" style="font-size:14px">baseline 3.2 days</text>
+      <text x="407" y="204" fill="#5FD3BE" font-size="16" font-weight="600">&lt; 1 day, disputes excepted</text>
+
+      <!-- ── Trust: the three gates that a veto checks ── -->
+      <rect class="card" x="766" y="0" width="362" height="212" rx="10"/>
+      <text x="790" y="42" fill="#F2786E" font-size="28" font-weight="600">Trust</text>
+      <text class="lg" x="790" y="68">Veto — one critical error voids VARR</text>
+      <text class="lgd" x="790" y="94" style="font-size:16px">Key error = wrong action, wrong party,</text>
+      <text class="lgd" x="790" y="116" style="font-size:16px">missed clock or broken promise</text>
+      <rect x="790" y="128" width="314" height="52" rx="8" fill="#1B4A44" stroke="#5FD3BE"/>
+      <text x="947" y="150" text-anchor="middle" fill="#5FD3BE" font-size="14.5" font-weight="600">✓ 0 key errors  ✓ clocks 100%</text>
+      <text x="947" y="171" text-anchor="middle" fill="#5FD3BE" font-size="14.5" font-weight="600">✓ recall ≥99.5%</text>
+      <text x="790" y="204" fill="#F2786E" font-size="18" font-weight="600">Non-negotiable</text>
+
+      <!-- ── 59-day pilot: weeks to scale, one gate ── -->
+      <text class="lgb" x="0" y="256">59-day pilot</text>
+      <rect x="0" y="272" width="153" height="52" rx="8" fill="#232D38" stroke="#2E3A46"/>
+      <text class="lg" x="76" y="296" text-anchor="middle">Backtest</text>
+      <text class="lgd" x="76" y="315" text-anchor="middle" style="font-size:13px">W1–W2</text>
+      <rect x="171" y="272" width="153" height="52" rx="8" fill="#232D38" stroke="#2E3A46"/>
+      <text class="lg" x="247" y="296" text-anchor="middle">Shadow</text>
+      <text class="lgd" x="247" y="315" text-anchor="middle" style="font-size:13px">W3–W4</text>
+      <rect x="343" y="272" width="307" height="52" rx="8" fill="#3A3320" stroke="#F5B544"/>
+      <text x="496" y="296" text-anchor="middle" fill="#F5B544" font-size="18">L2 · one-click approval</text>
+      <text class="lgd" x="496" y="315" text-anchor="middle" style="font-size:13px">W5–W8 · observe</text>
+      <rect x="668" y="272" width="460" height="52" rx="8" fill="#1B4A44" stroke="#5FD3BE"/>
+      <text x="898" y="296" text-anchor="middle" fill="#5FD3BE" font-size="18">L3 · first graduations</text>
+      <text class="lgd" x="898" y="315" text-anchor="middle" style="font-size:13px">rollout W9–W14</text>
+      <path d="M659 262 v74" stroke="#F5B544" stroke-width="1.5" stroke-dasharray="5 4" fill="none"/>
+      <text x="659" y="256" text-anchor="middle" fill="#F5B544" font-size="12.5" font-weight="700" letter-spacing="1.2">DAY-59 GATE</text>
+
+      <!-- ── week axis ── -->
+      <path d="M0 334 H1128" stroke="#2E3A46" stroke-width="1" fill="none"/>
+      <path d="M171 334 v7 M343 334 v7 M668 334 v7" stroke="#2E3A46" stroke-width="1" fill="none"/>
+      <text class="lgd" x="4" y="354" style="font-size:12.5px">W1</text>
+      <text class="lgd" x="175" y="354" style="font-size:12.5px">W3</text>
+      <text class="lgd" x="347" y="354" style="font-size:12.5px">W5</text>
+      <text class="lgd" x="672" y="354" style="font-size:12.5px">W9</text>
+      <text class="lgd" x="1128" y="354" text-anchor="end" style="font-size:12.5px">W14 end</text>
+      <text class="lgd" x="0" y="380">Twelve guardrails run alongside — Backup <tspan class="xref" data-jump="B6">B6</tspan>. The 35% ROI base case is the top of this band, at steady state (<tspan class="xref" data-jump="B2">B2</tspan>).</text>
+    </svg>
+  </div>
+  <div class="colophon"><span>B24</span></div>
+</section>
+
+<!-- ═══ B25 · RISK (moved from main 12) ═══ -->
+<section class="slide backup">
+  <p class="eyebrow"><span class="n">Backup · B25</span> Risk</p>
+  <h2>The risks that would end this product.</h2>
+  <div class="chart">
+    <div class="risks">
+      <div class="risk">
+        <div class="idx"><span class="d"></span>RISK 01</div>
+        <div class="h">Missing a regulated intent</div>
+        <div class="w">Half a sentence is a running clock.</div>
+        <div class="viz">
+          <span class="ring" aria-hidden="true"></span>
+          <div class="vcap"><b>136 violations</b>74% sat in error resolution (2025)</div>
+        </div>
+        <div class="div"></div>
+        <div class="k">What we built</div>
+        <ul>
+          <li>High-recall detection at ingest, <b>before an agent opens the mail</b></li>
+          <li><b>False positives preferred</b> — recall ≥99.5% gates all autonomy</li>
+          <li>No samples in 90 days means <b>no L3</b></li>
+        </ul>
+      </div>
+      <div class="risk">
+        <div class="idx"><span class="d"></span>RISK 02</div>
+        <div class="h">The email attack surface</div>
+        <div class="w">BEC, ATO and attachment injection — under ATO every normal identity signal still passes.</div>
+        <div class="viz col">
+          <div class="frow"><i class="bad">BEC</i><i class="bad">ATO</i><i class="bad">attachment injection</i></div>
+          <div class="frow"><span class="ok">quarantined as data</span><b>⊘</b><span class="off">R3 has no tool</span></div>
+        </div>
+        <div class="div"></div>
+        <div class="k">What we built</div>
+        <ul>
+          <li>Injected text is quarantined <b>as data, never as instruction</b></li>
+          <li>R3 combinations have <b>no callable function</b> on this channel</li>
+          <li>Confirmation goes only to <b>on-file contacts</b></li>
+        </ul>
+      </div>
+      <div class="risk">
+        <div class="idx"><span class="d"></span>RISK 03</div>
+        <div class="h">Numeric hallucination</div>
+        <div class="w">An invented fee or date is a Reg E and UDAAP violation; one wrong write can be unrecoverable.</div>
+        <div class="viz col">
+          <div class="gate">
+            <div class="gr"><em class="yes">✓</em><span>number from a system slot → sent</span></div>
+            <div class="gr"><em class="no">✕</em><span>model-written number → locked template</span></div>
+            <div class="gr"><em class="sig">✎</em><span>money stays R4 · L1 human-signed</span></div>
+          </div>
+        </div>
+        <div class="div"></div>
+        <div class="k">What we built</div>
+        <ul>
+          <li><b>Numbers only from system slots</b> — never written by the model</li>
+          <li>Failed claim check → <b>the locked template</b></li>
+          <li>Money stays R4: <b>L1 human-signed</b></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <p class="note"><b>Also on the register:</b> tipping-off vs duty to speak (31 CFR 1020.320(e)) · over-disclosure to an unverified sender (GLBA) · third-party risk review · vulnerable-customer fairness · the LLM-as-judge flipping verdicts in evaluation (14%) · sign-off fatigue — L2 approvals and AI nominations both drift toward rubber-stamping (watch the approve-without-edit rate, sample the approved files) · a step-up link that collides with “never click a link in an email” training. Full list — seventeen risks — in Backup <a class="xref" data-jump="B11">B11</a>.</p>
+  <div class="colophon"><span>B25</span></div>
+</section>
+
+<!-- ═══ B26 · ROADMAP (moved from main 13) ═══ -->
+<section class="slide backup">
+  <p class="eyebrow"><span class="n">Backup · B26</span> Roadmap</p>
+  <h2>One governance layer, three waves.</h2>
+  <div class="chart">
+    <svg viewBox="0 0 1128 384" role="img" style="max-height:none;flex:0 0 auto">
+      <text x="0" y="14" fill="#9BAAB9" font-size="16" font-weight="600" letter-spacing="1.5">ROADMAP — SAME ENGINE, WIDER SURFACE</text>
+
+      <!-- now -->
+      <g>
+        <rect x="0" y="30" width="340" height="256" rx="12" fill="#1D2530" stroke="#5FD3BE"/>
+        <g stroke="#5FD3BE" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round" transform="translate(18,44)">
+          <rect x="0" y="0" width="44" height="30" rx="4"/>
+          <path d="M2.5 3.5 L22 18.5 L41.5 3.5"/>
+        </g>
+        <text x="18" y="100" fill="#5FD3BE" font-size="15" font-weight="600" letter-spacing="1.6">NOW · WAVE 1</text>
+        <line x1="18" y1="110" x2="322" y2="110" stroke="#2E3A46"/>
+        <text x="18" y="148" fill="#EAF0F6" font-size="30" font-weight="600">Email</text>
+        <text x="18" y="174" fill="#C0CBD6" font-size="17.5">Mid-size US banks and credit unions</text>
+        <text x="18" y="194" fill="#9BAAB9" font-size="16.5">Reg E disputes · refunds · servicing</text>
+        <text x="18" y="210" fill="#5FD3BE" font-size="15.5" font-weight="600">Test set: 90 days of their own mail</text>
+        <!-- the intelligence half of this wave, on the same card -->
+        <rect x="18" y="218" width="304" height="60" rx="8" fill="#17322E" stroke="#2E3A46"/>
+        <text x="32" y="234" fill="#5FD3BE" font-size="12.5" font-weight="600" letter-spacing="1.3">INTELLIGENCE</text>
+        <text x="32" y="253" fill="#C0CBD6" font-size="13.5">R0/R1 nominations · pre-empt tag</text>
+        <text x="32" y="269" fill="#C0CBD6" font-size="13.5">consequence preview</text>
+      </g>
+      <path d="M358 116 L376 125 L358 134" fill="none" stroke="#4A5A6B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+      <!-- next -->
+      <g>
+        <rect x="394" y="30" width="340" height="256" rx="12" fill="#1D2530" stroke="#F5B544"/>
+        <g stroke="#F5B544" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round" transform="translate(412,44)">
+          <path d="M22 1 L42 10 L22 19 L2 10 Z"/>
+          <path d="M2 16 L22 25 L42 16"/>
+          <path d="M2 23 L22 32 L42 23"/>
+        </g>
+        <text x="412" y="100" fill="#F5B544" font-size="15" font-weight="600" letter-spacing="1.6">NEXT · WAVE 2</text>
+        <line x1="412" y1="110" x2="716" y2="110" stroke="#2E3A46"/>
+        <text x="412" y="148" fill="#EAF0F6" font-size="30" font-weight="600">More intents</text>
+        <text x="412" y="174" fill="#C0CBD6" font-size="17.5">Payments, payoff, Reg Z, Spanish</text>
+        <text x="412" y="194" fill="#9BAAB9" font-size="16.5">UDAAP wording review for complaints</text>
+        <text x="412" y="210" fill="#F5B544" font-size="15.5" font-weight="600">Same policy pack, second wave</text>
+        <rect x="412" y="218" width="304" height="60" rx="8" fill="#3A3320" stroke="#2E3A46"/>
+        <text x="426" y="234" fill="#F5B544" font-size="12.5" font-weight="600" letter-spacing="1.3">INTELLIGENCE</text>
+        <text x="426" y="253" fill="#C0CBD6" font-size="13.5">R2 nominations · wave board</text>
+        <text x="426" y="269" fill="#C0CBD6" font-size="13.5">policy compiler</text>
+      </g>
+      <path d="M752 116 L770 125 L752 134" fill="none" stroke="#4A5A6B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+      <!-- later -->
+      <g>
+        <rect x="788" y="30" width="340" height="256" rx="12" fill="#17322E" stroke="#5FD3BE" stroke-width="1.5"/>
+        <g stroke="#5FD3BE" stroke-width="3" stroke-linecap="round" transform="translate(806,46)">
+          <path d="M5 9 V26"/>
+          <path d="M15 3 V32"/>
+          <path d="M25 12 V23"/>
+          <path d="M35 6 V29"/>
+          <path d="M45 14 V21"/>
+        </g>
+        <text x="806" y="100" fill="#5FD3BE" font-size="15" font-weight="600" letter-spacing="1.6">LATER</text>
+        <line x1="806" y1="110" x2="1110" y2="110" stroke="#2E3A46"/>
+        <text x="806" y="148" fill="#EAF0F6" font-size="30" font-weight="600">Voice + Chat</text>
+        <text x="806" y="174" fill="#C0CBD6" font-size="17.5">AI agents built in Agent Builder</text>
+        <text x="806" y="194" fill="#9BAAB9" font-size="16.5">Then the rest of financial services</text>
+        <text x="806" y="210" fill="#5FD3BE" font-size="15.5" font-weight="600">The Voice / Builder strategy</text>
+        <rect x="806" y="218" width="304" height="60" rx="8" fill="#14291F" stroke="#2E3A46"/>
+        <text x="820" y="234" fill="#5FD3BE" font-size="12.5" font-weight="600" letter-spacing="1.3">INTELLIGENCE</text>
+        <text x="820" y="253" fill="#C0CBD6" font-size="13.5">batch remediation · intent discovery</text>
+        <text x="820" y="269" fill="#C0CBD6" font-size="13.5">regulatory radar</text>
+      </g>
+
+      <!-- all three sit on the same layer -->
+      <g stroke="#3A4756" stroke-width="2">
+        <line x1="170" y1="286" x2="170" y2="310"/>
+        <line x1="564" y1="286" x2="564" y2="310"/>
+        <line x1="958" y1="286" x2="958" y2="310"/>
+      </g>
+      <g fill="#3A4756">
+        <path d="M164 308 L170 318 L176 308 Z"/>
+        <path d="M558 308 L564 318 L570 308 Z"/>
+        <path d="M952 308 L958 318 L964 308 Z"/>
+      </g>
+
+      <rect x="0" y="324" width="1128" height="56" rx="12" fill="#1B4A44" stroke="#5FD3BE"/>
+      <g stroke="#5FD3BE" stroke-width="2.4" fill="none" stroke-linecap="round" transform="translate(22,332)">
+        <circle cx="20" cy="20" r="7.5"/>
+        <path d="M20 3 v5 M20 32 v5 M3 20 h5 M32 20 h5 M8.1 8.1 l3.5 3.5 M28.4 28.4 l3.6 3.6 M31.9 8.1 l-3.5 3.5 M11.6 28.4 l-3.6 3.6"/>
+      </g>
+      <g stroke="#5FD3BE" stroke-width="2.4" fill="none" stroke-linecap="round" transform="translate(1058,332)">
+        <circle cx="20" cy="20" r="17"/>
+        <path d="M20 9.5 V21 l8.5 5.5"/>
+      </g>
+      <text x="80" y="348" fill="#5FD3BE" font-size="19.5" font-weight="600">One policy engine (R × I → L) + one clock engine — written once by the bank</text>
+      <text x="80" y="370" fill="#C0CBD6" font-size="17">Applied to every channel: email ships first, then the Voice and Chat AI agents built in Agent Builder.</text>
+    </svg>
+  </div>
+  <div class="layerbar">
+    <div class="lrow add"><span class="tag">New · we add</span><span class="items">A bank-written limit matrix (R × I → L) · a clock that turns a promise into a deadline · in-thread step-up · dispute intake · email defense</span></div>
+    <div class="lrow"><span class="tag">Already ships</span><span class="items">Autopilot (LLM) · Automation Flows · Agent Builder · CXA Ops Center · FS core connectors</span></div>
+    <p class="note"><b>The new part is the layer, not the channel</b> — a thin vertical layer, no new platform or runtime. Full stack: <b><a class="xref" data-jump="B16">B16</a></b> · the day-0 ask, item by item: <b><a class="xref" data-jump="B19">B19</a></b>.</p>
+  </div>
+  <div class="colophon"><span>B26</span></div>
+</section>
+
+<!-- ═══ B27 · SAYS-DOES-TO WHOM (restored from main 06) ═══ -->
+<section class="slide backup">
+  <p class="eyebrow"><span class="n">Backup · B27</span> Says · does · to whom</p>
+  <h2>What governs every reply.</h2>
+  <p class="claim">Three questions the matrix answers per email — They-lines describe public materials as of 2026-09.</p>
+  <div class="chart">
+    <div class="cap6">
+      <div class="cap">
+        <div class="caph"><span class="ct">SAYS</span></div>
+        <div class="cd"><i>They</i>One generator, three modes, per topic</div>
+        <div class="cd"><i>We</i>Three sources assembled per email</div>
+      </div>
+      <div class="cap">
+        <div class="caph"><span class="ct">DOES</span></div>
+        <div class="cd"><i>They</i>Not governed in public materials</div>
+        <div class="cd"><i>We</i>R0–R4 action risk — may it act at all?</div>
+      </div>
+      <div class="cap">
+        <div class="caph"><span class="ct">TO WHOM</span></div>
+        <div class="cd"><i>They</i>Not governed in public materials</div>
+        <div class="cd"><i>We</i>I0–I3 identity — what may be disclosed</div>
+      </div>
+    </div>
+    <p class="note"><b>Reads with the matrix on 06:</b> R answers DOES, I answers TO WHOM, SAYS is answered by template + system slots, never by the model alone.</p>
+  </div>
+  <div class="colophon"><span>B27</span></div>
 </section>
 
 </div>

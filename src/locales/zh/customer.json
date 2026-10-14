@@ -292,7 +292,9 @@
     "neverSub": "工具层无此能力",
     "capLabel": "L 轴 · 毕业封顶",
     "capNone": "未毕业 · 最高 L1",
-    "capSome": "已毕业 · 最高 {{level}}"
+    "capSome": "已毕业 · 最高 {{level}}",
+    "capFixed": "固定 · 最高 {{level}}",
+    "awaitingApproval": "等待审批"
   },
   "cell": {
     "deny": "不放权",
