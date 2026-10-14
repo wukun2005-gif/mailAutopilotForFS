@@ -266,7 +266,7 @@ table.rvlog td:first-child{white-space:nowrap;font-weight:700;color:#5b21b6}
 <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
 <tr><th>维度</th><th>结论</th></tr>
 <tr><td><b>问题</b></td><td>银行/信用联社的公共客服邮箱是最慢、最贵、时效最差、自动化最低的渠道；美国银行对未认证邮件的标准回复是"出于安全请致电"，一次联系变两次；更严重的是，Reg E 规定争议通知<b>邮件到达即起法定时钟</b>，积压邮件本身就是合规负债（FDIC 2025 年 Reg E 违规 136 项，74% 集中在错误处理环节）。</td></tr>
-<tr><td><b>方案一句话</b></td><td>邮件线程即案件（case）；Autopilot 在 L0–L3 放权矩阵内办案，Automation Flows 持有跨天案件状态与法定时钟；不可逆动作锁死或永远留人。</td></tr>
+<tr><td><b>方案一句话</b></td><td>邮件线程即案件（case）；Autopilot 在 L1–L3 放权矩阵内办案，Automation Flows 持有跨天案件状态与法定时钟；不可逆动作锁死或永远留人。</td></tr>
 <tr><td><b>首发滩头</b></td><td>美国中型银行与信用联社（资产约 $5B–150B）的公共邮箱 + 网银 secure message；先做存量语音客户的邮件加购，再以 overlay 方式进入非本平台客户。</td></tr>
 <tr><td><b>差异化钉子</b></td><td>① 受监管意图进件即识别、即起钟；② 按身份保障等级放权 + 同线程 step-up；③ 争议受理侧整包（立案/起钟/回执/催材料，裁决永不自动）；④ 邮件攻击面纵深防御（R3 动作组合在工具层不可达）；<span class="rvrow">⑤ 设计时提规矩（v0.3）：AI 提名放权与政策 diff、证据答辩、产品 + 合规双签——<b>人签 diff，不签每封信</b>；收紧可即时、放宽必走流程（§6.6 / FR-12.1–12.7，属第 2 波）<span class="rv add" title="v0.3 新增差异化钉子：运行时守规矩，设计时提规矩">v0.3 新增</span></span>。</td></tr>
 <tr><td><b>第 1 波范围</b></td><td>general inquiries、transactions（含阈值内费用退还）、account servicing 的读与低影响写、disputes 受理侧；30–45 天 pilot 可验证。</td></tr>
@@ -282,9 +282,9 @@ table.rvlog td:first-child{white-space:nowrap;font-weight:700;color:#5b21b6}
 <div class="table-wrap"><table class="fixed rvlog">
 <colgroup><col style="width:5%"><col style="width:11%"><col style="width:13%"><col style="width:45%"><col style="width:26%"></colgroup>
 <thead><tr><th>#</th><th>类型</th><th>位置</th><th>改动</th><th>理由 / 依据</th></tr></thead><tbody>
-<tr><td>1</td><td>一致性</td><td><a href="#model">§6.2</a><br><a href="#model">§6.1 ⑦</a><br><a href="#fr-3-2">FR-3.2</a><br><a href="#scope">§5.1</a><br><a href="#release">§11.3</a></td><td>L0–L3 与调研报告统一：L1 AI 起草、人发送；L2 AI 提案、人一键批；L3 条件达标后自动执行 + 事后抽检。FR-3.2 策略门分支、§5.1 退费行、§11.3 Phase 1b 同步改口径</td><td>v0.1 在不同章节里 L2 一会儿是“自主执行”，一会儿是“人工审批”，VARR 口径、审批队列和毕业门槛都会跟着错</td></tr>
+<tr><td>1</td><td>一致性</td><td><a href="#model">§6.2</a><br><a href="#model">§6.1 ⑦</a><br><a href="#fr-3-2">FR-3.2</a><br><a href="#scope">§5.1</a><br><a href="#release">§11.3</a></td><td>L1–L3 与调研报告统一：L1 AI 起草、人发送；L2 AI 提案、人一键批；L3 条件达标后自动执行 + 事后抽检。FR-3.2 策略门分支、§5.1 退费行、§11.3 Phase 1b 同步改口径</td><td>v0.1 在不同章节里 L2 一会儿是“自主执行”，一会儿是“人工审批”，VARR 口径、审批队列和毕业门槛都会跟着错</td></tr>
 <tr><td>2</td><td>纠错·逻辑</td><td><a href="#model">§6.1 ③</a><br><a href="#model">§6.2 I 级表</a></td><td>I2 从“满足任一信号”改为“全部满足”：在档地址 + SPF/DKIM/DMARC 无失败 + 无欺诈/ATO 信号 + 30 天内无联系方式变更（假设）。线程历史和知识问答只作加分；线程中途换地址降为 I1；“在档地址但 DMARC 失败”归入 I0</td><td>按 OR 逻辑，攻击者拿下客户邮箱（ATO）就能直接得到 I2，而这正是 FS 邮件渠道最主要的攻击路径</td></tr>
-<tr><td>3</td><td>纠错·逻辑</td><td><a href="#model">§6.2 权限矩阵</a></td><td>R0 限定为不含账户数据的公开信息。R1：I0/I1 不披露、引导 step-up（I0 且有欺诈信号 → L0），I2 只放行低敏字段。R2：I0 也建内部 case、不延后起钟；I1 只做受理 + 起钟 + 通用回执、不写账；12 个月内第二次退费转人工。R4 收窄为争议裁决 / 授信拒赔 / SAR / 法律意见，临时贷记移出 R4</td><td>临时贷记是法定时限内必须完成的执行动作，不是裁决，放在 R4 会让它全部排队等人工。通知是否有效只看能否识别客户姓名和账户（1005.11(b)(1)(ii)），与核验等级无关，所以 I0 的来件也必须起钟</td></tr>
+<tr><td>3</td><td>纠错·逻辑</td><td><a href="#model">§6.2 权限矩阵</a></td><td>R0 限定为不含账户数据的公开信息。R1：I0/I1 不披露、引导 step-up（I0 且有欺诈信号 → L1），I2 只放行低敏字段。R2：I0 也建内部 case、不延后起钟；I1 只做受理 + 起钟 + 通用回执、不写账；12 个月内第二次退费转人工。R4 收窄为争议裁决 / 授信拒赔 / SAR / 法律意见，临时贷记移出 R4</td><td>临时贷记是法定时限内必须完成的执行动作，不是裁决，放在 R4 会让它全部排队等人工。通知是否有效只看能否识别客户姓名和账户（1005.11(b)(1)(ii)），与核验等级无关，所以 I0 的来件也必须起钟</td></tr>
 <tr><td>4</td><td>纠错·法规</td><td><a href="#fr-4-2">FR-4.2</a><br><a href="#model">§6.4 ②</a><br><a href="#metrics">§4.2</a><br><a href="#risks">§12.3</a><br><a href="#glossary">术语表</a></td><td>Reg E 时限改为：10 个工作日内完成调查，否则在 10 个工作日内临时贷记（新账户 20 个工作日，(c)(3)(i)）；调查最长 45 天，新账户 / POS / 境外交易 90 天（(c)(3)(ii)）。删除“等客户材料时暂停时钟”及对应配置项；§12.3 原“是否暂停”问题标为已解决，换成“是否启用 20 BD / 90 天分支”</td><td>官方解释 11(b)(1)-2：可以索取签字声明，但不能因等资料推迟调查。11(c)-2：不能等口头通知的书面确认。邮件本身就是书面通知，法规里没有可以合法暂停的点</td></tr>
 <tr><td>5</td><td>纠错·法规</td><td><a href="#flows">§8.2</a></td><td>第 2 步：补发新卡在 I2 可走 L3（需已毕业，且不含改地址），措辞改为调查期口径；第 3 步：签字声明改为可选</td><td>同第 4 项：签字声明不能成为受理或调查的前提</td></tr>
 <tr><td>6</td><td>纠错·法规</td><td><a href="#fr-5-1">FR-5.1</a></td><td>AC2 的“法定要素”改为“必备要素”；“需补充材料”改为“可选补充材料，并注明不影响调查启动”；注明 Reg E 没有法定回执义务，Reg Z 1026.13 的 30 天书面回执另建模板</td><td>原写法和 §8.2 的注释矛盾，而且“需补充材料”容易被客户和审计读成受理前提</td></tr>
@@ -302,7 +302,7 @@ table.rvlog td:first-child{white-space:nowrap;font-weight:700;color:#5b21b6}
 <tr><td>18</td><td>补强新增</td><td><a href="#metrics">§4.2</a><br><a href="#nfr">§9</a><br><a href="#risks">§12.1</a></td><td>新增护栏：受监管检测延迟 P99 ≤ 15 分钟；“请致电”结尾率（基线 22%）。NFR 新增单位经济：单个自主结案成本 ≤ 按结果计费单价的 20%（$1.5/件时 ≤ $0.30，假设）。新增风险：step-up 被客户当成钓鱼（完成率 < 40% 触发复盘）</td><td>补上 v0.1 缺失的时延、体验和成本三类护栏</td></tr>
 <tr><td>19</td><td>核实·补注</td><td><a href="#risks">§12.1</a><br><a href="#release">§11.2</a><br><a href="#risks">§12.3</a><br><a href="#model">§6.2 I2</a><br><a href="#fr-2-1">FR-2.1</a><br><a href="#fr-2-2">FR-2.2</a></td><td>2026-09-28 逐项外部核实结果写入正文：1) NCUA 信用联社家数 4,250 → 4,214（2026Q2 季报），合计 8,481 → 8,445；2) 同资产段（$5B–150B）信用联社家数注明 NCUA 自 2025Q4 季报停发资产分段家数，记下最后可用分段（$1B–$10B 433 家、2025Q2；&gt;$10B 20 家、2024 数据）与实查路径（NCUA Custom Data Query）；3) §12.3 的 20 个工作日 / 90 天延长分支条件对照 eCFR 12 CFR 1005.11(c)(3) 原文逐款核实一致，待决的只剩“行内是否启用”；4) 30 天联系方式变更窗口补公开参照 16 CFR 681.2(c)（地址变更验证窗），OTP 10 分钟补 NIST SP 800-63B 参照（非邮寄确认码最长 10 分钟），两项仍标假设；5) 48 小时一次性链接、每线程 24 小时 ≤ 3 封、单件成本 ≤ $0.30、标注约 60 小时四项经外部检索无行业标准或公开基准可依，维持假设</td><td>本轮为“核实 PRD 内未核实信息”，不是文档自检；依据 eCFR 1005.11、eCFR 681.2、NCUA 2025Q2/2025Q4/2026Q1/2026Q2 季报、NIST SP 800-63B、Arnold Ventures 2025 报告</td></tr>
 <tr><td>20</td><td>补强新增</td><td><a href="#model">§6.1b</a><br><a href="#model">§6.3</a></td><td>§6.1 九步流程后新增“6.1b 六个要点在这 9 步上的落点”：表 A 按 9 步列每步谁在干活、哪条要点落在这一格；表 B 按 D1–D6 列主战场、步骤链、AI 参与度与 PRD 落点（章节 / FR）。D1–D5 为差异点，D6（案件运行时）标为共同底座、非差异点，落在平台既有 Automation Flows。§6.3 开头补“毕业（graduation）”的定义</td><td>让“每一步谁在干活、每条要点落在哪一步”可直接查；正文反复使用“毕业”但从未定义过这个词</td></tr>
-<tr><td>21</td><td>补强新增</td><td><a href="#model">§6.2 图例</a></td><td>重写矩阵格值图例：说明 L0–L3 量的是“把多少裁量权交给 AI、人卡在哪一步”而非“是否自动”；写明“不放权”类格子（R1×I0/I1、R2×I0/I1）系统全自动、但无裁量权交给 AI 故不套 L 阶梯，若标 L3 会违反单调性（R1×I0 风险高于 R1×I2/I3 反拿高级别）与毕业语义（硬约束、毕业不改变）；补图例类名与格内措辞的对应（“不放权”=“不披露”/“通用回执”/“锁定模板回执”）；点明 R1×I0 格内“欺诈复核（L0）”是该类来件去向、不是格值</td><td>审阅反馈：只声明“有两类非 L 取值”不解释原因，任何读者都会追问“系统全自动的格子为什么不给自治级别、矩阵是否无法自圆其说”</td></tr>
+<tr><td>21</td><td>补强新增</td><td><a href="#model">§6.2 图例</a></td><td>重写矩阵格值图例：说明 L1–L3 量的是“把多少裁量权交给 AI、人卡在哪一步”而非“是否自动”；写明“不放权”类格子（R1×I0/I1、R2×I0/I1）系统全自动、但无裁量权交给 AI 故不套 L 阶梯，若标 L3 会违反单调性（R1×I0 风险高于 R1×I2/I3 反拿高级别）与毕业语义（硬约束、毕业不改变）；补图例类名与格内措辞的对应（“不放权”=“不披露”/“通用回执”/“锁定模板回执”）；点明 R1×I0 格内“欺诈复核（L1）”是该类来件去向、不是格值</td><td>审阅反馈：只声明“有两类非 L 取值”不解释原因，任何读者都会追问“系统全自动的格子为什么不给自治级别、矩阵是否无法自圆其说”</td></tr>
 <tr class="rvrow"><td>22</td><td>补强新增</td><td><a href="#vision">§2.1</a><br><a href="#metrics">§4.1</a><br><a href="#metrics">§4.3</a><br><a href="#model">§6.1b 表 B D2</a><br><a href="#fr-1-5">FR-1.5</a></td><td>新增 FR-1.5「对客承诺的自动登记与兑现追踪」：AI/模板对客户说出的时限承诺在信件<b>实际发出瞬间</b>登记为承诺时钟（到期 = 发出 + N 个工作日，纯算术），兑现信发出即销账；到期前 48 自然小时预警、逾期自动升级并记风险记录；承诺达成率并入 Trust（§4.1 ③ 与 §4.3 阶段目标，与法定时钟达成并列）。§2.1 定位框补卖点句、§6.1b 表 B D2 行落点同步</td><td>D2（受监管识别/起钟）<b>向对客文案侧的延伸</b>，不进 D6 底座：竞品治理 AI 说什么，我们还保证它说出口的时间一定被追到兑现（与 §2.1 既有定位句同源）。对外承诺不兑现属 UDAAP 欺骗性表述风险（Moffatt v. Air Canada, 2024 BCCRT 149；CFPB 2023-06 Chatbots Issue Spotlight）</td></tr>
 <tr class="rvrow"><td>23</td><td>补强新增</td><td><a href="#personas">§3.1 ③</a><br><a href="#metrics">§4.4</a></td><td>§3.1 主管卡触点补「成功指标面板（VARR / TTR / Trust 与八条护栏数值）」；新增 §4.4「原型呈现口径」：原型主管台把三个主指标与八条护栏<b>全部以数值呈现</b>，数值为虚构画像与试点第 6 周观测的 fixture，目标列 = §4.3 阶段门槛、阈值列 = §4.2 口径，VARR 观测期数值不构成对外承诺</td><td>case doc 给 supervisor 的定义是“day-to-day operations, KPIs, and performance”，只把主管台做成审批/兜底队列会与该定位错位；同时回答“§04 为什么看不到数字”——不是不呈现，而是以 fixture 呈现并注明阶段口径（原型时间线 Day 0 → Day 21 满足不了 VARR 的 14 天回溯窗口）</td></tr>
 <tr><td>24</td><td>新增·主张</td><td><a href="#vision">§2.2</a><br><a href="#model">§6.6</a></td><td>新增设计原则“运行时守规矩，设计时提规矩 / AI 提名，证据答辩，人类授予 / 人签 diff，不签每封信”；新增 §6.6 设计时智能层（Design-time Intelligence）：Sense → Propose → Prove → Grant → Watch 闭环，LLM 不进任何运行时决策路径，全部产物是可回测、可签字、可回滚的配置 diff，流进既有 backtest / shadow / 双签 / 自动降级闸门</td><td>约 150 个 wow idea 评审（见 backlog.html（评审合并档））的核心结论：运行时在 FS 里本就该确定性，WoW 空间在“谁写规则、谁放权、谁发现新 intent、谁看见浪”；也是 L2 橡皮图章风险的结构性解法（每天批 1,000 封信必然橡皮图章，每周签 3 个带证据的 diff 不会）</td></tr>
@@ -385,14 +385,14 @@ table.rvlog td:first-child{white-space:nowrap;font-weight:700;color:#5b21b6}
 <div class="table-wrap"><table class="fixed">
 <colgroup><col style="width:34%"><col style="width:66%"></colgroup>
 <tr><th>明确不做</th><th>原因</th></tr>
-<tr><td>争议裁决、授信/核保、拒赔、投资/保险建议、法律文书应答的自动化</td><td>有后果的判断，永久 L0/L1（AI 只备卷宗与草稿，人下结论、人签发）。</td></tr>
+<tr><td>争议裁决、授信/核保、拒赔、投资/保险建议、法律文书应答的自动化</td><td>有后果的判断，永久 L1（AI 只备卷宗与草稿，人下结论、人签发）。</td></tr>
 <tr><td>R3 高影响写操作在邮件渠道自主执行（改联系方式/地址、补卡寄新地址、向第三方付款、改收款账户、POA身份关系变更）</td><td>ATO/BEC 高危组合；邮件渠道工具白名单中不提供这些函数，只能 step-up 到已认证渠道由客户本人操作，或转办人工。</td></tr>
 <tr><td>另造一个 agent runtime / 案件状态引擎</td><td>持久性、定时器、幂等、人机断点落在已有 Automation Flows 上；本产品只定义 Autopilot × Flows 的案件状态契约。</td></tr>
 <tr><td>大行（Chase/Citi 级）私有化交付、财富管理/券商场景</td><td>大行倾向自建与私有化；券商触发 FINRA 17a-4 等极严留存义务，首发不进入。</td></tr>
 <tr><td>横向（全行业）邮件 autopilot</td><td>Fin/Zendesk/Freshworks 按结果定价的红海；FS 做硬后再降维复制。</td></tr>
 <tr><td>个人邮箱效率工具 / 类 Copilot in Outlook 形态</td><td>工作单元、权限模型、治理方式完全不同（见 §6.1）。</td></tr>
 <tr><td>把 conformal prediction 证书作为首发卖点</td><td>它只保证统计错误率信封、不保证动钱安全；第 1 波仅作稀有意图的流程内兜底，对外故事放前瞻层（见 FR-3.5）。</td></tr>
-<tr class="rvrow"><td>AI 做裁决或直接动钱的任何形态（v0.3 明确）<span class="rv add" title="8 类 cut 之①，见 backlog.html（评审合并档）§5">v0.3 新增</span></td><td>客户陪审团、双 agent 法官裁决、决策令牌、AI 双边谈判/和解结局（含跨机构 A2A 谈判）。Reg E/Z 裁决是银行的合理调查，R4 永久 L0/L1；AI 拍板无法向检查官解释。</td></tr>
+<tr class="rvrow"><td>AI 做裁决或直接动钱的任何形态（v0.3 明确）<span class="rv add" title="8 类 cut 之①，见 backlog.html（评审合并档）§5">v0.3 新增</span></td><td>客户陪审团、双 agent 法官裁决、决策令牌、AI 双边谈判/和解结局（含跨机构 A2A 谈判）。Reg E/Z 裁决是银行的合理调查，R4 永久 L1；AI 拍板无法向检查官解释。</td></tr>
 <tr class="rvrow"><td>按客户价值或预测行为区别对待（v0.3 明确）</td><td>按价值让步/讨价还价、留存加权、利率让步、客户孪生（customer twin）、按 cohort 定制处理策略、动态策略引擎、对结果做实时 A/B、情境/价值路由、存款流失预报进决策。违反 ECOA / Reg B 一致性与 UDAAP；“会哭的孩子有奶吃”在金融服务里是歧视风险。客户价值、流失预测只可用于不影响处理结果的措辞建议（FR-12.5 连这些都不显示）。</td></tr>
 <tr class="rvrow"><td>建议、营销与交叉销售（v0.3 明确）</td><td>理财/保险建议、一键提额、“会挣钱的收件箱”、产品推荐、对手方情报。服务渠道不是销售渠道：GLBA 用途限定，授信邀约另有 Reg Z / FCRA 规则；FR-12.5 的措辞建议只允许指向低余额提醒等已批的教育性内容，不推产品。</td></tr>
 <tr class="rvrow"><td>跨银行/跨客户数据共享与集体信号（v0.3 明确）</td><td>跨机构集体信号网、行业基准池、画像部分的跨租户复用。GLBA、合同与 TPRM 不允许；“默认不跨客户训练”（FR-11.4）本身是卖点，不自己拆。</td></tr>
@@ -535,7 +535,7 @@ table.rvlog td:first-child{white-space:nowrap;font-weight:700;color:#5b21b6}
 <tr><td><b>General inquiries</b><br>一般咨询</td><td>营业时间、网点/ATM、利率、产品政策、费用政策解释、如何开通</td><td>很高</td><td>R0–R1</td><td>无</td><td><b>第 1 波</b></td><td>L3 直接答（政策库 grounding + 来源标注）；个案查询转身份流程</td></tr>
 <tr><td><b>Transactions</b><br>交易查询与小额退费</td><td>"这笔扣费是什么"、余额/在途交易、阈值内费用退还（如 NSF/月费，行内政策明确）</td><td>高</td><td>已核验 L2；未核验只解释</td><td>R1 读 / R2 阈值内写</td><td><b>第 1 波</b></td><td>读：L2 审批→毕业 L3；阈值内退费：政策求值（金额/频次/账户状态）通过后 <span class="rvt">L2 一键批 → 毕业 L3</span>，超阈值转人；<b>政策求值分两拍：首次退、第二次不退（转人复核）</b></td></tr>
 <tr><td><b>Account servicing</b><br>账户服务</td><td>对账单/回单、地址证明、更新联系方式、借记卡锁卡/解锁、支票簿</td><td>中高</td><td>读 L2；写必须已核验</td><td>R1 读 / R3 部分写</td><td><b>第 1 波（读+低影响写）</b></td><td>对账单等读类走 L2→L3；锁卡（对客户有利、可逆）可已核验后自动；<span class="rvt"><b>解锁/解除冻结 = R3</b>：解锁是攻击者拿下客户邮箱后最想要的动作，风险与锁卡不对称，邮件渠道永不自动</span><span class="rv add" title="v0.1 把“锁卡/解锁”并列却只规定了锁卡">v0.2 新增</span>；<b>改地址/改电话/补卡寄新地址 = R3，邮件渠道永不自动</b>，给 secure message 深链或转人</td></tr>
-<tr><td><b>Disputes 受理侧</b><br>争议/差错通知</td><td>"这笔交易我不认识/没授权"、重复扣款、货没收到、ATM 短款</td><td>中（受理）/ 高（裁决）</td><td>受理不要求身份完美；动钱要求</td><td>R2 受理 / R4 裁决</td><td><b>第 1 波（仅受理侧）</b></td><td><b>裁决 L0 + 签发 L1</b>：AI 只做检测、起钟、回执（10 个工作日/45 天/90 天口径按交易类型求值）、材料清单、建卷宗；<span class="rvt">裁决由调查员人工（L0）；临时贷记由 Flows 按银行规则计算、L2 主管一键批，永不毕业 L3</span><span class="rv" title="v0.1 写“临时贷记与裁决由调查员人工”，与 §8.1 步骤 4 的“L2 主管批准”口径不一致">v0.2 修订</span>；多意图邮件中的半句争议同样起钟</td></tr>
+<tr><td><b>Disputes 受理侧</b><br>争议/差错通知</td><td>"这笔交易我不认识/没授权"、重复扣款、货没收到、ATM 短款</td><td>中（受理）/ 高（裁决）</td><td>受理不要求身份完美；动钱要求</td><td>R2 受理 / R4 裁决</td><td><b>第 1 波（仅受理侧）</b></td><td><b>裁决与签发 L1</b>：AI 只做检测、起钟、回执（10 个工作日/45 天/90 天口径按交易类型求值）、材料清单、建卷宗；<span class="rvt">裁决由调查员人工（L1）；临时贷记由 Flows 按银行规则计算、L2 主管一键批，永不毕业 L3</span><span class="rv" title="v0.1 写“临时贷记与裁决由调查员人工”，与 §8.1 步骤 4 的“L2 主管批准”口径不一致">v0.2 修订</span>；多意图邮件中的半句争议同样起钟</td></tr>
 <tr><td><b>Payments / payoff</b><br>付款与贷款结清</td><td>自动扣款管理、payoff letter（结清证明）、汇款状态、还款安排</td><td>中</td><td>多数已核验</td><td>R2–R3</td><td>第 2 波</td><td>读与证明类自动；改扣款/改收款账户 = R3 转已认证渠道；还款安排（forbearance）转专人</td></tr>
 <tr><td><b>投诉与弱势客户</b><br>Complaints / vulnerability</td><td>服务投诉、收费争议升级、POA（授权委托）、财务困难</td><td>低中</td><td>—</td><td>R1–R4 混合</td><td>第 2 波（深能力）</td><td>第 1 波只做识别 + 温情转办 + 时钟登记；POA的身份关系变更永不自动；投诉深能力（UDAAP 措辞审查、监管投诉路径）第 2 波</td></tr>
 <tr><td><b>欺诈与安全</b><br>Fraud / security</td><td>客户报告钓鱼、账户被盗、可疑登录；以及攻击者发来的 BEC/ATO 邮件本身</td><td>低（但极高危）</td><td>R4</td><td>—</td><td>第 1 波（防护，不自动办理）</td><td>检测→隔离→on-file 渠道（档案留存电话/地址）外呼确认；<b>AI 无权回复疑似欺诈案件、无权权衡 SAR 保密义务</b>；锁定话术由欺诈团队配置</td></tr>
@@ -565,7 +565,7 @@ table.rvlog td:first-child{white-space:nowrap;font-weight:700;color:#5b21b6}
   <div class="fstep"><div class="n">2</div><div><div class="nm">Triage &amp; intent 分诊与意图识别</div><div class="ds">多意图拆分（一封邮件可同时含咨询+争议+投诉）；受监管意图高召回检测；语言/弱势信号/欺诈信号并行跑。</div></div></div>
   <div class="fstep"><div class="n">3</div><div><div class="nm">Identity assurance 身份保障评估</div><div class="ds">输出 I0–I3：I0 无法关联账户 / I1 仅域名匹配 / <span class="rvt">I2 预留邮箱匹配且 SPF/DKIM/DMARC 通过、无欺诈信号</span><span class="rv" title="v0.1 写成“知识或历史信号匹配”，与 6.2 表的 I2 要件不一致">v0.2 修订</span> / I3 已通过 step-up（如 secure message 会话、一次性链接验证）。</div></div></div>
   <div class="fstep"><div class="n">4</div><div><div class="nm">Policy evaluation 政策求值</div><div class="ds">对确定性问题（退费资格、调查期限、材料清单）由规则/流程引擎求值；LLM 不决定政策结果，只负责把自然语言映射成求值输入。</div></div></div>
-  <div class="fstep"><div class="n">5</div><div><div class="nm">Autonomy decision 放权路由</div><div class="ds">按 L0–L3 × R0–R4 × I0–I3 三维矩阵决定：自动办结 / 起草待批 / 只做受理与回执 / 直接转人 / 隔离（见 6.2）。</div></div></div>
+  <div class="fstep"><div class="n">5</div><div><div class="nm">Autonomy decision 放权路由</div><div class="ds">按 L1–L3 × R0–R4 × I0–I3 三维矩阵决定：自动办结 / 起草待批 / 只做受理与回执 / 直接转人 / 隔离（见 6.2）。</div></div></div>
   <div class="fstep"><div class="n">6</div><div><div class="nm">Action &amp; orchestration 执行与编排</div><div class="ds">读核心系统、建卷宗、起时钟、发回执走 Autopilot + Automation Flows；工具调用经签名层白名单授权；所有写操作幂等、可补偿（saga）。</div></div></div>
   <div class="fstep"><div class="n">7</div><div><div class="nm">Human checkpoint 人工节点</div><div class="ds"><span class="rvt">L1 坐席改稿后发送、L2 主管一键批</span><span class="rv" title="与 6.2 修订后的 L 定义对齐">v0.2 修订</span>、争议裁决、欺诈确认；人工处理完案件自动回到 Autopilot 续跑（通知客户、关单、归档）。</div></div></div>
   <div class="fstep"><div class="n">8</div><div><div class="nm">Customer response 对客回复</div><div class="ds">三段拼装：监管披露语与数字来自模板/槽位（不过模型），解释与共情由受控生成承担；同线程 step-up 链接；AI 身份披露；一键转人。</div></div></div>
@@ -583,7 +583,7 @@ table.rvlog td:first-child{white-space:nowrap;font-weight:700;color:#5b21b6}
 <tr><td><b>4 Policy evaluation 政策求值</b></td><td>仅把自然语言映射成求值输入，<b>不决定政策结果</b></td><td>退费资格、调查期限、材料清单由规则/流程引擎求值</td><td>无专属条目；其输出决定第 5 步走哪一格</td></tr>
 <tr><td><b>5 Autonomy decision 放权路由</b></td><td>—</td><td><b>查三维放权矩阵</b> · 单调性约束 · 自动办结 / 起草待批 / 只受理回执 / 转人 / 隔离</td><td><b>D1 本体</b> · <b>D6 检查点</b></td></tr>
 <tr><td><b>6 Action &amp; orchestration 执行与编排</b></td><td>—</td><td>读核心系统、逐条槽位校验落库 · 建卷宗 · <b>起法定时钟</b>（起点＝第 1 步时间戳）· 工具调用经签名层白名单授权 · 写操作幂等与补偿</td><td><b>D2 起钟落地</b> · <b>D4 白名单</b> · <b>D5 的事实来源</b></td></tr>
-<tr><td><b>7 Human checkpoint 人工节点</b></td><td>—</td><td>L1 坐席改稿后发送 · L2 主管一键批 · 争议裁决 L0 · 欺诈确认；人工处理完案件自动回流续跑</td><td><b>D3 门槛落地</b>（毕业前停在 L1/L2） · <b>D6 人机交接</b></td></tr>
+<tr><td><b>7 Human checkpoint 人工节点</b></td><td>—</td><td>L1 坐席改稿后发送 · L2 主管一键批 · 争议裁决 L1 · 欺诈确认；人工处理完案件自动回流续跑</td><td><b>D3 门槛落地</b>（毕业前停在 L1/L2） · <b>D6 人机交接</b></td></tr>
 <tr><td><b>8 Customer response 对客回复</b></td><td>仅“衔接与共情的组织”这一段；发送前闸门用 LLM-as-judge</td><td><b>披露语＝模板字符串 · 金额/日期/期限＝系统槽位</b> · 发送前质量闸门（DLP/PII、字段级权限、槽位 grounding 比对、必备披露，FR-5.2）· 按 L 档分流发送</td><td><b>D5 本体</b>（三段拼装）· <b>D4 锁模板与闸门</b>；<b>D3 的 Shadow 在此只判不发</b></td></tr>
 <tr><td><b>9 Close, verify &amp; learn 关单、核验与学习</b></td><td>judge</td><td>14 天窗口判 VARR · 纠正与人工修改回流训练/回测样本 · 卷宗 WORM 留存</td><td><b>D3 指标来源</b> · <b>D6 case 状态</b> · <span class="rvrow"><b>D7 的输入来源</b>（人批案件、改稿 diff 从这里回流）</span></td></tr>
 <tr><td><b>底座</b><br>贯穿 1–9，不在任何一步里</td><td>—</td><td>＝<a href="#model">§6.4</a> Durable Case Runtime：持久化案件状态 · 法定时钟与原生等待 · 幂等+补偿 · 人机交接闭环 · 降级而非拦停 · 链式可靠性预算</td><td><b>D6</b>（托住全部 9 步；<b>共同底座，非差异点</b>）</td></tr>
@@ -606,13 +606,12 @@ table.rvlog td:first-child{white-space:nowrap;font-weight:700;color:#5b21b6}
 <h3>6.2 三维放权矩阵（Autonomy Matrix）</h3>
 <p>自主权不是一个开关，而是三个维度的函数：<b>放权级别 L（人在回路的位置）× 动作风险 R（可逆性与影响）× 身份保障 I</b>。</p>
 <div class="ladder">
-  <div class="rung r1"><b>L0 人工专办</b><span>AI 不面对客户：分诊、归集信息、建卷宗、给建议；全部由人写、人发。争议裁决、欺诈案件固定在此级。</span></div>
-  <div class="rung r2"><b>L1 AI 起草、人发送</b><span>AI 写完整回复，坐席编辑后亲自发送。默认上线级别。</span></div>
+  <div class="rung r2"><b>L1 人工签发</b><span>AI 做分诊、归集信息、建卷宗、给建议，并写完整回复草稿；坐席编辑后亲自发送。默认上线级别。</span></div>
   <div class="rung r3"><b>L2 AI 提案、人一键批</b><span>AI 给出完整回复/动作提案，主管一键批准或驳回，批准即执行、不改写。写操作毕业前的默认级别；免修改批准率在此级统计。</span></div>
   <div class="rung r4"><b>L3 AI 执行 + 事后抽检</b><span>白名单意图 × 金额/次数阈值 × 身份达标时 AI 直接执行并发送；事后抽检 QA，异常自动降级。仅高频、可逆、R0–R2、毕业样本达标的意图可达。</span></div>
 </div>
-<p class="small"><b>怎么读这张表的格值</b><span class="rv" title="原图例只声明“有两类非 L 取值”，没解释为什么系统全自动的格子不给 L 级，读者必然追问“全自动为何不算自治级别”">v0.2 修订</span>：L0–L3 量的不是"是否自动"，而是<b>把多少裁量权交给 AI、人卡在哪一步</b>——四条梯级全部按"AI 产出的内容/动作由谁把关"定义（L0 人写人发 → L1 AI 起草人发 → L2 AI 提案人一键批 → L3 AI 执行 + 事后抽检）。格值分三类，判断依据是"有没有裁量权交给 AI"，不是"有没有人工参与"：① <b>L0–L3</b>：AI 要产出内容或执行写动作，按人在回路的位置定级；② <b>不放权</b>（R1×I0/I1、R2×I0/I1；格内写作"不披露账户信息""通用回执 + 引导 step-up""锁定模板回执"，措辞不同、实为同一类）：内容是合规锁定的固定模板（FR-5.1，模型不可改写），动作由规则触发，<b>系统全自动，但整条链路没有一分裁量权交给 AI</b>，没有可评级的对象，故格内直接写处置方式；它的"全自动"来自动作本身无害（不吐账户信息、不做写操作），不来自对 AI 的信任。若强行标 L3 会同时撞两条规则：R1×I0 身份风险高于 R1×I2/I3，级别反而更高，违反通则②单调性；L3 是 §6.3 考核毕业才可得、异常降回 L2，而本类是硬约束、毕业也不改变（见表下注）。③ <b>永不自动</b>（R3 整行，见 §5.2）：配置层禁开。另：R1×I0 格内"疑似欺诈进欺诈复核（L0）"指该类来件的去向，不是该格的格值。</p>
-<div class="rvbox"><span class="ct">v0.2 修订：L0–L3 定义统一</span>v0.1 把 L2 定义为“条件自主”、L1 定义为“起草待批”，但 §6.3 C（L1 → L2 审批制）、§8.1（L2 进主管队列）、§8.2（L2 主管批准）、FR-3.3（免修改批准率在 L2 算）都按“L2 = 人一键批”在用，定义和用法对不上。现按调研报告的四级定义统一：<b>L1 = AI 起草、人发送；L2 = AI 提案、人一键批；L3 = 条件达标后 AI 执行 + 事后抽检</b>。其余章节的 L 用法无需改动。</div>
+<p class="small"><b>怎么读这张表的格值</b><span class="rv" title="原图例只声明“有两类非 L 取值”，没解释为什么系统全自动的格子不给 L 级，读者必然追问“全自动为何不算自治级别”">v0.2 修订</span>：L1–L3 量的不是"是否自动"，而是<b>把多少裁量权交给 AI、人卡在哪一步</b>——三条梯级全部按"AI 产出的内容/动作由谁把关"定义（L1 人写/起草皆可、人发 → L2 AI 提案人一键批 → L3 AI 执行 + 事后抽检）。格值分三类，判断依据是"有没有裁量权交给 AI"，不是"有没有人工参与"：① <b>L1–L3</b>：AI 要产出内容或执行写动作，按人在回路的位置定级；② <b>不放权</b>（R1×I0/I1、R2×I0/I1；格内写作"不披露账户信息""通用回执 + 引导 step-up""锁定模板回执"，措辞不同、实为同一类）：内容是合规锁定的固定模板（FR-5.1，模型不可改写），动作由规则触发，<b>系统全自动，但整条链路没有一分裁量权交给 AI</b>，没有可评级的对象，故格内直接写处置方式；它的"全自动"来自动作本身无害（不吐账户信息、不做写操作），不来自对 AI 的信任。若强行标 L3 会同时撞两条规则：R1×I0 身份风险高于 R1×I2/I3，级别反而更高，违反通则②单调性；L3 是 §6.3 考核毕业才可得、异常降回 L2，而本类是硬约束、毕业也不改变（见表下注）。③ <b>永不自动</b>（R3 整行，见 §5.2）：配置层禁开。另：R1×I0 格内"疑似欺诈进欺诈复核（L1）"指该类来件的去向，不是该格的格值。</p>
+<div class="rvbox"><span class="ct">v0.2 修订：L1–L3 定义统一</span>v0.1 把 L2 定义为“条件自主”、L1 定义为“起草待批”，但 §6.3 C（L1 → L2 审批制）、§8.1（L2 进主管队列）、§8.2（L2 主管批准）、FR-3.3（免修改批准率在 L2 算）都按“L2 = 人一键批”在用，定义和用法对不上。现按调研报告的三级定义统一：<b>L1 = AI 做分诊、归集信息、建卷宗、给建议，并写完整回复草稿，人发送；L2 = AI 提案、人一键批；L3 = 条件达标后 AI 执行 + 事后抽检</b>。其余章节的 L 用法无需改动。</div>
 <h4>I 身份保障的四档定义</h4>
 <p>本维度判定的对象是<b>这一封来件能不能关联到账户、能关联到多强</b>，按案件（线程）实时评定，不是客户的静态标签。本产品自定义，与 NIST SP 800-63-4 的 IAL 不同义，也不替代银行正式认证。</p>
 <div class="table-wrap"><table class="fixed">
@@ -628,10 +627,10 @@ table.rvlog td:first-child{white-space:nowrap;font-weight:700;color:#5b21b6}
 <colgroup><col style="width:11%"><col style="width:25%"><col style="width:16%"><col style="width:16%"><col style="width:16%"><col style="width:16%"></colgroup>
 <tr><th>动作风险</th><th>定义</th><th>I0 无法关联</th><th>I1 仅域名匹配</th><th>I2 信号匹配</th><th>I3 已 step-up</th></tr>
 <tr class="rvrow"><td><b>R0</b> 无影响</td><td><span class="rvt">归档、噪声分类、不涉及任何账户数据的公共信息（费率表、网点、流程说明）</span></td><td>L3</td><td>L3</td><td>L3</td><td>L3</td></tr>
-<tr class="rvrow"><td><b>R1</b> 只读</td><td>读取并对外披露账户信息（余额、交易、案件/配送状态），按字段敏感度分级（FR-2.3）</td><td><b>不披露</b>账户信息：通用回复 + 引导 step-up；疑似欺诈件进欺诈复核（L0）</td><td><b>不披露</b>账户信息：通用回复 + 引导 step-up</td><td>L2 → 毕业 L3</td><td>L2 → 毕业 L3</td></tr>
-<tr class="rvrow"><td><b>R2</b> 可逆低影响写</td><td>阈值内退费、锁卡、程序性受理、起钟回执</td><td>内部自动建案 + 起钟（不因身份存疑推迟）；对外只发不含账户信息的锁定模板回执；疑似欺诈进欺诈复核（L0）</td><td>自动受理 + 起钟 + 通用回执；退费/锁卡等写操作不做，引导 step-up</td><td>L2 → 毕业 L3</td><td>L2 → 毕业 L3（同客户 12 个月内第二次退费强制转人）</td></tr>
+<tr class="rvrow"><td><b>R1</b> 只读</td><td>读取并对外披露账户信息（余额、交易、案件/配送状态），按字段敏感度分级（FR-2.3）</td><td><b>不披露</b>账户信息：通用回复 + 引导 step-up；疑似欺诈件进欺诈复核（L1）</td><td><b>不披露</b>账户信息：通用回复 + 引导 step-up</td><td>L2 → 毕业 L3</td><td>L2 → 毕业 L3</td></tr>
+<tr class="rvrow"><td><b>R2</b> 可逆低影响写</td><td>阈值内退费、锁卡、程序性受理、起钟回执</td><td>内部自动建案 + 起钟（不因身份存疑推迟）；对外只发不含账户信息的锁定模板回执；疑似欺诈进欺诈复核（L1）</td><td>自动受理 + 起钟 + 通用回执；退费/锁卡等写操作不做，引导 step-up</td><td>L2 → 毕业 L3</td><td>L2 → 毕业 L3（同客户 12 个月内第二次退费强制转人）</td></tr>
 <tr><td><b>R3</b> 高影响写</td><td>改地址/联系方式、补卡寄新地址、改收款账户、向第三方付款</td><td colspan="4" style="text-align:center;font-weight:700;color:var(--red)">邮件渠道永不自动：引导 step-up 到已认证渠道自助，或转人工；工具层不提供函数</td></tr>
-<tr><td><b>R4</b> 不可逆/受监管</td><td><span class="rvt">争议裁决（认定有无差错）</span>、授信拒赔、SAR 相关、法律意见</td><td colspan="4" style="text-align:center;font-weight:700;color:var(--red)">永久 L0/L1：AI 备卷宗与草稿，人裁决、人签发</td></tr>
+<tr><td><b>R4</b> 不可逆/受监管</td><td><span class="rvt">争议裁决（认定有无差错）</span>、授信拒赔、SAR 相关、法律意见</td><td colspan="4" style="text-align:center;font-weight:700;color:var(--red)">永久 L1：AI 备卷宗与草稿，人裁决、人签发</td></tr>
 </table></div>
 <p class="small">矩阵单元是策略默认值，Admin 可调紧不可调松超过平台硬边界；每次策略变更生成版本，回测通过才生效。<span class="rvt">“L2 → 毕业 L3”= 上线默认 L2，按 §6.3 毕业后可到 L3；“不披露”类单元是硬约束，毕业也不改变。</span></p>
 <div class="rvbox"><span class="ct">v0.2 修订：矩阵 R0–R2、R4 行</span>① v0.1 的 R0 与 R1 都含“公共信息”，现公共信息全归 R0，R1 只指账户信息；② v0.1 R1×I0/I1 = L1，即 AI 为关联不到账户的发件人起草账户信息、再由人发出 —— 人审只能核内容，核不了对方是谁，身份问题不能靠人审兜底，改为“不披露 + 引导 step-up”；③ R2×I0/I1：来件只要能识别客户姓名与账户，即构成有效错误通知（Reg E 1005.11(b)(1)），内部起钟与建案不因身份存疑推迟，但对外回执只用不含账户信息的锁定模板；④ R2×I2/I3 与报告矩阵对齐为“L2 → 毕业 L3”，也与 §8.1 邮件一（I3 下 L3 退费）一致 —— v0.1 该格写 L2，与自己的示范流程矛盾；⑤ 临时贷记移出 R4：它是法定时限内的确定性义务（Reg E 1005.11(c)(2)），由 Flows 按银行规则计算、L2 人一键批（FR-7.2），与“裁决”放在同一格容易被读成“临时贷记可以等裁决”。<span class="rvt">移出后不新增行：识别侧（争议通知）已在 R2 受理格；执行侧由 FR-4.2 定时器与 FR-7.2 卷宗触发，AI 不决策，按矩阵定义不占格。</span>银行既有的小额自动贷记规则由 Flows 确定性执行，不属于 AI 放权。</div>
@@ -693,7 +692,7 @@ table.rvlog td:first-child{white-space:nowrap;font-weight:700;color:#5b21b6}
 <tr><td>☆6</td><td><b>Intent Discovery</b><br>意图发现（可选 · P1 第 2 波，顺延不降级）</td><td>对长期落入“未分类→转人工”的信聚类，发现候选新 intent，统计坐席处理步骤一致率，建议 R/I 等级、映射现有工具、起草锁定模板</td><td>R/I 等级人定；候选 intent 生于 shadow，走正常毕业；R3/R4 类聚类（如法律文书）只报告转专人，永不自动生成 intent</td><td>Builder → intents（候选区）</td><td><a href="#fr-12-6">FR-12.6</a></td></tr>
 </table></div>
 <p><b>公平性是每个提案的必答题（不单列功能）</b>：★1/★3 的每张证据卡必须带 cohort 影响（语言 / 62+ / LMI 普查区 / 渠道 / 脆弱标记五个代理维度，组差 &lt; 2pp，超标则提名自动不成立）；锁定段翻译必须预批准，生成文字才可跟随客户语言。见 <a href="#fr-12-7">FR-12.7</a> 与 §4.2 parity 护栏。</p>
-<div class="callout c-boundary rvrow"><span class="ct">设计时层的边界（v0.3）</span>① 设计时 AI 只读历史与配置、只产出提名/diff，不接触在途案件的处理决定；② 运行时 AI 只当顾问（起草、解释、摘要、建议措辞），不当裁判；③ 自动方向只有降级——任何放权/放宽都必须有人类签字的 diff；④ ROI 决定先做谁，证据决定能不能做；⑤ 新东西生于 shadow，R3 永不进邮件、R4 永久 L0/L1。</div>
+<div class="callout c-boundary rvrow"><span class="ct">设计时层的边界（v0.3）</span>① 设计时 AI 只读历史与配置、只产出提名/diff，不接触在途案件的处理决定；② 运行时 AI 只当顾问（起草、解释、摘要、建议措辞），不当裁判；③ 自动方向只有降级——任何放权/放宽都必须有人类签字的 diff；④ ROI 决定先做谁，证据决定能不能做；⑤ 新东西生于 shadow，R3 永不进邮件、R4 永久 L1。</div>
 </section>
 
 
@@ -826,7 +825,7 @@ table.rvlog td:first-child{white-space:nowrap;font-weight:700;color:#5b21b6}
 <div class="fr" id="fr-3-1">
 <div class="fr-h"><span class="fid">FR-3.1</span><b>三维放权矩阵执行器</b><span class="prio p0">P0</span><span class="tag t-new">新建</span></div>
 <div class="fr-b">
-<p class="fd">以意图 × 动作风险（R0–R4）× 身份等级（I0–I3）为输入，输出 L0–L3 路由决策；矩阵单元为策略版本化数据。单调性保证：任一维度风险升高，放权级别不得升高。</p>
+<p class="fd">以意图 × 动作风险（R0–R4）× 身份等级（I0–I3）为输入，输出 L1–L3 路由决策；矩阵单元为策略版本化数据。单调性保证：任一维度风险升高，放权级别不得升高。</p>
 <ul class="ac">
 <li>AC1：每次决策记录输入三元组、命中单元、策略版本、决策结果到 dossier。</li>
 <li>AC2：R3/R4 单元在邮件渠道为平台硬编码禁止项，配置界面不可放开（见 FR-9.3）。</li>
@@ -997,7 +996,7 @@ table.rvlog td:first-child{white-space:nowrap;font-weight:700;color:#5b21b6}
 <div class="fr-b">
 <p class="fd">用 LLM-as-judge 做草稿质量评分与路由辅助，但 judge 不是真理：评测样本配对随机换序、rubric 固化、规则项确定性兜底，并对 judge 本身做抽样人审与翻转率监控（研究显示同案换序平均约 14% 翻转率，必须量化自己的 judge）。</p>
 <ul class="ac">
-<li>AC1：judge 评分不直接决定任何 R2+ 动作放行；只用于排序、预警与 L0/L1 辅助。</li>
+<li>AC1：judge 评分不直接决定任何 R2+ 动作放行；只用于排序、预警与 L1 辅助。</li>
 <li>AC2：每月输出 judge 翻转率与与人审一致率；超阈时停用相关 judge 规则。</li>
 <li>AC3：合规相关判定（披露完整性、UDAAP 风险措辞）始终有确定性规则兜底。</li>
 </ul>
@@ -1062,7 +1061,7 @@ table.rvlog td:first-child{white-space:nowrap;font-weight:700;color:#5b21b6}
 <ul class="ac">
 <li>AC1：疑似 SAR 案件的对客回复只能从锁定模板集合选择，模型不可自由生成解释。</li>
 <li>AC2："为什么拒绝/冻结"类问题统一转欺诈团队渠道，AI 不回答原因。</li>
-<li>AC3：该类案件默认 L0，无毕业路径；配置面不可改。</li>
+<li>AC3：该类案件默认 L1，无毕业路径；配置面不可改。</li>
 </ul>
 <div class="fr-m">依赖：银行 BSA/AML 团队提供模板与流程。</div>
 </div></div>
@@ -1492,7 +1491,7 @@ table.rvlog td:first-child{white-space:nowrap;font-weight:700;color:#5b21b6}
   <div class="fstep"><div class="n">2</div><div><div class="nm">受理与回执（同日，分钟级）</div><div class="ds"><span class="rvt">新卡配送状态属 R1 低敏字段：在档地址、SPF/DKIM/DMARC 无失败（DKIM 与发件域对齐）、无欺诈/ATO 信号、近 30 天无联系方式变更四项同时满足即 I2（§6.2 I2 要件）<span class="rv" title="demo 视感对齐：原简写漏了 §6.2 四要件中的 SPF/DKIM 与 DKIM 对齐、无欺诈·ATO、30 天无变更">v0.2 修订</span>；已毕业意图 L3 答复（不含寄送地址）</span><span class="rv" title="v0.1 写“I3 后答复”，但客户在第 3 步才 step-up，第 2 步不可能是 I3">v0.2 修订</span>；争议子意图自动建案、起 Reg E 时钟、发回执：确认收到、<span class="rvt">调查期口径（POS 借记卡交易按 1005.11(c)(3)(ii) 调查期最长 90 天；临时贷记时限仍为 10 个工作日）</span><span class="rv" title="90 天是调查期，不是临时贷记时限">v0.2 修订</span>、材料清单一次列全、不索要完整卡号/CVV。查三维矩阵定分支（R1 读×I2→L3 候选；R2 受理照常起钟，见 §6.2）。回执外发前过 FR-5.2 闸门，含 FR-10.2 AI 披露句与 FR-10.3 转人工入口。<span class="small">注：Reg E 无法定回执义务；30 天书面回执是 Reg Z（1026.13）要求。发回执是实务做法，模板中不混淆。</span></div></div></div>
   <div class="fstep"><div class="n">3</div><div><div class="nm">同线程 step-up 与材料</div><div class="ds">需账户明细级信息时在同线程 step-up——默认走 App 待办案件卡（FR-2.2 默认路径），一次性链接仅作兜底<span class="rv" title="demo 视感对齐：原写“发一次性核验链接”，与 FR-2.2 默认不发链接相矛盾">v0.2 修订</span>；客户 Day 6 回传签字声明<span class="rvt">（可选材料：银行可以请求，但调查与时钟不等它，FR-4.2 AC2）</span>，时钟引擎唤醒案件（FR-4.4），OCR 置信度门控（FR-5.4）。</div></div></div>
   <div class="fstep"><div class="n">4</div><div><div class="nm">临时贷记（第 10 个工作日前，即 10/6 前）</div><div class="ds">若调查不能在一般 10 个工作日内完成，系统在到期前 48 自然小时预警主管；临时贷记由银行确定性规则执行、L2 主管批准，AI 不决策。写操作带幂等键、失败按 saga 补偿；连接器故障时降级转人并给客户时限承诺（FR-4.4），案件不拦停。</div></div></div>
-  <div class="fstep"><div class="n">5</div><div><div class="nm">调查与裁决（人，L0/L1）</div><div class="ds">调查员在卷宗视图审证据链；Day 40 商户 representment 窗口走完；人做裁决，AI 起草结果函：有错→1 个工作日内改正并 3 个工作日内告知；无错→1005.11(d) 书面说明 + 可索取文件 + 扣回垫款规则，人签发。结果函外发前同样过 FR-5.2 闸门，含 FR-10.2 披露与 FR-10.3 转人工入口。</div></div></div>
+  <div class="fstep"><div class="n">5</div><div><div class="nm">调查与裁决（人，L1）</div><div class="ds">调查员在卷宗视图审证据链；Day 40 商户 representment 窗口走完；人做裁决，AI 起草结果函：有错→1 个工作日内改正并 3 个工作日内告知；无错→1005.11(d) 书面说明 + 可索取文件 + 扣回垫款规则，人签发。结果函外发前同样过 FR-5.2 闸门，含 FR-10.2 披露与 FR-10.3 转人工入口。</div></div></div>
   <div class="fstep"><div class="n">6</div><div><div class="nm">关单、核验与学习</div><div class="ds">人签发后关单，卷宗 WORM 留存（FR-11.1）；14 天窗口无重复来件、无转人、无 QA 推翻才计 VARR（§4.1）；客户纠正与人工修改回流训练/回测样本（FR-7.3）。</div></div></div>
 </div>
 <p class="small rvrow"><b>v0.3 设计时层叠加（不改变本流程任何一步的分支与结论）</b>：第 1 步的新卡配送子意图同时被打 <a href="#fr-12-4">FR-12.4「可预防来信」</a>标签——档案内已有 card_shipped 事件（replacement_issued 2026-09-15、ETA、物流号），本可由事件触发通知提前发出；标签只用于主管指标与 Builder 的通知规则 shadow 提议，不改变该邮件的受理、起钟与答复路径。</p>

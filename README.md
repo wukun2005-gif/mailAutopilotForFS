@@ -26,7 +26,7 @@ This product targets the intersection of three problems, not just "slow replies"
 Differentiators (vs. per-topic style reply governance and horizontal Copilots):
 
 - **Regulated intents recognized and clocked on arrival** — even a half-sentence buried in a multi-intent email ("I don't recognize this charge") counts as notice; the clock starts at the intake timestamp.
-- **Delegation by identity assurance + in-thread step-up** — R (action risk R0–R4) × I (identity assurance I0–I3) × L (autonomy L0–L3) matrix computed by the same pure function as production; verification happens inside the thread (app secure message, OTP), identity is re-rated in place.
+- **Delegation by identity assurance + in-thread step-up** — R (action risk R0–R4) × I (identity assurance I0–I3) × L (autonomy L1–L3) matrix computed by the same pure function as production; verification happens inside the thread (app secure message, OTP), identity is re-rated in place.
 - **Full dispute-intake package, adjudication never automated** — filing, clocking, receipts, material chasing, and provisional-credit reminders are autonomous; dispute adjudication (R4) stays human-only, AI only drafts.
 - **Attack surface designed closed** — lookalike-address detection, attachment prompt-injection treated as data, contact-change (R3) tool functions simply not registered on the email channel, customer warned only over the on-file channel.
 - **Promises tracked to fulfillment** — any deadline the AI states to the customer becomes a promise clock at send time and is only cleared when the fulfillment letter goes out (UDAAP safeguard).

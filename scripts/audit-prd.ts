@@ -44,7 +44,7 @@ check("R4 is capped at L1 at every identity level", () => {
 
 check("R2: I0 internal intake + locked external template", () => {
   const d = L("R2", "I0", { policyOverall: "NOT_RUN" });
-  assert.deepEqual(d.cell, { kind: "L", level: "L0" });
+  assert.deepEqual(d.cell, { kind: "L", level: "L1" });
   assert.equal(d.externalLockedTemplate, true);
 });
 
@@ -58,9 +58,9 @@ check("R2: I2/I3 with PASS reach L3 only after graduation", () => {
   assert.deepEqual(L("R2", "I3").cell, { kind: "L", level: "L3" });
 });
 
-check("R2: UNKNOWN policy verdict fails closed to L0", () => {
+check("R2: UNKNOWN policy verdict fails closed to L1", () => {
   const d = L("R2", "I3", { policyOverall: "UNKNOWN" });
-  assert.deepEqual(d.cell, { kind: "L", level: "L0" });
+  assert.deepEqual(d.cell, { kind: "L", level: "L1" });
 });
 
 check("R2: FAIL policy verdict produces an L2 explanation draft, not an auto-write", () => {
@@ -82,10 +82,10 @@ check("R0: public info reaches L3 at any identity when graduated", () => {
   }
 });
 
-check("No intent ever runs above its graduation level (fail-closed L0 pre-graduation)", () => {
+check("No intent ever runs above its graduation level (fail-closed L1 pre-graduation)", () => {
   for (const risk of ["R0", "R1", "R2"] as RLevel[]) {
     const d = L(risk, "I3", { graduatedL: null, policyOverall: "PASS" });
-    if (d.cell.kind === "L") assert.equal(d.cell.level === "L0", true);
+    if (d.cell.kind === "L") assert.equal(d.cell.level === "L1", true);
   }
 });
 

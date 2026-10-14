@@ -794,8 +794,8 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
           <td class="s lo" title="weak"><span class="bars"><i class="f"></i><i></i><i></i></span></td>
         </tr>
         <tr>
-          <td class="k"><span class="oi"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 6.5v11"/><path d="M15 9.2c0-1.3-1.4-2.2-3-2.2s-3 .9-3 2.2 1.4 2.3 3 2.3 3 1 3 2.3-1.4 2.2-3 2.2-3-.9-3-2.2"/></svg></span>Collections<span class="why">money moves — R4, permanent L0</span></td>
-          <td class="f lo"><i class="g">·</i>nothing — money stays R4 / L0</td>
+          <td class="k"><span class="oi"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 6.5v11"/><path d="M15 9.2c0-1.3-1.4-2.2-3-2.2s-3 .9-3 2.2 1.4 2.3 3 2.3 3 1 3 2.3-1.4 2.2-3 2.2-3-.9-3-2.2"/></svg></span>Collections<span class="why">money moves — R4, permanent L1</span></td>
+          <td class="f lo"><i class="g">·</i>nothing — money stays R4 / L1</td>
           <td class="f md"><i class="g">–</i>async intake, money still moves</td>
           <td class="f lo"><i class="g">·</i>same base</td>
           <td class="s lo" title="slow — cure rate only shows after a full cohort"><span class="bars"><i class="f"></i><i></i><i></i></span></td>
@@ -855,7 +855,7 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       <text class="lgb" x="444" y="313" fill="#F2786E">5% · route only</text>
 
       <rect x="0" y="360" width="1128" height="34" rx="8" fill="#1B4A44" stroke="#5FD3BE"/>
-      <text class="lg" x="20" y="383" fill="#5FD3BE">Dispute intake is Wave 1; adjudication is permanently L0 — humans decide and sign.</text>
+      <text class="lg" x="20" y="383" fill="#5FD3BE">Dispute intake is Wave 1; adjudication is permanently L1 — humans decide and sign.</text>
     </svg>
   </div>
   <p class="note" style="font-size:16.5px"><b>Route-only in wave 1:</b> complaints, fraud and off-brief mail are detected, clocked and handed to a person — never answered autonomously. UDAAP wording review follows in wave 2. Full wave matrix: <b><a class="xref" data-jump="B9">B9</a></b>.</p>
@@ -866,43 +866,52 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
 <section class="slide">
   <p class="eyebrow"><span class="n">05</span> How it works</p>
   <h2>The thread is the case.</h2>
-  <p class="claim">Nine steps. After step 5 the matrix picks one of three roads — auto, one-click, human-only — and only step 8 reaches the customer.</p>
+  <p class="claim">Nine steps. Steps 2–3 classify the case (category → R) and grade identity (I); step 5 reads the matrix (<a class="xref" data-jump="06">06</a>) and picks one of three roads — auto, one-click, human-only. Only step 8 reaches the customer, and it is assembled, not written.</p>
   <div class="chart thread">
     <!-- flex:1 (from .chart.thread>svg) must keep winning: freezing it with flex:0 0 auto
          pushed the letter figure past the right edge. Only the max-height clamp is lifted. -->
-    <svg viewBox="0 0 1128 412" role="img" style="max-height:none">
+    <svg viewBox="0 0 1128 424" role="img" style="max-height:none">
       <!-- row 1 · the nine steps, first five -->
       <rect class="card" x="0" y="0" width="200" height="56" rx="8"/><text class="lgb" x="100" y="28" text-anchor="middle">1 · Ingest</text><text class="lgd" x="100" y="47" text-anchor="middle" style="font-size:15px">arrival timestamp</text>
-      <rect class="card" x="232" y="0" width="200" height="56" rx="8"/><text class="lgb" x="332" y="28" text-anchor="middle">2 · Triage</text><text class="lgd" x="332" y="47" text-anchor="middle" style="font-size:15px">split intents</text>
-      <rect class="card" x="464" y="0" width="200" height="56" rx="8"/><text class="lgb" x="564" y="28" text-anchor="middle">3 · Identity</text><text class="lgd" x="564" y="47" text-anchor="middle" style="font-size:15px">grade I0–I3</text>
-      <rect class="card" x="696" y="0" width="200" height="56" rx="8"/><text class="lgb" x="796" y="28" text-anchor="middle">4 · Policy</text><text class="lgd" x="796" y="47" text-anchor="middle" style="font-size:15px">rules decide</text>
-      <rect x="928" y="0" width="200" height="56" rx="8" fill="#1B4A44" stroke="#5FD3BE"/><text class="lgb" x="1028" y="28" text-anchor="middle" fill="#5FD3BE">5 · Autonomy</text><text class="lgd" x="1028" y="47" text-anchor="middle" style="font-size:15px">read the matrix</text>
+      <rect class="card" x="232" y="0" width="200" height="56" rx="8"/><text class="lgb" x="332" y="28" text-anchor="middle">2 · Triage</text><text class="lgd" x="332" y="47" text-anchor="middle" style="font-size:15px">classify · sets R</text>
+      <rect class="card" x="464" y="0" width="200" height="56" rx="8"/><text class="lgb" x="564" y="28" text-anchor="middle">3 · Identity</text><text class="lgd" x="564" y="47" text-anchor="middle" style="font-size:15px">grade I0–I3 · sets I</text>
+      <rect class="card" x="696" y="0" width="200" height="56" rx="8"/><text class="lgb" x="796" y="28" text-anchor="middle">4 · Policy</text><text class="lgd" x="796" y="47" text-anchor="middle" style="font-size:15px">bank playbook</text>
+      <rect x="928" y="0" width="200" height="56" rx="8" fill="#1B4A44" stroke="#5FD3BE"/><text class="lgb" x="1028" y="28" text-anchor="middle" fill="#5FD3BE">5 · Autonomy</text><text class="lgd" x="1028" y="47" text-anchor="middle" fill="#5FD3BE" style="font-size:15px">R × I → L</text>
       <g stroke="#4A5A6B" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
         <path d="M210 23 L218 28 L210 33"/><path d="M442 23 L450 28 L442 33"/><path d="M674 23 L682 28 L674 33"/><path d="M906 23 L914 28 L906 33"/>
       </g>
 
       <!-- the branch: step 5 hands the case to one of three roads -->
-      <path d="M1028 56 L1028 74 L60 74 L60 250" fill="none" stroke="#4A5A6B" stroke-width="2"/>
-      <g stroke="#4A5A6B" stroke-width="2"><path d="M60 113 L90 113"/><path d="M60 171 L90 171"/><path d="M60 229 L90 229"/></g>
-      <text class="lgd" x="90" y="69" style="font-size:13px">matrix returns</text>
+      <path d="M1028 56 L1028 70 L60 70 L60 208" fill="none" stroke="#4A5A6B" stroke-width="2"/>
+      <g stroke="#4A5A6B" stroke-width="2"><path d="M60 99 L90 99"/><path d="M60 147 L90 147"/><path d="M60 195 L90 195"/></g>
+      <text class="lgd" x="90" y="62" style="font-size:13px">matrix returns</text>
 
-      <rect x="90" y="92" width="420" height="42" rx="8" fill="#1B4A44" stroke="#5FD3BE"/><text class="lg" x="106" y="119" fill="#5FD3BE" font-weight="600" style="font-size:17px">L3 · auto — 6 · Act: tools, idempotent</text>
-      <rect x="90" y="150" width="420" height="42" rx="8" fill="#3A3320" stroke="#F5B544"/><text class="lg" x="106" y="177" fill="#F5B544" font-weight="600" style="font-size:17px">L2 · one click — 7 · approve, then it runs</text>
-      <rect x="90" y="208" width="420" height="42" rx="8" fill="#3B2320" stroke="#F2786E"/><text class="lg" x="106" y="235" fill="#F2786E" font-weight="600" style="font-size:17px">L0–L1 · human — 7 · a person decides or signs</text>
+      <rect x="90" y="80" width="420" height="38" rx="8" fill="#1B4A44" stroke="#5FD3BE"/><text class="lg" x="106" y="104" fill="#5FD3BE" font-weight="600" style="font-size:16px">L3 · auto — 6 · Act: tools, idempotent</text>
+      <rect x="90" y="128" width="420" height="38" rx="8" fill="#3A3320" stroke="#F5B544"/><text class="lg" x="106" y="152" fill="#F5B544" font-weight="600" style="font-size:16px">L2 · one click — 7 · approve, then it runs</text>
+      <rect x="90" y="176" width="420" height="38" rx="8" fill="#3B2320" stroke="#F2786E"/><text class="lg" x="106" y="200" fill="#F2786E" font-weight="600" style="font-size:16px">L1 · human — 7 · a person decides or signs</text>
 
       <!-- and they converge back into the one reply -->
-      <g stroke="#4A5A6B" stroke-width="2"><path d="M510 113 L560 113"/><path d="M510 171 L560 171"/><path d="M510 229 L560 229"/><path d="M560 113 L560 229"/></g>
-      <path d="M560 171 L586 171" fill="none" stroke="#4A5A6B" stroke-width="2"/><path d="M580 165 L588 171 L580 177" fill="none" stroke="#4A5A6B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      <rect x="596" y="145" width="272" height="54" rx="8" fill="#1B4A44" stroke="#5FD3BE"/><text class="lgb" x="732" y="169" text-anchor="middle" fill="#5FD3BE">8 · Reply</text><text class="lgd" x="732" y="189" text-anchor="middle" style="font-size:15px">assembled, three sources</text>
-      <path d="M876 165 L884 171 L876 177" fill="none" stroke="#4A5A6B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      <rect class="card" x="894" y="145" width="234" height="54" rx="8"/><text class="lgb" x="1011" y="169" text-anchor="middle">9 · Verify</text><text class="lgd" x="1011" y="189" text-anchor="middle" style="font-size:15px">14-day window</text>
+      <g stroke="#4A5A6B" stroke-width="2"><path d="M510 99 L560 99"/><path d="M510 147 L560 147"/><path d="M510 195 L560 195"/><path d="M560 99 L560 195"/></g>
+      <path d="M560 147 L582 147" fill="none" stroke="#4A5A6B" stroke-width="2"/><path d="M576 141 L584 147 L576 153" fill="none" stroke="#4A5A6B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <rect x="584" y="120" width="272" height="54" rx="8" fill="#1B4A44" stroke="#5FD3BE"/><text class="lgb" x="720" y="144" text-anchor="middle" fill="#5FD3BE">8 · Reply</text><text class="lgd" x="720" y="166" text-anchor="middle" style="font-size:15px">locked template · assembled</text>
+      <path d="M856 141 L864 147 L856 153" fill="none" stroke="#4A5A6B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <rect class="card" x="892" y="120" width="236" height="54" rx="8"/><text class="lgb" x="1010" y="144" text-anchor="middle">9 · Verify</text><text class="lgd" x="1010" y="166" text-anchor="middle" style="font-size:15px">14-day window</text>
 
-      <!-- step 8 in detail: what a model may and may not write -->
-      <text class="lg" x="0" y="292" style="font-size:16px">Step 8 — the only place a model writes to a customer. <tspan fill="#5FD3BE" font-weight="600">Assembled, not written:</tspan> the system fills the disclosures and amounts, the model joins them.</text>
-      <rect x="0" y="308" width="360" height="62" rx="8" fill="#1A2536" stroke="#3B7DD8"/><text class="lgb" x="18" y="335" fill="#6FA8FF" style="font-size:18px">Regulated disclosure</text><text class="lgd" x="18" y="357" style="font-size:15px">locked template, never generated</text>
-      <rect x="384" y="308" width="360" height="62" rx="8" fill="#17322E" stroke="#3F8F4A"/><text class="lgb" x="402" y="335" fill="#7BD88F" style="font-size:18px">Amounts, dates, deadlines</text><text class="lgd" x="402" y="357" style="font-size:15px">system slots, checked field by field</text>
-      <rect x="768" y="308" width="360" height="62" rx="8" fill="#241E3A" stroke="#8B5CF6"/><text class="lgb" x="786" y="335" fill="#A78BFA" style="font-size:18px">Connective tissue</text><text class="lgd" x="786" y="357" style="font-size:15px">the only part that goes through a model</text>
-      <text class="lgd" x="0" y="396" style="font-size:15px">Personalization is the name, product, thread history, tone tier and channel — never a disclosure or an amount (CSAT gates graduation, <tspan class="xref" data-jump="B6">B6</tspan>).</text>
+      <!-- carry-over from slide 04: the category is what the matrix reads -->
+      <rect x="0" y="222" width="1128" height="82" rx="10" fill="#1D2530" stroke="#2E3A46"/>
+      <text x="14" y="244" fill="#9BAAB9" font-size="12.5" font-weight="600" letter-spacing="1.1">STEP 2 TRIAGE → CATEGORY SETS THE ROW (R) · STEP 3 IDENTITY SETS THE COLUMN (I) · STEP 5 READS THE MATRIX (06) → THE ROAD</text>
+      <circle cx="16" cy="265" r="5" fill="#5FD3BE"/><text x="28" y="270" fill="#5FD3BE" font-size="14" font-weight="600">General inquiry · R0 → L3 full-auto</text>
+      <circle cx="330" cy="265" r="5" fill="#F5B544"/><text x="342" y="270" fill="#F5B544" font-size="14" font-weight="600">Account servicing · R1 → L2/L3 at I2/I3</text>
+      <circle cx="680" cy="265" r="5" fill="#F5B544"/><text x="692" y="270" fill="#F5B544" font-size="14" font-weight="600">Transaction / refund · R2 → L2/L3 at I2/I3</text>
+      <circle cx="16" cy="289" r="5" fill="#F2786E"/><text x="28" y="294" fill="#F2786E" font-size="14" font-weight="600">Complaints &amp; fraud · R3 → route-only to a human</text>
+      <circle cx="450" cy="289" r="5" fill="#F2786E"/><text x="462" y="294" fill="#F2786E" font-size="14" font-weight="600">Dispute adjudication · R4 → L1, permanent</text>
+
+      <!-- step 8 in detail: deterministic by construction — the anti-hallucination point -->
+      <text class="lg" x="0" y="326" style="font-size:16px">Step 8 — the category picks a locked template; the reply is <tspan fill="#5FD3BE" font-weight="600">assembled, not written</tspan>, so the answer stays deterministic.</text>
+      <rect x="0" y="338" width="360" height="54" rx="8" fill="#1A2536" stroke="#3B7DD8"/><text class="lgb" x="18" y="364" fill="#6FA8FF" style="font-size:18px">Locked template</text><text class="lgd" x="18" y="384" style="font-size:15px">regulated disclosures · fixed wording</text>
+      <rect x="384" y="338" width="360" height="54" rx="8" fill="#17322E" stroke="#3F8F4A"/><text class="lgb" x="402" y="364" fill="#7BD88F" style="font-size:18px">System slots</text><text class="lgd" x="402" y="384" style="font-size:15px">amounts and dates — checked field by field</text>
+      <rect x="768" y="338" width="360" height="54" rx="8" fill="#241E3A" stroke="#8B5CF6"/><text class="lgb" x="786" y="364" fill="#A78BFA" style="font-size:18px">Connective tissue</text><text class="lgd" x="786" y="384" style="font-size:15px">the only text a model touches</text>
+      <text class="lgd" x="0" y="416" style="font-size:15px">Personalization is the name, product, thread history, tone tier and channel — never a disclosure or an amount (CSAT gates graduation, <tspan class="xref" data-jump="B6">B6</tspan>).</text>
     </svg>
     <figure class="zoomshot">
       <img data-src="assets/shots/shot-letter.jpg" alt="The assembled reply, colored by source">
@@ -936,59 +945,54 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       <text x="778" y="102" fill="#5FD3BE" font-size="14.5">We: I0–I3 identity — what may be disclosed</text>
 
       <!-- ── 2 · where the human sits ── -->
-      <text x="0" y="156" fill="#EAF0F6" font-size="16.5" font-weight="600">R (action risk) × I (identity assurance) → <tspan fill="#5FD3BE">L (where the human sits)</tspan><tspan fill="#9BAAB9" font-weight="400"> · nothing starts autonomous</tspan></text>
+      <text x="0" y="156" fill="#EAF0F6" font-size="15.5" font-weight="600">The slide-04 category sets the ROW (R) · step-3 identity sets the COLUMN (I) · the cell is the ROAD step 5 takes — <tspan fill="#5FD3BE">R × I = L, where the human sits</tspan></text>
 
       <rect class="card2" x="256" y="168" width="196" height="30" rx="6"/><text class="lgb" x="354" y="188" text-anchor="middle" style="font-size:15px">I0 · identity unconfirmed</text>
       <rect class="card2" x="464" y="168" width="196" height="30" rx="6"/><text class="lgb" x="562" y="188" text-anchor="middle" style="font-size:15px">I1 · sender domain only</text>
       <rect class="card2" x="672" y="168" width="196" height="30" rx="6"/><text class="lgb" x="770" y="188" text-anchor="middle" style="font-size:15px">I2 · on-file address</text>
       <rect class="card2" x="880" y="168" width="196" height="30" rx="6"/><text class="lgb" x="978" y="188" text-anchor="middle" style="font-size:15px">I3 · verified in app</text>
 
-      <rect class="card2" x="36" y="206" width="196" height="34" rx="6"/><text class="lgb" x="134" y="228" text-anchor="middle" style="font-size:15px">R0 · public info</text>
+      <rect class="card2" x="36" y="206" width="196" height="34" rx="6"/><text class="lgb" x="134" y="222" text-anchor="middle" style="font-size:13.5px">R0 · General inquiries</text><text class="lgd" x="134" y="239" text-anchor="middle" style="font-size:11.5px">public info</text>
       <rect x="256" y="206" width="196" height="34" rx="6" fill="#1B4A44" stroke="#5FD3BE"/><text class="lgb" x="354" y="228" text-anchor="middle" fill="#5FD3BE" style="font-size:15px">L3</text>
       <rect x="464" y="206" width="196" height="34" rx="6" fill="#1B4A44" stroke="#5FD3BE"/><text class="lgb" x="562" y="228" text-anchor="middle" fill="#5FD3BE" style="font-size:15px">L3</text>
       <rect x="672" y="206" width="196" height="34" rx="6" fill="#1B4A44" stroke="#5FD3BE"/><text class="lgb" x="770" y="228" text-anchor="middle" fill="#5FD3BE" style="font-size:15px">L3</text>
       <rect x="880" y="206" width="196" height="34" rx="6" fill="#1B4A44" stroke="#5FD3BE"/><text class="lgb" x="978" y="228" text-anchor="middle" fill="#5FD3BE" style="font-size:15px">L3</text>
 
-      <rect class="card2" x="36" y="245" width="196" height="34" rx="6"/><text class="lgb" x="134" y="267" text-anchor="middle" style="font-size:15px">R1 · read account data</text>
+      <rect class="card2" x="36" y="245" width="196" height="34" rx="6"/><text class="lgb" x="134" y="261" text-anchor="middle" style="font-size:13.5px">R1 · Account servicing</text><text class="lgd" x="134" y="278" text-anchor="middle" style="font-size:11.5px">reads account data</text>
       <rect x="256" y="245" width="196" height="34" rx="6" fill="#232D38" stroke="#2E3A46"/><text class="lg" x="354" y="267" text-anchor="middle" style="font-size:15px">locked · step-up</text>
       <rect x="464" y="245" width="196" height="34" rx="6" fill="#232D38" stroke="#2E3A46"/><text class="lg" x="562" y="267" text-anchor="middle" style="font-size:15px">locked · step-up</text>
       <rect x="672" y="245" width="196" height="34" rx="6" fill="#3A3320" stroke="#F5B544"/><text class="lgb" x="770" y="267" text-anchor="middle" fill="#F5B544" style="font-size:15px">L2 → L3</text>
       <rect x="880" y="245" width="196" height="34" rx="6" fill="#3A3320" stroke="#F5B544"/><text class="lgb" x="978" y="267" text-anchor="middle" fill="#F5B544" style="font-size:15px">L2 → L3</text>
 
-      <rect class="card2" x="36" y="284" width="196" height="34" rx="6"/><text class="lgb" x="134" y="306" text-anchor="middle" style="font-size:15px">R2 · reversible writes</text>
-      <rect x="256" y="284" width="196" height="34" rx="6" fill="#232D38" stroke="#2E3A46"/><text class="lg" x="354" y="306" text-anchor="middle" style="font-size:15px">L0 · intake + clock</text>
+      <rect class="card2" x="36" y="284" width="196" height="34" rx="6"/><text class="lgb" x="134" y="300" text-anchor="middle" style="font-size:13.5px">R2 · Transactions / refunds</text><text class="lgd" x="134" y="317" text-anchor="middle" style="font-size:11.5px">reversible writes</text>
+      <rect x="256" y="284" width="196" height="34" rx="6" fill="#3B2320" stroke="#F2786E"/><text class="lgb" x="354" y="306" text-anchor="middle" fill="#F2786E" style="font-size:15px">L1 · intake + clock</text>
       <rect x="464" y="284" width="196" height="34" rx="6" fill="#232D38" stroke="#2E3A46"/><text class="lg" x="562" y="306" text-anchor="middle" style="font-size:15px">locked · step-up</text>
       <rect x="672" y="284" width="196" height="34" rx="6" fill="#3A3320" stroke="#F5B544"/><text class="lgb" x="770" y="306" text-anchor="middle" fill="#F5B544" style="font-size:15px">L2 one-click</text>
       <rect x="880" y="284" width="196" height="34" rx="6" fill="#1B4A44" stroke="#5FD3BE"/><text class="lgb" x="978" y="306" text-anchor="middle" fill="#5FD3BE" style="font-size:15px">L3 in policy</text>
 
-      <rect class="card2" x="36" y="323" width="196" height="34" rx="6"/><text class="lgb" x="134" y="345" text-anchor="middle" fill="#F2786E" style="font-size:15px">R3 · high-impact changes</text>
+      <rect class="card2" x="36" y="323" width="196" height="34" rx="6"/><text class="lgb" x="134" y="339" text-anchor="middle" fill="#F2786E" style="font-size:13.5px">R3 · Complaints</text><text class="lgd" x="134" y="356" text-anchor="middle" style="font-size:11.5px">high-impact changes</text>
       <rect x="256" y="323" width="820" height="34" rx="6" fill="#3B2320" stroke="#F2786E"/><text class="lgb" x="666" y="345" text-anchor="middle" fill="#F2786E" style="font-size:15px">Never autonomous over email — the tool functions do not exist on this channel</text>
 
-      <rect class="card2" x="36" y="362" width="196" height="34" rx="6"/><text class="lgb" x="134" y="380" text-anchor="middle" style="font-size:15px">R4 · adjudication</text><text class="lgb" x="134" y="395" text-anchor="middle" style="font-size:14px">/ money movement</text>
-      <rect x="256" y="362" width="820" height="34" rx="6" fill="#3A3320" stroke="#F5B544"/><text class="lgb" x="666" y="384" text-anchor="middle" fill="#F5B544" style="font-size:15px">L0 decides · the AI drafts at L1 and a person signs — permanent, no graduation path</text>
+      <rect class="card2" x="36" y="362" width="196" height="34" rx="6"/><text class="lgb" x="134" y="378" text-anchor="middle" fill="#F2786E" style="font-size:13.5px">R4 · Disputes</text><text class="lgd" x="134" y="395" text-anchor="middle" style="font-size:11.5px">adjudication / money movement</text>
+      <rect x="256" y="362" width="820" height="34" rx="6" fill="#3B2320" stroke="#F2786E"/><text class="lgb" x="666" y="384" text-anchor="middle" fill="#F2786E" style="font-size:15px">L1 · a person decides and signs; AI drafts — permanent, no graduation path</text>
 
-      <!-- L0–L3 spelled out: the matrix output, at the weight the concept carries -->
+      <!-- L1–L3 spelled out: the matrix output, at the weight the concept carries -->
 
 
-      <rect x="0" y="426" width="276" height="52" rx="8" fill="#3B2320" stroke="#F2786E"/>
-      <text x="16" y="462" fill="#F2786E" font-size="24" font-weight="700">L0</text>
-      <text x="66" y="449" fill="#EAF0F6" font-size="15.5" font-weight="600">human decides and sends</text>
-      <text x="66" y="469" fill="#9BAAB9" font-size="14">AI only triages and suggests</text>
+      <rect x="0" y="426" width="364" height="52" rx="8" fill="#35251C" stroke="#F0925A"/>
+      <text x="16" y="462" fill="#F0925A" font-size="24" font-weight="700">L1</text>
+      <text x="66" y="449" fill="#EAF0F6" font-size="15.5" font-weight="600">human-signed: decides and sends</text>
+      <text x="66" y="469" fill="#9BAAB9" font-size="14">AI triages, drafts; a human signs</text>
 
-      <rect x="284" y="426" width="276" height="52" rx="8" fill="#35251C" stroke="#F0925A"/>
-      <text x="300" y="462" fill="#F0925A" font-size="24" font-weight="700">L1</text>
-      <text x="350" y="449" fill="#EAF0F6" font-size="15.5" font-weight="600">AI drafts</text>
-      <text x="350" y="469" fill="#9BAAB9" font-size="14">model writes, a human signs</text>
+      <rect x="382" y="426" width="364" height="52" rx="8" fill="#3A3320" stroke="#F5B544"/>
+      <text x="398" y="462" fill="#F5B544" font-size="24" font-weight="700">L2</text>
+      <text x="448" y="449" fill="#EAF0F6" font-size="15.5" font-weight="600">one-click approval</text>
+      <text x="448" y="469" fill="#9BAAB9" font-size="14">a person approves, it runs</text>
 
-      <rect x="568" y="426" width="276" height="52" rx="8" fill="#3A3320" stroke="#F5B544"/>
-      <text x="584" y="462" fill="#F5B544" font-size="24" font-weight="700">L2</text>
-      <text x="634" y="449" fill="#EAF0F6" font-size="15.5" font-weight="600">one-click approval</text>
-      <text x="634" y="469" fill="#9BAAB9" font-size="14">a person approves, it runs</text>
-
-      <rect x="852" y="426" width="276" height="52" rx="8" fill="#1B4A44" stroke="#5FD3BE"/>
-      <text x="868" y="462" fill="#5FD3BE" font-size="24" font-weight="700">L3</text>
-      <text x="918" y="449" fill="#EAF0F6" font-size="15.5" font-weight="600">auto-execute</text>
-      <text x="918" y="469" fill="#9BAAB9" font-size="14">acts alone, no one clicks</text>
+      <rect x="764" y="426" width="364" height="52" rx="8" fill="#1B4A44" stroke="#5FD3BE"/>
+      <text x="780" y="462" fill="#5FD3BE" font-size="24" font-weight="700">L3</text>
+      <text x="830" y="449" fill="#EAF0F6" font-size="15.5" font-weight="600">auto-execute</text>
+      <text x="830" y="469" fill="#9BAAB9" font-size="14">acts alone, no one clicks</text>
 
       <text class="lgd" x="0" y="500" style="font-size:14.5px">Graduation: backtest → shadow → dual sign-off (compliance + operations) → autonomous · auto-demotion on drift</text>
     </svg>
@@ -1003,6 +1007,7 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
 <section class="slide">
   <p class="eyebrow"><span class="n">07</span> Intelligence</p>
   <h2>AI nominates, the evidence argues, humans sign the diff.</h2>
+  <p class="claim" style="margin-bottom:8px">This is the post-launch loop on top of slides 04–06, not a second engine: the deterministic matrix still decides every reply. AI only proposes changes to the same categories and limits, and two humans sign every diff.</p>
   <div class="chart">
     <svg viewBox="0 0 1128 176" role="img" style="max-height:none;flex:0 0 auto">
       <text x="0" y="12" fill="#9BAAB9" font-size="14" font-weight="600" letter-spacing="1.4">A LOOP, NOT A PIPELINE</text>
@@ -1809,12 +1814,12 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
         <tr><td class="k">General inquiries · 25%</td><td style="color:#5FD3BE">W1</td><td>L3 direct answers with policy grounding and source citation</td></tr>
         <tr><td class="k">Transactions · 20%</td><td style="color:#5FD3BE">W1</td><td>Reads L2→L3; in-threshold refunds pass policy; a 2nd refund in 12 months goes to a human</td></tr>
         <tr><td class="k">Account servicing · 25%</td><td style="color:#5FD3BE">W1 reads</td><td>Reads and reversible lock at L3; contact change and reissue are R3, never automatic</td></tr>
-        <tr><td class="k">Disputes · 10%</td><td style="color:#5FD3BE">W1 intake</td><td>Detect, clock, receipt, chase documents, build the file; adjudication stays L0</td></tr>
+        <tr><td class="k">Disputes · 10%</td><td style="color:#5FD3BE">W1 intake</td><td>Detect, clock, receipt, chase documents, build the file; adjudication stays L1</td></tr>
         <tr><td class="k">Fraud and security</td><td style="color:#5FD3BE">W1 protect</td><td>Detect → quarantine → confirm over on-file channels; never replies into a suspected-fraud case</td></tr>
         <tr><td class="k">Spam / noise</td><td style="color:#5FD3BE">W1</td><td>L3 auto-archive; excluded from the VARR count</td></tr>
         <tr><td class="k">Payments / payoff · 15%</td><td style="color:#F5B544">W2</td><td>Letters automatic; changing autopay or payee account is R3 → authenticated channels</td></tr>
         <tr><td class="k">Complaints and vulnerable</td><td style="color:#F5B544">W2 deep</td><td>W1 is detect, warm handoff, clock registration; UDAAP wording review in W2</td></tr>
-        <tr><td class="k">Off-brief · 5%</td><td style="color:#F2786E">Route only</td><td>Legal process, POA — recognize and route at L0, closure never automated</td></tr>
+        <tr><td class="k">Off-brief · 5%</td><td style="color:#F2786E">Route only</td><td>Legal process, POA — recognize and route at L1, closure never automated</td></tr>
         <tr><td class="k">A2A · cross-institution threads</td><td style="color:#F2786E">Waits · vision</td><td>An agent holds thread state and the evidence pack across institutions; negotiation and settlement stay human — on the “never” list below, not on the roadmap</td></tr>
       </table>
       <div class="panel no dense">
@@ -2100,7 +2105,7 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       <tr><td class="k">2 · The ratchet</td><td>Tightening is immediate and time-boxed: a same-day change may only tighten, and must carry an expiry. Any loosening runs backtest → shadow → dual sign. Policy content changes are dual-signed either way.</td></tr>
       <tr><td class="k">3 · Predictions change wording, never outcomes</td><td>Customer value and churn never enter a decision — otherwise “the squeaky wheel gets the grease”, which is an ECOA and UDAAP problem. A consequence preview may reword a letter; it may not re-decide it.</td></tr>
       <tr><td class="k">4 · ROI first, evidence decides</td><td>ROI decides who we build for first. Evidence decides whether it can be built at all — 90 days of samples, four proofs, zero critical misses.</td></tr>
-      <tr><td class="k">5 · New things are born in shadow</td><td>Humans set R and I levels. Candidates start shadow-classified and graduate normally. R3 never enters email; R4 stays L0 permanently.</td></tr>
+      <tr><td class="k">5 · New things are born in shadow</td><td>Humans set R and I levels. Candidates start shadow-classified and graduate normally. R3 never enters email; R4 stays L1 permanently.</td></tr>
       <tr><td class="k">6 · Proactive outreach is account facts only</td><td>Locked templates plus slots, frequency caps, opt-out (statutory notices excepted), on-file addresses only, no marketing, no links asking for information or credentials. A decision <i>not</i> to send is logged too.</td></tr>
       <tr><td class="k">7 · Fairness is a required answer</td><td>Every nomination and policy diff carries cohort impact across language / 62+ / LMI tract / channel / stated vulnerability. Cohort data is monitored only — no protected attributes collected. The engine is deterministic, so unfairness comes from its surroundings: identification error, step-up drop-off, or approver variance at L2.</td></tr>
     </table>

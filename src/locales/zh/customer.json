@@ -117,12 +117,12 @@
       "SECOND_WAIVER_12M_FORCED_HUMAN_L2": "12 个月内第二次豁免，转人工",
       "LOW_CONFIDENCE_HANDOFF": "识别置信度不足，转人工",
       "R0_PUBLIC_INFO_L3": "公开信息，可自动答复",
-      "FRAUD_REVIEW_L0": "疑似欺诈，只转人工",
-      "R4_ADJUDICATION_HUMAN_L0": "裁决归人工",
+      "FRAUD_REVIEW_L1": "疑似欺诈，只转人工",
+      "R4_ADJUDICATION_HUMAN_L1": "裁决归人工",
       "R4_DRAFT_HUMAN_SIGNOFF_L1": "结果信须人工签发",
       "NOT_GRADUATED_FAIL_CLOSED": "未毕业，先关闸转人工",
       "POLICY_FAIL_EXPLANATION_DRAFT_L2": "政策不通过，起草说明待批",
-      "POLICY_UNKNOWN_FAIL_CLOSED_L0": "政策未知，先关闸转人工",
+      "POLICY_UNKNOWN_FAIL_CLOSED_L1": "政策未知，先关闸转人工",
       "HUMAN_RECONSIDERATION_OPEN": "可申请人工复议",
       "NEVER_NO_TOOL_REGISTERED": "邮件渠道没有注册这类工具",
       "NEVER_CONFIG_LOCKED": "配置层锁死，永不开放",
@@ -133,7 +133,7 @@
       "R2_WRITE_L2_TO_GRADUATED_L3": "已毕业意图按 L3 自动执行",
       "R1_I2_LOW_SENSITIVITY_FIELDS_ONLY": "I2 身份只放低敏字段",
       "R1_I3": "I3 身份，可读可披露",
-      "NOT_GRADUATED_FAIL_CLOSED_L0": "意图未毕业，先关闸转人工",
+      "NOT_GRADUATED_FAIL_CLOSED_L1": "意图未毕业，先关闸转人工",
       "POLICY_VERSION_FALLBACK_CAP_L2": "政策版本降级，上限压到 L2",
       "UNKNOWN_RISK_FAIL_CLOSED": "风险档未知，先关闸转人工"
     },
@@ -207,7 +207,6 @@
       "wire_recall_request": "电汇撤销请求"
     },
     "levels": {
-      "L0": "只转人工",
       "L1": "起草待签发",
       "L2": "一键审批",
       "L3": "自动执行"
@@ -292,7 +291,7 @@
     "denySub": "只给固定话术",
     "neverSub": "工具层无此能力",
     "capLabel": "L 轴 · 毕业封顶",
-    "capNone": "未毕业 · 最高 L0",
+    "capNone": "未毕业 · 最高 L1",
     "capSome": "已毕业 · 最高 {{level}}"
   },
   "cell": {

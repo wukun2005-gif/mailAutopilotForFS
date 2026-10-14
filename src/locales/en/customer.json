@@ -117,12 +117,12 @@
       "SECOND_WAIVER_12M_FORCED_HUMAN_L2": "Second waiver in 12 months, routed to human",
       "LOW_CONFIDENCE_HANDOFF": "Low recognition confidence, handed to human",
       "R0_PUBLIC_INFO_L3": "Public info, auto-reply allowed",
-      "FRAUD_REVIEW_L0": "Suspected fraud, human only",
-      "R4_ADJUDICATION_HUMAN_L0": "Adjudication stays human",
+      "FRAUD_REVIEW_L1": "Suspected fraud, human only",
+      "R4_ADJUDICATION_HUMAN_L1": "Adjudication stays human",
       "R4_DRAFT_HUMAN_SIGNOFF_L1": "Result letter needs human sign-off",
       "NOT_GRADUATED_FAIL_CLOSED": "Not graduated, fail closed to human",
       "POLICY_FAIL_EXPLANATION_DRAFT_L2": "Policy failed, explanation drafted for approval",
-      "POLICY_UNKNOWN_FAIL_CLOSED_L0": "Unknown policy, fail closed to human",
+      "POLICY_UNKNOWN_FAIL_CLOSED_L1": "Unknown policy, fail closed to human",
       "HUMAN_RECONSIDERATION_OPEN": "Human reconsideration available",
       "NEVER_NO_TOOL_REGISTERED": "No such tool exists in the email channel",
       "NEVER_CONFIG_LOCKED": "Locked at the configuration layer, never enabled",
@@ -133,7 +133,7 @@
       "R2_WRITE_L2_TO_GRADUATED_L3": "Graduated intent executes automatically at L3",
       "R1_I2_LOW_SENSITIVITY_FIELDS_ONLY": "I2 identity releases low-sensitivity fields only",
       "R1_I3": "I3 identity, read and disclosure allowed",
-      "NOT_GRADUATED_FAIL_CLOSED_L0": "Intent not graduated, fail closed to human",
+      "NOT_GRADUATED_FAIL_CLOSED_L1": "Intent not graduated, fail closed to human",
       "POLICY_VERSION_FALLBACK_CAP_L2": "Policy version degraded, capped at L2",
       "UNKNOWN_RISK_FAIL_CLOSED": "Risk level unknown, fail closed to human"
     },
@@ -207,7 +207,6 @@
       "wire_recall_request": "Wire recall request"
     },
     "levels": {
-      "L0": "human only",
       "L1": "draft for sign-off",
       "L2": "one-click approval",
       "L3": "auto-execute"
@@ -292,7 +291,7 @@
     "denySub": "locked wording",
     "neverSub": "no such tool",
     "capLabel": "L axis · graduation cap",
-    "capNone": "not graduated · max L0",
+    "capNone": "not graduated · max L1",
     "capSome": "graduated · max {{level}}"
   },
   "cell": {

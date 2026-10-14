@@ -114,7 +114,7 @@ export function makeAct(deps: NodeDeps): NodeFn {
       updates.status = "quarantined";
       addApproval({
         id: FRAUD_APPROVAL, kind: "fraud_confirm", intentCode: "contact_detail_change",
-        risk: "R3", lLevel: "L0", title: "Confirm BEC/ATO quarantine", status: "pending",
+        risk: "R3", lLevel: "L1", title: "Confirm BEC/ATO quarantine", status: "pending",
       });
       await emit(state, "act", "system", { quarantined: true, signals: f });
       return { ...updates, actions: actionEntries };

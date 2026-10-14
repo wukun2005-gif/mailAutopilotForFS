@@ -34,7 +34,7 @@
     "manualCap": "手动封顶",
     "legendLocked": "锁定模板 / 影子",
     "legendNever": "硬永不：配置禁用 + 无工具",
-    "legendR4": "R4 永久属于人：L0 人决策 / L1 AI 起草、人签发",
+    "legendR4": "R4 永久属于人（L1）：AI 起草，人决策签发",
     "driftNotice": "漂移自动降级生效：{{intent}} 被降回 L2",
     "driftDetail": "PSI/工具失败率/新意图簇超阈 → 自动执行（fail-closed，无需人工审批）。重新回测达标后可双签放回。"
   },
@@ -82,7 +82,7 @@
     "signed": "已签",
     "signedAt": "{{role}} 于 {{at}} 签署",
     "apply": "把毕业结果应用到 runtime",
-    "neverR4Headline": "永久属于人：R4 裁决为 L0 人决策 / L1 人签草稿",
+    "neverR4Headline": "永久属于人：R4 裁决为 L1 人决策、人签发",
     "neverR3Headline": "邮件渠道硬永不：没有注册任何 R3 工具",
     "neverClockHeadline": "时钟驱动自动执行：按银行规则计算、L2 主管一键批，永不毕业 L3",
     "neverDetail": "该意图在结构上无法毕业。",

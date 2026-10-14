@@ -318,7 +318,7 @@ class DesignTimeStore {
     if (!c || c.reportOnly) return;
     c.state = "in_shadow";
     // The accepted candidate becomes a real (shadow-state) intent row: it
-    // shows up in the runtime intent/graduation lists, fail-closed at L0,
+    // shows up in the runtime intent/graduation lists, fail-closed at L1,
     // until it earns dual sign and graduates.
     if (!GRADUATION_TABLE.some((g) => g.intentCode === c.proposedCode)) {
       GRADUATION_TABLE.push({
