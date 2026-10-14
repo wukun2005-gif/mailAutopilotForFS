@@ -13,8 +13,15 @@
 // from the case state); the other three columns are computed by the same
 // decideCell() the runtime uses, through the same input builder, so this
 // cannot drift into showing a different answer than the one that was applied.
+//
+// Spotlight: clock-driven approvals (provisional credit, adjudication) surface
+// intents the email turns never decide, and matrix verdicts only recompute on
+// email turns — so while such an approval is pending the strip shows ITS row
+// (with the approval's level as the awaited verdict) instead of staying frozen
+// on the last email row. Email-intent approvals keep the latest-decision row,
+// so scripted audit beats never move.
 import { decideCell } from "@/runtime/gates.ts";
-import { autonomyInput, IDENTITY_COLUMNS } from "@/runtime/autonomyView.ts";
+import { autonomyInput, IDENTITY_COLUMNS, pickSpotlightApproval } from "@/runtime/autonomyView.ts";
 import { intentSpec, graduatedLevel } from "@/runtime/intentRegistry.ts";
 import type { CaseStateType } from "@/runtime/caseState.ts";
 import type { CellValue, ILevel } from "@/runtime/state.ts";
@@ -49,20 +56,22 @@ export function AutonomyStrip({ state }: { state: CaseStateType }) {
   // throwing — an unguarded throw here unmounts the whole screen.
   const decisions = state.decisions ?? [];
   const decision = decisions[decisions.length - 1];
-  if (!decision) return null;
-  const spec = intentSpec(decision.intentCode);
+  const spot = pickSpotlightApproval(state);
+  if (!decision && !spot) return null;
+  const rowIntent = spot ? spot.intentCode : decision!.intentCode;
+  const rowRisk = spot ? spot.risk : intentSpec(decision!.intentCode).risk;
   // Third axis: the graduation ceiling for this intent (null = never graduated).
-  const cap = graduatedLevel(decision.intentCode);
+  const cap = graduatedLevel(rowIntent);
   const current = state.identity?.level ?? "I0";
-  const emailId = decision.sourceEmailId;
-  const base = autonomyInput(state, decision.intentCode, spec.risk, emailId);
+  const emailId = decision?.sourceEmailId ?? state.currentEmailId ?? null;
+  const base = autonomyInput(state, rowIntent, rowRisk, emailId);
 
   return (
     <div className="rounded-lg border border-line bg-white p-3" data-id="s1.autonomy">
       <div className="flex items-baseline justify-between gap-2">
         <span className="text-[14px] font-semibold text-navy">{t("matrix.stripTitle")}</span>
         <span className="truncate text-[12px] text-faint">
-          {t(`builder:matrix.risk.${spec.risk}`, { defaultValue: spec.risk })}
+          {t(`builder:matrix.risk.${rowRisk}`, { defaultValue: rowRisk })}
         </span>
       </div>
       {/* The third axis, without which the strip only draws two of the three:
@@ -73,19 +82,35 @@ export function AutonomyStrip({ state }: { state: CaseStateType }) {
       >
         <span className="text-[11.5px] text-faint">{t("matrix.capLabel")}</span>
         <span className="font-mono text-[12px] font-semibold text-navy">
-          {cap === null
-            ? t("matrix.capNone")
-            : t("matrix.capSome", { level: cap })}
+          {cap !== null
+            ? t("matrix.capSome", { level: cap })
+            : spot
+              ? t("matrix.capFixed", { level: spot.lLevel })
+              : t("matrix.capNone")}
         </span>
       </div>
       <div className="mt-1.5 grid grid-cols-4 gap-1">
         {IDENTITY_COLUMNS.map((col: ILevel) => {
-          // The case's own column shows the applied verdict, not a recompute.
-          const cell =
-            col === current
-              ? decision.cell
-              : decideCell({ ...base, identity: col }).cell;
-          const { head, sub } = cellLabel(cell, t as (k: string, o?: Record<string, unknown>) => string);
+          // The case's own column shows the applied verdict, not a recompute —
+          // unless a spotlight approval is pending for this row, in which case
+          // the approval's level is what the case is actually waiting on.
+          let head: string;
+          let sub: string;
+          let tone: string;
+          if (spot && col === current) {
+            head = spot.lLevel;
+            sub = t("matrix.awaitingApproval");
+            tone = spot.lLevel;
+          } else {
+            const cell =
+              col === current && decision
+                ? decision.cell
+                : decideCell({ ...base, identity: col }).cell;
+            const labeled = cellLabel(cell, t as (k: string, o?: Record<string, unknown>) => string);
+            head = labeled.head;
+            sub = labeled.sub;
+            tone = cell.kind === "L" ? cell.level : cell.kind;
+          }
           const active = col === current;
           return (
             <div
@@ -101,7 +126,7 @@ export function AutonomyStrip({ state }: { state: CaseStateType }) {
               <div
                 className={cn(
                   "mt-0.5 inline-block rounded px-1 py-px text-[12px] font-semibold leading-tight",
-                  TONE[cell.kind === "L" ? cell.level : cell.kind],
+                  TONE[tone],
                 )}
               >
                 {head}

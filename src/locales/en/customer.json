@@ -292,7 +292,9 @@
     "neverSub": "no such tool",
     "capLabel": "L axis · graduation cap",
     "capNone": "not graduated · max L1",
-    "capSome": "graduated · max {{level}}"
+    "capSome": "graduated · max {{level}}",
+    "capFixed": "fixed · max {{level}}",
+    "awaitingApproval": "waiting approval"
   },
   "cell": {
     "deny": "no grant",
