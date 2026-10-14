@@ -64,7 +64,7 @@ export type PolicyCard = z.infer<typeof PolicyCardSchema>;
 export type ApprovalKind =
   | "money_action" // L2 one-click approve (e.g. refund, provisional credit)
   | "draft_signoff" // L1 human sends
-  | "adjudication" // R4: human decides (L0)
+  | "adjudication" // R4: human decides (L1)
   | "fraud_confirm" // quarantine confirm → SAR locked template
   | "manual_review"; // FR-1.5: reviewer clears a low-confidence attachment task
 

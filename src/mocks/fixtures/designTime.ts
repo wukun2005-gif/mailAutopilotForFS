@@ -159,8 +159,8 @@ export const NOMINATIONS: Nomination[] = [
     cooldownDays: 30,
     neverNominated: true,
     neverReason: {
-      zh: "R4 法律责任与 UDAAP 风险：AI 可起草结果函，裁决永远是人（L0）",
-      en: "R4 legal liability and UDAAP risk: AI may draft the outcome letter; adjudication stays human (L0)",
+      zh: "R4 法律责任与 UDAAP 风险：AI 可起草结果函，裁决永远是人（L1）",
+      en: "R4 legal liability and UDAAP risk: AI may draft the outcome letter; adjudication stays human (L1)",
     },
     evidence: {
       consistency: { reproRate: 0, sampleSize: 0, thresholdRate: 0.99, criticalMisses: 0, regulated: true },

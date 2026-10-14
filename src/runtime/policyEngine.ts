@@ -1,7 +1,7 @@
 // Deterministic policy engine (Dev Plan §6.5) — the LLM never decides policy.
 // This local engine is the source of truth; /mock/policy/evaluate is only a
 // network shell that mirrors it. Missing evidence is UNKNOWN, and the gate
-// turns UNKNOWN into fail-closed L0.
+// turns UNKNOWN into fail-closed L1.
 import type { PolicyCondition, PolicyPack } from "@/mocks/fixtures/index.ts";
 import type { PolicyCard, PolicyVerdict } from "./caseState.ts";
 

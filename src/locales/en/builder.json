@@ -34,7 +34,7 @@
     "manualCap": "manual cap",
     "legendLocked": "locked template / shadow",
     "legendNever": "hard never: config + no tool",
-    "legendR4": "R4 is permanently human L0 decide / L1 AI-drafts-human-signs",
+    "legendR4": "R4 is permanently human L1: AI drafts, humans decide and sign",
     "driftNotice": "Drift auto-degrade active: {{intent}} dropped to L2",
     "driftDetail": "PSI / tool failure rate / new intent cluster over threshold → auto-executed (fail-closed, no human approval). Re-run backtest, then dual-sign to restore."
   },
@@ -82,7 +82,7 @@
     "signed": "signed",
     "signedAt": "{{role}} signed {{at}}",
     "apply": "apply graduation to runtime",
-    "neverR4Headline": "Permanent human: R4 adjudication is L0 decide / L1 human-signed draft",
+    "neverR4Headline": "Permanent human: R4 adjudication is L1 human-decided, human-signed",
     "neverR3Headline": "Hard never in the email channel: no R3 tool is registered",
     "neverClockHeadline": "Clock-driven automation: computed by bank rules, L2 one-tap approval — never graduates to L3",
     "neverDetail": "Graduation is structurally unreachable for this intent.",

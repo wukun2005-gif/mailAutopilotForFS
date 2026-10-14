@@ -6,7 +6,7 @@
 import type { CellValue, ILevel, LLevel, RLevel } from "./state.ts";
 import type { PolicyVerdict } from "./caseState.ts";
 
-export const L_RANK: Record<LLevel, number> = { L0: 0, L1: 1, L2: 2, L3: 3 };
+export const L_RANK: Record<LLevel, number> = { L1: 1, L2: 2, L3: 3 };
 
 export interface CellDecision {
   cell: CellValue;
@@ -67,11 +67,11 @@ export function decideCell(args: DecideCellArgs): CellDecision {
     };
   }
 
-  // ── R4: permanent L0/L1 — human adjudicates, AI only drafts ──
+  // ── R4: permanently L1 human — human adjudicates, AI only drafts ──
   if (risk === "R4") {
     return {
       cell: l("L1"),
-      reasonCodes: ["R4_ADJUDICATION_HUMAN_L0", "R4_DRAFT_HUMAN_SIGNOFF_L1"],
+      reasonCodes: ["R4_ADJUDICATION_HUMAN_L1", "R4_DRAFT_HUMAN_SIGNOFF_L1"],
       queueable: true,
     };
   }
@@ -79,7 +79,7 @@ export function decideCell(args: DecideCellArgs): CellDecision {
   // ── R0: public information, no account data, all identity columns ──
   if (risk === "R0") {
     if (!args.graduatedL)
-      return { cell: l("L0"), reasonCodes: ["NOT_GRADUATED_FAIL_CLOSED"], queueable: false };
+      return { cell: l("L1"), reasonCodes: ["NOT_GRADUATED_FAIL_CLOSED"], queueable: false };
     return { cell: l("L3"), reasonCodes: ["R0_PUBLIC_INFO_L3"], queueable: false };
   }
 
@@ -87,7 +87,7 @@ export function decideCell(args: DecideCellArgs): CellDecision {
   if (risk === "R1") {
     if (identity === "I0") {
       if (args.fraudSuspected)
-        return { cell: l("L0"), reasonCodes: ["FRAUD_REVIEW_L0"], queueable: false };
+        return { cell: l("L1"), reasonCodes: ["FRAUD_REVIEW_L1"], queueable: false };
       return {
         cell: { kind: "deny", reasonCode: "R1_I0_NO_DISCLOSE_STEPUP" },
         reasonCodes: ["DRAFT_CHANNEL_CLOSED"],
@@ -112,7 +112,7 @@ export function decideCell(args: DecideCellArgs): CellDecision {
       // Composite cell: internal case creation + clocks run automatically;
       // the external receipt is a locked, account-free template.
       return {
-        cell: l("L0"),
+        cell: l("L1"),
         reasonCodes: ["R2_I0_INTERNAL_INTAKE_ONLY", "EXTERNAL_LOCKED_TEMPLATE"],
         queueable: false,
         externalLockedTemplate: true,
@@ -129,8 +129,8 @@ export function decideCell(args: DecideCellArgs): CellDecision {
     // I2/I3: policy result decides the write.
     if (args.policyOverall === "UNKNOWN") {
       return {
-        cell: l("L0"),
-        reasonCodes: ["POLICY_UNKNOWN_FAIL_CLOSED_L0"],
+        cell: l("L1"),
+        reasonCodes: ["POLICY_UNKNOWN_FAIL_CLOSED_L1"],
         queueable: false,
       };
     }
@@ -155,14 +155,14 @@ export function decideCell(args: DecideCellArgs): CellDecision {
   }
 
   // Unknown risk → fail closed.
-  return { cell: l("L0"), reasonCodes: ["UNKNOWN_RISK_FAIL_CLOSED"], queueable: false };
+  return { cell: l("L1"), reasonCodes: ["UNKNOWN_RISK_FAIL_CLOSED"], queueable: false };
 }
 
 function graduatedLadder(args: DecideCellArgs, reasons: string[]): CellDecision {
   if (!args.graduatedL) {
     return {
-      cell: l("L0"),
-      reasonCodes: [...reasons, "NOT_GRADUATED_FAIL_CLOSED_L0"],
+      cell: l("L1"),
+      reasonCodes: [...reasons, "NOT_GRADUATED_FAIL_CLOSED_L1"],
       queueable: false,
     };
   }

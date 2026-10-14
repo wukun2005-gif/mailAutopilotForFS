@@ -36,7 +36,6 @@ function cellLabel(
 const TONE: Record<string, string> = {
   never: "bg-gray-100 text-gray-500",
   deny: "bg-red-50 text-red-700 ring-1 ring-red-200",
-  L0: "bg-gray-200 text-gray-700",
   L1: "bg-amber-100 text-amber-900",
   L2: "bg-sky-100 text-sky-900",
   L3: "bg-teal text-white",

@@ -15,7 +15,7 @@ export interface GradOverride {
   driftDegraded?: boolean;
 }
 
-const RANK: Record<LLevel, number> = { L0: 0, L1: 1, L2: 2, L3: 3 };
+const RANK: Record<LLevel, number> = { L1: 1, L2: 2, L3: 3 };
 
 class OverrideStore {
   private map = new Map<string, GradOverride>();

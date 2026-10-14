@@ -2,7 +2,7 @@
 // Zod schemas for full CaseState land in M2 with the graph; M1 establishes
 // the vocabulary + the CaseEvent contract.
 
-export const L_LEVELS = ["L0", "L1", "L2", "L3"] as const;
+export const L_LEVELS = ["L1", "L2", "L3"] as const;
 export type LLevel = (typeof L_LEVELS)[number];
 
 export const R_LEVELS = ["R0", "R1", "R2", "R3", "R4"] as const;

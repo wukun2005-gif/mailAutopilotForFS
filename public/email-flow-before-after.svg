@@ -115,7 +115,7 @@
       <text x="853" y="368" font-size="12.5" font-weight="700" fill="#16324f">6. Human</text>
       <text x="853" y="384" font-size="12.5" font-weight="700" fill="#16324f">if needed</text>
       <text x="853" y="402">L1 edit · L2 approve</text>
-      <text x="853" y="418">L0 adjudicate;</text>
+      <text x="853" y="418">L1 adjudicate;</text>
       <text x="853" y="434">then auto-resume</text>
     </g>
     <g>

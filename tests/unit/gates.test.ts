@@ -11,15 +11,15 @@ const base = {
 };
 
 describe("decideCell — fail-closed matrix", () => {
-  it("never graduates above the table: no graduation → L0 even when everything else passes", () => {
+  it("never graduates above the table: no graduation → L1 even when everything else passes", () => {
     const d = decideCell({ ...base, risk: "R1", graduatedL: null });
-    expect(d.cell).toEqual({ kind: "L", level: "L0" });
+    expect(d.cell).toEqual({ kind: "L", level: "L1" });
     expect(d.reasonCodes.join(" ")).toContain("NOT_GRADUATED");
   });
 
-  it("UNKNOWN policy verdict fails closed to L0 for R2 writes", () => {
+  it("UNKNOWN policy verdict fails closed to L1 for R2 writes", () => {
     const d = decideCell({ ...base, risk: "R2", identity: "I3", policyOverall: "UNKNOWN" });
-    expect(d.cell).toEqual({ kind: "L", level: "L0" });
+    expect(d.cell).toEqual({ kind: "L", level: "L1" });
   });
 
   it("R3 contact changes are hard-never in the email channel and never queueable", () => {
@@ -28,7 +28,7 @@ describe("decideCell — fail-closed matrix", () => {
     expect(d.queueable).toBe(false);
   });
 
-  it("R4 adjudication is permanently human (L0 decision / L1 draft), identity cannot raise it", () => {
+  it("R4 adjudication is permanently human (L1 human decision and sign-off), identity cannot raise it", () => {
     for (const identity of ["I0", "I1", "I2", "I3"] as const) {
       const d = decideCell({ ...base, risk: "R4", identity, graduatedL: null });
       expect(d.cell).toEqual({ kind: "L", level: "L1" });
@@ -38,7 +38,7 @@ describe("decideCell — fail-closed matrix", () => {
 
   it("R2×I0 runs internal intake but locks the external reply to a template", () => {
     const d = decideCell({ ...base, risk: "R2", identity: "I0", policyOverall: "NOT_RUN" });
-    expect(d.cell).toEqual({ kind: "L", level: "L0" });
+    expect(d.cell).toEqual({ kind: "L", level: "L1" });
     expect(d.externalLockedTemplate).toBe(true);
   });
 
@@ -72,10 +72,10 @@ describe("decideCell — fail-closed matrix", () => {
     expect(d.cell).toEqual({ kind: "L", level: "L2" });
   });
 
-  it("unknown risk fails closed to L0", () => {
+  it("unknown risk fails closed to L1", () => {
     // @ts-expect-error deliberately unknown risk
     const d = decideCell({ ...base, risk: "R9" });
-    expect(d.cell).toEqual({ kind: "L", level: "L0" });
+    expect(d.cell).toEqual({ kind: "L", level: "L1" });
   });
 
   it("identity ceiling: R1/R2 allow L3 at I2/I3, never at I0/I1; R4 capped L1", () => {

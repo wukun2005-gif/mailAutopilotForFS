@@ -52,7 +52,7 @@ export async function actOnClock(
   ) {
     out.push({
       id: ADJ_APPROVAL, kind: "adjudication", intentCode: "reg_e_adjudication",
-      risk: "R4", lLevel: "L0", title: "Human adjudication — merchant evidence arrived (Day 40)",
+      risk: "R4", lLevel: "L1", title: "Human adjudication — merchant evidence arrived (Day 40)",
       status: "pending",
     });
   }

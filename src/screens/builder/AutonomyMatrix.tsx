@@ -1,7 +1,7 @@
 // AutonomyMatrix — R (action risk) × I (identity assurance) grid, FR-3.1/9.3.
 // Cells are computed by the SAME decideCell() pure function the runtime uses;
 // the Builder cannot open a cell the config layer cannot reach: R3 is a hard
-// never with no registered tool, R4 is permanently L0/L1 human.
+// never with no registered tool, R4 is permanently L1 human.
 import { Lock, Ban, MousePointerClick, AlertTriangle, BadgeCheck, Clock } from "lucide-react";
 import { decideCell } from "@/runtime/gates.ts";
 import { graduatedLevel } from "@/runtime/intentRegistry.ts";
@@ -25,7 +25,6 @@ const ROW_INTENT: Record<RLevel, string> = {
 };
 
 const L_COLOR: Record<LLevel, string> = {
-  L0: "bg-gray-200 text-gray-600",
   L1: "bg-amber-100 text-amber-900",
   L2: "bg-sky-100 text-sky-900",
   L3: "bg-teal text-white",
