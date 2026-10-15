@@ -94,7 +94,7 @@ td.k{color:var(--ink);font-weight:600}
 tr:last-child td{border-bottom:none}
 
 /* content-height, not flex:1 — stretching these two cards to fill the slide
-   left ~180px of empty card on Scope and B13, which reads as a mistake. */
+   left ~180px of empty card on Scope and B11, which reads as a mistake. */
 .panels{display:grid;grid-template-columns:1fr 1fr;gap:18px;min-height:0}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px 20px;display:flex;flex-direction:column}
 .panel .ph{font-size:19px;font-weight:600;margin-bottom:11px;display:flex;align-items:center;gap:9px}
@@ -118,7 +118,7 @@ table.xs td{padding:5px 9px;line-height:1.3}
 table.tight{font-size:12.5px;table-layout:fixed}
 table.tight th{font-size:11.5px;letter-spacing:.04em;padding:0 8px 5px}
 table.tight td{padding:3px 8px;line-height:1.28}
-/* B11 grew to twelve guardrails and B16 to seventeen risks: both pages fit by
+/* B9 grew to twelve guardrails and B14 to seventeen risks: both pages fit by
    tightening their own tables, not by running past the slide box */
 table.xs.pin{font-size:12px}
 table.xs.pin th{padding:0 9px 5px}
@@ -126,7 +126,7 @@ table.xs.pin td{padding:3.5px 9px;line-height:1.26}
 table.tight.pin{font-size:10.8px}
 table.tight.pin th{font-size:11px;padding:0 8px 4px}
 table.tight.pin td{padding:2px 8px;line-height:1.22}
-/* B18 puts eighteen rows in two columns — tightened so the closing note clears both tables */
+/* B16 puts eighteen rows in two columns — tightened so the closing note clears both tables */
 section.assumptions table.sm{font-size:14.5px}
 section.assumptions table.sm th{padding:0 10px 6px}
 section.assumptions table.sm td{padding:4px 10px;line-height:1.3}
@@ -138,7 +138,7 @@ section.assumptions table.sm td{padding:4px 10px;line-height:1.3}
 
 .risks{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;min-height:0}
 /* Three cards on the mainline again: sign-off fatigue moved to the register
-   (B16 · 14), where the rest of the long tail lives. */
+   (B14 · 14), where the rest of the long tail lives. */
 .risk{background:var(--panel);border:1px solid var(--line);border-radius:10px;
   padding:9px 16px;display:flex;flex-direction:column;gap:6px;min-width:0}
 .risk .idx{display:flex;align-items:center;gap:8px;font-size:12.5px;letter-spacing:.14em;
@@ -309,7 +309,7 @@ text .xref{cursor:pointer;text-decoration:underline;text-decoration-thickness:2p
   text-underline-offset:3px;font-weight:600}
 body.light a.xref:hover{color:#0B8055}
 
-/* The ask, item by item — the backup page (B21). Restored from the pre-review
+/* The ask, item by item — the backup page (B19). Restored from the pre-review
    deck, where it was B14 and got cut when the backups were trimmed to B6–B17. */
 .asklist{display:flex;flex-direction:column;gap:14px;min-height:0}
 .askrow{display:flex;gap:16px;align-items:flex-start;background:var(--panel);
@@ -635,21 +635,21 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
 <div class="stage" id="stage">
 <!-- ═══ 01 TITLE ═══ -->
 <section class="slide title on">
+  <p class="eyebrow" style="position:absolute;left:64px;right:64px;top:44px;margin:0"><span class="n">01</span></p>
   <h1>Email Autopilot for Financial Services</h1>
   <p class="sub">Turn every inbound email into a compliant, resolved case.</p>
   <p class="sig">Wu Kun, wukun2005@gmail.com, October 2026</p>
   <div class="outline">
     <b>Why</b><span>Problem &amp; motivation</span>
-    <b>What</b><span>Scope, how it works, the matrix</span>
+    <b>What</b><span>Scope, how it works, the metrics</span>
     <b>Demo</b><span>The screens and the demo films</span>
-    <b>Backup</b><span>Metrics, risk and roadmap on request</span>
   </div>
 </section>
 
 <!-- ═══ 02 ASSUMPTIONS & BEACHHEAD ═══ -->
 <section class="slide">
-  <p class="eyebrow"><span class="n">01</span> Beachhead</p>
-  <h2>Mid-size banks and credit unions are the beachhead.</h2>
+  <p class="eyebrow"><span class="n">02</span> Beachhead</p>
+  <h2>Mid-size banks are the beachhead.</h2>
   <p class="claim">Of 8,445 insured US institutions, 262 banks sit in the band we can serve: big enough to carry the full regulatory load, small enough to buy rather than build.</p>
   <div class="chart">
     <svg viewBox="0 0 1128 326" role="img">
@@ -678,7 +678,7 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
 
 <!-- ═══ 03 WHY FS CARES ═══ -->
 <section class="slide">
-  <p class="eyebrow"><span class="n">02</span> Why they care</p>
+  <p class="eyebrow"><span class="n">03</span> Why they care</p>
   <h2>Email is on the clock, costly and slow.</h2>
   <p class="claim">Three pains in one inbox: a legal clock starts at receipt, each email costs $6-12 and waits 27 hours, and agents lose 28% of their time re-typing.</p>
   <div class="chart">
@@ -744,7 +744,7 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
 
 
 
-<!-- ═══ 05 WHERE WE START · PRIORITIES ═══ -->
+<!-- ═══ 04 WHERE WE START · PRIORITIES ═══ -->
 <section class="slide">
   <p class="eyebrow"><span class="n">04</span> Scope</p>
   <h2>Sort by category first, then automate.</h2>
@@ -786,7 +786,7 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       <text class="lg" x="20" y="383" fill="#5FD3BE">Dispute intake is Phase 1; adjudication is permanently L1. Humans decide and sign.</text>
     </svg>
   </div>
-  <p class="note" style="font-size:16.5px"><b>Human-only in phase 1:</b> complaints, fraud (the customer says they were defrauded) and off-brief mail are detected, clocked and handed to a person. Spam / noise is auto-archived in Phase 1 and never enters intake. Full matrix: <b><a class="xref" data-jump="B14">B14</a></b>.</p>
+  <p class="note" style="font-size:16.5px"><b>Human-only in phase 1:</b> complaints, fraud (the customer says they were defrauded) and off-brief mail are detected, clocked and handed to a person. Spam / noise is auto-archived in Phase 1 and never enters intake. Full matrix: <b><a class="xref" data-jump="B12">B12</a></b>.</p>
   <div class="colophon"><span>04 / 09</span></div>
 </section>
 
@@ -914,10 +914,10 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
   <div class="colophon"><span>05 / 09</span></div>
 </section>
 
-<!-- ═══ 07 AI AND HUMANS ═══ -->
+<!-- ═══ 06 AI AND HUMANS ═══ -->
 <section class="slide">
   <p class="eyebrow"><span class="n">06</span> AI and humans</p>
-  <h2>Autonomy is earned one intent at a time.</h2>
+  <h2>The Policy RIL Matrix governs autonomy.</h2>
   <div class="chart">
     <svg viewBox="0 0 1128 484" role="img">
       <!-- ── where the human sits ── -->
@@ -981,6 +981,127 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
     </svg>
   </div>
   <div class="colophon"><span>06 / 09</span></div>
+</section>
+
+
+
+<!-- ═══ 07 ONBOARDING (how a bank installs the platform) ═══
+     The review asked for the customer's landing/integration story: how a
+     platform product lands at one specific bank. Answer in one diagram:
+     the bank hands over two artifacts (90 days of mail, a policy playbook);
+     two platform compilers turn them into that bank's classifier and R×I
+     matrix; the bank admin signs every diff, then backtest/shadow → go live.
+     The two arrows that cross the dashed teal box ARE the interface —
+     artifacts and sign-off in, a signed configuration out. Never a code
+     project; never vendor authority. -->
+<section class="slide">
+  <p class="eyebrow"><span class="n">07</span> Onboarding</p>
+  <h2>Each bank's policies, compiled onto one shared platform.</h2>
+  <p class="claim">Every bank gets its own categories and R × I matrix, signed before it runs.</p>
+  <div class="chart">
+    <svg viewBox="0 0 1128 404" role="img">
+      <!-- column headers -->
+      <text x="0" y="24" fill="#9BAAB9" font-size="14" font-weight="600" letter-spacing="1.4">1 · WHAT THE BANK PROVIDES</text>
+      <text x="372" y="24" fill="#5FD3BE" font-size="14" font-weight="600" letter-spacing="1.4">2 · ONBOARDING TOOLS (WE ADD)</text>
+      <text x="812" y="24" fill="#9BAAB9" font-size="14" font-weight="600" letter-spacing="1.4">3 · THE BANK'S SIGNED AUTOPILOT</text>
+
+      <!-- dashed enclosure: the platform compiler box (the configuration seam) -->
+      <rect x="366" y="40" width="380" height="238" rx="12" fill="none" stroke="#5FD3BE" stroke-width="1.5" stroke-dasharray="6 6" opacity="0.35"/>
+
+      <!-- ── lane 1 · history → category discovery → category classifier ── -->
+      <rect class="card2" x="0" y="46" width="300" height="108" rx="10"/>
+      <g fill="none" stroke="#6FA8FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="20" y="64" width="34" height="24" rx="4"/>
+        <path d="M22 68 L37 81 L52 68"/>
+      </g>
+      <text class="lgb" x="66" y="82" style="font-size:18px">90 days of historical email</text>
+      <text x="20" y="120" fill="#9BAAB9" font-size="14.5">the volume and categories the bank</text>
+      <text x="20" y="140" fill="#9BAAB9" font-size="14.5">handles, and how staff work a thread</text>
+
+      <rect x="372" y="46" width="368" height="108" rx="10" fill="#1B4A44" stroke="#5FD3BE"/>
+      <g fill="none" stroke="#5FD3BE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M392 66 h32 l-12 13 v13 l-8 4 v-17 z"/>
+      </g>
+      <text x="438" y="82" fill="#EAF0F6" font-size="18" font-weight="600">Category discovery</text>
+      <text x="392" y="120" fill="#C0CBD6" font-size="14.5">clusters the mail and proposes the</text>
+      <text x="392" y="140" fill="#C0CBD6" font-size="14.5">category set; the bank admin confirms</text>
+
+      <rect class="card2" x="812" y="46" width="316" height="108" rx="10"/>
+      <g fill="none" stroke="#5FD3BE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M832 78 l16-8 16 8 -16 8 z"/>
+        <path d="M832 85 l16 8 16-8"/>
+        <path d="M832 92 l16 8 16-8"/>
+      </g>
+      <text class="lgb" x="878" y="82" style="font-size:18px">The bank's classifier</text>
+      <text x="832" y="120" fill="#9BAAB9" font-size="14.5">account servicing at bank A,</text>
+      <text x="832" y="140" fill="#9BAAB9" font-size="14.5">mortgages at bank B</text>
+
+      <!-- ── lane 2 · playbook → policy compiler → R×I matrix ── -->
+      <rect class="card2" x="0" y="164" width="300" height="108" rx="10"/>
+      <g fill="none" stroke="#6FA8FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M24 182 h20 l10 10 v20 h-30 z"/>
+        <path d="M44 182 v10 h10"/>
+        <path d="M31 199 h16 M31 207 h11"/>
+      </g>
+      <text class="lgb" x="66" y="200" style="font-size:18px">Policy &amp; process playbook</text>
+      <text x="20" y="238" fill="#9BAAB9" font-size="14.5">locked templates, approved answers,</text>
+      <text x="20" y="258" fill="#9BAAB9" font-size="14.5">who signs, clocks, where mail is kept</text>
+
+      <rect x="372" y="164" width="368" height="108" rx="10" fill="#1B4A44" stroke="#5FD3BE"/>
+      <g fill="none" stroke="#5FD3BE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="408" cy="196" r="8"/>
+        <circle cx="408" cy="196" r="3"/>
+        <path d="M408 183 v5 M408 204 v5 M395 196 h5 M416 196 h5 M399 187 l3.5 3.5 M413.5 201 l3.5 3.5 M417 187 l-3.5 3.5 M402.5 201 l-3.5 3.5"/>
+      </g>
+      <text x="438" y="200" fill="#EAF0F6" font-size="18" font-weight="600">Policy compiler</text>
+      <text x="392" y="238" fill="#C0CBD6" font-size="14.5">reads the playbook, doc or database,</text>
+      <text x="392" y="258" fill="#C0CBD6" font-size="14.5">and compiles the R × I matrix:</text>
+
+      <rect class="card2" x="812" y="164" width="316" height="108" rx="10"/>
+      <g fill="none" stroke="#5FD3BE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="832" y="182" width="30" height="26" rx="3"/>
+        <path d="M842 182 v26 M852 182 v26 M832 191 h30 M832 199 h30"/>
+      </g>
+      <text class="lgb" x="878" y="200" style="font-size:18px">The bank's policy engine</text>
+      <text x="832" y="238" fill="#9BAAB9" font-size="14.5">the bank's thresholds, approval nodes</text>
+      <text x="832" y="258" fill="#9BAAB9" font-size="14.5">and clocks. The bank signs it.</text>
+
+      <!-- arrows: the interface = artifacts in, a signed configuration out -->
+      <g stroke="#4A5A6B" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M302 101 L364 101"/><path d="M356 95 L366 101 L356 107"/>
+        <path d="M748 101 L806 101"/><path d="M798 95 L808 101 L798 107"/>
+        <path d="M302 218 L364 218"/><path d="M356 212 L366 218 L356 224"/>
+        <path d="M748 218 L806 218"/><path d="M798 212 L808 218 L798 224"/>
+      </g>
+      <text x="334" y="93" fill="#7B8B9B" font-size="11.5" text-anchor="middle" font-weight="600">history</text>
+      <text x="777" y="93" fill="#7B8B9B" font-size="11.5" text-anchor="middle" font-weight="600">categories</text>
+      <text x="334" y="210" fill="#7B8B9B" font-size="11.5" text-anchor="middle" font-weight="600">playbook</text>
+      <text x="777" y="210" fill="#7B8B9B" font-size="11.5" text-anchor="middle" font-weight="600">R × I matrix</text>
+
+      <!-- connector band: the runtime wiring seam — prebuilt connections, not builds -->
+      <rect class="card2" x="0" y="282" width="1128" height="50" rx="10" stroke="#5FD3BE" stroke-width="1.2" stroke-dasharray="6 5"/>
+      <text x="18" y="306" fill="#5FD3BE" font-size="12.5" font-weight="700" letter-spacing="0.5">PREBUILT CONNECTORS</text>
+      <g font-size="12.5">
+        <rect x="190" y="289" width="172" height="24" rx="12" fill="#1A2536" stroke="#2E4560"/><text x="276" y="305" fill="#6FA8FF" text-anchor="middle">mailbox · SPF/DKIM</text>
+        <rect x="372" y="289" width="172" height="24" rx="12" fill="#1A2536" stroke="#2E4560"/><text x="458" y="305" fill="#6FA8FF" text-anchor="middle">core banking</text>
+        <rect x="554" y="289" width="172" height="24" rx="12" fill="#1A2536" stroke="#2E4560"/><text x="640" y="305" fill="#6FA8FF" text-anchor="middle">CRM / cases</text>
+        <rect x="736" y="289" width="172" height="24" rx="12" fill="#1A2536" stroke="#2E4560"/><text x="822" y="305" fill="#6FA8FF" text-anchor="middle">identity / SSO</text>
+        <rect x="918" y="289" width="172" height="24" rx="12" fill="#1A2536" stroke="#2E4560"/><text x="1004" y="305" fill="#6FA8FF" text-anchor="middle">WORM archive</text>
+      </g>
+      <text x="18" y="325" fill="#7B8B9B" font-size="12">the bank's CRM stays the system of record; scoped credentials, TPRM &amp; data residency are cleared before go-live</text>
+
+      <!-- go-live bar -->
+      <rect x="0" y="340" width="1128" height="54" rx="10" fill="#1B4A44" stroke="#5FD3BE"/>
+      <g fill="none" stroke="#5FD3BE" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 352 h20 v14 c0 10 -10 15 -10 15 s-10-5 -10-15 z"/>
+        <path d="M27 365 l4 4 l7-8"/>
+      </g>
+      <text x="62" y="366" fill="#5FD3BE" font-size="17" font-weight="600">Backtest · shadow → dual sign-off (compliance + operations) → go live</text>
+      <text x="62" y="385" fill="#C0CBD6" font-size="13.8">Only the bank admin signs it.</text>
+    </svg>
+  </div>
+  <p class="note" style="font-size:15.5px"><b>One runtime, per-bank configuration</b>, so the next bank takes weeks. Walkthrough: <b><a class="xref" data-jump="B17">B17</a></b> · architecture: <b><a class="xref" data-jump="B2">B2</a></b>.</p>
+  <div class="colophon"><span>07 / 09</span></div>
 </section>
 
 
@@ -1080,7 +1201,7 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
     </div>
     </div>
   </div>
-  <div class="colophon"><span>07 / 09</span></div>
+  <div class="colophon"><span>08 / 09</span></div>
 </section>
 
 
@@ -1095,7 +1216,55 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
 
 
 
-<!-- ═══ 14 THANK YOU ═══ -->
+<!-- ═══ 09 METRICS ═══ -->
+<section class="slide">
+  <p class="eyebrow"><span class="n">09</span> How we would know</p>
+  <h2>Success metrics.</h2>
+  <div class="chart">
+    <svg viewBox="0 0 1128 264" role="img">
+      <!-- ── VARR: the target as a band on a 0–100% track ── -->
+      <rect class="card" x="0" y="0" width="362" height="212" rx="10"/>
+      <text class="lgx" x="24" y="42">VARR</text>
+      <text class="lg" x="24" y="68">Verified autonomous resolution rate</text>
+      <text class="lgd" x="24" y="96">No human touch · no reopen in 14 days</text>
+      <text class="lgd" x="24" y="118">Survives QA sampling</text>
+      <text x="24" y="154" fill="#5FD3BE" font-size="18" font-weight="600">25–35% by six months</text>
+      <rect x="24" y="166" width="314" height="14" rx="7" fill="#232D38"/>
+      <rect x="102" y="166" width="32" height="14" rx="7" fill="#5FD3BE"/>
+      <text class="lgd" x="24" y="198" style="font-size:12.5px">0</text>
+      <text x="118" y="198" text-anchor="middle" fill="#5FD3BE" font-size="12.5" font-weight="600">target band</text>
+      <text class="lgd" x="338" y="198" text-anchor="end" style="font-size:12.5px">100%</text>
+
+      <!-- ── Median TTR: the target is the sliver at the far left ── -->
+      <rect class="card" x="383" y="0" width="362" height="212" rx="10"/>
+      <text class="lgx" x="407" y="42">Median TTR</text>
+      <text class="lg" x="407" y="68">Time to resolution, not to first reply</text>
+      <text class="lgd" x="407" y="94" style="font-size:16px">Measured from the arrival timestamp</text>
+      <text class="lgd" x="407" y="116" style="font-size:16px">Baseline today: 3.2 days <tspan fill="#F5B544" style="font-weight:600">(assumption)</tspan></text>
+      <rect x="407" y="126" width="314" height="16" rx="4" fill="#3A3320" stroke="#F5B544"/>
+      <rect x="407" y="126" width="5" height="16" rx="2" fill="#5FD3BE"/>
+      <path d="M404 147 l14 0 l-7 9 z" fill="#5FD3BE"/>
+      <text x="407" y="182" fill="#5FD3BE" font-size="16" font-weight="600">&lt; 15 min autonomous</text>
+      <text class="lgd" x="721" y="182" text-anchor="end" style="font-size:14px">baseline 3.2 days</text>
+      <text x="407" y="204" fill="#5FD3BE" font-size="16" font-weight="600">&lt; 1 day, disputes excepted</text>
+
+      <!-- ── Trust: the three gates that a veto checks ── -->
+      <rect class="card" x="766" y="0" width="362" height="212" rx="10"/>
+      <text x="790" y="42" fill="#F2786E" font-size="28" font-weight="600">Trust</text>
+      <text class="lg" x="790" y="68">Veto — one critical error voids VARR</text>
+      <text class="lgd" x="790" y="94" style="font-size:16px">Key error = wrong action, wrong party,</text>
+      <text class="lgd" x="790" y="116" style="font-size:16px">missed clock or broken promise</text>
+      <rect x="790" y="128" width="314" height="52" rx="8" fill="#1B4A44" stroke="#5FD3BE"/>
+      <text x="947" y="150" text-anchor="middle" fill="#5FD3BE" font-size="14.5" font-weight="600">✓ 0 key errors  ✓ clocks 100%</text>
+      <text x="947" y="171" text-anchor="middle" fill="#5FD3BE" font-size="14.5" font-weight="600">✓ recall ≥99.5%</text>
+      <text x="790" y="204" fill="#F2786E" font-size="18" font-weight="600">Non-negotiable</text>
+
+      <text class="lgd" x="0" y="240">Twelve guardrails run alongside — Backup <tspan class="xref" data-jump="B9">B9</tspan>. The 35% ROI base case is the top of this band, at steady state (<tspan class="xref" data-jump="B5">B5</tspan>).</text>
+    </svg>
+  </div>
+  <div class="colophon"><span>09 / 09</span></div>
+</section>
+<!-- ═══ THANK YOU ═══ -->
 <section class="slide title" style="padding-left:200px">
   <h1 style="text-align:center">Thank you.</h1>
   <p class="sub" style="text-align:center;margin-left:0">Questions</p>
@@ -1162,82 +1331,9 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
   <p class="note"><b>Window: 12–18 months.</b> We spend it on what the platform already ships — CXA Operations Center, Agent Builder, Automation Flows, and core-banking connectors since April 2025. Freshworks has shipped autonomous email since 2025-06; nobody has shipped the <i>case</i>.<br><b>Most automate the reply; few propose the rules.</b></p>
   <div class="colophon"><span>B1</span></div>
 </section>
-<!-- ═══ B2 · METRICS (moved from main 11) ═══ -->
+<!-- ═══ B2 · ARCH ═══ -->
 <section class="slide backup">
-  <p class="eyebrow"><span class="n">Backup · B2</span> How we would know</p>
-  <h2>Three numbers. One pilot.</h2>
-  <div class="chart">
-    <svg viewBox="0 0 1128 388" role="img">
-      <!-- ── VARR: the target as a band on a 0–100% track ── -->
-      <rect class="card" x="0" y="0" width="362" height="212" rx="10"/>
-      <text class="lgx" x="24" y="42">VARR</text>
-      <text class="lg" x="24" y="68">Verified autonomous resolution rate</text>
-      <text class="lgd" x="24" y="96">No human touch · no reopen in 14 days</text>
-      <text class="lgd" x="24" y="118">Survives QA sampling</text>
-      <text x="24" y="154" fill="#5FD3BE" font-size="18" font-weight="600">25–35% by six months</text>
-      <rect x="24" y="166" width="314" height="14" rx="7" fill="#232D38"/>
-      <rect x="102" y="166" width="32" height="14" rx="7" fill="#5FD3BE"/>
-      <text class="lgd" x="24" y="198" style="font-size:12.5px">0</text>
-      <text x="118" y="198" text-anchor="middle" fill="#5FD3BE" font-size="12.5" font-weight="600">target band</text>
-      <text class="lgd" x="338" y="198" text-anchor="end" style="font-size:12.5px">100%</text>
-
-      <!-- ── Median TTR: the target is the sliver at the far left ── -->
-      <rect class="card" x="383" y="0" width="362" height="212" rx="10"/>
-      <text class="lgx" x="407" y="42">Median TTR</text>
-      <text class="lg" x="407" y="68">Time to resolution, not to first reply</text>
-      <text class="lgd" x="407" y="94" style="font-size:16px">Measured from the arrival timestamp</text>
-      <text class="lgd" x="407" y="116" style="font-size:16px">Baseline today: 3.2 days <tspan fill="#F5B544" style="font-weight:600">(assumption)</tspan></text>
-      <rect x="407" y="126" width="314" height="16" rx="4" fill="#3A3320" stroke="#F5B544"/>
-      <rect x="407" y="126" width="5" height="16" rx="2" fill="#5FD3BE"/>
-      <path d="M404 147 l14 0 l-7 9 z" fill="#5FD3BE"/>
-      <text x="407" y="182" fill="#5FD3BE" font-size="16" font-weight="600">&lt; 15 min autonomous</text>
-      <text class="lgd" x="721" y="182" text-anchor="end" style="font-size:14px">baseline 3.2 days</text>
-      <text x="407" y="204" fill="#5FD3BE" font-size="16" font-weight="600">&lt; 1 day, disputes excepted</text>
-
-      <!-- ── Trust: the three gates that a veto checks ── -->
-      <rect class="card" x="766" y="0" width="362" height="212" rx="10"/>
-      <text x="790" y="42" fill="#F2786E" font-size="28" font-weight="600">Trust</text>
-      <text class="lg" x="790" y="68">Veto — one critical error voids VARR</text>
-      <text class="lgd" x="790" y="94" style="font-size:16px">Key error = wrong action, wrong party,</text>
-      <text class="lgd" x="790" y="116" style="font-size:16px">missed clock or broken promise</text>
-      <rect x="790" y="128" width="314" height="52" rx="8" fill="#1B4A44" stroke="#5FD3BE"/>
-      <text x="947" y="150" text-anchor="middle" fill="#5FD3BE" font-size="14.5" font-weight="600">✓ 0 key errors  ✓ clocks 100%</text>
-      <text x="947" y="171" text-anchor="middle" fill="#5FD3BE" font-size="14.5" font-weight="600">✓ recall ≥99.5%</text>
-      <text x="790" y="204" fill="#F2786E" font-size="18" font-weight="600">Non-negotiable</text>
-
-      <!-- ── 59-day pilot: weeks to scale, one gate ── -->
-      <text class="lgb" x="0" y="256">59-day pilot</text>
-      <rect x="0" y="272" width="153" height="52" rx="8" fill="#232D38" stroke="#2E3A46"/>
-      <text class="lg" x="76" y="296" text-anchor="middle">Backtest</text>
-      <text class="lgd" x="76" y="315" text-anchor="middle" style="font-size:13px">W1–W2</text>
-      <rect x="171" y="272" width="153" height="52" rx="8" fill="#232D38" stroke="#2E3A46"/>
-      <text class="lg" x="247" y="296" text-anchor="middle">Shadow</text>
-      <text class="lgd" x="247" y="315" text-anchor="middle" style="font-size:13px">W3–W4</text>
-      <rect x="343" y="272" width="307" height="52" rx="8" fill="#3A3320" stroke="#F5B544"/>
-      <text x="496" y="296" text-anchor="middle" fill="#F5B544" font-size="18">L2 · one-click approval</text>
-      <text class="lgd" x="496" y="315" text-anchor="middle" style="font-size:13px">W5–W8 · observe</text>
-      <rect x="668" y="272" width="460" height="52" rx="8" fill="#1B4A44" stroke="#5FD3BE"/>
-      <text x="898" y="296" text-anchor="middle" fill="#5FD3BE" font-size="18">L3 · first graduations</text>
-      <text class="lgd" x="898" y="315" text-anchor="middle" style="font-size:13px">rollout W9–W14</text>
-      <path d="M659 262 v74" stroke="#F5B544" stroke-width="1.5" stroke-dasharray="5 4" fill="none"/>
-      <text x="659" y="256" text-anchor="middle" fill="#F5B544" font-size="12.5" font-weight="700" letter-spacing="1.2">DAY-59 GATE</text>
-
-      <!-- ── week axis ── -->
-      <path d="M0 334 H1128" stroke="#2E3A46" stroke-width="1" fill="none"/>
-      <path d="M171 334 v7 M343 334 v7 M668 334 v7" stroke="#2E3A46" stroke-width="1" fill="none"/>
-      <text class="lgd" x="4" y="354" style="font-size:12.5px">W1</text>
-      <text class="lgd" x="175" y="354" style="font-size:12.5px">W3</text>
-      <text class="lgd" x="347" y="354" style="font-size:12.5px">W5</text>
-      <text class="lgd" x="672" y="354" style="font-size:12.5px">W9</text>
-      <text class="lgd" x="1128" y="354" text-anchor="end" style="font-size:12.5px">W14 end</text>
-      <text class="lgd" x="0" y="380">Twelve guardrails run alongside — Backup <tspan class="xref" data-jump="B11">B11</tspan>. The 35% ROI base case is the top of this band, at steady state (<tspan class="xref" data-jump="B7">B7</tspan>).</text>
-    </svg>
-  </div>
-  <div class="colophon"><span>B2</span></div>
-</section>
-<!-- ═══ B3 · ARCH ═══ -->
-<section class="slide backup">
-  <p class="eyebrow"><span class="n">Backup · B3</span> Architecture</p>
+  <p class="eyebrow"><span class="n">Backup · B2</span> Architecture</p>
   <h2>A thin vertical layer. Not a new platform.</h2>
   <div class="chart">
     <svg viewBox="0 0 1128 486" role="img">
@@ -1283,138 +1379,11 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       <text class="lgd" x="0" y="474" style="font-size:15px">Where a real gap appears we file a platform requirement rather than building a bypass. No new runtime.</text>
     </svg>
   </div>
-  <div class="colophon"><span>B3</span></div>
+  <div class="colophon"><span>B2</span></div>
 </section>
-<!-- ═══ B4 · LANDING · ADOPTION (how a bank installs the platform) ═══
-     The review asked for the customer's landing/integration story: how a
-     platform product lands at one specific bank. Answer in one diagram:
-     the bank hands over two artifacts (90 days of mail, a policy playbook);
-     two platform compilers turn them into that bank's classifier and R×I
-     matrix; the bank admin signs every diff, then backtest/shadow → go live.
-     The two arrows that cross the dashed teal box ARE the interface —
-     artifacts and sign-off in, a signed configuration out. Never a code
-     project; never vendor authority. -->
-<section class="slide">
-  <p class="eyebrow"><span class="n">Backup · B4</span> Landing &amp; adoption</p>
-  <h2>Each bank's rules, compiled onto one shared platform.</h2>
-  <p class="claim">Every bank lands its own build: its own categories and its own R×I matrix, signed before it runs.</p>
-  <div class="chart">
-    <svg viewBox="0 0 1128 404" role="img">
-      <!-- column headers -->
-      <text x="0" y="24" fill="#9BAAB9" font-size="14" font-weight="600" letter-spacing="1.4">1 · WHAT THE BANK PROVIDES</text>
-      <text x="372" y="24" fill="#5FD3BE" font-size="14" font-weight="600" letter-spacing="1.4">2 · PLATFORM ADOPTION TOOLS (WE ADD)</text>
-      <text x="812" y="24" fill="#9BAAB9" font-size="14" font-weight="600" letter-spacing="1.4">3 · THE BANK'S SIGNED AUTOPILOT</text>
-
-      <!-- dashed enclosure: the platform compiler box (the configuration seam) -->
-      <rect x="366" y="40" width="380" height="238" rx="12" fill="none" stroke="#5FD3BE" stroke-width="1.5" stroke-dasharray="6 6" opacity="0.35"/>
-
-      <!-- ── lane 1 · history → category discovery → category classifier ── -->
-      <rect class="card2" x="0" y="46" width="300" height="108" rx="10"/>
-      <g fill="none" stroke="#6FA8FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="20" y="64" width="34" height="24" rx="4"/>
-        <path d="M22 68 L37 81 L52 68"/>
-      </g>
-      <text class="lgb" x="66" y="82" style="font-size:18px">90 days of historical email</text>
-      <text x="20" y="106" fill="#9BAAB9" font-size="14.5">the volume and categories you</text>
-      <text x="20" y="126" fill="#9BAAB9" font-size="14.5">actually handle, and how staff</text>
-      <text x="20" y="146" fill="#9BAAB9" font-size="14.5">work each thread today</text>
-
-      <rect x="372" y="46" width="368" height="108" rx="10" fill="#1B4A44" stroke="#5FD3BE"/>
-      <g fill="none" stroke="#5FD3BE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M392 66 h32 l-12 13 v13 l-8 4 v-17 z"/>
-      </g>
-      <text x="438" y="82" fill="#EAF0F6" font-size="18" font-weight="600">Category discovery</text>
-      <text x="392" y="106" fill="#C0CBD6" font-size="14.5">clusters mail and proposes the</text>
-      <text x="392" y="126" fill="#C0CBD6" font-size="14.5">category set and priority for this bank</text>
-      <text x="392" y="146" fill="#C0CBD6" font-size="14.5">a bank admin reviews and confirms</text>
-
-      <rect class="card2" x="812" y="46" width="316" height="108" rx="10"/>
-      <g fill="none" stroke="#5FD3BE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M832 78 l16-8 16 8 -16 8 z"/>
-        <path d="M832 85 l16 8 16-8"/>
-        <path d="M832 92 l16 8 16-8"/>
-      </g>
-      <text class="lgb" x="878" y="82" style="font-size:18px">The bank's classifier</text>
-      <text x="832" y="106" fill="#9BAAB9" font-size="14.5">The categories this bank handles</text>
-      <text x="832" y="126" fill="#9BAAB9" font-size="14.5">(account servicing at bank A,</text>
-      <text x="832" y="146" fill="#9BAAB9" font-size="14.5">mortgages at bank B), from mail</text>
-
-      <!-- ── lane 2 · playbook → policy compiler → R×I matrix ── -->
-      <rect class="card2" x="0" y="164" width="300" height="108" rx="10"/>
-      <g fill="none" stroke="#6FA8FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M24 182 h20 l10 10 v20 h-30 z"/>
-        <path d="M44 182 v10 h10"/>
-        <path d="M31 199 h16 M31 207 h11"/>
-      </g>
-      <text class="lgb" x="66" y="200" style="font-size:18px">Policy &amp; process playbook</text>
-      <text x="20" y="224" fill="#9BAAB9" font-size="14.5">locked templates · approved answers</text>
-      <text x="20" y="244" fill="#9BAAB9" font-size="14.5">who signs · allowlists · clocks</text>
-      <text x="20" y="264" fill="#9BAAB9" font-size="14.5">track · archive · doc or database</text>
-
-      <rect x="372" y="164" width="368" height="108" rx="10" fill="#1B4A44" stroke="#5FD3BE"/>
-      <g fill="none" stroke="#5FD3BE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="408" cy="196" r="8"/>
-        <circle cx="408" cy="196" r="3"/>
-        <path d="M408 183 v5 M408 204 v5 M395 196 h5 M416 196 h5 M399 187 l3.5 3.5 M413.5 201 l3.5 3.5 M417 187 l-3.5 3.5 M402.5 201 l-3.5 3.5"/>
-      </g>
-      <text x="438" y="200" fill="#EAF0F6" font-size="18" font-weight="600">Policy compiler</text>
-      <text x="392" y="224" fill="#C0CBD6" font-size="14.5">reads the playbook (doc or database)</text>
-      <text x="392" y="244" fill="#C0CBD6" font-size="14.5">and compiles the R × I matrix.</text>
-      <text x="392" y="264" fill="#C0CBD6" font-size="14.5">Every cell comes as a diff you sign</text>
-
-      <rect class="card2" x="812" y="164" width="316" height="108" rx="10"/>
-      <g fill="none" stroke="#5FD3BE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="832" y="182" width="30" height="26" rx="3"/>
-        <path d="M842 182 v26 M852 182 v26 M832 191 h30 M832 199 h30"/>
-      </g>
-      <text class="lgb" x="878" y="200" style="font-size:18px">The bank's policy engine</text>
-      <text x="832" y="224" fill="#9BAAB9" font-size="14.5">the bank's thresholds, locked templates,</text>
-      <text x="832" y="244" fill="#9BAAB9" font-size="14.5">approval nodes and clocks.</text>
-      <text x="832" y="264" fill="#9BAAB9" font-size="14.5">The bank owns and signs it</text>
-
-      <!-- arrows: the interface = artifacts in, a signed configuration out -->
-      <g stroke="#4A5A6B" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M302 101 L364 101"/><path d="M356 95 L366 101 L356 107"/>
-        <path d="M748 101 L806 101"/><path d="M798 95 L808 101 L798 107"/>
-        <path d="M302 218 L364 218"/><path d="M356 212 L366 218 L356 224"/>
-        <path d="M748 218 L806 218"/><path d="M798 212 L808 218 L798 224"/>
-      </g>
-      <text x="334" y="93" fill="#7B8B9B" font-size="11.5" text-anchor="middle" font-weight="600">history</text>
-      <text x="777" y="93" fill="#7B8B9B" font-size="11.5" text-anchor="middle" font-weight="600">categories</text>
-      <text x="334" y="210" fill="#7B8B9B" font-size="11.5" text-anchor="middle" font-weight="600">playbook</text>
-      <text x="777" y="210" fill="#7B8B9B" font-size="11.5" text-anchor="middle" font-weight="600">R × I matrix</text>
-
-      <!-- connector band: the runtime wiring seam — prebuilt connections, not builds -->
-      <rect class="card2" x="0" y="282" width="1128" height="50" rx="10" stroke="#5FD3BE" stroke-width="1.2" stroke-dasharray="6 5"/>
-      <text x="18" y="306" fill="#5FD3BE" font-size="13" font-weight="700" letter-spacing="1.1">PLUG IN · NOT BUILD</text>
-      <g font-size="12.5">
-        <rect x="190" y="289" width="172" height="24" rx="12" fill="#1E4A44"/><text x="276" y="305" fill="#D6F2EC" text-anchor="middle">mailbox · SPF/DKIM</text>
-        <rect x="372" y="289" width="172" height="24" rx="12" fill="#1E4A44"/><text x="458" y="305" fill="#D6F2EC" text-anchor="middle">core banking</text>
-        <rect x="554" y="289" width="172" height="24" rx="12" fill="#1E4A44"/><text x="640" y="305" fill="#D6F2EC" text-anchor="middle">CRM / cases</text>
-        <rect x="736" y="289" width="172" height="24" rx="12" fill="#1E4A44"/><text x="822" y="305" fill="#D6F2EC" text-anchor="middle">identity / SSO</text>
-        <rect x="918" y="289" width="172" height="24" rx="12" fill="#1E4A44"/><text x="1004" y="305" fill="#D6F2EC" text-anchor="middle">WORM archive</text>
-      </g>
-      <text x="18" y="325" fill="#7B8B9B" font-size="12">prebuilt connectors: the bank's CRM stays the system of record. We clear scoped credentials, TPRM &amp; data residency before go-live</text>
-
-      <!-- go-live bar -->
-      <rect x="0" y="340" width="1128" height="54" rx="10" fill="#1B4A44" stroke="#5FD3BE"/>
-      <g fill="none" stroke="#5FD3BE" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M22 352 h20 v14 c0 10 -10 15 -10 15 s-10-5 -10-15 z"/>
-        <path d="M27 365 l4 4 l7-8"/>
-      </g>
-      <text x="62" y="366" fill="#5FD3BE" font-size="17" font-weight="600">Backtest · shadow → dual sign-off (compliance + operations) → go live</text>
-      <text x="62" y="385" fill="#C0CBD6" font-size="13.8">Only the bank admin signs it, never the vendor.</text>
-    </svg>
-  </div>
-  <p class="note" style="font-size:15.5px"><b>One runtime, per-bank configuration</b>, so the next bank takes weeks. Admin walkthrough: <b><a class="xref" data-jump="B19">B19</a></b> · architecture: <b><a class="xref" data-jump="B3">B3</a></b>.</p>
-  <div class="colophon"><span>B4</span></div>
-</section>
-
-
-
-<!-- ═══ B5 · ROADMAP (moved from main 13) ═══ -->
+<!-- ═══ B3 · ROADMAP (moved from main 13) ═══ -->
 <section class="slide backup">
-  <p class="eyebrow"><span class="n">Backup · B5</span> Roadmap</p>
+  <p class="eyebrow"><span class="n">Backup · B3</span> Roadmap</p>
   <h2>One governance layer, three waves.</h2>
   <div class="chart">
     <svg viewBox="0 0 1128 384" role="img" style="max-height:none;flex:0 0 auto">
@@ -1512,14 +1481,14 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
   <div class="layerbar">
     <div class="lrow add"><span class="tag">New · we add</span><span class="items">A bank-written limit matrix (R × I → L) · a clock that turns a promise into a deadline · in-thread step-up · dispute intake · email defense</span></div>
     <div class="lrow"><span class="tag">Already ships</span><span class="items">Autopilot (LLM) · Automation Flows · Agent Builder · CXA Ops Center · FS core connectors</span></div>
-    <p class="note"><b>The new part is the layer, not the channel</b> — a thin vertical layer, no new platform or runtime. Full stack: <b><a class="xref" data-jump="B3">B3</a></b> · the day-0 ask, item by item: <b><a class="xref" data-jump="B21">B21</a></b>.</p>
+    <p class="note"><b>The new part is the layer, not the channel</b> — a thin vertical layer, no new platform or runtime. Full stack: <b><a class="xref" data-jump="B2">B2</a></b> · the day-0 ask, item by item: <b><a class="xref" data-jump="B19">B19</a></b>.</p>
   </div>
-  <div class="colophon"><span>B5</span></div>
+  <div class="colophon"><span>B3</span></div>
 </section>
 
-<!-- ═══ B6 · OVERVIEW ═══ -->
+<!-- ═══ B4 · OVERVIEW ═══ -->
 <section class="slide backup">
-  <p class="eyebrow"><span class="n">Backup · B6</span> Overview video · 2:06</p>
+  <p class="eyebrow"><span class="n">Backup · B4</span> Overview video · 2:06</p>
   <h2>One thread, three desks, no cold hand-off.</h2>
   <p class="claim">Ninety-nine seconds: three emails — dispute, refund, fraud — and the admin console that sets their limits.</p>
   <div class="fig">
@@ -1547,14 +1516,14 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       </div>
     </div>
   </div>
-  <div class="colophon"><span>B6</span></div>
+  <div class="colophon"><span>B4</span></div>
 </section>
 
-<!-- ═══ B7 ═══ -->
+<!-- ═══ B5 ═══ -->
 <section class="slide backup">
-  <p class="eyebrow"><span class="n">Backup · B7</span> The ROI, line by line</p>
+  <p class="eyebrow"><span class="n">Backup · B5</span> The ROI, line by line</p>
   <h2>Where $2.68M comes from.</h2>
-  <p class="claim">600,000 emails a year at $8 = a $4.8M cost base. Three base-case levers (<a class="xref" data-jump="B17">B17</a>): repeat contacts −15% · resolved autonomously 35% · the rest 30% faster. <b>One price moves all three:</b> $1.50 a resolution, billed only on the 35% the AI resolves — the other two are not billed separately.</p>
+  <p class="claim">600,000 emails a year at $8 = a $4.8M cost base. Three base-case levers (<a class="xref" data-jump="B15">B15</a>): repeat contacts −15% · resolved autonomously 35% · the rest 30% faster. <b>One price moves all three:</b> $1.50 a resolution, billed only on the 35% the AI resolves — the other two are not billed separately.</p>
   <div class="chart">
     <table>
       <tr><th>Line</th><th>Calculation</th><th>Value</th></tr>
@@ -1566,12 +1535,12 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
     </table>
   </div>
   <p class="note"><b>Two denominators, both reported.</b> 35% is measured against email net of failed demand; against all valid inbound it is ≈30%. Both are published side by side, so the denominator is never chosen after the fact.</p>
-  <div class="colophon"><span>B7</span></div>
+  <div class="colophon"><span>B5</span></div>
 </section>
 
-<!-- ═══ B8 ═══ -->
+<!-- ═══ B6 ═══ -->
 <section class="slide backup">
-  <p class="eyebrow"><span class="n">Backup · B8</span> Reg E · Reg Z · retention</p>
+  <p class="eyebrow"><span class="n">Backup · B6</span> Reg E · Reg Z · retention</p>
   <h2>The clocks the product is measured against.</h2>
   <div class="chart">
     <div class="two" style="gap:22px">
@@ -1595,12 +1564,12 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
     </div>
     <p class="note" style="font-size:15px"><b>Terminology guard:</b> Reg E has <b>no</b> explicit acknowledgement duty — the 30-day acknowledgement is a <b>Reg Z</b> requirement. <b>Enforcement anchor:</b> 2019-BCFP-0001 (USAA Federal Savings Bank) cited the bank for “requiring customers to contact the merchant first”, which the CFPB Reg E FAQ (Q4, Q9) prohibits — the product must never require a signed statement or police report before accepting a dispute.</p>
   </div>
-  <div class="colophon"><span>B8</span></div>
+  <div class="colophon"><span>B6</span></div>
 </section>
 
-<!-- ═══ B9 ═══ -->
+<!-- ═══ B7 ═══ -->
 <section class="slide backup">
-  <p class="eyebrow"><span class="n">Backup · B9</span> Questions I expect</p>
+  <p class="eyebrow"><span class="n">Backup · B7</span> Questions I expect</p>
   <h2>Six questions, short answers.</h2>
   <div class="chart">
     <div class="qgrid">
@@ -1631,12 +1600,12 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       
     </div>
   </div>
-  <div class="colophon"><span>B9</span></div>
+  <div class="colophon"><span>B7</span></div>
 </section>
 
-<!-- ═══ B10 ═══ -->
+<!-- ═══ B8 ═══ -->
 <section class="slide backup">
-  <p class="eyebrow"><span class="n">Backup · B10</span> Four more questions I expect</p>
+  <p class="eyebrow"><span class="n">Backup · B8</span> Four more questions I expect</p>
   <h2>Four more questions, short answers.</h2>
   <div class="chart">
     <div class="qgrid">
@@ -1654,17 +1623,17 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       </div>
       <div class="qa">
         <div class="q">“The window is 12–18 months. What holds it after that?”</div>
-        <div class="a">Not a data flywheel — <a class="xref" data-jump="B16">B16</a> rules out cross-customer training. What holds is the <b>policy pack the bank wrote</b>, the clock engine that turns a promise into a deadline, a dossier a regulator can be handed, and 262 institutions already on the voice contract. Leaving means re-writing their own limits somewhere else.</div>
+        <div class="a">Not a data flywheel — <a class="xref" data-jump="B14">B14</a> rules out cross-customer training. What holds is the <b>policy pack the bank wrote</b>, the clock engine that turns a promise into a deadline, a dossier a regulator can be handed, and 262 institutions already on the voice contract. Leaving means re-writing their own limits somewhere else.</div>
       </div>
     </div>
     <p class="note" style="font-size:16px">Four more, because these are the four that decide the follow-up: <b>system of record, unit economics, the team, and what is left after the window.</b></p>
   </div>
-  <div class="colophon"><span>B10</span></div>
+  <div class="colophon"><span>B8</span></div>
 </section>
 
-<!-- ═══ B11 ═══ -->
+<!-- ═══ B9 ═══ -->
 <section class="slide backup">
-  <p class="eyebrow"><span class="n">Backup · B11</span> Guardrails · stage targets</p>
+  <p class="eyebrow"><span class="n">Backup · B9</span> Guardrails · stage targets</p>
   <h2>Twelve guardrails. Five checkpoints. Three numbers.</h2>
   <div class="chart">
     <table class="xs pin">
@@ -1692,12 +1661,12 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
     </table>
     <p class="note" style="font-size:15px;max-width:1000px"><b>The one I would not trade:</b> any promise the AI makes becomes a clock the moment the letter is sent, cleared only when the fulfillment letter goes out — Zendesk's Verified Resolution, made <b>regulator-grade</b>.</p>
   </div>
-  <div class="colophon"><span>B11</span></div>
+  <div class="colophon"><span>B9</span></div>
 </section>
 
-<!-- ═══ B12 ═══ -->
+<!-- ═══ B10 ═══ -->
 <section class="slide backup">
-  <p class="eyebrow"><span class="n">Backup · B12</span> Trade-offs</p>
+  <p class="eyebrow"><span class="n">Backup · B10</span> Trade-offs</p>
   <h2>Reversible earns it. Irreversible never does.</h2>
   <div class="chart">
     <div class="colhead"><div class="ha">We choose</div><div></div><div class="hb">The price we accept</div></div>
@@ -1738,12 +1707,12 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
     </div>
     <p class="note" style="font-size:16px"><b>Also given up, on purpose:</b> assembled letters over fluent ones, an in-thread step-up link over in-app, a runtime of our own, and mega-bank deals — they build, and Sierra owns that story.</p>
   </div>
-  <div class="colophon"><span>B12</span></div>
+  <div class="colophon"><span>B10</span></div>
 </section>
 
-<!-- ═══ B13 ═══ -->
+<!-- ═══ B11 ═══ -->
 <section class="slide backup">
-  <p class="eyebrow"><span class="n">Backup · B13</span> Competitor detail · verified 2026-09</p>
+  <p class="eyebrow"><span class="n">Backup · B11</span> Competitor detail · verified 2026-09</p>
   <h2>Everyone has an agent. Nobody has the email case.</h2>
   <div class="chart">
     <table class="tight">
@@ -1765,12 +1734,12 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
     </table>
     <p class="note" style="font-size:15px"><b>What the gaps mean:</b> every “missing” cell above is absence in public materials, not absence in the market. <b>Threat ranking:</b> big banks → Sierra × Salesforce+Fin; beachhead → Glia first, Eltropy second. <b>On that same public material, everyone here automates the reply and no one proposes the rules</b> — the governance layer these agents run inside is still written by hand.</p>
   </div>
-  <div class="colophon"><span>B13</span></div>
+  <div class="colophon"><span>B11</span></div>
 </section>
 
-<!-- ═══ B14 · HARD NEVER ═══ -->
+<!-- ═══ B12 · HARD NEVER ═══ -->
 <section class="slide backup">
-  <p class="eyebrow"><span class="n">Backup · B14</span> Wave matrix · hard “never” list</p>
+  <p class="eyebrow"><span class="n">Backup · B12</span> Wave matrix · hard “never” list</p>
   <h2>What ships, what waits, and what has no switch.</h2>
   <div class="chart">
     <div class="two" style="gap:22px;flex:0 0 auto">
@@ -1809,12 +1778,12 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
     </div>
     <p class="note" style="font-size:15.5px"><b>Sort order:</b> volume × determinability × identity achievability, then gated by regulatory risk. <b>Wave is delivery order, not importance.</b> The configuration layer must not offer a switch for anything on the “never” list — they are not off by default, they are absent.</p>
   </div>
-  <div class="colophon"><span>B14</span></div>
+  <div class="colophon"><span>B12</span></div>
 </section>
 
-<!-- ═══ B15 ═══ -->
+<!-- ═══ B13 ═══ -->
 <section class="slide backup">
-  <p class="eyebrow"><span class="n">Backup · B15</span> Pilot plan · go / no-go</p>
+  <p class="eyebrow"><span class="n">Backup · B13</span> Pilot plan · go / no-go</p>
   <h2>59 days to a signed day-59 report.</h2>
   <div class="chart">
     <svg viewBox="0 0 1128 176" role="img">
@@ -1878,12 +1847,12 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       </div>
     </div>
   </div>
-  <div class="colophon"><span>B15</span></div>
+  <div class="colophon"><span>B13</span></div>
 </section>
 
-<!-- ═══ B16 ═══ -->
+<!-- ═══ B14 ═══ -->
 <section class="slide backup">
-  <p class="eyebrow"><span class="n">Backup · B16</span> Full risk register</p>
+  <p class="eyebrow"><span class="n">Backup · B14</span> Full risk register</p>
   <h2>Seventeen risks, each with evidence and a countermeasure.</h2>
   <div class="chart">
     <table class="tight pin">
@@ -1908,12 +1877,12 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
     </table>
     <p class="note" style="font-size:14px;max-width:1010px"><b>Not immunity:</b> CFPB guidance was withdrawn in 2025-05, but Reg E and Reg Z still stand — hence proactive AI identity disclosure regardless of requirement.</p>
   </div>
-  <div class="colophon"><span>B16</span></div>
+  <div class="colophon"><span>B14</span></div>
 </section>
 
-<!-- ═══ B17 ═══ -->
+<!-- ═══ B15 ═══ -->
 <section class="slide backup assumptions">
-  <p class="eyebrow"><span class="n">Backup · B17</span> Every assumption in this deck</p>
+  <p class="eyebrow"><span class="n">Backup · B15</span> Every assumption in this deck</p>
   <h2>Seventeen numbers are assumptions. Here they are.</h2>
   <div class="chart">
     <div class="two" style="gap:22px">
@@ -1944,12 +1913,12 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
     </div>
     <p class="note" style="font-size:15px">The brief invites stated assumptions. Putting all seventeen on one page turns the weakest numbers in the deck into something controlled — rather than something to be caught out on.</p>
   </div>
-  <div class="colophon"><span>B17</span></div>
+  <div class="colophon"><span>B15</span></div>
 </section>
 
-<!-- ═══ B18 ═══ -->
+<!-- ═══ B16 ═══ -->
 <section class="slide backup">
-  <p class="eyebrow"><span class="n">Backup · B18</span> Packaging · price · motion</p>
+  <p class="eyebrow"><span class="n">Backup · B16</span> Packaging · price · motion</p>
   <h2>How it is packaged, priced and sold.</h2>
   <div class="chart">
     <div class="qgrid">
@@ -1972,12 +1941,12 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
     </div>
     <p class="note" style="font-size:16px"><b>All four are proposals, not commitments:</b> the price, the platform minimum and the sequencing are the three things a design partner would rewrite first.</p>
   </div>
-  <div class="colophon"><span>B18</span></div>
+  <div class="colophon"><span>B16</span></div>
 </section>
 
-<!-- ═══ B19 · ADMIN ═══ -->
+<!-- ═══ B17 · ADMIN ═══ -->
 <section class="slide backup">
-  <p class="eyebrow"><span class="n">Backup · B19</span> Admin walkthrough <a class="gh" href="https://github.com/wukun2005-gif/mailAutopilotForFS/" target="_blank" rel="noopener" title="Open the source repository on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg><span class="gl">github.com/wukun2005-gif/mailAutopilotForFS</span><span class="ar">↗</span></a></p>
+  <p class="eyebrow"><span class="n">Backup · B17</span> Admin walkthrough <a class="gh" href="https://github.com/wukun2005-gif/mailAutopilotForFS/" target="_blank" rel="noopener" title="Open the source repository on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg><span class="gl">github.com/wukun2005-gif/mailAutopilotForFS</span><span class="ar">↗</span></a></p>
   <h2>Admin: the bank writes the limits, not the model.</h2>
   <p class="claim">The model drafts the diff; the bank signs it. Nominations, wave remediations and policy changes all arrive as configuration diffs — and every one of them has to clear the same gates.</p>
   <div class="fig">
@@ -2005,14 +1974,14 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       </div>
     </div>
   </div>
-  <div class="colophon"><span>B19</span></div>
+  <div class="colophon"><span>B17</span></div>
 </section>
 
 
 
-<!-- ═══ B20 · THE SEVEN RULES (review §6.9) ═══ -->
+<!-- ═══ B18 · THE SEVEN RULES (review §6.9) ═══ -->
 <section class="slide backup">
-  <p class="eyebrow"><span class="n">Backup · B20</span> The seven rules every feature passes</p>
+  <p class="eyebrow"><span class="n">Backup · B18</span> The seven rules every feature passes</p>
   <h2>The AI proposes. The rule engine decides.</h2>
   <div class="chart">
     <table class="tight">
@@ -2027,12 +1996,12 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
     </table>
     <p class="note" style="font-size:15.5px"><b>Why these seven:</b> they are the difference between a demo and something a bank can put in front of an examiner. Each one is enforced in the prototype, not asserted on a slide — the engine refuses the action, the config layer has no switch, or the metric blocks the graduation.</p>
   </div>
-  <div class="colophon"><span>B20</span></div>
+  <div class="colophon"><span>B18</span></div>
 </section>
 
-<!-- ═══ B21 · THE ASK, ITEM BY ITEM (restored from the pre-review deck) ═══ -->
+<!-- ═══ B19 · THE ASK, ITEM BY ITEM (restored from the pre-review deck) ═══ -->
 <section class="slide backup">
-  <p class="eyebrow"><span class="n">Backup · B21</span> The ask, item by item</p>
+  <p class="eyebrow"><span class="n">Backup · B19</span> The ask, item by item</p>
   <h2>Two partners. Fifty-nine days.</h2>
   <div class="chart">
     <div class="asklist">
@@ -2040,7 +2009,7 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
         <div class="num">1</div>
         <div>
           <div class="h">Two design partners from the existing voice base</div>
-          <div class="d">Banks or credit unions with a public mailbox and an off-the-shelf core. Their own mail history is the test set from day one — and day 0 counts from signature, carried by the existing voice vendor approval and the TPRM evidence in <b><a class="xref" data-jump="B16">B16</a></b>.</div>
+          <div class="d">Banks or credit unions with a public mailbox and an off-the-shelf core. Their own mail history is the test set from day one — and day 0 counts from signature, carried by the existing voice vendor approval and the TPRM evidence in <b><a class="xref" data-jump="B14">B14</a></b>.</div>
         </div>
       </div>
       <div class="askrow">
@@ -2058,14 +2027,14 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
         </div>
       </div>
     </div>
-    <p class="note">The commercial question is the one that decides the packaging — see <b><a class="xref" data-jump="B18">B18</a></b>. Everything above is what we would ask a design partner for on day 0.</p>
+    <p class="note">The commercial question is the one that decides the packaging — see <b><a class="xref" data-jump="B16">B16</a></b>. Everything above is what we would ask a design partner for on day 0.</p>
   </div>
-  <div class="colophon"><span>B21</span></div>
+  <div class="colophon"><span>B19</span></div>
 </section>
 
-<!-- ═══ B22 · WHY EMAIL (moved from main 03) ═══ -->
+<!-- ═══ B20 · WHY EMAIL (moved from main 03) ═══ -->
 <section class="slide backup">
-  <p class="eyebrow"><span class="n">Backup · B22</span> Why we prioritize email</p>
+  <p class="eyebrow"><span class="n">Backup · B20</span> Why we prioritize email</p>
   <h2>Same base, no live caller, same runtime.</h2>
   <div class="whygrid">
     <div class="wg"><span class="wi"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9.6 12 4.2l9 5.4"/><path d="M5.2 9.9V19.4h13.6V9.9"/><path d="M9.6 19.4v-5.1h4.8v5.1"/></svg></span><span class="wt"><b>Same base.</b> Voice is the existing base — email rides it as an add-on, not new-customer acquisition.</span></div>
@@ -2132,16 +2101,16 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
         </tr>
     </table>
   </div>
-  <p class="note" style="font-size:16.5px"><b>What email still costs us:</b> pricing is our own $1.50 assumption (<a class="xref" data-jump="B17">B17</a>: no public price), and an auditable number takes 90 days to build — where nobody has done it, the blank is also the opportunity. Bars: length = how much, colour = good or bad.</p>
-  <div class="colophon"><span>B22</span></div>
+  <p class="note" style="font-size:16.5px"><b>What email still costs us:</b> pricing is our own $1.50 assumption (<a class="xref" data-jump="B15">B15</a>: no public price), and an auditable number takes 90 days to build — where nobody has done it, the blank is also the opportunity. Bars: length = how much, colour = good or bad.</p>
+  <div class="colophon"><span>B20</span></div>
 </section>
 
-<!-- ═══ 07b INTELLIGENCE (v0.3 · review §6.1) ═══
+<!-- ═══ B21 · INTELLIGENCE (v0.3 · review §6.1) ═══
      Naming: the deck says "intelligence" only — no runtime / design-time split
      for the audience to learn. "Runtime" stays where it means the platform we
-     borrow (p04, B12), never as the opposite of this page. ═══ -->
+     borrow (p04, B10), never as the opposite of this page. ═══ -->
 <section class="slide backup">
-  <p class="eyebrow"><span class="n">Backup · B23</span> Intelligence</p>
+  <p class="eyebrow"><span class="n">Backup · B21</span> Intelligence</p>
   <h2>AI nominates, the evidence argues, humans sign the diff.</h2>
   <p class="claim" style="margin-bottom:8px">This is the post-launch loop on top of slides 04–06, not a second engine: the deterministic matrix still decides every reply. AI only proposes changes to the same categories and limits, and two humans sign every diff.</p>
   <div class="chart">
@@ -2232,14 +2201,14 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
     </div>
     <p class="note" style="padding-right:76px;font-size:15.5px"><b>The gates already exist.</b> Backtest, shadow, dual sign-off and auto-demotion already ship — what was missing was a nominator, and every output is a configuration diff flowing into those same gates.</p>
   </div>
-  <div class="colophon"><span>B23</span></div>
+  <div class="colophon"><span>B21</span></div>
 </section>
 
 
 
-<!-- ═══ B24 · VALUE (moved from main 10) ═══ -->
+<!-- ═══ B22 · VALUE (moved from main 10) ═══ -->
 <section class="slide backup">
-  <p class="eyebrow"><span class="n">Backup · B24</span> Value &amp; priority</p>
+  <p class="eyebrow"><span class="n">Backup · B22</span> Value &amp; priority</p>
   <h2>One bank's email book is a $4.8M cost base.</h2>
   <p class="claim">600,000 emails a year at $8 each. What we take out depends on how much we can genuinely finish.</p>
   <div class="chart">
@@ -2274,12 +2243,12 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       <text class="lgx" x="744" y="206" fill="#F5B544" style="font-size:30px">≈ $54M</text>
       <text class="lgd" x="744" y="232" style="font-size:14px">Vendor-side opportunity at full adoption</text>
       <text class="lgd" x="744" y="252" style="font-size:14px" fill="#F5B544">262 × $205k — penetration not assumed</text>
-      <text class="lgd" x="744" y="276" style="font-size:13px">$1.50 per resolution is our price (<tspan class="xref" data-jump="B16">B16</tspan>), not a list price</text>
+      <text class="lgd" x="744" y="276" style="font-size:13px">$1.50 per resolution is our price (<tspan class="xref" data-jump="B14">B14</tspan>), not a list price</text>
     </svg>
   </div>
   <p class="note"><b>Net-new, not cannibalized.</b> Async mail is the safest autonomy proving ground, and 90 days of history is a ready-made eval set: the bank keeps the saving, the vendor's fee sits on top of it.</p>
-  <p class="note" style="font-size:15.5px"><b>Three levers move together</b> across the three cases — failed demand, autonomy, copilot uplift. 35% is measured against email net of failed demand; against all valid inbound it reads ≈30% — both published, both in <a class="xref" data-jump="B7">B7</a>. Inputs come from the customer's own mail: mix and baselines in week one, pricing in four weeks.</p>
-  <div class="colophon"><span>B24</span></div>
+  <p class="note" style="font-size:15.5px"><b>Three levers move together</b> across the three cases — failed demand, autonomy, copilot uplift. 35% is measured against email net of failed demand; against all valid inbound it reads ≈30% — both published, both in <a class="xref" data-jump="B5">B5</a>. Inputs come from the customer's own mail: mix and baselines in week one, pricing in four weeks.</p>
+  <div class="colophon"><span>B22</span></div>
 </section>
 
 
@@ -2288,9 +2257,9 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
 
 
 
-<!-- ═══ B25 · SAYS-DOES-TO WHOM (restored from main 06) ═══ -->
+<!-- ═══ B23 · SAYS-DOES-TO WHOM (restored from main 06) ═══ -->
 <section class="slide backup">
-  <p class="eyebrow"><span class="n">Backup · B25</span> Says · does · to whom</p>
+  <p class="eyebrow"><span class="n">Backup · B23</span> Says · does · to whom</p>
   <h2>What governs every reply.</h2>
   <p class="claim">Three questions the matrix answers per email — They-lines describe public materials as of 2026-09.</p>
   <div class="chart">
@@ -2313,12 +2282,12 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
     </div>
     <p class="note"><b>Reads with the matrix on 06:</b> R answers DOES, I answers TO WHOM, SAYS is answered by template + system slots, never by the model alone.</p>
   </div>
-  <div class="colophon"><span>B25</span></div>
+  <div class="colophon"><span>B23</span></div>
 </section>
 
-<!-- ═══ B26 · RISK (moved from main 12) ═══ -->
+<!-- ═══ B24 · RISK (moved from main 12) ═══ -->
 <section class="slide backup">
-  <p class="eyebrow"><span class="n">Backup · B26</span> Risk</p>
+  <p class="eyebrow"><span class="n">Backup · B24</span> Risk</p>
   <h2>The risks that would end this product.</h2>
   <div class="chart">
     <div class="risks">
@@ -2375,13 +2344,13 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       </div>
     </div>
   </div>
-  <p class="note"><b>Also on the register:</b> tipping-off vs duty to speak (31 CFR 1020.320(e)) · over-disclosure to an unverified sender (GLBA) · third-party risk review · vulnerable-customer fairness · the LLM-as-judge flipping verdicts in evaluation (14%) · sign-off fatigue — L2 approvals and AI nominations both drift toward rubber-stamping (watch the approve-without-edit rate, sample the approved files) · a step-up link that collides with “never click a link in an email” training. Full list — seventeen risks — in Backup <a class="xref" data-jump="B16">B16</a>.</p>
-  <div class="colophon"><span>B26</span></div>
+  <p class="note"><b>Also on the register:</b> tipping-off vs duty to speak (31 CFR 1020.320(e)) · over-disclosure to an unverified sender (GLBA) · third-party risk review · vulnerable-customer fairness · the LLM-as-judge flipping verdicts in evaluation (14%) · sign-off fatigue — L2 approvals and AI nominations both drift toward rubber-stamping (watch the approve-without-edit rate, sample the approved files) · a step-up link that collides with “never click a link in an email” training. Full list — seventeen risks — in Backup <a class="xref" data-jump="B14">B14</a>.</p>
+  <div class="colophon"><span>B24</span></div>
 </section>
 
-<!-- ═══ B27 · MODEL FOR CLASSIFICATION ═══ -->
+<!-- ═══ B25 · MODEL FOR CLASSIFICATION ═══ -->
 <section class="slide backup">
-  <p class="eyebrow"><span class="n">Backup · B27</span> Model for classification</p>
+  <p class="eyebrow"><span class="n">Backup · B25</span> Model for classification</p>
   <h2>Small model first, LLM for the hard ones.</h2>
   <p class="claim">Same architecture everywhere, thresholds retrained per bank; regulated recall ≥99.5% gates L3.</p>
   <div class="chart">
@@ -2447,7 +2416,7 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       <text class="lgd" x="856" y="414" style="font-size:12.5px">never guessed — a person reads it</text>
     </svg>
   </div>
-  <div class="colophon"><span>B27</span></div>
+  <div class="colophon"><span>B25</span></div>
 </section>
 
 </div>
@@ -2655,7 +2624,7 @@ document.addEventListener('click',function(e){
   }
 });
 /* ── one-click present: narration + one-line caption + auto tour ──
-   Scope is colophon pages 02/09–07/09. Steps (clip, caption, shots, film) come
+   Scope is the voiced colophon pages: 02/09–09/09. Steps (clip, caption, shots, film) come
    from assets/voice/present.json, built from tts/deck-voiceover.en.md — this
    code never parses the md itself. Slide key is read from the colophon, so a
    reorder by another editor keeps working. Toggle defaults OFF; the tour starts
@@ -2794,7 +2763,7 @@ function pvOnShow(){
   if(pvPaused)return;                  /* jumped while paused: stay quiet */
   pvStartPage();
 }
-/* begin from the current page; outside the voiced pages 02–07, jump to 02 first */
+/* begin from the current page; outside the voiced pages (02–09), jump to 02 first */
 function pvBegin(){
   if(!pvData){pvCap('voice files missing');return;}
   if(!pvData[pvColKey(slides[i])]){show(1);return;}
@@ -2807,7 +2776,7 @@ function pvStartPage(){
   pvSteps=pvData[key]||null;
   pvStep=-1;
   if(pvPageSteps!==pvSteps)pvSliderBind();   /* data arrived after the last show() */
-  if(!pvSteps){pvCap('');return;}      /* outside 02–07: quiet until re-entry */
+  if(!pvSteps){pvCap('');return;}      /* outside the voiced pages: quiet until re-entry */
   /* a slider drag while stopped parks a start position for this page */
   const at=(pvPageSteps===pvSteps)?pvStartAt:0;
   pvStartAt=0;
@@ -2832,10 +2801,14 @@ function pvStepGo(n,seek){
   document.body.classList.remove('pv-vid');
   if(lb.classList.contains('on'))closeLb();
   pvStep=n;
-  if(!pvSteps||n>=pvSteps.length){     /* page done: next page, or tour ends */
-    const key=pvColKey(slides[i]);
-    if(key==='07'){pvPlaying=false;pvPaused=false;pvCap('');pvBtn();return;}  /* 07 is the last voiced page */
-    show(i+1);return;
+  if(!pvSteps||n>=pvSteps.length){     /* page done: next voiced page, or tour ends */
+    /* a silent page can sit between two voiced ones, so step over any page
+       with no narration rather than stalling on it — and stop once the pages
+       after this one carry no narration at all (02–09 are all voiced today) */
+    let j=i+1;
+    while(j<slides.length&&(!pvData||!pvData[pvColKey(slides[j])]))j++;
+    if(j>=slides.length){pvPlaying=false;pvPaused=false;pvCap('');pvBtn();return;}
+    show(j);return;
   }
   const st=pvSteps[n], sl=slides[i];
   pvCap(st.caption);

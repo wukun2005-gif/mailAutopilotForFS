@@ -1,10 +1,10 @@
-# Deck voiceover (English) — pages 02/09–07/09 · DRAFT for review
+# Deck voiceover (English) — pages 02/09–09/09 · DRAFT for review
 Voice: Kokoro `am_michael`, speed `1.15`. File for TTS input, not deck.
 Rules agreed: max 3 infos per page; numbers from deck; deck wins, PRD/report only decide depth; screenshots opened one by one then closed; only demo-2 plays full; caption 1 line. Each bullet carries exactly one idea — never read the slide's own labels back, and each caption states that same idea, so the caption and the narration move together.
 
 ---
 
-## 02/09 · Mid-size banks and credit unions are the beachhead.
+## 02/09 · Mid-size banks are the beachhead.
 Infos: (1) the 262-bank band (2) above and below the band (3) Larkspur profile.
 Script:
 - Where we land first: of 8,445 insured US institutions, 262 sit in the 5-to-150-billion band, big enough to carry the full regulatory load and small enough to buy rather than build.
@@ -53,7 +53,7 @@ Captions:
 - Step 4 assembles three sources; a model never writes the reply.
 Actions: open `shot-letter.jpg` once, then close (it shows the three sources colour-coded).
 
-## 06/09 · Autonomy is earned one intent at a time.
+## 06/09 · The Policy RIL Matrix governs autonomy.
 Infos: (1) R×I → L (2) locked cells (3) the never list (4) graduation.
 Script:
 - Every cell is a product of two: the category sets the row, the identity level of the sender sets the column, and R times I gives L, where the human sits.
@@ -67,7 +67,21 @@ Captions:
 - Nothing starts autonomous, and graduation never unlocks a locked cell.
 Actions: none.
 
-## 07/09 · Four screens and four demo films.
+## 07/09 · Each bank's policies, compiled onto one shared platform.
+Infos: (1) the bank's own material (2) the compile (3) the prebuilt connectors (4) the bank signs it; the next bank takes weeks.
+Script:
+- Onboarding runs on the bank's own material: 90 days of historical email, and the policy and process playbook it already works from.
+- Our tools compile it: category discovery proposes the bank's category set for an admin to confirm, and the policy compiler turns the playbook into the bank's own R times I matrix, carrying its thresholds, approval nodes and clocks.
+- The connectors come prebuilt: mailbox, core banking, CRM, identity and the archive, so the bank's systems stay where they are.
+- The bank signs the result before anything runs, on the same path as the pilot: backtest, shadow, dual sign-off. One runtime, per-bank configuration, so the next bank takes weeks.
+Captions:
+- Onboarding starts from 90 days of the bank's own mail and its playbook.
+- Our tools compile it into the bank's own categories and R × I matrix.
+- The connectors are prebuilt; the bank's systems stay where they are.
+- The bank signs it before go-live; one runtime, so the next bank takes weeks.
+Actions: none.
+
+## 08/09 · Four screens and four demo films.
 Infos: (1) the four screens, one case (2) demo 2 in full (3) demos 1, 3 and 5.
 Script:
 - One case runs through four screens. [open scr-customer] The customer verifies inside the thread, and the AI is disclosed there. [close] [open scr-agent] The agent works a case pack built on the policy verdict, not the model mood. [close] [open scr-supervisor] The supervisor owns the statutory clocks and every approval. [close] [open scr-admin] The admin writes every R times I limit and tightens a cell in one click. [close]
@@ -78,3 +92,17 @@ Captions:
 - Now demo 2 in full: a dispute across 45 days.
 - Demos 1, 3 and 5 are on YouTube: identity, fraud, intelligence.
 Actions: open and close the four screenshots one by one; then fullscreen demo-2, play it in full, exit; never touch demo-1, demo-3 or demo-5.
+
+## 09/09 · Success metrics.
+Infos: (1) VARR (2) median TTR (3) the veto (4) the guardrails and the ROI ceiling.
+Script:
+- The headline is the verified autonomous resolution rate: 25 to 35 percent by six months, where resolved means no human touch and no reopen within 14 days, and the number has to survive QA sampling.
+- Time to resolution, not to first reply, measured from the arrival timestamp: under 15 minutes when it runs autonomously, under a day otherwise, disputes excepted, against a 3.2-day baseline that is still an assumption.
+- And a veto stands over it: one critical error voids the whole rate. A key error is a wrong action, a wrong party, a missed clock or a broken promise, so the bar is zero key errors, clocks at 100 percent, and recall of at least 99.5 percent. Non-negotiable.
+- Twelve guardrails run alongside, and the 35 percent ROI base case is the top of this band, at steady state.
+Captions:
+- VARR: 25-35% by six months, no human touch, no reopen in 14 days, QA-sampled.
+- Median TTR: under 15 min autonomous, under 1 day otherwise, baseline 3.2 days.
+- One critical error voids VARR; zero key errors, clocks 100%, recall 99.5%+.
+- Twelve guardrails run alongside; the ROI base case is the top of the band.
+Actions: none.

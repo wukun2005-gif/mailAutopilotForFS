@@ -116,6 +116,32 @@
  "07": [
   {
    "clip": "p07b1.mp3",
+   "caption": "Onboarding runs on the bank's own material: 90 days of historical email, and the policy and process playbook it already works from.",
+   "shots": [],
+   "video": false
+  },
+  {
+   "clip": "p07b2.mp3",
+   "caption": "Our tools compile it: category discovery proposes the bank's category set for an admin to confirm, and the policy compiler turns the playbook into the bank's own R times I matrix, carrying its thresholds, approval nodes and clocks.",
+   "shots": [],
+   "video": false
+  },
+  {
+   "clip": "p07b3.mp3",
+   "caption": "The connectors come prebuilt: mailbox, core banking, CRM, identity and the archive, so the bank's systems stay where they are.",
+   "shots": [],
+   "video": false
+  },
+  {
+   "clip": "p07b4.mp3",
+   "caption": "The bank signs the result before anything runs, on the same path as the pilot: backtest, shadow, dual sign-off. One runtime, per-bank configuration, so the next bank takes weeks.",
+   "shots": [],
+   "video": false
+  }
+ ],
+ "08": [
+  {
+   "clip": "p08b1.mp3",
    "caption": "One case runs through four screens. The customer verifies inside the thread, and the AI is disclosed there. The agent works a case pack built on the policy verdict, not the model mood. The supervisor owns the statutory clocks and every approval. The admin writes every R times I limit and tightens a cell in one click.",
    "shots": [
     "scr-customer",
@@ -126,14 +152,40 @@
    "video": false
   },
   {
-   "clip": "p07b2.mp3",
+   "clip": "p08b2.mp3",
    "caption": "Then the proof: demo 2, a dispute that runs across 45 days.",
    "shots": [],
    "video": true
   },
   {
-   "clip": "p07b3.mp3",
+   "clip": "p08b3.mp3",
    "caption": "Demos 1, 3 and 5 are films too, on identity assurance, fraud defense and the intelligence layer. They open on YouTube and do not play here.",
+   "shots": [],
+   "video": false
+  }
+ ],
+ "09": [
+  {
+   "clip": "p09b1.mp3",
+   "caption": "The headline is the verified autonomous resolution rate: 25 to 35 percent by six months, where resolved means no human touch and no reopen within 14 days, and the number has to survive QA sampling.",
+   "shots": [],
+   "video": false
+  },
+  {
+   "clip": "p09b2.mp3",
+   "caption": "Time to resolution, not to first reply, measured from the arrival timestamp: under 15 minutes when it runs autonomously, under a day otherwise, disputes excepted, against a 3.2-day baseline that is still an assumption.",
+   "shots": [],
+   "video": false
+  },
+  {
+   "clip": "p09b3.mp3",
+   "caption": "And a veto stands over it: one critical error voids the whole rate. A key error is a wrong action, a wrong party, a missed clock or a broken promise, so the bar is zero key errors, clocks at 100 percent, and recall of at least 99.5 percent. Non-negotiable.",
+   "shots": [],
+   "video": false
+  },
+  {
+   "clip": "p09b4.mp3",
+   "caption": "Twelve guardrails run alongside, and the 35 percent ROI base case is the top of this band, at steady state.",
    "shots": [],
    "video": false
   }
