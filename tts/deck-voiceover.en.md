@@ -4,7 +4,7 @@ Rules agreed: max 3 infos per page; numbers from deck; deck wins, PRD/report onl
 
 ---
 
-## 02/09 · Mid-size banks are the beachhead.
+## 02/09 · Mid-size banks are the target.
 Infos: (1) the 262-bank band (2) above and below the band (3) Larkspur profile.
 Script:
 - Where we land first: of 8,445 insured US institutions, 262 sit in the 5-to-150-billion band, big enough to carry the full regulatory load and small enough to buy rather than build.
