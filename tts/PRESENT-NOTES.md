@@ -29,6 +29,31 @@ regenerates `deck-html/assets/voice/*.mp3` + `present.json`/`present.js`.
   key is missing from `present.json` goes silent with no error, so a renumbered deck
   fails quietly — check both sides whenever pages move.
 
+## 2026-10-15 (third pass) · all nine mainline pages voiced — scope is 02/09–09/09
+- 07/09 Onboarding and 09/09 How we would know now carry narration: 4 clips each
+  (`p07b1–4`, `p09b1–4`), written against the current slide text. The 02/09 and
+  06/09 headings in the md follow the rewritten h2s (`Mid-size banks are the
+  beachhead.`, `The Policy RIL Matrix governs autonomy.`).
+- `bash scripts/build-present-voice.sh` re-synthesised the full set; the clips for
+  02–06 and 08 were then restored byte-for-byte from the pre-run copy, so the diff
+  carries only the new pages. Kokoro on this CPU is byte-nondeterministic run to
+  run (same text and voice, tiny float differences — equal sizes do not mean
+  equal bytes).
+- Player comments in `deck-html/index.html` now read `02/09–09/09` and
+  `outside the voiced pages (02–09)`. The silent-page step-over in `pvStepGo`
+  stays: no mainline page is silent today, but a reorder can still create one.
+
+## 2026-10-15 (later) · nine numbered pages — scope is 02/09–06/09 · 08/09
+- Onboarding joins the mainline as **07/09** and How we would know as **09/09**,
+  both still unvoiced (the tour steps over silent pages); Key experiences moves
+  07/09 → 08/09, so its heading in `tts/deck-voiceover.en.md` is now `## 08/09`.
+- `present.json` / `present.js`: key `07` → `08`; clips renamed `p07b*.mp3` →
+  `p08b*.mp3` (no re-synthesis — the narration text did not change).
+- The scope comments in `deck-html/index.html` now read
+  `02/09–06/09 · 08/09` and `outside the voiced pages (02–06, 08)`.
+- When 07/09 and 09/09 get narration: add their pages to the md and run
+  `bash scripts/build-present-voice.sh`.
+
 ## 2026-10-15 · scope follows the mainline to 02/09–07/09
 - The mainline is now title + colophon pages **02/09 through 07/09** (six voiced pages);
   the old 02/15–14/15 set pointed at pages that moved into the backup block, so the
