@@ -23,6 +23,21 @@ regenerates `deck-html/assets/voice/*.mp3` + `present.json`/`present.js`.
 ## Player ownership
 - The `pv*` block (CSS `#pbar`, bar HTML, JS player) in `deck-html/index.html` belongs
   to the present feature — do not reformat/remove; slide keys come from colophons.
+- The tour's scope is written in **two places that must move together**: the voiceover
+  md's page headings, and the player's last-voiced-page constant plus the
+  `outside 02–xx` comments (`pvStepGo`, `pvStartPage`, `pvBegin`). A colophon whose
+  key is missing from `present.json` goes silent with no error, so a renumbered deck
+  fails quietly — check both sides whenever pages move.
+
+## 2026-10-15 · scope follows the mainline to 02/09–07/09
+- The mainline is now title + colophon pages **02/09 through 07/09** (six voiced pages);
+  the old 02/15–14/15 set pointed at pages that moved into the backup block, so the
+  tour played the wrong clip on 04–07.
+- Rewrote `tts/deck-voiceover.en.md` against the current slide text (L0 is gone,
+  the pipeline is five steps, the demo page has four films) and rebuilt all clips:
+  **20 clips across 6 pages**, Kokoro `am_michael` @ 1.15.
+- Clips for pages 08–14 were deleted from `deck-html/assets/voice/` — nothing
+  references them any more.
 
 ## Voice re-audition (2026-10-08)
 - **MeloTTS is a dead end for an English male voice.** Every released English
