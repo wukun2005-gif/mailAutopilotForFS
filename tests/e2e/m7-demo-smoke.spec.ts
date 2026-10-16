@@ -219,9 +219,9 @@ test("builder script plays to end (graduation)", async ({ page }) => {
 test("pointer never covers the label of the element it points at", async ({ page }) => {
   test.setTimeout(180_000);
   const cases: [script: string, beat: number, focus: string][] = [
-    ["email1", 6, "s1.autonomy.cell.I1"],
-    ["email1", 15, "s1.autonomy.cell.I3"],
-    ["email1", 30, "s1.autonomy.cell.I3"],
+    ["email1", 5, "s1.autonomy.cell.I1"],
+    ["email1", 16, "s1.autonomy.cell.I3"],
+    ["email1", 20, "s1.autonomy.cell.I3"],
     ["email2", 6, "s1.autonomy.cell.I2"],
     ["builder", 20, "s4.matrix.row.R3"],
   ];
