@@ -60,3 +60,6 @@ tts/candidates/
 # 它是 agent 的运行状态、每次干活都会动，提交进来只会让 diff 变吵
 .workbuddy/
 .vercel
+
+# Supabase CLI 的本机链接状态（含 project ref），不是项目内容
+supabase/.temp/

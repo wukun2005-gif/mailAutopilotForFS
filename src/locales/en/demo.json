@@ -58,11 +58,11 @@
   "email1": {
     "caseCard": "Same thread: push notice, code to on-file phone, six digits, case continues.",
     "cellDowngrade": "Risk R2 and identity I3 stay, but policy check fails on the second waiver; L drops to L2 one-click approval.",
-    "explanationSent": "Supervisor sends Email Autopilot\u2019s explanation into Jane\u2019s thread.",
+    "explanationSent": "Upon supervisor\u2019s one-click approval, Email Autopilot sends its explanation into Jane\u2019s thread automatically.",
     "i3cell": "Same risk R2 row, identity now I3; Email Autopilot derives L3 and auto-refunds $35.",
     "i3refund": "Identity verified, R2 row now allows it: $35 fee refunded; reply still template, slot, generated sentence.",
     "identityUp": "Jane verifies in this thread; Email Autopilot upgrades identity I1 to I3.",
-    "l2queue": "Email Autopilot wrote the denial email; supervisor only clicks once to send it.",
+    "l2queue": "Email Autopilot wrote the denial email and is about to reply to Jane; the supervisor clicks once to approve the reply.",
     "adminRil": "Admin view: the email is an overdraft fee refund, risk R2, identity I1 to I3; matrix derives L1 no grant or L3 auto-refund.",
     "lockedCell": "Jane\u2019s email is an overdraft refund at category risk R2. At identity I1 that row grants no automatic action.",
     "outro": "Same request, different matrix cell: different outcome, every step explainable.",

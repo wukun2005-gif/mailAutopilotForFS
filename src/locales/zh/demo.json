@@ -58,11 +58,11 @@
   "email1": {
     "caseCard": "同一线程：发通知、验证码到备案手机、输六位，案件自动继续。",
     "cellDowngrade": "风险 R2、身份 I3 不变，但策略检查未过（第二次豁免）；L 降到 L2 一键审批。",
-    "explanationSent": "主管将 Email Autopilot 的解释发回 Jane 的线程。",
+    "explanationSent": "主管一键批准后，Email Autopilot 自动将解释发回 Jane 的线程。",
     "i3cell": "同一 R2 行，身份 I1→I3；Email Autopilot 推导 L3，自动退回 35 美元。",
     "i3refund": "身份确认后 R2 行允许：退回 $35 费用，回覆仍是模板、槽位、生成句。",
     "identityUp": "Jane 在同一线程完成验证；Email Autopilot 将身份 I1 提升到 I3。",
-    "l2queue": "Email Autopilot 写好拒退邮件；主管只需点一次即可发送。",
+    "l2queue": "Email Autopilot 已写好拒退邮件，即将回复 Jane；主管点一次批准这次回复。",
     "adminRil": "管理视图：这封邮件是透支费退费，风险 R2，身份从 I1 到 I3；矩阵推导为 L1 不授权或 L3 自动退费。",
     "lockedCell": "Jane 的邮件是透支费退费，类别风险 R2。身份 I1 时，该行不授权自动处理。",
     "outro": "同一封邮件，不同矩阵格：结果不同，全程可解释。",

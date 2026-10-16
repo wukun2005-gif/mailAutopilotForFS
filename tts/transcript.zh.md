@@ -38,7 +38,7 @@
 
 ## email1 · 邮件 1 · 透支费两拍
 
-### 1-3 · day0 · caption 2000 ms · audio 6.4s · email1.publicMailbox · pointer s1.thread.in
+### 1-2 · day0 · caption 2000 ms · audio 6.4s · email1.publicMailbox
 
 Jane 要求 Larkspur 银行退还 35 美元透支费。
 
@@ -70,13 +70,13 @@ Jane 在同一线程完成验证；Email Autopilot 将身份 I1 提升到 I3。
 
 在 Agent 工作区：12 个月已有 2 次豁免；策略检查未过，因此不自动处理。
 
-### 1-24 · day21 · caption 2000 ms · audio 6.2s · email1.l2queue · pointer s3.approvalcard
+### 1-24 · day21 · caption 2000 ms · audio 8.2s · email1.l2queue · pointer s3.approvalcard
 
-Email Autopilot 写好拒退邮件；主管只需点一次即可发送。
+Email Autopilot 已写好拒退邮件，即将回复 Jane；主管点一次批准这次回复。
 
-### 1-27 · day21 · caption 2000 ms · audio 5.2s · email1.explanationSent · pointer s1.thread.out
+### 1-27 · day21 · caption 2000 ms · audio 6.9s · email1.explanationSent · pointer s1.thread.out
 
-主管将 Email Autopilot 的解释发回 Jane 的线程。
+主管一键批准后，Email Autopilot 自动将解释发回 Jane 的线程。
 
 ### 1-28 · outro · caption 2000 ms · audio 6.1s · email1.outro · pointer s1.thread
 

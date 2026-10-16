@@ -38,7 +38,7 @@ Deterministic where the law requires it, autonomous where evidence has earned it
 
 ## email1 · Email 1 · OD fee, two beats
 
-### 1-3 · day0 · caption 2000 ms · audio 4.5s · email1.publicMailbox · pointer s1.thread.in
+### 1-2 · day0 · caption 2000 ms · audio 4.5s · email1.publicMailbox
 
 Jane asks Larkspur to refund a $35 overdraft fee.
 
@@ -70,13 +70,13 @@ Risk R2 and identity I3 stay, but policy check fails on the second waiver; L dro
 
 In the Agent workspace: second waiver in 12 months; policy check fails, so not automatic.
 
-### 1-24 · day21 · caption 2000 ms · audio 5.4s · email1.l2queue · pointer s3.approvalcard
+### 1-24 · day21 · caption 2000 ms · audio 8.1s · email1.l2queue · pointer s3.approvalcard
 
-Email Autopilot wrote the denial email; supervisor only clicks once to send it.
+Email Autopilot wrote the denial email and is about to reply to Jane; the supervisor clicks once to approve the reply.
 
-### 1-27 · day21 · caption 2000 ms · audio 4.7s · email1.explanationSent · pointer s1.thread.out
+### 1-27 · day21 · caption 2000 ms · audio 7.5s · email1.explanationSent · pointer s1.thread.out
 
-Supervisor sends Email Autopilot’s explanation into Jane’s thread.
+Upon supervisor’s one-click approval, Email Autopilot sends its explanation into Jane’s thread automatically.
 
 ### 1-28 · outro · caption 2000 ms · audio 4.8s · email1.outro · pointer s1.thread
 
