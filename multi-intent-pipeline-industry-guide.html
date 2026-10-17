@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>多意图识别（Multi-Intent Detection）在邮件/客服场景的业界 Pipeline 与模型全景</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='5' fill='%2316324f'/%3E%3Cpath d='M4 8l8 5 8-5M4 8v9h16V8M4 8l8-2 8 2' stroke='%2314b8a6' stroke-width='1.6' fill='none' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=Noto+Serif+SC:wght@600;700&display=swap">
+<style>
+:root{
+  --navy:#16324f; --navy-s:#e8eef4; --navy-l:#3b6ea5;
+  --teal:#0f766e; --teal-d:#0b5450; --accent:#0e7490; --accent-s:#cfeef0; --accent-d:#0c4a5e;
+  --amber:#b45309; --amber-s:#fdf0d7; --red:#9f1239; --red-s:#fde7ec;
+  --green:#15803d; --green-s:#e3f4e8;
+  --ink:#1f2937; --soft:#4b5563; --faint:#6b7280; --line:#e2e5e9; --bg:#f6f5f1; --paper:#fffdf8;
+  --mono:"SF Mono",ui-monospace,Menlo,Consolas,monospace;
+  --sans:"Noto Sans SC",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --serif:"Noto Serif SC",Georgia,serif;
+  --shadow:0 1px 3px rgba(22,50,79,.08),0 1px 2px rgba(22,50,79,.04);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:14.5px;line-height:1.75;-webkit-font-smoothing:antialiased}
+a{color:var(--accent-d);text-decoration:none}
+b,strong{font-weight:700}
+code,pre{font-family:var(--mono)}
+.sidebar{position:fixed;top:0;left:0;bottom:0;width:262px;background:var(--navy);color:#cdd9e5;overflow-y:auto;padding:22px 0;z-index:40}
+.sidebar .brand{padding:0 20px 14px;border-bottom:1px solid rgba(255,255,255,.12);margin-bottom:10px}
+.sidebar .brand .t{color:#fff;font-weight:900;font-size:15px;line-height:1.4}
+.sidebar .brand .s{font-size:11px;color:#8fb0c9;margin-top:5px;font-family:var(--mono)}
+.sidebar nav a{display:block;padding:6px 20px;color:#b9c8d6;font-size:12.6px;border-left:3px solid transparent}
+.sidebar nav a:hover{background:rgba(255,255,255,.07);color:#fff;border-left-color:var(--accent)}
+.sidebar nav a .n{font-family:var(--mono);color:#7fa3bf;font-size:11px;margin-right:7px}
+.sidebar nav .grp{padding:12px 20px 4px;font-size:10.5px;letter-spacing:.14em;color:#6d8aa5;font-weight:700;text-transform:uppercase}
+.main{margin-left:262px;max-width:1080px}
+.wrap{padding:0 44px 80px}
+.hero{background:linear-gradient(135deg,#13293f,#1d4366);color:#fff;padding:46px 44px 38px;margin:0 -44px 26px}
+.hero .kicker{font-family:var(--mono);font-size:11.5px;letter-spacing:.22em;color:#7fd1cb;text-transform:uppercase}
+.hero h1{font-family:var(--serif);font-size:26px;font-weight:700;margin:10px 0 8px;line-height:1.3}
+.hero .sub{color:#cdd9e5;font-size:14px;max-width:760px}
+.hero .meta{margin-top:14px;font-family:var(--mono);font-size:11.5px;color:#9cc0d8}
+h2{font-family:var(--serif);font-size:20px;color:var(--navy);margin:34px 0 12px;padding-bottom:6px;border-bottom:2px solid var(--navy-s)}
+h3{font-size:15.5px;color:var(--navy-l);margin:22px 0 8px;font-weight:700}
+h4{font-size:13.5px;color:var(--accent-d);margin:16px 0 6px;font-weight:700}
+p{margin:8px 0}
+ul,ol{margin:8px 0 8px 22px}
+li{margin:4px 0}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px}
+th,td{border:1px solid var(--line);padding:7px 9px;vertical-align:top}
+th{background:var(--navy-s);color:var(--navy);font-weight:700}
+tr:nth-child(even) td{background:#fafaf7}
+code{background:#eef2f7;padding:1px 5px;border-radius:3px;font-size:12.5px;color:var(--accent-d)}
+pre{background:#1e293b;color:#e2e8f0;padding:12px 14px;border-radius:6px;overflow-x:auto;margin:10px 0;font-size:12.5px;line-height:1.55}
+pre code{background:none;color:inherit;padding:0}
+.callout{border-left:4px solid var(--accent);background:var(--accent-s);padding:10px 14px;margin:12px 0;border-radius:0 6px 6px 0}
+.callout.warn{border-color:var(--amber);background:var(--amber-s)}
+.callout.danger{border-color:var(--red);background:var(--red-s)}
+.callout.good{border-color:var(--green);background:var(--green-s)}
+.callout b{color:var(--navy)}
+.tag{display:inline-block;font-family:var(--mono);font-size:11px;padding:1px 6px;border-radius:3px;margin:0 2px}
+.tag.red{background:var(--red-s);color:var(--red)}
+.tag.green{background:var(--green-s);color:var(--green)}
+.tag.amber{background:var(--amber-s);color:var(--amber)}
+.tag.teal{background:var(--accent-s);color:var(--accent-d)}
+.kv{display:grid;grid-template-columns:160px 1fr;gap:6px 12px;margin:8px 0}
+.kv .k{font-weight:700;color:var(--navy)}
+hr{border:none;border-top:1px solid var(--line);margin:24px 0}
+@media print{.sidebar{display:none}.main{margin:0}}
+</style>
+</head>
+<body>
+<div class="sidebar">
+  <div class="brand">
+    <div class="t">多意图识别 Pipeline</div>
+    <div class="s">industry guide · 2026-10</div>
+  </div>
+  <nav>
+    <div class="grp">总览</div>
+    <a href="#verdict"><span class="n">0</span>你的 pipeline 对吗</a>
+    <a href="#def"><span class="n">1</span>问题定义</a>
+    <a href="#pipeline"><span class="n">2</span>端到端 Pipeline</a>
+    <div class="grp">模型与算法</div>
+    <a href="#models"><span class="n">3</span>模型家族全景</a>
+    <a href="#compare"><span class="n">4</span>模型对比表</a>
+    <a href="#taxonomy"><span class="n">5</span>意图分类体系设计</a>
+    <div class="grp">归因与路由</div>
+    <a href="#attr"><span class="n">6</span>归因与规范化</a>
+    <a href="#route"><span class="n">7</span>路由与处置</a>
+    <a href="#metrics"><span class="n">8</span>评估指标</a>
+    <div class="grp">平台与场景</div>
+    <a href="#platforms"><span class="n">9</span>业界平台/框架</a>
+    <a href="#emailfs"><span class="n">10</span>邮件/金融特殊考量</a>
+    <a href="#data"><span class="n">11</span>数据与持续迭代</a>
+    <a href="#arch"><span class="n">12</span>参考架构与本项目映射</a>
+    <a href="#ood"><span class="n">13</span>OOD/新意图治理（客户 vs 供应商）</a>
+    <a href="#refs"><span class="n">14</span>参考资源</a>
+  </nav>
+</div>
+<div class="main"><div class="wrap">
+<div class="hero">
+  <div class="kicker">MULTI-INTENT DETECTION · EMAIL / CUSTOMER SERVICE</div>
+  <h1>多意图识别（Multi-Intent Detection）在邮件/客服场景的业界 Pipeline 与模型全景</h1>
+  <div class="sub">从历史邮件建立意图目录，到新入站邮件的多意图识别、归因到目录、路由与处置：业界经典成熟做法、模型家族、评估与持续迭代的完整介绍。</div>
+  <div class="meta">适用：Email Autopilot for Financial Services 项目 · 生成日期 2026-10-17</div>
+</div>
+
+<h2 id="verdict">0. 你的 pipeline 对吗</h2>
+<p><b>结论：对，方向正确，是业界的主干做法。</b>「先从历史邮件建立意图目录（intent category list），再对新入站邮件做多意图识别，把识别出的意图归因到已有目录，然后路由与处置」——这就是业界标准的多意图识别（MID）+ 多标签分类（multi-label classification）+ 路由（routing）流水线。</p>
+<p>但有 4 个缺口需要补，否则在金融/监管场景会出事：</p>
+<ul>
+  <li><b>高危/受监管意图必须"只多不少"。</b>对 Reg E/Z 等受监管意图，模型可以升级（model may upgrade）但绝不能被静默降级；需要一个高召回、低精度的规则层垫底（本项目已有 <code>keywordDetector.ts</code>），把模糊邮件路由到人工而非自动处置。</li>
+  <li><b>必须显式处理"未知意图 / 新意图"。</b>目录不是封闭集合；历史里没出现过的新意图需要被发现（聚类/新意图发现 NID）并进入审核，而不是被强行归入最近的类。</li>
+  <li><b>多意图不是"挑一个"。</b>归因时可能得到 0~N 个意图，处置策略是"任一受监管意图触发时钟"、"风险取最大（按维度）"、"需要人工的意图对应部分升级"，不能只取 top-1。</li>
+  <li><b>置信度校准 + 证据链 + 人机回环。</b>每个意图命中必须带证据句（evidence sentences）、置信度；按置信度三档路由（自动 / 缓冲复核 / 人工）；人工纠正回流训练。</li>
+</ul>
+<div class="callout good"><b>映射到本项目：</b>本项目的 <code>INTENT_SPECS</code> 目录 + <code>recordedTriage</code> 多意图输出 + <code>keywordDetector</code> 高召回安全网 + R×I×L 矩阵，已覆盖主干；缺口主要在"未知意图发现"、"置信度校准/三档路由显式化"、"评估指标落地"。</div>
+
+<h2 id="def">1. 问题定义</h2>
+<h3>1.1 单意图 vs 多意图</h3>
+<ul>
+  <li><b>单意图分类（single-intent / multi-class）：</b>一句话/一封邮件只属于一个类。大多数传统 IVR/聊天机器人假设。</li>
+  <li><b>多意图识别（MID / multi-label）：</b>一句话/一封邮件可同时包含 0~N 个意图。真实客户邮件的常态："我的卡还没到，另外我不认识这笔 $247.18 的扣款"。</li>
+</ul>
+<h3>1.2 邮件/客服场景的特殊性</h3>
+<ul>
+  <li><b>长文本 + 线程：</b>一封邮件含多段、多轮回复；意图可能分布在不同轮次，新轮次可能追加新意图。</li>
+  <li><b>隐含意图：</b>"我上周五付的账单怎么还没到"隐含"交易查询 + 可能的投诉"。</li>
+  <li><b>受监管意图：</b>半句话"我不认识这笔扣款"即构成 Reg E 错误通知， statutory clock 从入站时间起算。</li>
+  <li><b>噪声：</b>签名、免责声明、转发链、附件、OCR 文本。</li>
+  <li><b>多语言、方言、错别字、口语化。</b></li>
+</ul>
+<h3>1.3 核心术语</h3>
+<div class="kv">
+  <div class="k">Intent（意图）</div><div>用户想达成的目标/诉求，如" disputing a charge""refund fee"。</div>
+  <div class="k">Slot / Entity</div><div>意图的参数，如金额 $247.18、账户、日期。</div>
+  <div class="k">Taxonomy / Category list</div><div>意图目录，层级化、带风险/监管属性。</div>
+  <div class="k">Attribution / Canonicalization</div><div>把识别出的自由文本意图映射到目录中的标准 code。</div>
+  <div class="k">Routing</div><div>根据意图（及风险/身份/置信度）决定队列、SLA、处置方式。</div>
+  <div class="k">OOD / Novel intent</div><div>目录外的新意图。</div>
+</div>
+
+<h2 id="pipeline">2. 端到端 Pipeline（业界经典）</h2>
+<pre>入站邮件
+  │
+  ▼
+[0] 采集与规范化：编码、去 HTML、签名/免责声明剥离、线程拆分、附件 OCR
+  │
+  ▼
+[1] 并行前置信号：语言检测、PII 脱敏、情绪/紧急度、欺诈/BEC 筛查、漏洞标记
+  │
+  ▼
+[2] 多意图检测 (MID)：规则层(高召回) + 模型层(多标签) → 候选意图集合 + 置信度 + 证据句
+  │
+  ▼
+[3] 归因/规范化：alias→canonical code、去重合并、层级归类、OOD 检测
+  │
+  ▼
+[4] 槽位/实体抽取：金额、账户、日期、商户、渠道
+  │
+  ▼
+[5] 置信度校准 + 路由决策：三档（自动/缓冲复核/人工）× 风险矩阵 R×I×L
+  │
+  ▼
+[6] 处置执行：clock 启动、收据、材料追逐、草拟回复、升级审批
+  │
+  ▼
+[7] 人机回环：人工纠正 → 标注池 → 重训/校准 → 监控漂移</pre>
+
+<h3>2.1 各阶段要点</h3>
+<table>
+<tr><th>阶段</th><th>关键动作</th><th>常见失败</th></tr>
+<tr><td>0 预处理</td><td>线程级上下文拼接、引用/签名剥离、附件文本抽取</td><td>把转发链当正文，噪声淹没意图</td></tr>
+<tr><td>1 并行信号</td><td>语言、情绪、欺诈、漏洞与意图并行，不串行</td><td>等意图出来再筛欺诈，漏掉 BEC</td></tr>
+<tr><td>2 MID</td><td>规则垫底 + 模型多标签；输出证据句</td><td>单标签 top-1，漏掉次要意图</td></tr>
+<tr><td>3 归因</td><td>alias 映射、层级归类、OOD 检测</td><td>强制归入最近类，掩盖新意图</td></tr>
+<tr><td>4 槽位</td><td>金额/账户/日期/商户抽取与校验</td><td>把金额抽错导致 clock/收据错误</td></tr>
+<tr><td>5 路由</td><td>置信度三档 × 风险矩阵；任一受监管意图触发时钟</td><td>用平均置信度掩盖单个低置信意图</td></tr>
+<tr><td>6 处置</td><td>确定性 runtime 执行，LLM 只起草</td><td>让 LLM 直接决定处置</td></tr>
+<tr><td>7 回环</td><td>纠正回流、漂移监控、重训</td><td>无人回环，模型退化无人知</td></tr>
+</table>
+
+<h2 id="models">3. 模型家族全景</h2>
+
+<h3>3.1 规则 / 关键词层（高召回安全网）</h3>
+<p>廉价、确定、可审计。业界在受监管意图（纠纷、欺诈、投诉）前放一层高召回规则：宁可假阳性（路由到人工）也不假阴性。本项目 <code>keywordDetector.ts</code> 即此层。适合：Reg E/Z 纠纷措辞、投诉关键词、欺诈信号。</p>
+
+<h3>3.2 传统 ML（TF-IDF + LR/SVM, fastText）</h3>
+<p>小数据、低延迟、可解释。多标签用 One-vs-Rest。fastText 训练快、部署轻。适合基线与资源受限场景。</p>
+
+<h3>3.3 深度学习（CNN / BiLSTM）</h3>
+<p>在 Transformer 普及前的主流；如今多作为轻量备选或蒸馏学生模型。</p>
+
+<h3>3.4 Transformer 预训练模型（BERT 家族）</h3>
+<p>当前生产主力。多标签分类：在 [CLS] 上接 sigmoid 多标签头（binary cross-entropy），或用 SetFit 小样本。DistilBERT/RoBERTa 常作蒸馏/精度权衡。金融/客服领域可继续在领域语料上预训练（domain-adaptive pretraining）。</p>
+
+<h3>3.5 联合意图-槽位（Joint Intent & Slot Filling, SLU）</h3>
+<p>同时做意图分类 + 槽位标注（BIO）。架构：BERT 编码 + intent 头 + slot 头，常加 slot-gated / co-interactive / stack propagation。适合需要参数抽取的场景（订票、转账）。代表：BERT-Joint、SLIM、NVIDIA NeMo Joint Intent & Slot。</p>
+
+<h3>3.6 多意图专用模型（MID）</h3>
+<p>专门针对"一句话多意图"。数据集：MixATIS、MixSNIPS（人工拼接，被批"不自然"）、BlendX（更自然的混合模式）。方法：多标签 BERT、注意力机制、生成式（BART/seq2seq 把意图集作为生成目标）、TFMN 等。生成式思路：把"识别意图"变成"生成意图列表"。</p>
+
+<h3>3.7 LLM（大语言模型）</h3>
+<p>零样本/少样本提示 + 结构化输出（JSON Schema / function calling）直接抽出意图列表与证据句。优势：冷启动、长尾、可解释；劣势：延迟、成本、幻觉、非确定性。生产中常见"LLM 候选 + 小模型/规则 adjudication"或"LLM 仅用于长尾/新意图"。结构化输出保证 schema 合法。</p>
+
+<h3>3.8 层级分类（Hierarchical）</h3>
+<p>先分大类（产品线/业务域 20+），再分小类（每域 30-40 意图）。降低单模型复杂度，提升可维护性。本项目 INTENT_SPECS 按业务域隐含分组。</p>
+
+<h3>3.9 新意图发现（Novel Intent Discovery, NID）</h3>
+<p>对目录外样本做聚类/对齐，发现新意图类别。方法：Deep Aligned Clustering、VAE OOD 检测、主动学习。生产中用于"目录扩展"与"长尾覆盖"。</p>
+
+<h3>3.10 OOD / 拒识（Out-of-Domain）</h3>
+<p>判断输入是否属于任一已知意图；低于阈值或 OOD 分数高 → 进入"未知/人工"。对安全至关重要。</p>
+
+<h2 id="compare">4. 模型对比</h2>
+<table>
+<tr><th>家族</th><th>多意图?</th><th>数据需求</th><th>延迟/成本</th><th>可解释</th><th>典型场景</th></tr>
+<tr><td>规则/关键词</td><td>是（多模式）</td><td>无</td><td>极低</td><td>高</td><td>受监管意图安全网</td></tr>
+<tr><td>TF-IDF+LR/SVM</td><td>多标签 OvR</td><td>小-中</td><td>低</td><td>中</td><td>基线、资源受限</td></tr>
+<tr><td>fastText</td><td>多标签</td><td>小-中</td><td>极低</td><td>低</td><td>边缘/高吞吐</td></tr>
+<tr><td>BERT 多标签</td><td>是</td><td>中-大</td><td>中</td><td>中</td><td>生产主力</td></tr>
+<tr><td>联合 SLU</td><td>部分</td><td>中-大</td><td>中</td><td>中</td><td>需槽位抽取</td></tr>
+<tr><td>生成式 MID</td><td>是</td><td>中-大</td><td>中-高</td><td>中</td><td>复杂多意图</td></tr>
+<tr><td>LLM 提示</td><td>是</td><td>零/少</td><td>高</td><td>高（证据句）</td><td>冷启动、长尾、新意图</td></tr>
+<tr><td>层级分类</td><td>是</td><td>中-大</td><td>中</td><td>中</td><td>大目录（500+ 意图）</td></tr>
+<tr><td>NID 聚类</td><td>—</td><td>无标签</td><td>离线</td><td>中</td><td>目录扩展</td></tr>
+</table>
+
+<h2 id="taxonomy">5. 意图分类体系（Taxonomy）设计</h2>
+<ul>
+  <li><b>层级化：</b>域（Domain）→ 产品线（Product）→ 意图（Intent）。例：银行 → 借记卡 → card_delivery_status / card_lock。</li>
+  <li><b>原子性：</b>一个意图对应一个可处置的动作/义务，避免"大杂烩"类。</li>
+  <li><b>可共存性：</b>明确哪些意图可共存（card_delivery_status + reg_e_intake），哪些互斥。</li>
+  <li><b>监管属性：</b>每个意图标 regulated: true/false、risk R0-R4、clockDriven、intakeAutoAtAnyIdentity。</li>
+  <li><b>字段敏感度：</b>fieldClass 控制回复时可披露字段（本项目已有）。</li>
+  <li><b>版本化：</b>policyPackId 绑定策略包版本，变更可追溯。</li>
+  <li><b>粒度权衡：</b>太粗 → 路由不准；太细 → 数据稀疏、模型难训。建议 20-60 个叶子意图起步。</li>
+</ul>
+<div class="callout">本项目 <code>INTENT_SPECS</code> 是一个良好的 taxonomy 示例：code、risk、regulated、fieldClass、policyPackId、clockDriven。</div>
+
+<h2 id="attr">6. 归因（Attribution）与规范化</h2>
+<ul>
+  <li><b>Alias 映射：</b>模型/LLM 输出的自由短语 → canonical code（同义词表）。</li>
+  <li><b>去重与合并：</b>同一意图多次命中合并；证据句聚合。</li>
+  <li><b>层级归类：</b>叶子 → 父类，便于报表与路由。</li>
+  <li><b>置信度校准：</b>原始分数 → 可靠概率（Platt/Isotonic/Temperature scaling）。</li>
+  <li><b>证据链：</b>每个命中附 evidenceSentences，支持审计与人工复核。</li>
+  <li><b>否定/排除：</b>识别"不是 X"避免误标（如"这不是欺诈"）。</li>
+  <li><b>OOD 检测：</b>置信度低于阈值或 OOD 分数高 → 标记 unknown，进新意图发现。</li>
+</ul>
+
+<h2 id="route">7. 路由与处置</h2>
+<h3>7.1 置信度三档</h3>
+<table>
+<tr><th>档位</th><th>条件</th><th>动作</th></tr>
+<tr><td>自动（Auto）</td><td>置信度 ≥ 高阈值 且 风险 ≤ 允许等级</td><td>自动处置（clock、收据、材料追逐）</td></tr>
+<tr><td>缓冲复核（Review）</td><td>中等置信度 或 高风险意图</td><td>AI 草拟，人工一键确认</td></tr>
+<tr><td>人工（Human）</td><td>低置信度 / OOD / 高风险 R3+ / 欺诈信号</td><td>升级人工，AI 仅提供证据</td></tr>
+</table>
+<h3>7.2 多意图聚合策略</h3>
+<ul>
+  <li><b>风险取最大（按维度，非按整封邮件）：</b>聚合作用于同一回复内容里的字段敏感度/风险等维度，决定该部分内容可披露/可自动发送的门槛；不是把整封邮件所有意图都升级。各意图的处置仍分别执行。</li>
+  <li><b>任一受监管触发时钟：</b>reg_e_intake 命中 → 立即启动 Reg E clock，不论其他意图。</li>
+  <li><b>任一需要人工 → 对应部分升级：</b>contact_detail_change (R3) 命中 → 其对应处置/回复部分升级人工；低风险意图（如 card delivery）仍可自动回复。</li>
+  <li><b>处置可并行：</b>各意图的 intake 可并行执行（如同时 clock + 材料追逐）。</li>
+</ul>
+<h3>7.3 身份与自治（R×I×L）</h3>
+<p>路由不仅看意图，还看身份保障级别 I 与自治等级 L：同一意图在 I0（未验证）与 I3（强验证）下处置不同；自治等级按意图毕业（graduation）逐步提升，可收紧/放宽。</p>
+
+<h2 id="metrics">8. 评估指标</h2>
+<ul>
+  <li><b>Subset Accuracy（子集准确率）：</b>预测集合与真实集合完全一致的比例。严格。</li>
+  <li><b>Hamming Loss：</b>标签级错误率，允许部分正确。</li>
+  <li><b>Micro/Macro F1、Precision、Recall：</b>多标签标准。</li>
+  <li><b>Per-intent Recall（尤其受监管意图）：</b>Reg E/Z 意图 recall 必须 ≈ 1.0（假阴性代价极高）。</li>
+  <li><b>OOD 检测：</b>AUROC、FPR@95TPR。</li>
+  <li><b>业务指标：</b>自动处置率、人工升级率、SLA 达成率、误处置率、客户满意度。</li>
+  <li><b>延迟与成本：</b>p95 延迟、每封成本。</li>
+</ul>
+<div class="callout warn"><b>关键：</b>对受监管意图，优化目标是 recall 而非整体 accuracy；允许假阳性（路由人工）。</div>
+
+<h2 id="platforms">9. 业界平台与框架</h2>
+<table>
+<tr><th>平台/框架</th><th>特点</th><th>多意图支持</th></tr>
+<tr><td>Rasa (DIET)</td><td>开源，可自托管，DIET 多任务 transformer</td><td>多意图 + 实体</td></tr>
+<tr><td>Dialogflow CX (Google)</td><td>云托管 NLU，flow-based</td><td>单意图为主，需组合</td></tr>
+<tr><td>Azure CLU</td><td>微软云 NLU（2029 退役）</td><td>单意图</td></tr>
+<tr><td>AWS Comprehend</td><td>托管分类/实体，自定义分类器</td><td>多标签支持</td></tr>
+<tr><td>Vertex AI</td><td>AutoML / 自定义文本分类</td><td>多标签支持</td></tr>
+<tr><td>IBM Watson NLU</td><td>托管 NLU</td><td>意图 + 实体</td></tr>
+<tr><td>NVIDIA NeMo</td><td>可训练联合意图-槽位</td><td>联合 SLU</td></tr>
+<tr><td>LLM 提供商 (OpenAI/Anthropic/Gemini)</td><td>结构化输出/函数调用</td><td>提示式多意图</td></tr>
+<tr><td>HuggingFace 生态</td><td>模型/数据/训练</td><td>全家族</td></tr>
+</table>
+
+<h2 id="emailfs">10. 邮件/金融场景的特殊考量</h2>
+<ul>
+  <li><b>Reg E/Z 合规时钟：</b>错误通知 = 入站邮件；clock 从入站时间起算，必须在 intake 阶段就启动，不能等分类完成。</li>
+  <li><b>高召回安全网：</b>受监管意图前放关键词层；模型可升级不可静默降级。</li>
+  <li><b>线程上下文：</b>新轮次可能追加意图；需 thread-level 聚合 + 增量检测。</li>
+  <li><b>PII 与安全：</b>脱敏、附件 prompt-injection 当数据处理、lookalike 地址检测。</li>
+  <li><b>多语言：</b>语言检测 + 多语言模型或翻译。</li>
+  <li><b>附件/OCR：</b>OCR 文本单独通道，避免污染正文意图。</li>
+  <li><b>欺诈/BEC：</b>并行筛查，不串行。</li>
+  <li><b>审计：</b>证据句、置信度、模型版本、策略包版本全留痕。</li>
+</ul>
+
+<h2 id="data">11. 数据工程与持续迭代</h2>
+<ul>
+  <li><b>标注指南：</b>意图定义、边界案例、多标签标注规范、标注者一致性（Cohen's kappa）。</li>
+  <li><b>主动学习：</b>优先标注低置信/高分歧样本。</li>
+  <li><b>人机回环：</b>人工纠正 → 标注池 → 增量训练。</li>
+  <li><b>漂移监控：</b>意图分布、置信度分布、新词/新短语、OOD 率。</li>
+  <li><b>发布门禁：</b>backtest → shadow → 双签（Product + Compliance）→ 渐进放量；收紧可当日生效带自动过期，放宽必须 earned。</li>
+  <li><b>数据集：</b>MixATIS/MixSNIPS/BlendX 用于基准；生产用真实邮件标注。</li>
+</ul>
+
+<h2 id="arch">12. 参考架构与本项目映射</h2>
+<pre>┌──────────────────────────────────────────────────────────────┐
+│  Inbound Email                                               │
+├──────────────────────────────────────────────────────────────┤
+│  Preprocess: normalize, thread split, attachment OCR          │
+├──────────────────────────────────────────────────────────────┤
+│  Parallel: lang / vuln / fraud / keyword safety net (high-recall) │
+├──────────────────────────────────────────────────────────────┤
+│  MID Model: multi-label BERT or LLM structured output        │
+│            → candidate intents + confidence + evidence        │
+├──────────────────────────────────────────────────────────────┤
+│  Attribution: alias→canonical, dedup, hierarchy, OOD          │
+├──────────────────────────────────────────────────────────────┤
+│  Slot filling: amount/account/date/merchant                  │
+├──────────────────────────────────────────────────────────────┤
+│  Calibration + Routing: 3-tier × R×I×L matrix                │
+│   - any regulated → start clock                              │
+│   - max risk → overall level                                 │
+│   - any needs human → escalate                               │
+├──────────────────────────────────────────────────────────────┤
+│  Deterministic runtime executes; LLM only drafts             │
+├──────────────────────────────────────────────────────────────┤
+│  Human-in-the-loop → label pool → retrain → monitor drift    │
+└──────────────────────────────────────────────────────────────┘</pre>
+<table>
+<tr><th>本项目组件</th><th>业界对应</th></tr>
+<tr><td><code>INTENT_SPECS</code></td><td>taxonomy / category list</td></tr>
+<tr><td><code>recordedTriage</code> (多 IntentHit)</td><td>MID 多标签输出</td></tr>
+<tr><td><code>keywordDetector</code></td><td>高召回安全网</td></tr>
+<tr><td><code>parallelSignals</code></td><td>并行信号</td></tr>
+<tr><td>R×I×L 矩阵 / gates</td><td>路由与处置门禁</td></tr>
+<tr><td>graduation table / overrides</td><td>自治 earned、收紧/放宽</td></tr>
+<tr><td>evals harness</td><td>backtest / 评估</td></tr>
+</table>
+<div class="callout warn"><b>本项目缺口：</b>① 未知意图发现（NID）未显式建模；② 置信度三档路由未显式化（当前 recorded 固定值）；③ 评估指标（subset accuracy/hamming loss/per-intent recall）未落地到 evals；④ 线程级增量意图检测未显式。</div>
+
+<h2 id="ood">13. OOD / 新意图治理：客户 vs 供应商分工</h2>
+<p>银行上线后 inevitably 会出现目录外的新意图（OOD）。谁来解决、怎么解决，决定售后能否规模化。</p>
+
+<h3>13.1 客户（银行 IT/admin）能通过 config 解决的</h3>
+<ul>
+  <li>新增意图 code、别名/同义词、关键词规则、路由策略、SLA、回复模板、阈值。</li>
+  <li>前提：检测层用 LLM 提示/零样本或可扩展 taxonomy 驱动——意图目录存在配置/数据库里，检测时动态读取；新增意图 = 改配置，不改模型权重。</li>
+  <li>银行 admin 通过界面填：意图名称、描述、示例、关键词、路由。系统自动生成 prompt，银行不手写 prompt。</li>
+  <li>新意图先以"候选"状态出现（LLM 零样本或聚类发现），由人审核确认名称/定义/路由后才正式写入目录；确认前保持"未知/待审"，路由到人工复核。</li>
+</ul>
+
+<h3>13.2 供应商（Talkdesk）必须介入的</h3>
+<ul>
+  <li>基础模型无法区分新意图（embedding 重叠、性能明显下降）时，需重训。</li>
+  <li>但不应"每银行各训一次"。正确做法：共享的 vertical foundation model + 多租户 config；新意图先走 LLM 零样本/规则兜底；Talkdesk 把各银行上报的新意图聚类、匿名化聚合后，批量、周期性重训一次共享模型，所有银行同步升级。</li>
+</ul>
+
+<h3>13.3 为什么这样不会让售后崩溃</h3>
+<ul>
+  <li>config 优先覆盖 80%+ 的新意图诉求，银行自助。</li>
+  <li>重训是中央批量、周期性、共享模型，不是按客户定制。</li>
+  <li>如果每个银行都要单独重训 vertical model，售后必然崩溃；架构上必须避免。</li>
+</ul>
+
+<div class="callout warn"><b>反模式：</b>把意图写死在模型权重里、按客户定制模型、无候选/审核流程直接自动入库。</div>
+
+<h2 id="refs">14. 参考资源</h2>
+<ul>
+  <li>BlendX: Complex Multi-Intent Detection with Blended Patterns (LREC 2024) — aclanthology.org/2024.lrec-main.218</li>
+  <li>A Generative Model for Joint Multiple Intent Detection and Slot Filling (arXiv 2602.08322)</li>
+  <li>A Survey of Joint Intent Detection and Slot Filling Models (ACM Computing Surveys)</li>
+  <li>SLIM: Explicit Slot-Intent Mapping with BERT (github TRUMANCFY/SLIM)</li>
+  <li>Multi-Intent Natural Language Understanding Framework (MDPI Applied Sciences)</li>
+  <li>MNID: Multiple Novel Intent Detection (NAACL 2022 findings)</li>
+  <li>Discovering New Intents with Deep Aligned Clustering</li>
+  <li>Novel Intent Discovery in Industry Setting (arXiv 2305.05474)</li>
+  <li>REIC: RAG-Enhanced Intent Classification at Scale (arXiv 2506.00210)</li>
+  <li>Hierarchical Reason-of-Contact Detection in Retail Banking (ACL 2026 Industry)</li>
+  <li>Benchmarking Multilingual Intent Classification in Logistics (arXiv 2603.23172)</li>
+  <li>Multi-Label Text Classification with BERT (HuggingFace blog)</li>
+  <li>Amazon Comprehend Custom Classification (AWS docs/blog)</li>
+  <li>Google Vertex AI Multi-Label Text Classification (docs)</li>
+  <li>Azure Conversational Language Understanding (Microsoft docs)</li>
+  <li>Confidence-Based Routing (LlamaIndex glossary)</li>
+  <li>Human-in-the-Loop AI: Confidence Thresholds (Medium / Neota Logic)</li>
+  <li>Intent Taxonomy / Hierarchy (Vonage dev blog, Aide, Cobbai)</li>
+  <li>Reg E Error Resolution (Consumer Compliance Outlook, Abrigo, Sardine, Quavo)</li>
+  <li>Scikit-learn: Hamming loss / multi-label metrics docs</li>
+</ul>
+
+<hr>
+<p style="color:var(--faint);font-size:12px">本文件为研究/介绍文档，非实现规格。与项目 PRD/Dev Plan 互补。</p>
+</div></div>
+</body>
+</html>
