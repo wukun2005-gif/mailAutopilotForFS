@@ -673,7 +673,7 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       <text class="lgd" x="24" y="314" style="font-size:14px">Bands not to scale · 262 = FDIC BankFind, 2026-09-25, FDIC-insured only. NCUA stopped publishing asset bands in 2025Q4, so in-band credit unions are not counted.</text>
     </svg>
   </div>
-  <div class="colophon"><span>02 / 10</span></div>
+  <div class="colophon"><span>02 / 09</span></div>
 </section>
 
 <!-- ═══ 03 WHY FS CARES ═══ -->
@@ -739,7 +739,7 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
     </svg>
 
   </div>
-  <div class="colophon"><span>03 / 10</span></div>
+  <div class="colophon"><span>03 / 09</span></div>
 </section>
 
 
@@ -787,7 +787,7 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
     </svg>
   </div>
   <p class="note" style="font-size:16.5px"><b>Human-only in phase 1:</b> complaints, fraud (the customer says they were defrauded) and off-brief mail are detected, clocked and handed to a person. Spam / noise is auto-archived in Phase 1 and never enters intake.</p>
-  <div class="colophon"><span>04 / 10</span></div>
+  <div class="colophon"><span>04 / 09</span></div>
 </section>
 
 <!-- ═══ 05 HOW IT WORKS · 5-STEP ═══
@@ -911,7 +911,7 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       </ul>
     </div>
   </div>
-  <div class="colophon"><span>05 / 10</span></div>
+  <div class="colophon"><span>05 / 09</span></div>
 </section>
 
 <!-- ═══ 06 AI AND HUMANS ═══ -->
@@ -980,7 +980,7 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       <text class="lgd" x="0" y="472" style="font-size:14.5px">Locked = locked-template reply now (no account data), step-up opens the rest. This is a hard constraint; graduation never changes it</text>
     </svg>
   </div>
-  <div class="colophon"><span>06 / 10</span></div>
+  <div class="colophon"><span>06 / 09</span></div>
 </section>
 
 
@@ -1101,123 +1101,14 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
     </svg>
   </div>
   <p class="note" style="font-size:15.5px"><b>One runtime, per-bank configuration</b>, so the next bank takes weeks. Architecture: <b><a class="xref" data-jump="B2">B2</a></b>.</p>
-  <div class="colophon"><span>07 / 10</span></div>
+  <div class="colophon"><span>07 / 09</span></div>
 </section>
 
 
 
-<!-- ═══ 08 SELF-SERVICE TOOL CHAIN · INTENT PIPELINE & OOD ═══ -->
+<!-- ═══ 08 KEY EXPERIENCES & DEMO (simplified: Demo 1 only; the full page lives at B26) ═══ -->
 <section class="slide">
-  <p class="eyebrow"><span class="n">08</span> Self-service tool chain</p>
-  <h2>How an email becomes a case — and how new intents enter the catalog.</h2>
-  <p class="claim">One pipeline reads every inbound email; one config-driven loop adds new intents without retraining the model.</p>
-  <div class="chart" style="gap:10px">
-    <!-- Part 1: pipeline -->
-    <svg viewBox="0 0 1128 150" role="img" style="flex:0 0 150px">
-      <!-- step 1 -->
-      <g>
-        <rect class="card" x="0" y="20" width="172" height="100" rx="10"/>
-        <g fill="none" stroke="#5FD3BE" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="22" y="42" width="46" height="30" rx="4"/>
-          <path d="M22 42 l23 18 l23-18"/>
-        </g>
-        <text class="lg" x="86" y="55" style="font-size:15px;font-weight:600">1. Inbound</text>
-        <text class="lgd" x="86" y="76" style="font-size:12.5px">email arrives</text>
-        <text class="lgd" x="86" y="92" style="font-size:12.5px">clock starts</text>
-      </g>
-      <path d="M180 70 h26" stroke="#5FD3BE" stroke-width="2.2" stroke-linecap="round"/><path d="M200 64 l8 6 l-8 6" fill="none" stroke="#5FD3BE" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-      <!-- step 2 -->
-      <g>
-        <rect class="card" x="214" y="20" width="172" height="100" rx="10"/>
-        <g fill="none" stroke="#5FD3BE" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M236 44 h40 M236 56 h40 M236 68 h28"/>
-          <path d="M286 44 l8 0 l0 28 l-8 0" stroke="#9BAAB9"/>
-        </g>
-        <text class="lg" x="296" y="55" style="font-size:15px;font-weight:600">2. Clean</text>
-        <text class="lgd" x="296" y="76" style="font-size:12.5px">strip sigs, split</text>
-        <text class="lgd" x="296" y="92" style="font-size:12.5px">threads, OCR</text>
-      </g>
-      <path d="M394 70 h26" stroke="#5FD3BE" stroke-width="2.2" stroke-linecap="round"/><path d="M414 64 l8 6 l-8 6" fill="none" stroke="#5FD3BE" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-      <!-- step 3 -->
-      <g>
-        <rect class="card" x="428" y="20" width="172" height="100" rx="10"/>
-        <g fill="none" stroke="#5FD3BE" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="462" cy="62" r="16"/>
-          <path d="M474 74 l12 12"/>
-          <text x="455" y="67" fill="#5FD3BE" font-size="15" font-weight="700">M</text>
-        </g>
-        <text class="lg" x="498" y="55" style="font-size:15px;font-weight:600">3. Detect</text>
-        <text class="lgd" x="498" y="76" style="font-size:12.5px">multi-intent</text>
-        <text class="lgd" x="498" y="92" style="font-size:12.5px">(rules + model)</text>
-      </g>
-      <path d="M608 70 h26" stroke="#5FD3BE" stroke-width="2.2" stroke-linecap="round"/><path d="M628 64 l8 6 l-8 6" fill="none" stroke="#5FD3BE" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-      <!-- step 4 -->
-      <g>
-        <rect class="card" x="642" y="20" width="172" height="100" rx="10"/>
-        <g fill="none" stroke="#5FD3BE" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="664" y="44" width="34" height="34" rx="4"/>
-          <path d="M670 56 h22 M670 66 h16"/>
-          <path d="M706 50 l12 12 l-12 12" stroke="#9BAAB9"/>
-        </g>
-        <text class="lg" x="720" y="55" style="font-size:15px;font-weight:600">4. Attribute</text>
-        <text class="lgd" x="720" y="76" style="font-size:12.5px">map to catalog</text>
-        <text class="lgd" x="720" y="92" style="font-size:12.5px">+ slots</text>
-      </g>
-      <path d="M822 70 h26" stroke="#5FD3BE" stroke-width="2.2" stroke-linecap="round"/><path d="M842 64 l8 6 l-8 6" fill="none" stroke="#5FD3BE" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-      <!-- step 5 -->
-      <g>
-        <rect class="card" x="856" y="20" width="130" height="100" rx="10"/>
-        <g fill="none" stroke="#5FD3BE" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="892" cy="62" r="16"/>
-          <path d="M892 50 v12 h10"/>
-          <path d="M920 50 l10 6 l-10 6" stroke="#9BAAB9"/>
-        </g>
-        <text class="lg" x="872" y="95" style="font-size:14px;font-weight:600">5. Route</text>
-      </g>
-      <path d="M994 70 h26" stroke="#5FD3BE" stroke-width="2.2" stroke-linecap="round"/><path d="M1014 64 l8 6 l-8 6" fill="none" stroke="#5FD3BE" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-      <!-- step 6 -->
-      <g>
-        <rect class="card" x="1028" y="20" width="100" height="100" rx="10"/>
-        <g fill="none" stroke="#5FD3BE" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="1078" cy="56" r="16"/>
-          <path d="M1070 56 l6 6 l12-12"/>
-        </g>
-        <text class="lg" x="1042" y="95" style="font-size:14px;font-weight:600">6. Act</text>
-      </g>
-    </svg>
-    <p class="note" style="font-size:14.5px;margin:0">Each hit carries <b>evidence sentences + confidence</b>. Regulated intents start their clock at intake; adjudication stays human-only.</p>
-    <!-- Part 2: OOD handling -->
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;flex:1;min-height:0">
-      <div class="card" style="padding:12px 14px;display:flex;flex-direction:column;gap:8px">
-        <div style="display:flex;align-items:center;gap:10px">
-          <svg width="30" height="30" viewBox="0 0 30 30"><rect x="2" y="2" width="26" height="26" rx="6" fill="#1D2530" stroke="#5FD3BE"/><path d="M9 11 h12 M9 15 h12 M9 19 h8" stroke="#5FD3BE" stroke-width="2" stroke-linecap="round"/></svg>
-          <b style="color:#EAF0F6;font-size:16px">Bank admin (customer)</b>
-        </div>
-        <div style="display:flex;align-items:flex-start;gap:8px"><span style="color:#5FD3BE;font-weight:700">1.</span><span style="font-size:14px;color:#C0CBD6">Sees a new intent surface in the review queue (unknown / low-confidence).</span></div>
-        <div style="display:flex;align-items:flex-start;gap:8px"><span style="color:#5FD3BE;font-weight:700">2.</span><span style="font-size:14px;color:#C0CBD6">Names it, adds a short description, examples and keywords via config UI.</span></div>
-        <div style="display:flex;align-items:flex-start;gap:8px"><span style="color:#5FD3BE;font-weight:700">3.</span><span style="font-size:14px;color:#C0CBD6">Sets routing, SLA, reply template and identity threshold.</span></div>
-        <div style="display:flex;align-items:flex-start;gap:8px"><span style="color:#5FD3BE;font-weight:700">4.</span><span style="font-size:14px;color:#C0CBD6">Approves → intent is live in the catalog, no model retrain.</span></div>
-      </div>
-      <div class="card" style="padding:12px 14px;display:flex;flex-direction:column;gap:8px">
-        <div style="display:flex;align-items:center;gap:10px">
-          <svg width="30" height="30" viewBox="0 0 30 30"><circle cx="15" cy="15" r="12" fill="#1D2530" stroke="#F5B544"/><path d="M9 15 l4 4 l8-8" stroke="#F5B544" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <b style="color:#EAF0F6;font-size:16px">Vendor (us)</b>
-        </div>
-        <div style="display:flex;align-items:flex-start;gap:8px"><span style="color:#F5B544;font-weight:700">1.</span><span style="font-size:14px;color:#C0CBD6">Zero-shot / clustering surfaces candidate new intents across banks.</span></div>
-        <div style="display:flex;align-items:flex-start;gap:8px"><span style="color:#F5B544;font-weight:700">2.</span><span style="font-size:14px;color:#C0CBD6">Aggregates and anonymizes them; validates with backtest.</span></div>
-        <div style="display:flex;align-items:flex-start;gap:8px"><span style="color:#F5B544;font-weight:700">3.</span><span style="font-size:14px;color:#C0CBD6">Batches a single shared-model retrain; ships one upgrade to all banks.</span></div>
-        <div style="display:flex;align-items:flex-start;gap:8px"><span style="color:#F5B544;font-weight:700">4.</span><span style="font-size:14px;color:#C0CBD6">No per-bank model training; support stays scalable.</span></div>
-      </div>
-    </div>
-  </div>
-  <div class="colophon"><span>08 / 10</span></div>
-</section>
-
-
-
-<!-- ═══ 09 KEY EXPERIENCES & DEMO (simplified: Demo 1 only; the full page lives at B26) ═══ -->
-<section class="slide">
-  <p class="eyebrow"><span class="n">09</span> Key experiences <a class="gh live" href="https://mail-autopilot-fs-demo.vercel.app/" target="_blank" rel="noopener" title="Try the running prototype in your browser — https://mail-autopilot-fs-demo.vercel.app"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 2.5l9 5.5-9 5.5z"/></svg><span class="gl">Demo App</span><span class="ar">↗</span></a></p>
+  <p class="eyebrow"><span class="n">08</span> Key experiences <a class="gh live" href="https://mail-autopilot-fs-demo.vercel.app/" target="_blank" rel="noopener" title="Try the running prototype in your browser — https://mail-autopilot-fs-demo.vercel.app"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 2.5l9 5.5-9 5.5z"/></svg><span class="gl">Demo App</span><span class="ar">↗</span></a></p>
   <p class="claim">Risk and identity decide who acts: AI or human.</p>
   <div class="fig" style="justify-content:center">
     <div class="vcol">
@@ -1230,13 +1121,13 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       <a class="ytlink" href="https://youtu.be/CKztSZ349Hs" target="_blank" rel="noopener">Watch it on YouTube →</a>
     </div>
   </div>
-  <div class="colophon"><span>09 / 10</span></div>
+  <div class="colophon"><span>08 / 09</span></div>
 </section>
 
 
-<!-- ═══ 10 METRICS ═══ -->
+<!-- ═══ 09 METRICS ═══ -->
 <section class="slide">
-  <p class="eyebrow"><span class="n">10</span> How we would know</p>
+  <p class="eyebrow"><span class="n">09</span> How we would know</p>
   <h2>Success metrics.</h2>
   <div class="chart">
     <svg viewBox="0 0 1128 264" role="img">
@@ -1280,7 +1171,7 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       <text class="lgd" x="0" y="240">The 35% ROI base case is the top of this band, at steady state.</text>
     </svg>
   </div>
-  <div class="colophon"><span>10 / 10</span></div>
+  <div class="colophon"><span>09 / 09</span></div>
 </section>
 <!-- ═══ THANK YOU ═══ -->
 <section class="slide title" style="padding-left:200px">
