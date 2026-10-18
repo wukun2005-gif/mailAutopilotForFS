@@ -29,6 +29,18 @@ regenerates `deck-html/assets/voice/*.mp3` + `present.json`/`present.js`.
   key is missing from `present.json` goes silent with no error, so a renumbered deck
   fails quietly — check both sides whenever pages move.
 
+## 2026-10-18 · pages 07/08 swapped; demo page now 07/09 "User experience", onboarding 08/09
+- User experience (with the inline demo-1 film) and onboarding changed places.
+  Eyebrows, colophons and the md headings were renumbered; player keys follow the
+  colophons, so no scope change was needed on the player side.
+- Clips moved with their pages, no re-synthesis: `p08b1–3` (user experience) are now
+  `p07b1–3`; the onboarding clips came back from HEAD as `p08b1–4`; the unused
+  `p07b4.mp3` was deleted. Only the 07/08 clips differ from HEAD.
+- Film steps now carry the clip name: the md marker `[fullscreen demo-1, ...]` is
+  parsed into `"film": "demo-1"` and `pvPlayFilm` looks that name up (`st.film`),
+  falling back to demo-2 when absent. Before this, demo-2 was hardcoded, so the
+  simplified demo page had no film an auto-present could play.
+
 ## 2026-10-15 (third pass) · all nine mainline pages voiced — scope is 02/09–09/09
 - 07/09 Onboarding and 09/09 How we would know now carry narration: 4 clips each
   (`p07b1–4`, `p09b1–4`), written against the current slide text. The 02/09 and

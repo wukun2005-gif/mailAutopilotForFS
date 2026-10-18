@@ -67,7 +67,19 @@ Captions:
 - Nothing starts autonomous, and graduation never unlocks a locked cell.
 Actions: none.
 
-## 07/09 · Each bank's policies, compiled onto one shared platform.
+## 07/09 · User experience.
+Infos: (1) risk and identity decide who acts (2) demo 1, identity assurance, plays here (3) the other demos on YouTube, the running prototype one click away.
+Script:
+- This is the user experience to judge: risk and identity decide who acts, AI or human, on every email.
+- Demo 1 plays here: identity assurance. A customer verifies inside the thread, and the AI is disclosed there. [fullscreen demo-1, play full, exit fullscreen]
+- The other demos live on YouTube, and the running prototype is one click away from this page.
+Captions:
+- Risk and identity decide who acts: AI or human.
+- Demo 1, identity assurance: verify inside the thread, AI disclosed.
+- Other demos on YouTube; the running prototype is one click away.
+Actions: fullscreen demo-1 after its bullet, play it in full, then exit fullscreen. (2026-10-18: the four-screenshot tour and the demo-2 film belong to the full page at B26.)
+
+## 08/09 · Each bank's policies, compiled onto one shared platform.
 Infos: (1) the bank's own material (2) the compile (3) the prebuilt connectors (4) the bank signs it; the next bank takes weeks.
 Script:
 - Onboarding runs on the bank's own material: 90 days of historical email, and the policy and process playbook it already works from.
@@ -80,18 +92,6 @@ Captions:
 - The connectors are prebuilt; the bank's systems stay where they are.
 - The bank signs it before go-live; one runtime, so the next bank takes weeks.
 Actions: none.
-
-## 08/09 · Four screens and four demo films.
-Infos: (1) the four screens, one case (2) demo 2 in full (3) demos 1, 3 and 5.
-Script:
-- One case runs through four screens. [open scr-customer] The customer verifies inside the thread, and the AI is disclosed there. [close] [open scr-agent] The agent works a case pack built on the policy verdict, not the model mood. [close] [open scr-supervisor] The supervisor owns the statutory clocks and every approval. [close] [open scr-admin] The admin writes every R times I limit and tightens a cell in one click. [close]
-- Then the proof: demo 2, a dispute that runs across 45 days. [fullscreen demo-2, play full, exit fullscreen]
-- Demos 1, 3 and 5 are films too, on identity assurance, fraud defense and the intelligence layer. They open on YouTube and do not play here.
-Captions:
-- Four screens, one case: customer, agent, supervisor, admin.
-- Now demo 2 in full: a dispute across 45 days.
-- Demos 1, 3 and 5 are on YouTube: identity, fraud, intelligence.
-Actions: open and close the four screenshots one by one; then fullscreen demo-2, play it in full, exit; never touch demo-1, demo-3 or demo-5.
 
 ## 09/09 · Success metrics.
 Infos: (1) VARR (2) median TTR (3) the veto (4) the guardrails and the ROI ceiling.

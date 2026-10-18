@@ -78,7 +78,8 @@ for k in range(1, len(pages), 3):
     steps = []
     for bi, (b, c) in enumerate(zip(bullets, caps)):
         shots = re.findall(r'\[open ([^\]]+)\]', b)
-        video = bool(re.search(r'\[fullscreen ([^\]]+)\]', b))
+        fm = re.search(r'\[fullscreen ([^,\]]+)', b)
+        video = bool(fm)
         clean = re.sub(r'\s+', ' ', re.sub(r'\[[^\]]+\]', '', b)).strip()
         say = speak(clean)
         fn = f"p{num}b{bi + 1}.mp3"
@@ -86,7 +87,10 @@ for k in range(1, len(pages), 3):
         # on-screen caption = this bullet's narration text verbatim (markers
         # stripped), so caption and voice never drift; the short Captions list
         # in the md stays as the one-line summary
-        steps.append({"clip": fn, "caption": clean, "shots": shots, "video": video})
+        step = {"clip": fn, "caption": clean, "shots": shots, "video": video}
+        if fm:
+            step["film"] = fm.group(1).strip()
+        steps.append(step)
     conf[num] = steps
 json.dump(conf, open('/tmp/voice_conf.json', 'w'), ensure_ascii=False, indent=1)
 print("pages:", len(conf), "clips:", sum(len(v) for v in conf.values()))
