@@ -5,7 +5,7 @@
 **Try the running prototype in your browser — no install, no clone:**
 https://mail-autopilot-fs-demo.vercel.app
 
-Full demo video: https://youtu.be/FPWNd_wCKxs
+Full demo video: https://www.bilibili.com/video/BV1tknn6oEFY/
 
 ## Problem
 
