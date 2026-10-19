@@ -1,5 +1,5 @@
 {
- "02": [
+ "03": [
   {
    "clip": "p02b1.mp3",
    "caption": "Where we land first: of 8,445 insured US institutions, 262 sit in the 5-to-150-billion band, big enough to carry the full regulatory load and small enough to buy rather than build.",
@@ -19,7 +19,7 @@
    "video": false
   }
  ],
- "03": [
+ "04": [
   {
    "clip": "p03b1.mp3",
    "caption": "An email is a written error notice under Reg E, so the clock starts the moment it lands: 10 business days to act, 45 days to resolve, and 90 for POS, foreign or first-30-day cases.",
@@ -45,7 +45,7 @@
    "video": false
   }
  ],
- "04": [
+ "05": [
   {
    "clip": "p04b1.mp3",
    "caption": "Scope comes from one sort: volume, determinability and whether identity can be achieved, all gated by penalty risk. One line follows: everything reversible goes to the machine, everything consequential stays with a person.",
@@ -65,7 +65,7 @@
    "video": false
   }
  ],
- "05": [
+ "06": [
   {
    "clip": "p05b1.mp3",
    "caption": "Every email runs the same five steps: ingest with an arrival timestamp, sort into a category and an identity level, decide on the matrix, resolve, then verify for 14 days.",
@@ -87,7 +87,7 @@
    "video": false
   }
  ],
- "06": [
+ "07": [
   {
    "clip": "p06b1.mp3",
    "caption": "Every cell is a product of two: the category sets the row, the identity level of the sender sets the column, and R times I gives L, where the human sits.",
@@ -113,7 +113,7 @@
    "video": false
   }
  ],
- "07": [
+ "08": [
   {
    "clip": "p07b1.mp3",
    "caption": "This is the user experience to judge: risk and identity decide who acts, AI or human, on every email.",
@@ -134,7 +134,7 @@
    "video": false
   }
  ],
- "08": [
+ "09": [
   {
    "clip": "p08b1.mp3",
    "caption": "Onboarding runs on the bank's own material: 90 days of historical email, and the policy and process playbook it already works from.",
@@ -160,7 +160,7 @@
    "video": false
   }
  ],
- "09": [
+ "10": [
   {
    "clip": "p09b1.mp3",
    "caption": "The headline is the verified autonomous resolution rate: 25 to 35 percent by six months, where resolved means no human touch and no reopen within 14 days, and the number has to survive QA sampling.",

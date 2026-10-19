@@ -41,6 +41,17 @@ regenerates `deck-html/assets/voice/*.mp3` + `present.json`/`present.js`.
   falling back to demo-2 when absent. Before this, demo-2 was hardcoded, so the
   simplified demo page had no film an auto-present could play.
 
+## 2026-10-19 · About me cover, page 01 unvoiced
+
+- The deck opens on **01 / 10 · About me**, a personal page with two ski photos.
+  It carries no narration.
+- The title is now **02** and is also unvoiced; the tour opens on it for 2.4 s
+  and then advances to the first voiced page.
+- Voiced colophons are **03/10–10/10**. `present.json` keys moved 02→03 … 09→10;
+  clip filenames still read `p02…p09` because they keep their original audio.
+- Source headings in `tts/deck-voiceover.en.md` follow the same numbering, so a
+  future rebuild will emit `p03…p10` clips.
+
 ## 2026-10-15 (third pass) · all nine mainline pages voiced — scope is 02/09–09/09
 - 07/09 Onboarding and 09/09 How we would know now carry narration: 4 clips each
   (`p07b1–4`, `p09b1–4`), written against the current slide text. The 02/09 and

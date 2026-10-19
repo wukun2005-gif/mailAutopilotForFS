@@ -617,6 +617,36 @@ body.dark svg [fill="#A78BFA"]{fill:#A78BFA}
 body.dark svg [fill="#EAF0F6"]{fill:#EAF0F6}
 body.dark svg [fill="#F2786E"]{fill:#F2786E}
 body.dark svg [fill="#F5B544"]{fill:#F5B544}
+
+/* 01 about me: three chapters; the demo screenshots run as a filmstrip */
+.chart.life{display:block;min-height:0;margin-top:10px}
+.liferow{display:flex;flex-direction:column;justify-content:space-between;height:100%}
+.lrow{display:grid;grid-template-columns:minmax(0,1fr) 560px;gap:34px;align-items:start;
+  padding:6px 0;border-top:1px solid var(--line)}
+.lrow:first-child{border-top:0;padding-top:0}
+.lrow:last-child{padding-bottom:0}
+.lrow.wide{display:block}
+.ltxt{min-width:0}
+.ltxt b{display:block;font-size:18.5px;line-height:1.3;font-weight:600;color:var(--ink)}
+.ltxt span{display:block;font-size:14.5px;line-height:1.6;color:var(--dim);margin-top:7px;max-width:540px}
+.lrow.wide .ltxt span{max-width:none}
+.cube{margin:0}
+.cube img{width:280px;max-width:100%;height:130px;object-fit:cover;object-position:50% 18%;
+  border-radius:9px;border:1px solid var(--line);display:block;background:var(--panel2)}
+.lstrip{display:flex;align-items:flex-start;gap:14px;margin:8px 0 0;padding-bottom:18px}
+.demoimg{margin:0;position:relative;flex:0 0 auto;cursor:zoom-in}
+.demoimg img{height:145px;width:auto;display:block;border-radius:8px;border:1px solid var(--line);background:var(--panel2)}
+.demoimg:hover img{border-color:var(--teal)}
+.demoimg figcaption{position:absolute;top:calc(100% + 6px);left:0;white-space:nowrap;
+  font-size:11px;line-height:1.3;color:var(--dim)}
+.demoimg figcaption b{color:var(--soft);font-weight:600}
+.lrow.skirow{grid-template-columns:300px minmax(0,1fr)}
+.skirow .ltxt span{max-width:300px}
+.snow{display:flex;align-items:flex-start;gap:12px}
+.snow figure{margin:0}
+.snow img{height:170px;width:auto;display:block;border-radius:9px;border:1px solid var(--line);
+  background:var(--panel2)}
+.snow figure:nth-child(2) img{object-position:50% 44%}
 </style>
 <link rel="stylesheet" href="comments.css">
 </head>
@@ -633,9 +663,39 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
 <button id="tocshow" type="button" title="Show the page rail (T)">◧ Pages</button>
 
 <div class="stage" id="stage">
-<!-- ═══ 01 TITLE ═══ -->
-<section class="slide title on">
-  <p class="eyebrow" style="position:absolute;left:64px;right:64px;top:44px;margin:0"><span class="n">01</span></p>
+<!-- ═══ 01 ABOUT ME (opening page: personal, no product content, no narration) ═══ -->
+<section class="slide on">
+  <p class="eyebrow"><span class="n">01</span> About me</p>
+  <div class="chart life">
+    <div class="liferow">
+      <div class="lrow">
+        <div class="ltxt"><b>Started as a software engineer</b><span>Then moved into the product team of foundation model and agent platform. Innovation is the most exciting part: patent cubes are generated out of daily work.</span></div>
+        <div class="lmed"><figure class="cube"><img data-src="assets/shots/patent-cubes.jpg" alt="The two Microsoft Patent Award cubes"></figure></div>
+      </div>
+      <div class="lrow wide">
+        <div class="ltxt"><b>Looking for the next one</b><span>Building prototypes and looking for the right startup or open-source bet on: trustworthy AI content, evaluation, and user interaction.</span></div>
+        <div class="lstrip">
+          <figure class="demoimg"><img data-src="assets/shots/demo-iwrite.png" alt="i-Write document preview"><figcaption><b>i-Write:</b> Trusted Doc Studio</figcaption></figure>
+          <figure class="demoimg"><img data-src="assets/shots/demo-gating.png" alt="Agent Gating Platform dashboard"><figcaption>Agent Gating Platform</figcaption></figure>
+          <figure class="demoimg"><img data-src="assets/shots/demo-graphme.png" alt="GraphMe memory detail"><figcaption><b>GraphMe:</b> Agent Memory Management Platform</figcaption></figure>
+        </div>
+      </div>
+      <div class="lrow skirow">
+        <div class="ltxt"><b>Work-life balance</b><span>Try adventures, and pursue the fun</span></div>
+        <div class="lmed snow">
+          <figure><img data-src="assets/shots/mountain.jpg" alt="The ski hill, seen from the ridge"></figure>
+          <figure><img data-src="assets/shots/life-ski.jpg" alt="Skiing at Nanshan, Beijing"></figure>
+          <figure><img data-src="assets/shots/life-board.jpg" alt="Snowboarding at Nanshan, Beijing"></figure>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="colophon"><span>01 / 10</span></div>
+</section>
+
+<!-- ═══ 02 TITLE ═══ -->
+<section class="slide title">
+  <p class="eyebrow" style="position:absolute;left:64px;right:64px;top:44px;margin:0"><span class="n">02</span></p>
   <h1>Email Autopilot for Financial Services</h1>
   <p class="sub">Turn every inbound email into a resolved case.</p>
   <p class="sig">Wu Kun, wukun2005@gmail.com, October 2026</p>
@@ -646,9 +706,9 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
   </div>
 </section>
 
-<!-- ═══ 02 ASSUMPTIONS & TARGET USER ═══ -->
+<!-- ═══ 03 ASSUMPTIONS & TARGET USER ═══ -->
 <section class="slide">
-  <p class="eyebrow"><span class="n">02</span> Target user</p>
+  <p class="eyebrow"><span class="n">03</span> Target user</p>
   <h2>Mid-size banks are the target.</h2>
   <p class="claim">Of 8,445 insured US institutions, 262 banks sit in the band we can serve: big enough to carry the full regulatory load, small enough to buy rather than build.</p>
   <div class="chart">
@@ -673,12 +733,12 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       <text class="lgd" x="24" y="314" style="font-size:14px">Bands not to scale · 262 = FDIC BankFind, 2026-09-25, FDIC-insured only. NCUA stopped publishing asset bands in 2025Q4, so in-band credit unions are not counted.</text>
     </svg>
   </div>
-  <div class="colophon"><span>02 / 09</span></div>
+  <div class="colophon"><span>03 / 10</span></div>
 </section>
 
-<!-- ═══ 03 WHY FS CARES ═══ -->
+<!-- ═══ 04 WHY FS CARES ═══ -->
 <section class="slide">
-  <p class="eyebrow"><span class="n">03</span> Why they care</p>
+  <p class="eyebrow"><span class="n">04</span> Why they care</p>
   <h2>Email is on the clock, costly and slow.</h2>
   <p class="claim">Three pains in one inbox: a legal clock starts at receipt, each email costs $6-12 and waits 27 hours, and agents lose 28% of their time re-typing.</p>
   <div class="chart">
@@ -739,14 +799,14 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
     </svg>
 
   </div>
-  <div class="colophon"><span>03 / 09</span></div>
+  <div class="colophon"><span>04 / 10</span></div>
 </section>
 
 
 
-<!-- ═══ 04 WHERE WE START · PRIORITIES ═══ -->
+<!-- ═══ 05 WHERE WE START · PRIORITIES ═══ -->
 <section class="slide">
-  <p class="eyebrow"><span class="n">04</span> Scope</p>
+  <p class="eyebrow"><span class="n">05</span> Scope</p>
   <h2>Sort by category first, then automate.</h2>
   <p class="claim">Sort order first: volume × determinability × who they are, gated by penalty risk. Then one line: everything reversible goes to AI, everything consequential stays with a human.</p>
   <div class="chart">
@@ -787,10 +847,10 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
     </svg>
   </div>
   <p class="note" style="font-size:16.5px"><b>Human-only in phase 1:</b> complaints, fraud (the customer says they were defrauded) and off-brief mail are detected, clocked and handed to a person. Spam / noise is auto-archived in Phase 1 and never enters intake.</p>
-  <div class="colophon"><span>04 / 09</span></div>
+  <div class="colophon"><span>05 / 10</span></div>
 </section>
 
-<!-- ═══ 05 HOW IT WORKS · 5-STEP ═══
+<!-- ═══ 06 HOW IT WORKS · 5-STEP ═══
      What the 2026-10-14 review asked this page to do:
      ① carry page 04's categories over so the two pages visibly connect. They sit
         ABOVE the pipeline and feed step 2, with an arrow that says so. One flat
@@ -806,9 +866,9 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
      repeats the picture's own paragraph colours, which is why they are not in
      the diagram. -->
 <section class="slide">
-  <p class="eyebrow"><span class="n">05</span> How it works · 5-step</p>
+  <p class="eyebrow"><span class="n">06</span> How it works · 5-step</p>
   <h2>The category decides who acts.</h2>
-  <p class="claim">Every email runs the same five steps. Step 2 stamps the row from <a class="xref" data-jump="04">04</a> and who is writing; step 3 reads the matrix (<a class="xref" data-jump="06">06</a>) and picks one of three roads; only step 4 sends, and what it sends is assembled.</p>
+  <p class="claim">Every email runs the same five steps. Step 2 stamps the row from <a class="xref" data-jump="05">05</a> and who is writing; step 3 reads the matrix (<a class="xref" data-jump="07">07</a>) and picks one of three roads; only step 4 sends, and what it sends is assembled.</p>
   <div class="chart thread">
     <svg viewBox="0 0 860 444" role="img">
       <!-- ── 1 · what step 2 sorts: the 04 categories, carried straight over,
@@ -911,17 +971,17 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       </ul>
     </div>
   </div>
-  <div class="colophon"><span>05 / 09</span></div>
+  <div class="colophon"><span>06 / 10</span></div>
 </section>
 
-<!-- ═══ 06 AI AND HUMANS ═══ -->
+<!-- ═══ 07 AI AND HUMANS ═══ -->
 <section class="slide">
-  <p class="eyebrow"><span class="n">06</span> AI and humans</p>
+  <p class="eyebrow"><span class="n">07</span> AI and humans</p>
   <h2>The Policy RIL Matrix governs autonomy.</h2>
   <div class="chart">
     <svg viewBox="0 0 1128 484" role="img">
       <!-- ── where the human sits ── -->
-      <text x="0" y="20" fill="#EAF0F6" font-size="15.5" font-weight="600">The <tspan class="xref" data-jump="04">category</tspan> sets the ROW (R) · step-2 identity sets the COLUMN (I) · the cell is the ROAD step 3 takes. <tspan fill="#5FD3BE">R × I = L, where the human sits</tspan></text>
+      <text x="0" y="20" fill="#EAF0F6" font-size="15.5" font-weight="600">The <tspan class="xref" data-jump="05">category</tspan> sets the ROW (R) · step-2 identity sets the COLUMN (I) · the cell is the ROAD step 3 takes. <tspan fill="#5FD3BE">R × I = L, where the human sits</tspan></text>
 
       <rect class="card2" x="256" y="86" width="196" height="48" rx="6"/><text class="lgb" x="354" y="106" text-anchor="middle" style="font-size:15px">I0 · identity unconfirmed</text><text class="lgd" x="354" y="127" text-anchor="middle" style="font-size:11.5px">e.g. look-alike address</text>
       <rect class="card2" x="464" y="86" width="196" height="48" rx="6"/><text class="lgb" x="562" y="106" text-anchor="middle" style="font-size:15px">I1 · sender domain only</text><text class="lgd" x="562" y="127" text-anchor="middle" style="font-size:11.5px">e.g. stranger, domain OK</text>
@@ -980,14 +1040,14 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       <text class="lgd" x="0" y="472" style="font-size:14.5px">Locked = locked-template reply now (no account data), step-up opens the rest. This is a hard constraint; graduation never changes it</text>
     </svg>
   </div>
-  <div class="colophon"><span>06 / 09</span></div>
+  <div class="colophon"><span>07 / 10</span></div>
 </section>
 
 
 
-<!-- ═══ 07 USER EXPERIENCE & DEMO (simplified: Demo 1 only; the full page lives at B26) ═══ -->
+<!-- ═══ 08 USER EXPERIENCE & DEMO (simplified: Demo 1 only; the full page lives at B26) ═══ -->
 <section class="slide">
-  <p class="eyebrow"><span class="n">07</span> User experience <a class="gh live" href="https://mail-autopilot-fs-demo.vercel.app/" target="_blank" rel="noopener" title="Try the running prototype in your browser — https://mail-autopilot-fs-demo.vercel.app"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 2.5l9 5.5-9 5.5z"/></svg><span class="gl">Demo App</span><span class="ar">↗</span></a></p>
+  <p class="eyebrow"><span class="n">08</span> User experience <a class="gh live" href="https://mail-autopilot-fs-demo.vercel.app/" target="_blank" rel="noopener" title="Try the running prototype in your browser — https://mail-autopilot-fs-demo.vercel.app"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 2.5l9 5.5-9 5.5z"/></svg><span class="gl">Demo App</span><span class="ar">↗</span></a></p>
   <p class="claim">Risk and identity decide who acts: AI or human.</p>
   <div class="fig" style="justify-content:center">
     <div class="vcol">
@@ -1000,11 +1060,11 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       <a class="ytlink" href="https://youtu.be/tc3g6t4b3_8" target="_blank" rel="noopener">Watch it on YouTube →</a>
     </div>
   </div>
-  <div class="colophon"><span>07 / 09</span></div>
+  <div class="colophon"><span>08 / 10</span></div>
 </section>
 
 
-<!-- ═══ 08 ONBOARDING EXPERIENCE (merges the old 07 onboarding + 08 intent catalog) ═══
+<!-- ═══ 09 ONBOARDING EXPERIENCE (merges the old 07 onboarding + 08 intent catalog) ═══
      Same three columns as the old onboarding page — what the bank provides, the
      tools we add, what comes out — with the intent catalog as a THIRD lane, so
      the post-go-live case reads in the same input → tool → output grammar.
@@ -1015,7 +1075,7 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
      Colours: blue = what the bank brings, teal = our system / acts alone, amber =
      waiting on a person. All from the deck's existing theme map. -->
 <section class="slide">
-  <p class="eyebrow"><span class="n">08</span> Onboarding Experience</p>
+  <p class="eyebrow"><span class="n">09</span> Onboarding Experience</p>
   <h2>One console compiles the bank, then keeps it current.</h2>
   <p class="claim">A bank goes live in weeks. After that, a new category is a short form away.</p>
   <div class="chart">
@@ -1160,14 +1220,14 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       <text x="1116" y="442" text-anchor="end" fill="#C0CBD6" font-size="12.5">Only the bank admin signs it.</text>
     </svg>
   </div>
-  <div class="colophon"><span>08 / 09</span></div>
+  <div class="colophon"><span>09 / 10</span></div>
 </section>
 
 
 
-<!-- ═══ 09 METRICS ═══ -->
+<!-- ═══ 10 METRICS ═══ -->
 <section class="slide">
-  <p class="eyebrow"><span class="n">09</span> How we would know</p>
+  <p class="eyebrow"><span class="n">10</span> How we would know</p>
   <h2>Success metrics.</h2>
   <div class="chart">
     <svg viewBox="0 0 1128 264" role="img">
@@ -1211,7 +1271,7 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       <text class="lgd" x="0" y="240">The 35% ROI base case is the top of this band, at steady state.</text>
     </svg>
   </div>
-  <div class="colophon"><span>09 / 09</span></div>
+  <div class="colophon"><span>10 / 10</span></div>
 </section>
 <!-- ═══ THANK YOU ═══ -->
 <section class="slide title">
@@ -1600,7 +1660,9 @@ slides.forEach(function(s,idx){
   th.appendChild(c);
   const lab=document.createElement('span'); lab.className='toclabel';
   const h=s.querySelector('h1,h2');
-  lab.textContent=(idx+1)+' · '+(h?h.textContent.trim():'');
+  let t=h?h.textContent.trim():'';
+  if(!t){const e=s.querySelector('.eyebrow');t=e?e.textContent.replace(/^\s*\d+\s*/,'').trim():'';}
+  lab.textContent=(idx+1)+' · '+t;
   b.appendChild(th); b.appendChild(lab);
   b.addEventListener('click',function(){show(idx);});
   tocList.appendChild(b);
@@ -1642,6 +1704,7 @@ document.querySelectorAll('.vplay').forEach(function(btn){
     const v=btn.parentElement.querySelector('video');
     if(!v) return;
     armVideo(v);
+    if(btn.closest('.vdemo')){openLb(v);return;}
     const p=v.play(); if(p&&p.catch) p.catch(function(){});
   });
 });
@@ -1666,12 +1729,22 @@ function openLb(m,tip){
 }
 function closeLb(){
   if(!lbMedia) return;
-  if(lbMedia.tagName==='VIDEO') lbMedia.pause();
+  if(lbMedia.tagName==='VIDEO'){
+    lbMedia.pause();
+    if(lbHome&&lbHome.closest('.vdemo')){        /* demo card: restore the poster and its play button */
+      lbMedia.controls=false;
+      const b=lbHome.querySelector('.vplay');
+      if(b)b.classList.remove('gone');
+    }
+  }
   lbHome.insertBefore(lbMedia,lbHome.firstChild);
   lb.classList.remove('on');
   if(lbTip) lbTip.textContent=TIP_VIDEO;
   lbMedia=null; lbHome=null;
 }
+document.querySelectorAll('#stage .demoimg img').forEach(function(img){
+  img.addEventListener('click',function(){openLb(img,TIP_SHOT);});
+});
 document.querySelectorAll('.fsbtn').forEach(function(b){
   b.addEventListener('click',function(e){
     e.stopPropagation();
@@ -1765,7 +1838,7 @@ document.addEventListener('click',function(e){
   }
 });
 /* ── one-click present: narration + one-line caption + auto tour ──
-   Scope is the voiced colophon pages: 02/09–09/09. Steps (clip, caption, shots, film) come
+   Scope is the voiced colophon pages: 03/10–10/10. Steps (clip, caption, shots, film) come
    from assets/voice/present.json, built from tts/deck-voiceover.en.md — this
    code never parses the md itself. Slide key is read from the colophon, so a
    reorder by another editor keeps working. Toggle defaults OFF; the tour starts
@@ -1904,10 +1977,12 @@ function pvOnShow(){
   if(pvPaused)return;                  /* jumped while paused: stay quiet */
   pvStartPage();
 }
-/* begin from the current page; outside the voiced pages (02–09), jump to 02 first */
+/* begin from the current page. Page 01 (About me) and the title carry no
+   narration: a silent page holds for a beat, then the tour moves on. */
 function pvBegin(){
   if(!pvData){pvCap('voice files missing');return;}
-  if(!pvData[pvColKey(slides[i])]){show(1);return;}
+  /* page 01 (About me) never speaks, so Present opens on page 02 instead */
+  if(i<1){show(1);return;}                 /* show() re-enters through pvOnShow */
   pvStartPage();
 }
 function pvStartPage(){
@@ -1917,7 +1992,16 @@ function pvStartPage(){
   pvSteps=pvData[key]||null;
   pvStep=-1;
   if(pvPageSteps!==pvSteps)pvSliderBind();   /* data arrived after the last show() */
-  if(!pvSteps){pvCap('');return;}      /* outside the voiced pages: quiet until re-entry */
+  if(!pvSteps){                        /* no narration here (About me, title, backups):
+                                          show it briefly, then continue */
+    if(pvPlaying&&!pvPaused){
+      const n=i;
+      if(n<slides.length-1){
+        pvLater(function(){if(pvPlaying&&!pvPaused&&i===n)show(n+1);},2400);
+      }else{pvPlaying=false;pvPaused=false;pvCap('');pvBtn();}
+    }
+    return;
+  }
   /* a slider drag while stopped parks a start position for this page */
   const at=(pvPageSteps===pvSteps)?pvStartAt:0;
   pvStartAt=0;
@@ -1945,7 +2029,7 @@ function pvStepGo(n,seek){
   if(!pvSteps||n>=pvSteps.length){     /* page done: next voiced page, or tour ends */
     /* a silent page can sit between two voiced ones, so step over any page
        with no narration rather than stalling on it — and stop once the pages
-       after this one carry no narration at all (02–09 are all voiced today) */
+       after this one carry no narration at all (03–10 are all voiced today) */
     let j=i+1;
     while(j<slides.length&&(!pvData||!pvData[pvColKey(slides[j])]))j++;
     if(j>=slides.length){pvPlaying=false;pvPaused=false;pvCap('');pvBtn();return;}

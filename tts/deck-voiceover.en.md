@@ -4,7 +4,7 @@ Rules agreed: max 3 infos per page; numbers from deck; deck wins, PRD/report onl
 
 ---
 
-## 02/09 · Mid-size banks are the target.
+## 03/10 · Mid-size banks are the target.
 Infos: (1) the 262-bank band (2) above and below the band (3) Larkspur profile.
 Script:
 - Where we land first: of 8,445 insured US institutions, 262 sit in the 5-to-150-billion band, big enough to carry the full regulatory load and small enough to buy rather than build.
@@ -16,7 +16,7 @@ Captions:
 - Larkspur, $18B fictional: 1.1M customers, 420 seats, 50k emails a month.
 Actions: none.
 
-## 03/09 · Email is on the clock, costly and slow.
+## 04/10 · Email is on the clock, costly and slow.
 Infos: (1) the Reg E clock (2) cost and speed (3) the switching tax.
 Script:
 - An email is a written error notice under Reg E, so the clock starts the moment it lands: 10 business days to act, 45 days to resolve, and 90 for POS, foreign or first-30-day cases.
@@ -30,7 +30,7 @@ Captions:
 - 28% of agent time goes to switching systems and re-typing.
 Actions: none.
 
-## 04/09 · Sort by category first, then automate.
+## 05/10 · Sort by category first, then automate.
 Infos: (1) the sort and the one line (2) phase assignment (3) the human-only list.
 Script:
 - Scope comes from one sort: volume, determinability and whether identity can be achieved, all gated by penalty risk. One line follows: everything reversible goes to the machine, everything consequential stays with a person.
@@ -41,7 +41,7 @@ Captions:
 - Phase 1 is 80% of the volume, including dispute intake.
 - Complaints, fraud and off-brief mail go to a person; spam never enters.
 
-## 05/09 · The category decides who acts.
+## 06/10 · The category decides who acts.
 Infos: (1) five steps (2) the matrix picks the road (3) step 4 assembles three sources.
 Script:
 - Every email runs the same five steps: ingest with an arrival timestamp, sort into a category and an identity level, decide on the matrix, resolve, then verify for 14 days.
@@ -53,7 +53,7 @@ Captions:
 - Step 4 assembles three sources; a model never writes the reply.
 Actions: open `shot-letter.jpg` once, then close (it shows the three sources colour-coded).
 
-## 06/09 · The Policy RIL Matrix governs autonomy.
+## 07/10 · The Policy RIL Matrix governs autonomy.
 Infos: (1) R×I → L (2) locked cells (3) the never list (4) graduation.
 Script:
 - Every cell is a product of two: the category sets the row, the identity level of the sender sets the column, and R times I gives L, where the human sits.
@@ -67,7 +67,7 @@ Captions:
 - Nothing starts autonomous, and graduation never unlocks a locked cell.
 Actions: none.
 
-## 07/09 · User experience.
+## 08/10 · User experience.
 Infos: (1) risk and identity decide who acts (2) demo 1, identity assurance, plays here (3) the other demos on YouTube, the running prototype one click away.
 Script:
 - This is the user experience to judge: risk and identity decide who acts, AI or human, on every email.
@@ -79,7 +79,7 @@ Captions:
 - Other demos on YouTube; the running prototype is one click away.
 Actions: fullscreen demo-1 after its bullet, play it in full, then exit fullscreen. (2026-10-18: the four-screenshot tour and the demo-2 film belong to the full page at B26.)
 
-## 08/09 · Each bank's policies, compiled onto one shared platform.
+## 09/10 · Each bank's policies, compiled onto one shared platform.
 Infos: (1) the bank's own material (2) the compile (3) the prebuilt connectors (4) the bank signs it; the next bank takes weeks.
 Script:
 - Onboarding runs on the bank's own material: 90 days of historical email, and the policy and process playbook it already works from.
@@ -93,7 +93,7 @@ Captions:
 - The bank signs it before go-live; one runtime, so the next bank takes weeks.
 Actions: none.
 
-## 09/09 · Success metrics.
+## 10/10 · Success metrics.
 Infos: (1) VARR (2) median TTR (3) the veto (4) the guardrails and the ROI ceiling.
 Script:
 - The headline is the verified autonomous resolution rate: 25 to 35 percent by six months, where resolved means no human touch and no reopen within 14 days, and the number has to survive QA sampling.
