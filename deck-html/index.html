@@ -618,7 +618,9 @@ body.dark svg [fill="#EAF0F6"]{fill:#EAF0F6}
 body.dark svg [fill="#F2786E"]{fill:#F2786E}
 body.dark svg [fill="#F5B544"]{fill:#F5B544}
 
-/* 01 about me: three chapters; the demo screenshots run as a filmstrip */
+/* layout for the About-me page, which was removed on 2026-10-21. The rules are
+   kept so the page can be dropped back in; .lrow is still used by B3 and B11,
+   so do not delete the whole block. */
 .chart.life{display:block;min-height:0;margin-top:10px}
 .liferow{display:flex;flex-direction:column;justify-content:space-between;height:100%}
 .lrow{display:grid;grid-template-columns:minmax(0,1fr) 560px;gap:34px;align-items:start;
@@ -665,39 +667,9 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
 <button id="tocshow" type="button" title="Show the page rail (T)">◧ Pages</button>
 
 <div class="stage" id="stage">
-<!-- ═══ 01 ABOUT ME (opening page: personal, no product content, no narration) ═══ -->
-<section class="slide on">
-  <p class="eyebrow"><span class="n">01</span> About me</p>
-  <div class="chart life">
-    <div class="liferow">
-      <div class="lrow">
-        <div class="ltxt"><b>Started as a software engineer</b><span>Then moved into the product team of foundation model and agent platform. Innovation is the most exciting part: patent cubes are generated out of daily work.</span></div>
-        <div class="lmed"><figure class="cube"><img data-src="assets/shots/patent-cubes.jpg" alt="The two Microsoft Patent Award cubes"></figure></div>
-      </div>
-      <div class="lrow wide">
-        <div class="ltxt"><b>Exploring startup or open-source opportunities</b><span>Building prototypes and looking for the right startup or open-source bet on: trustworthy AI content, evaluation, and user interaction.</span></div>
-        <div class="lstrip">
-          <figure class="demoimg"><img data-src="assets/shots/demo-iwrite.png" alt="i-Write document preview"><figcaption><b>i-Write:</b> Trusted Doc Studio</figcaption></figure>
-          <figure class="demoimg"><img data-src="assets/shots/demo-gating.png" alt="Agent Gating Platform dashboard"><figcaption>Agent Gating Platform</figcaption></figure>
-          <figure class="demoimg"><img data-src="assets/shots/demo-graphme.png" alt="GraphMe memory detail"><figcaption><b>GraphMe:</b> Agent Memory Management Platform</figcaption></figure>
-        </div>
-      </div>
-      <div class="lrow skirow">
-        <div class="ltxt"><b>Work-life balance</b><span>Try adventures, and pursue the fun</span></div>
-        <div class="lmed snow">
-          <figure><img data-src="assets/shots/mountain.jpg" alt="The ski hill, seen from the ridge"></figure>
-          <figure><img data-src="assets/shots/life-ski.jpg" alt="Skiing at Nanshan, Beijing"></figure>
-          <figure><img data-src="assets/shots/life-board.jpg" alt="Snowboarding at Nanshan, Beijing"></figure>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="colophon"><span>01 / 10</span></div>
-</section>
-
-<!-- ═══ 02 TITLE ═══ -->
-<section class="slide title">
-  <p class="eyebrow" style="position:absolute;left:64px;right:64px;top:44px;margin:0"><span class="n">02</span></p>
+<!-- ═══ 01 TITLE ═══ -->
+<section class="slide title on">
+  <p class="eyebrow" style="position:absolute;left:64px;right:64px;top:44px;margin:0"><span class="n">01</span></p>
   <h1>Email Autopilot for Financial Services</h1>
   <p class="sub">Turn every inbound email into a resolved case.</p>
   <p class="sig">Wu Kun, wukun2005@gmail.com, October 2026</p>
@@ -708,9 +680,9 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
   </div>
 </section>
 
-<!-- ═══ 03 ASSUMPTIONS & TARGET USER ═══ -->
+<!-- ═══ 02 ASSUMPTIONS & TARGET USER ═══ -->
 <section class="slide">
-  <p class="eyebrow"><span class="n">03</span> Target user</p>
+  <p class="eyebrow"><span class="n">02</span> Target user</p>
   <h2>Mid-size banks are the target.</h2>
   <p class="claim">Of 8,445 insured US institutions, 262 banks sit in the band we can serve: big enough to carry the full regulatory load, small enough to buy rather than build.</p>
   <div class="chart">
@@ -735,12 +707,12 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       <text class="lgd" x="24" y="314" style="font-size:14px">Bands not to scale · 262 = FDIC BankFind, 2026-09-25, FDIC-insured only. NCUA stopped publishing asset bands in 2025Q4, so in-band credit unions are not counted.</text>
     </svg>
   </div>
-  <div class="colophon"><span>03 / 10</span></div>
+  <div class="colophon"><span>02 / 11</span></div>
 </section>
 
-<!-- ═══ 04 WHY FS CARES ═══ -->
+<!-- ═══ 03 WHY FS CARES ═══ -->
 <section class="slide">
-  <p class="eyebrow"><span class="n">04</span> Why they care</p>
+  <p class="eyebrow"><span class="n">03</span> Why they care</p>
   <h2>Email is on the clock, costly and slow.</h2>
   <p class="claim">Three pains in one inbox: a legal clock starts at receipt, each email costs $6-12 and waits 27 hours, and agents lose 28% of their time re-typing.</p>
   <div class="chart">
@@ -801,14 +773,14 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
     </svg>
 
   </div>
-  <div class="colophon"><span>04 / 10</span></div>
+  <div class="colophon"><span>03 / 11</span></div>
 </section>
 
 
 
-<!-- ═══ 05 WHERE WE START · PRIORITIES ═══ -->
+<!-- ═══ 04 WHERE WE START · PRIORITIES ═══ -->
 <section class="slide">
-  <p class="eyebrow"><span class="n">05</span> Scope</p>
+  <p class="eyebrow"><span class="n">04</span> Scope</p>
   <h2>Sort by category first, then automate.</h2>
   <p class="claim">Sort order first: volume × determinability × who they are, gated by penalty risk. Then one line: everything reversible goes to AI, everything consequential stays with a human.</p>
   <div class="chart">
@@ -849,10 +821,10 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
     </svg>
   </div>
   <p class="note" style="font-size:16.5px"><b>Human-only in phase 1:</b> complaints, fraud (the customer says they were defrauded) and off-brief mail are detected, clocked and handed to a person. Spam / noise is auto-archived in Phase 1 and never enters intake.</p>
-  <div class="colophon"><span>05 / 10</span></div>
+  <div class="colophon"><span>04 / 11</span></div>
 </section>
 
-<!-- ═══ 06 HOW IT WORKS · 5-STEP ═══
+<!-- ═══ 05 HOW IT WORKS · 5-STEP ═══
      What the 2026-10-14 review asked this page to do:
      ① carry page 04's categories over so the two pages visibly connect. They sit
         ABOVE the pipeline and feed step 2, with an arrow that says so. One flat
@@ -868,9 +840,9 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
      repeats the picture's own paragraph colours, which is why they are not in
      the diagram. -->
 <section class="slide">
-  <p class="eyebrow"><span class="n">06</span> How it works · 5-step</p>
+  <p class="eyebrow"><span class="n">05</span> How it works · 5-step</p>
   <h2>The category decides who acts.</h2>
-  <p class="claim">Every email runs the same five steps. Step 2 stamps the row from <a class="xref" data-jump="05">05</a> and who is writing; step 3 reads the matrix (<a class="xref" data-jump="07">07</a>) and picks one of three roads; only step 4 sends, and what it sends is assembled.</p>
+  <p class="claim">Every email runs the same five steps. Step 2 stamps the row from <a class="xref" data-jump="04">04</a> and who is writing; step 3 reads the matrix (<a class="xref" data-jump="06">06</a>) and picks one of three roads; only step 4 sends, and what it sends is assembled.</p>
   <div class="chart thread">
     <svg viewBox="0 0 860 444" role="img">
       <!-- ── 1 · what step 2 sorts: the 04 categories, carried straight over,
@@ -973,17 +945,17 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       </ul>
     </div>
   </div>
-  <div class="colophon"><span>06 / 10</span></div>
+  <div class="colophon"><span>05 / 11</span></div>
 </section>
 
-<!-- ═══ 07 AI AND HUMANS ═══ -->
+<!-- ═══ 06 AI AND HUMANS ═══ -->
 <section class="slide">
-  <p class="eyebrow"><span class="n">07</span> AI and humans</p>
+  <p class="eyebrow"><span class="n">06</span> AI and humans</p>
   <h2>The Policy RIL Matrix governs autonomy.</h2>
   <div class="chart">
     <svg viewBox="0 0 1128 484" role="img">
       <!-- ── where the human sits ── -->
-      <text x="0" y="20" fill="#EAF0F6" font-size="15.5" font-weight="600">The <tspan class="xref" data-jump="05">category</tspan> sets the ROW (R) · step-2 identity sets the COLUMN (I) · the cell is the ROAD step 3 takes. <tspan fill="#5FD3BE">R × I = L, where the human sits</tspan></text>
+      <text x="0" y="20" fill="#EAF0F6" font-size="15.5" font-weight="600">The <tspan class="xref" data-jump="04">category</tspan> sets the ROW (R) · step-2 identity sets the COLUMN (I) · the cell is the ROAD step 3 takes. <tspan fill="#5FD3BE">R × I = L, where the human sits</tspan></text>
 
       <rect class="card2" x="256" y="86" width="196" height="48" rx="6"/><text class="lgb" x="354" y="106" text-anchor="middle" style="font-size:15px">I0 · identity unconfirmed</text><text class="lgd" x="354" y="127" text-anchor="middle" style="font-size:11.5px">e.g. look-alike address</text>
       <rect class="card2" x="464" y="86" width="196" height="48" rx="6"/><text class="lgb" x="562" y="106" text-anchor="middle" style="font-size:15px">I1 · sender domain only</text><text class="lgd" x="562" y="127" text-anchor="middle" style="font-size:11.5px">e.g. stranger, domain OK</text>
@@ -1042,31 +1014,12 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       <text class="lgd" x="0" y="472" style="font-size:14.5px">Locked = locked-template reply now (no account data), step-up opens the rest. This is a hard constraint; graduation never changes it</text>
     </svg>
   </div>
-  <div class="colophon"><span>07 / 10</span></div>
+  <div class="colophon"><span>06 / 11</span></div>
 </section>
 
 
 
-<!-- ═══ 08 USER EXPERIENCE & DEMO (simplified: Demo 1 only; the full page lives at B26) ═══ -->
-<section class="slide">
-  <p class="eyebrow"><span class="n">08</span> User experience <a class="gh live" href="https://mail-autopilot-fs-demo.vercel.app/" target="_blank" rel="noopener" title="Try the running prototype in your browser — https://mail-autopilot-fs-demo.vercel.app"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 2.5l9 5.5-9 5.5z"/></svg><span class="gl">Demo App</span><span class="ar">↗</span></a></p>
-  <p class="claim">Risk and identity decide who acts: AI or human.</p>
-  <div class="fig" style="justify-content:center">
-    <div class="vcol">
-      <div class="vidslot">
-        <div class="ph"><span class="tri">▶</span>Video 1 · Identity Assurance · 2:01</div>
-        <video data-src="assets/clips/demo-1-identity.mp4" poster="assets/shots/poster-1.jpg" controls preload="none" playsinline></video>
-        <button class="vplay" type="button" aria-label="Play video 1, 16 MB"></button>
-        <button class="fsbtn" type="button">⛶ Full screen</button>
-      </div>
-      <a class="ytlink" href="https://youtu.be/tc3g6t4b3_8" target="_blank" rel="noopener">Watch it on YouTube →</a>
-    </div>
-  </div>
-  <div class="colophon"><span>08 / 10</span></div>
-</section>
-
-
-<!-- ═══ 09 ONBOARDING EXPERIENCE (merges the old 07 onboarding + 08 intent catalog) ═══
+<!-- ═══ 07 ONBOARDING EXPERIENCE (merges the old 07 onboarding + 08 intent catalog) ═══
      Same three columns as the old onboarding page — what the bank provides, the
      tools we add, what comes out — with the intent catalog as a THIRD lane, so
      the post-go-live case reads in the same input → tool → output grammar.
@@ -1077,7 +1030,7 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
      Colours: blue = what the bank brings, teal = our system / acts alone, amber =
      waiting on a person. All from the deck's existing theme map. -->
 <section class="slide">
-  <p class="eyebrow"><span class="n">09</span> Onboarding Experience</p>
+  <p class="eyebrow"><span class="n">07</span> Onboarding Experience</p>
   <h2>One console compiles the bank, then keeps it current.</h2>
   <p class="claim">A bank goes live in weeks. After that, a new category is a short form away.</p>
   <div class="chart">
@@ -1222,14 +1175,282 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       <text x="1116" y="442" text-anchor="end" fill="#C0CBD6" font-size="12.5">Only the bank admin signs it.</text>
     </svg>
   </div>
-  <div class="colophon"><span>09 / 10</span></div>
+  <div class="colophon"><span>07 / 11</span></div>
 </section>
 
 
 
-<!-- ═══ 10 METRICS ═══ -->
+<!-- ═══ 08 USER EXPERIENCE & DEMO (simplified: Demo 1 only; the full page lives at B26) ═══ -->
 <section class="slide">
-  <p class="eyebrow"><span class="n">10</span> How we would know</p>
+  <p class="eyebrow"><span class="n">08</span> User experience <a class="gh live" href="https://mail-autopilot-fs-demo.vercel.app/" target="_blank" rel="noopener" title="Try the running prototype in your browser — https://mail-autopilot-fs-demo.vercel.app"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 2.5l9 5.5-9 5.5z"/></svg><span class="gl">Demo App</span><span class="ar">↗</span></a></p>
+  <p class="claim">Risk and identity decide who acts: AI or human.</p>
+  <div class="fig" style="justify-content:center">
+    <div class="vcol">
+      <div class="vidslot">
+        <div class="ph"><span class="tri">▶</span>Video 1 · Identity Assurance · 2:01</div>
+        <video data-src="assets/clips/demo-1-identity.mp4" poster="assets/shots/poster-1.jpg" controls preload="none" playsinline></video>
+        <button class="vplay" type="button" aria-label="Play video 1, 16 MB"></button>
+        <button class="fsbtn" type="button">⛶ Full screen</button>
+      </div>
+      <a class="ytlink" href="https://youtu.be/tc3g6t4b3_8" target="_blank" rel="noopener">Watch it on YouTube →</a>
+    </div>
+  </div>
+  <div class="colophon"><span>08 / 11</span></div>
+</section>
+
+
+<!-- ═══ 09 INSIDE THE AUTOPILOT · CALL BY CALL (component collaboration) ═══ -->
+<section class="slide">
+  <p class="eyebrow"><span class="n">09</span> Inside the Autopilot · call by call</p>
+  <h2>One email, one call at a time.</h2>
+  <p class="claim">The case engine runs the case and calls one component at a time; every call sends a defined input and gets a defined answer back.</p>
+  <div class="chart">
+    <svg viewBox="0 0 1128 426" role="img">
+      <!-- ── 1 · the channel ── -->
+      <rect x="0" y="86" width="150" height="66" rx="9" fill="#1D2530" stroke="#2E3A46"/>
+      <circle cx="20" cy="104" r="10" fill="#1B4A44" stroke="#5FD3BE"/>
+      <text x="20" y="108" text-anchor="middle" fill="#5FD3BE" font-size="12" font-weight="700">1</text>
+      <g transform="translate(38,96)" fill="none" stroke="#9BAAB9" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="1" y="3" width="15" height="11" rx="1.6"/><path d="M1.6 4.4l7 5 7-5"/>
+      </g>
+      <text x="62" y="112" fill="#EAF0F6" font-size="12.5" font-weight="700">An email</text>
+      <text x="62" y="128" fill="#9BAAB9" font-size="10.5">arrives</text>
+      <text x="16" y="146" fill="#7B8B9B" font-size="9.5">the customer's words</text>
+
+      <path d="M154 119H216" fill="none" style="stroke:var(--soft);stroke-width:2"/>
+      <path d="M202 112.8L216 119L202 125.2Z" fill="#C0CBD6"/>
+      <text x="185" y="111" text-anchor="middle" fill="#7B8B9B" font-size="9">raw email</text>
+
+      <!-- ── 2 · the orchestrator ── -->
+      <rect x="220" y="30" width="210" height="270" rx="10" fill="#1B4A44" stroke="#5FD3BE" stroke-width="2"/>
+      <circle cx="240" cy="48" r="10" fill="#1B4A44" stroke="#5FD3BE"/>
+      <text x="240" y="52" text-anchor="middle" fill="#5FD3BE" font-size="12" font-weight="700">2</text>
+      <g transform="translate(258,42)" fill="none" stroke="#5FD3BE" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="1" y="5" width="8" height="8" rx="1.8"/><rect x="11" y="1" width="8" height="8" rx="1.8"/><rect x="11" y="11" width="8" height="8" rx="1.8"/>
+        <path d="M9 9h2M9 15h2M5 13v-3"/>
+      </g>
+      <text x="282" y="54" fill="#EAF0F6" font-size="16" font-weight="700">Case engine</text>
+      <text x="238" y="94" fill="#C0CBD6" font-size="11.5">runs the case, holds</text>
+      <text x="238" y="110" fill="#C0CBD6" font-size="11.5">the state, keeps</text>
+      <text x="238" y="126" fill="#C0CBD6" font-size="11.5">the clock</text>
+      <text x="238" y="156" fill="#5FD3BE" font-size="11">It asks, then routes.</text>
+
+      <!-- ── 3 · the reader ── -->
+      <rect x="540" y="30" width="290" height="66" rx="9" fill="#1D2530" stroke="#5FD3BE" stroke-width="1.5"/>
+      <circle cx="560" cy="48" r="10" fill="#1B4A44" stroke="#5FD3BE"/>
+      <text x="560" y="52" text-anchor="middle" fill="#5FD3BE" font-size="12" font-weight="700">3</text>
+      <g transform="translate(578,42)" fill="none" stroke="#5FD3BE" stroke-width="1.5" stroke-linejoin="round">
+        <path d="M9 1.8l1.7 5 5 1.7-5 1.7L9 15.2l-1.7-5-5-1.7 5-1.7z"/>
+      </g>
+      <text x="602" y="54" fill="#EAF0F6" font-size="14" font-weight="700">Classifier</text>
+      <text x="676" y="54" fill="#9BAAB9" font-size="10.5">an LLM</text>
+
+      <path d="M434 54H536" fill="none" style="stroke:var(--soft);stroke-width:2"/>
+      <path d="M522 47.8L536 54L522 60.2Z" fill="#C0CBD6"/>
+      <text x="485" y="38" text-anchor="middle" fill="#7B8B9B" font-size="9">prompt: email +</text>
+      <text x="485" y="48" text-anchor="middle" fill="#7B8B9B" font-size="9">category list</text>
+      <path d="M536 78H438" fill="none" style="stroke:var(--dim);stroke-width:1.8" stroke-dasharray="4 3"/>
+      <path d="M452 71.8L438 78L452 84.2Z" fill="#9BAAB9"/>
+      <text x="485" y="90" text-anchor="middle" fill="#7B8B9B" font-size="9">intent, category,</text>
+      <text x="485" y="100" text-anchor="middle" fill="#7B8B9B" font-size="9">sender, evidence</text>
+
+      <!-- ── 4 · the decider ── -->
+      <rect x="540" y="120" width="290" height="66" rx="9" fill="#1D2530" stroke="#5FD3BE" stroke-width="1.5"/>
+      <circle cx="560" cy="138" r="10" fill="#1B4A44" stroke="#5FD3BE"/>
+      <text x="560" y="142" text-anchor="middle" fill="#5FD3BE" font-size="12" font-weight="700">4</text>
+      <g transform="translate(578,132)" fill="none" stroke="#5FD3BE" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 1.5v15"/><path d="M9 4h6l1.8 1.9L15 8H9z"/><path d="M9 9.5H3L1.2 11.4 3 13.3h6z"/>
+      </g>
+      <text x="602" y="144" fill="#EAF0F6" font-size="14" font-weight="700">Policy engine</text>
+      <text x="706" y="144" fill="#9BAAB9" font-size="10.5">the signed playbook</text>
+      <text x="558" y="166" fill="#9BAAB9" font-size="11">a table lookup, not a model</text>
+      <text x="558" y="180" fill="#7B8B9B" font-size="9.5">the same answer every time</text>
+
+      <path d="M434 144H536" fill="none" style="stroke:var(--soft);stroke-width:2"/>
+      <path d="M522 137.8L536 144L522 150.2Z" fill="#C0CBD6"/>
+      <text x="485" y="128" text-anchor="middle" fill="#7B8B9B" font-size="9">row × identity</text>
+      <path d="M536 168H438" fill="none" style="stroke:var(--dim);stroke-width:1.8" stroke-dasharray="4 3"/>
+      <path d="M452 161.8L438 168L452 174.2Z" fill="#9BAAB9"/>
+      <text x="485" y="180" text-anchor="middle" fill="#7B8B9B" font-size="9">the road + the</text>
+      <text x="485" y="190" text-anchor="middle" fill="#7B8B9B" font-size="9">template to use</text>
+
+      <!-- ── 5 · who acts (the detail is on the next page) ── -->
+      <rect x="540" y="205" width="588" height="120" rx="9" fill="#1D2530" stroke="#2E3A46"/>
+      <circle cx="560" cy="221" r="10" fill="#1B4A44" stroke="#5FD3BE"/>
+      <text x="560" y="225" text-anchor="middle" fill="#5FD3BE" font-size="12" font-weight="700">5</text>
+      <text x="582" y="225" fill="#9BAAB9" font-size="9.5" font-weight="700" letter-spacing="1">WHO ACTS</text>
+      <text x="1112" y="225" text-anchor="end" fill="#5FD3BE" font-size="10" font-weight="600">each road in detail: 10</text>
+
+      <rect x="552" y="232" width="140" height="26" rx="6" fill="#1B4A44" stroke="#5FD3BE"/>
+      <text x="562" y="250" fill="#5FD3BE" font-size="12" font-weight="700">L3 · auto</text>
+      <text x="704" y="250" fill="#C0CBD6" font-size="11">Automation Flows acts, then the reply goes out</text>
+
+      <rect x="552" y="262" width="140" height="26" rx="6" fill="#3A3320" stroke="#F5B544"/>
+      <text x="562" y="280" fill="#F5B544" font-size="12" font-weight="700">L2 · one click</text>
+      <text x="704" y="280" fill="#C0CBD6" font-size="11">a person approves, then the same two moves run</text>
+
+      <rect x="552" y="292" width="140" height="26" rx="6" fill="#3B2320" stroke="#F2786E"/>
+      <text x="562" y="310" fill="#F2786E" font-size="12" font-weight="700">L1 · human</text>
+      <text x="704" y="310" fill="#C0CBD6" font-size="11">a person decides, edits and signs</text>
+
+      <path d="M434 265H536" fill="none" style="stroke:var(--soft);stroke-width:2"/>
+      <path d="M522 258.8L536 265L522 271.2Z" fill="#C0CBD6"/>
+      <text x="485" y="257" text-anchor="middle" fill="#7B8B9B" font-size="9">one road</text>
+
+      <!-- ── 6 · the reply ── -->
+      <rect x="0" y="356" width="1128" height="60" rx="9" fill="#1D2530" stroke="#5FD3BE" stroke-width="1.5"/>
+      <circle cx="20" cy="374" r="10" fill="#1B4A44" stroke="#5FD3BE"/>
+      <text x="20" y="378" text-anchor="middle" fill="#5FD3BE" font-size="12" font-weight="700">6</text>
+      <g transform="translate(38,366)" fill="none" stroke="#5FD3BE" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2.5 2.5h15a1.3 1.3 0 0 1 1.3 1.3v7.9a1.3 1.3 0 0 1-1.3 1.3H8l-4 3V13H2.5a1.3 1.3 0 0 1-1.3-1.3V3.8a1.3 1.3 0 0 1 1.3-1.3z"/>
+        <path d="M6 7.2l2.2 2.2L13 5.2"/>
+      </g>
+      <text x="62" y="378" fill="#EAF0F6" font-size="14" font-weight="700">Reply builder</text>
+      <text x="196" y="378" fill="#9BAAB9" font-size="10.5">an LLM writes one line; everything else is filled in</text>
+      <text x="62" y="400" fill="#9BAAB9" font-size="11">the locked template and the system slots carry the compliance wording and the account data; the model writes only the connective sentence</text>
+      <text x="1112" y="378" text-anchor="end" fill="#5FD3BE" font-size="11" font-weight="600">✉ sent in-thread</text>
+
+      <path d="M834 327V352" fill="none" style="stroke:var(--soft);stroke-width:2"/>
+      <path d="M827.8 338L834 352L840.2 338Z" fill="#C0CBD6"/>
+      <text x="846" y="344" fill="#7B8B9B" font-size="9">the action + the slots</text>
+    </svg>
+  </div>
+  <div class="colophon"><span>09 / 11</span></div>
+</section>
+
+<!-- ═══ 10 INSIDE THE AUTOPILOT · THE THREE ROADS (each one as a flow) ═══ -->
+<section class="slide">
+  <p class="eyebrow"><span class="n">10</span> Inside the Autopilot · the three roads</p>
+  <h2>What happens after the road is chosen.</h2>
+  <p class="claim">The engine takes one road and runs it. The front half is identical every time; what changes is who touches the action, and what has to be on the record before it goes out.</p>
+  <div class="chart">
+    <svg viewBox="0 0 1128 426" role="img">
+      <!-- ═══ L3 · auto ═══ -->
+      <rect x="0" y="40" width="106" height="64" rx="8" fill="#1B4A44" stroke="#5FD3BE"/>
+      <text x="14" y="66" fill="#5FD3BE" font-size="17" font-weight="700">L3</text>
+      <text x="52" y="66" fill="#5FD3BE" font-size="11.5" font-weight="600">auto</text>
+      <text x="14" y="88" fill="#C0CBD6" font-size="9.5">no one clicks</text>
+
+      <rect x="130" y="40" width="288" height="64" rx="8" fill="#1D2530" stroke="#2E3A46"/>
+      <circle cx="146" cy="56" r="9" fill="#1B4A44" stroke="#5FD3BE"/>
+      <text x="146" y="60" text-anchor="middle" fill="#5FD3BE" font-size="11" font-weight="700">1</text>
+      <text x="162" y="60" fill="#EAF0F6" font-size="13" font-weight="700">Automation Flows</text>
+      <text x="142" y="80" fill="#9BAAB9" font-size="10">calls the bank's core API</text>
+      <text x="142" y="94" fill="#7B8B9B" font-size="9.5">the registered action + its parameters</text>
+      <g transform="translate(372,58)" fill="none" stroke="#5FD3BE" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="3.5" cy="4" r="2"/><circle cx="16" cy="9" r="2"/><circle cx="3.5" cy="14" r="2"/><path d="M5.3 4.6l8.4 3.6M5.3 13.4l8.4-3.6"/></g>
+
+      <path d="M422 72H478" fill="none" style="stroke:var(--soft);stroke-width:2"/>
+      <path d="M464 65.8L478 72L464 78.2Z" fill="#C0CBD6"/>
+      <text x="450" y="64" text-anchor="middle" fill="#7B8B9B" font-size="9">the call</text>
+
+      <rect x="482" y="40" width="288" height="64" rx="8" fill="#1D2530" stroke="#2E3A46"/>
+      <circle cx="498" cy="56" r="9" fill="#1B4A44" stroke="#5FD3BE"/>
+      <text x="498" y="60" text-anchor="middle" fill="#5FD3BE" font-size="11" font-weight="700">2</text>
+      <text x="514" y="60" fill="#EAF0F6" font-size="13" font-weight="700">The bank acts</text>
+      <text x="494" y="80" fill="#9BAAB9" font-size="10">core banking moves the money</text>
+      <text x="494" y="94" fill="#7B8B9B" font-size="9.5">once, and returns a reference</text>
+      <g transform="translate(724,58)" fill="none" stroke="#9BAAB9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18h16M4 18V8l6-4 6 4v10"/><path d="M7 11h6M7 14.5h6"/></g>
+
+      <path d="M774 72H830" fill="none" style="stroke:var(--soft);stroke-width:2"/>
+      <path d="M816 65.8L830 72L816 78.2Z" fill="#C0CBD6"/>
+      <text x="802" y="64" text-anchor="middle" fill="#7B8B9B" font-size="9">done + ref</text>
+
+      <rect x="834" y="40" width="294" height="64" rx="8" fill="#1D2530" stroke="#2E3A46"/>
+      <circle cx="850" cy="56" r="9" fill="#1B4A44" stroke="#5FD3BE"/>
+      <text x="850" y="60" text-anchor="middle" fill="#5FD3BE" font-size="11" font-weight="700">3</text>
+      <text x="866" y="60" fill="#EAF0F6" font-size="13" font-weight="700">Reply, then the record</text>
+      <text x="846" y="80" fill="#9BAAB9" font-size="10">template filled, sent in-thread</text>
+      <text x="846" y="94" fill="#7B8B9B" font-size="9.5">the dossier is sealed to WORM</text>
+      <g transform="translate(1076,58)" fill="none" stroke="#5FD3BE" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="17" height="12" rx="1.6"/><path d="M1.6 5.4l7.9 5.4 7.9-5.4"/><path d="M14 12.5l2 2 3.5-3.5"/></g>
+
+      <!-- ═══ L2 · one click ═══ -->
+      <rect x="0" y="152" width="106" height="64" rx="8" fill="#3A3320" stroke="#F5B544"/>
+      <text x="14" y="178" fill="#F5B544" font-size="17" font-weight="700">L2</text>
+      <text x="52" y="178" fill="#F5B544" font-size="11.5" font-weight="600">one click</text>
+      <text x="14" y="200" fill="#C0CBD6" font-size="9.5">a person approves</text>
+
+      <rect x="130" y="152" width="288" height="64" rx="8" fill="#1D2530" stroke="#2E3A46"/>
+      <circle cx="146" cy="168" r="9" fill="#3A3320" stroke="#F5B544"/>
+      <text x="146" y="172" text-anchor="middle" fill="#F5B544" font-size="11" font-weight="700">1</text>
+      <text x="162" y="172" fill="#EAF0F6" font-size="13" font-weight="700">Approval queue</text>
+      <text x="142" y="192" fill="#9BAAB9" font-size="10">the action and the draft, side by side</text>
+      <text x="142" y="206" fill="#7B8B9B" font-size="9.5">who, what, why, and the wording</text>
+      <g transform="translate(372,170)" fill="none" stroke="#F5B544" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="16" height="4" rx="1.4"/><rect x="2" y="8.5" width="16" height="4" rx="1.4"/><rect x="2" y="14" width="10" height="3.5" rx="1.4"/></g>
+
+      <path d="M422 184H478" fill="none" style="stroke:var(--soft);stroke-width:2"/>
+      <path d="M464 177.8L478 184L464 190.2Z" fill="#C0CBD6"/>
+      <text x="450" y="176" text-anchor="middle" fill="#7B8B9B" font-size="9">the proposal</text>
+
+      <rect x="482" y="152" width="288" height="64" rx="8" fill="#1D2530" stroke="#2E3A46"/>
+      <circle cx="498" cy="168" r="9" fill="#3A3320" stroke="#F5B544"/>
+      <text x="498" y="172" text-anchor="middle" fill="#F5B544" font-size="11" font-weight="700">2</text>
+      <text x="514" y="172" fill="#EAF0F6" font-size="13" font-weight="700">A person clicks</text>
+      <text x="494" y="192" fill="#9BAAB9" font-size="10">one click, and it is on the record</text>
+      <text x="494" y="206" fill="#7B8B9B" font-size="9.5">their name and the time are kept</text>
+      <g transform="translate(724,170)" fill="none" stroke="#F5B544" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2l11 7.5-5 1.2 2.4 5-2.6 1.2-2.4-5L4 14z"/></g>
+
+      <path d="M774 184H830" fill="none" style="stroke:var(--soft);stroke-width:2"/>
+      <path d="M816 177.8L830 184L816 190.2Z" fill="#C0CBD6"/>
+      <text x="802" y="176" text-anchor="middle" fill="#7B8B9B" font-size="9">approved</text>
+
+      <rect x="834" y="152" width="294" height="64" rx="8" fill="#1D2530" stroke="#2E3A46"/>
+      <circle cx="850" cy="168" r="9" fill="#3A3320" stroke="#F5B544"/>
+      <text x="850" y="172" text-anchor="middle" fill="#F5B544" font-size="11" font-weight="700">3</text>
+      <text x="866" y="172" fill="#EAF0F6" font-size="13" font-weight="700">Then the same two moves</text>
+      <text x="846" y="192" fill="#9BAAB9" font-size="10">Flows calls, the reply goes out</text>
+      <text x="846" y="206" fill="#7B8B9B" font-size="9.5">nothing else about the case changes</text>
+      <g transform="translate(1076,170)" fill="none" stroke="#9BAAB9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="3.5" cy="4" r="2"/><circle cx="16" cy="9" r="2"/><circle cx="3.5" cy="14" r="2"/><path d="M5.3 4.6l8.4 3.6M5.3 13.4l8.4-3.6"/></g>
+
+      <!-- ═══ L1 · human ═══ -->
+      <rect x="0" y="264" width="106" height="64" rx="8" fill="#3B2320" stroke="#F2786E"/>
+      <text x="14" y="290" fill="#F2786E" font-size="17" font-weight="700">L1</text>
+      <text x="52" y="290" fill="#F2786E" font-size="11.5" font-weight="600">human</text>
+      <text x="14" y="312" fill="#C0CBD6" font-size="9.5">a person signs</text>
+
+      <rect x="130" y="264" width="288" height="64" rx="8" fill="#1D2530" stroke="#2E3A46"/>
+      <circle cx="146" cy="280" r="9" fill="#3B2320" stroke="#F2786E"/>
+      <text x="146" y="284" text-anchor="middle" fill="#F2786E" font-size="11" font-weight="700">1</text>
+      <text x="162" y="284" fill="#EAF0F6" font-size="13" font-weight="700">Human queue</text>
+      <text x="142" y="304" fill="#9BAAB9" font-size="10">the email, the evidence, a draft reply</text>
+      <text x="142" y="318" fill="#7B8B9B" font-size="9.5">the clock is already running</text>
+      <g transform="translate(372,282)" fill="none" stroke="#F2786E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h16v9H8l-3.5 3.5V12H2z"/><path d="M5.5 7h9M5.5 9.5h5"/></g>
+
+      <path d="M422 296H478" fill="none" style="stroke:var(--soft);stroke-width:2"/>
+      <path d="M464 289.8L478 296L464 302.2Z" fill="#C0CBD6"/>
+      <text x="450" y="288" text-anchor="middle" fill="#7B8B9B" font-size="9">the dossier</text>
+
+      <rect x="482" y="264" width="288" height="64" rx="8" fill="#1D2530" stroke="#2E3A46"/>
+      <circle cx="498" cy="280" r="9" fill="#3B2320" stroke="#F2786E"/>
+      <text x="498" y="284" text-anchor="middle" fill="#F2786E" font-size="11" font-weight="700">2</text>
+      <text x="514" y="284" fill="#EAF0F6" font-size="13" font-weight="700">A person decides</text>
+      <text x="494" y="304" fill="#9BAAB9" font-size="10">reads, edits, may throw the draft away</text>
+      <text x="494" y="318" fill="#7B8B9B" font-size="9.5">the AI text is marked as a draft</text>
+      <g transform="translate(724,282)" fill="none" stroke="#F2786E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="5" r="3.2"/><path d="M2.5 17c0-3.4 2.9-5.5 6.5-5.5s6.5 2.1 6.5 5.5"/></g>
+
+      <path d="M774 296H830" fill="none" style="stroke:var(--soft);stroke-width:2"/>
+      <path d="M816 289.8L830 296L816 302.2Z" fill="#C0CBD6"/>
+      <text x="802" y="288" text-anchor="middle" fill="#7B8B9B" font-size="9">their call</text>
+
+      <rect x="834" y="264" width="294" height="64" rx="8" fill="#1D2530" stroke="#2E3A46"/>
+      <circle cx="850" cy="280" r="9" fill="#3B2320" stroke="#F2786E"/>
+      <text x="850" y="284" text-anchor="middle" fill="#F2786E" font-size="11" font-weight="700">3</text>
+      <text x="866" y="284" fill="#EAF0F6" font-size="13" font-weight="700">Signed and sent</text>
+      <text x="846" y="304" fill="#9BAAB9" font-size="10">under their name, not the model's</text>
+      <text x="846" y="318" fill="#7B8B9B" font-size="9.5">every edit stays on the record</text>
+      <g transform="translate(1076,282)" fill="none" stroke="#F2786E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 16.5l1-4L13 2.5a2 2 0 0 1 2.8 2.8L5.8 15.5z"/><path d="M11.6 4l2.8 2.8"/><path d="M2 19h16"/></g>
+
+      <!-- ── the shared footer: what all three have in common ── -->
+      <rect x="0" y="352" width="1128" height="58" rx="9" fill="#1B4A44" stroke="#5FD3BE" stroke-width="1.5"/>
+      <text x="18" y="376" fill="#5FD3BE" font-size="10" font-weight="700" letter-spacing="1.2">ALL THREE END THE SAME WAY</text>
+      <text x="18" y="396" fill="#EAF0F6" font-size="12">The reply leaves the bank's own mailbox, in the same thread. The dossier — what arrived, what was decided, who acted and why — is written once and sealed.</text>
+    </svg>
+  </div>
+  <div class="colophon"><span>10 / 11</span></div>
+</section>
+
+<!-- ═══ 11 METRICS ═══ -->
+<section class="slide">
+  <p class="eyebrow"><span class="n">11</span> How we would know</p>
   <h2>Success metrics.</h2>
   <div class="chart">
     <svg viewBox="0 0 1128 264" role="img">
@@ -1273,7 +1494,7 @@ body.dark svg [fill="#F5B544"]{fill:#F5B544}
       <text class="lgd" x="0" y="240">The 35% ROI base case is the top of this band, at steady state.</text>
     </svg>
   </div>
-  <div class="colophon"><span>10 / 10</span></div>
+  <div class="colophon"><span>11 / 11</span></div>
 </section>
 <!-- ═══ THANK YOU ═══ -->
 <section class="slide title">
@@ -1659,6 +1880,13 @@ slides.forEach(function(s,idx){
   c.querySelectorAll('video').forEach(function(v){v.remove();});
   c.querySelectorAll('.fsbtn,.ytlink').forEach(function(v){v.remove();});
   c.querySelectorAll('.vplay').forEach(function(v){v.remove();});
+  /* a thumbnail is a full clone, so it also clones every <defs> — and an id inside
+     the clone steals url(#id) from the real slide, because the rail sits before
+     #stage in the document. Present mode hides the rail, the stolen marker goes
+     into a display:none subtree, and every arrowhead on the page disappears.
+     The thumbnails do not need their own definitions; drop them. */
+  c.querySelectorAll('defs,clipPath,marker,linearGradient,radialGradient,filter,pattern')
+    .forEach(function(d){d.remove();});
   th.appendChild(c);
   const lab=document.createElement('span'); lab.className='toclabel';
   const h=s.querySelector('h1,h2');
@@ -1840,7 +2068,7 @@ document.addEventListener('click',function(e){
   }
 });
 /* ── one-click present: narration + one-line caption + auto tour ──
-   Scope is the voiced colophon pages: 03/10–10/10. Steps (clip, caption, shots, film) come
+   Scope is the voiced colophon pages: 02/11–08/11 and 11/11. Steps (clip, caption, shots, film) come
    from assets/voice/present.json, built from tts/deck-voiceover.en.md — this
    code never parses the md itself. Slide key is read from the colophon, so a
    reorder by another editor keeps working. Toggle defaults OFF; the tour starts
@@ -1979,13 +2207,11 @@ function pvOnShow(){
   if(pvPaused)return;                  /* jumped while paused: stay quiet */
   pvStartPage();
 }
-/* begin from the current page. Page 01 (About me) and the title carry no
-   narration: a silent page holds for a beat, then the tour moves on. */
+/* begin from the current page. The title carries no narration: a silent page
+   holds for a beat, then the tour moves on. */
 function pvBegin(){
   if(!pvData){pvCap('voice files missing');return;}
-  /* page 01 (About me) never speaks, so Present opens on page 02 instead */
-  if(i<1){show(1);return;}                 /* show() re-enters through pvOnShow */
-  pvStartPage();
+  pvStartPage();      /* the title is just another silent page now */
 }
 function pvStartPage(){
   if(!pvPresent||!pvPlaying||pvPaused||!pvData)return;
@@ -1994,7 +2220,7 @@ function pvStartPage(){
   pvSteps=pvData[key]||null;
   pvStep=-1;
   if(pvPageSteps!==pvSteps)pvSliderBind();   /* data arrived after the last show() */
-  if(!pvSteps){                        /* no narration here (About me, title, backups):
+  if(!pvSteps){                        /* no narration here (title, backups):
                                           show it briefly, then continue */
     if(pvPlaying&&!pvPaused){
       const n=i;
@@ -2031,7 +2257,7 @@ function pvStepGo(n,seek){
   if(!pvSteps||n>=pvSteps.length){     /* page done: next voiced page, or tour ends */
     /* a silent page can sit between two voiced ones, so step over any page
        with no narration rather than stalling on it — and stop once the pages
-       after this one carry no narration at all (03–10 are all voiced today) */
+       after this one carry no narration at all (02–08 and 11 are voiced today) */
     let j=i+1;
     while(j<slides.length&&(!pvData||!pvData[pvColKey(slides[j])]))j++;
     if(j>=slides.length){pvPlaying=false;pvPaused=false;pvCap('');pvBtn();return;}

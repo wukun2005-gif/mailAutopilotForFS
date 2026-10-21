@@ -29,6 +29,20 @@ regenerates `deck-html/assets/voice/*.mp3` + `present.json`/`present.js`.
   key is missing from `present.json` goes silent with no error, so a renumbered deck
   fails quietly — check both sides whenever pages move.
 
+## 2026-10-21 · mainline is 11 pages; calls and roads voiced
+
+- The mainline is now title + **02/11–11/11** + Thank you. The old playbook page
+  was deleted, and the three Inside-the-Autopilot pages sit at 09–11.
+- Pages **09/11 (call by call)** and **10/11 (the three roads)** are voiced for the
+  first time: three clips each, written against the current slides. Metrics moved
+  to **11/11**.
+- Audio moved with its pages, no re-synthesis: onboarding `p08b1–4` → `p07b1–4`;
+  user experience `p07b1–3` → `p08b1–3`; metrics `p09b1–4` → `p11b1–4`; the unused
+  `p08b4`/`p09b4` were deleted. Only `p04b1` was re-synthesised, for the slide's
+  "goes to AI" wording; `p09b1–3` and `p10b1–3` are the new pages.
+- `present.json` keys are **02–08 and 11** — the two new pages are voiced, so the
+  tour runs straight through 02–11. Scope comments in the player follow.
+
 ## 2026-10-18 · pages 07/08 swapped; demo page now 07/09 "User experience", onboarding 08/09
 - User experience (with the inline demo-1 film) and onboarding changed places.
   Eyebrows, colophons and the md headings were renumbered; player keys follow the
